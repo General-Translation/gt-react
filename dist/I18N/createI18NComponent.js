@@ -18,7 +18,7 @@ exports.default = createI18NComponent;
 const jsx_runtime_1 = require("react/jsx-runtime");
 const ServerI18N_1 = __importDefault(require("./ServerI18N"));
 function createI18NComponent(_a) {
-    var { I18NConfig, getLocale } = _a, metadata = __rest(_a, ["I18NConfig", "getLocale"]);
+    var { I18NConfig } = _a, metadata = __rest(_a, ["I18NConfig"]);
     return (_a) => {
         var { children } = _a, props = __rest(_a, ["children"]);
         const locale = I18NConfig.getLocale();

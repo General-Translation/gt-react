@@ -1,5 +1,5 @@
 import I18NConfiguration from "../config/I18NConfiguration";
-export default function createI18NComponent({ I18NConfig, getLocale, ...metadata }: {
+export default function createI18NComponent({ I18NConfig, ...metadata }: {
     I18NConfig: I18NConfiguration;
     [key: string]: any;
 }): ({ children, ...props }: {

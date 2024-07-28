@@ -3,7 +3,6 @@ import 'server-only'
 import getDefaultFromEnv from "./local/getDefaultFromEnv";
 import I18NConfiguration from './config/I18NConfiguration';
 import createIntlFunction from './intl/createIntlFunction';
-import createI18NComponent from './i18n/createI18NComponent';
 import createGTProviderComponent from './client/createGTProviderComponent';
 import CreateI18NConfigProps from './types/CreateGTProps';
 import createTFunction from './dictionary/createTFunction';
@@ -16,6 +15,7 @@ import createDateVariableComponent from './primitives/variables/DateVariable/cre
 import createCurrencyVariableComponent from './primitives/variables/CurrencyVariable/createCurrencyVariableComponent';
 import GeneralTranslation from './types/GeneralTranslationInterface';
 import Variables from './types/VariableInterface';
+import createI18NComponent from './i18n/createI18NComponent';
 
 /**
  * Initializes the `gt-react` i18n library.
