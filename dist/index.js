@@ -18,6 +18,7 @@ exports.createGT = createGT;
 exports.createVariables = createVariables;
 require("server-only");
 const getDefaultFromEnv_1 = __importDefault(require("./local/getDefaultFromEnv"));
+const createI18NComponent_1 = __importDefault(require("./server/createI18NComponent"));
 const I18NConfiguration_1 = __importDefault(require("./config/I18NConfiguration"));
 const createIntlFunction_1 = __importDefault(require("./intl/createIntlFunction"));
 const createGTProviderComponent_1 = __importDefault(require("./client/createGTProviderComponent"));
@@ -29,7 +30,6 @@ const createVariableComponent_1 = __importDefault(require("./primitives/variable
 const createNumberVariableComponent_1 = __importDefault(require("./primitives/variables/NumberVariable/createNumberVariableComponent"));
 const createDateVariableComponent_1 = __importDefault(require("./primitives/variables/DateVariable/createDateVariableComponent"));
 const createCurrencyVariableComponent_1 = __importDefault(require("./primitives/variables/CurrencyVariable/createCurrencyVariableComponent"));
-const createI18NComponent_1 = __importDefault(require("./i18n/createI18NComponent"));
 /**
  * Initializes the `gt-react` i18n library.
  *

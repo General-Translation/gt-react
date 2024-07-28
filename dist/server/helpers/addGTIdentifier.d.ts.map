@@ -1,0 +1,1 @@
+{"version":3,"file":"addGTIdentifier.d.ts","sourceRoot":"","sources":["../../../src/server/helpers/addGTIdentifier.tsx"],"names":[],"mappings":"AAAA,OAAO,KAAK,EAAE,EAAE,SAAS,EAAgB,MAAM,OAAO,CAAA;AAGtD,KAAK,KAAK,GAAG,SAAS,GAAG,MAAM,CAAC,MAAM,EAAE,GAAG,CAAC,CAAC;AAC7C,KAAK,QAAQ,GAAG,KAAK,EAAE,GAAG,KAAK,CAAC;AAkBhC;;;;GAIG;AACH,MAAM,CAAC,OAAO,UAAU,eAAe,CAAC,QAAQ,EAAE,QAAQ,iVAkJzD"}
