@@ -1,0 +1,1 @@
+{"version":3,"file":"createDictFunction.js","sourceRoot":"","sources":["../../src/dictionary/createDictFunction.tsx"],"names":[],"mappings":";;AAEA,qCAIC;AAJD,SAAwB,kBAAkB,CAAC,UAA6B;IACpE,OAAO,CAAC,EAAU,EAAE,EAAE;QAClB,OAAO,UAAU,CAAC,kBAAkB,CAAC,EAAE,CAAC,CAAC;IAC7C,CAAC,CAAA;AACL,CAAC"}

@@ -1,0 +1,94 @@
+{
+  "name": "gt-react",
+  "version": "3.0.0",
+  "description": "",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "peerDependencies": {
+    "react": "^16.8.0 || ^17.0.0 || ^18.0.0",
+    "react-dom": "^16.8.0 || ^17.0.0 || ^18.0.0"
+  },
+  "scripts": {
+    "patch": "npm version patch",
+    "transpile": "tsc",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/general-translation/gt-react.git"
+  },
+  "author": "General Translation, Inc.",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/general-translation/gt-react/issues"
+  },
+  "homepage": "https://github.com/general-translation/gt-react#readme",
+  "devDependencies": {
+    "@types/node": "^20.14.9",
+    "@types/react": "^18.3.3",
+    "@types/react-dom": "^18.3.0",
+    "typescript": "^5.5.2"
+  },
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "require": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    },
+    "./next": {
+      "import": "./dist/next.js",
+      "require": "./dist/next.js",
+      "types": "./dist/next.d.ts"
+    },
+    "./next.js": "./dist/next.js",
+    "./client": {
+      "import": "./dist/client.js",
+      "require": "./dist/client.js",
+      "types": "./dist/client.d.ts"
+    },
+    "./client.js": "./dist/client.js",
+    "./middleware": {
+      "import": "./dist/middleware.js",
+      "require": "./dist/middleware.js",
+      "types": "./dist/middleware.d.ts"
+    },
+    "./middleware.js": "./dist/middleware.js"
+  },
+  "typesVersions": {
+    "*": {
+      "next": [
+        "./dist/next.d.ts"
+      ],
+      "client": [
+        "./dist/client.d.ts"
+      ],
+      "middleware": [
+        "./dist/middleware.d.ts"
+      ]
+    }
+  },
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "gt-react/next": [
+        "/dist/next"
+      ],
+      "gt-react/client": [
+        "/dist/client"
+      ],
+      "gt-react/middleware": [
+        "/dist/client"
+      ]
+    }
+  },
+  "keywords": [
+    "react",
+    "translation",
+    "internationalization",
+    "localization",
+    "i18n"
+  ],
+  "dependencies": {
+    "generaltranslation": "^2.0.17"
+  }
+}
