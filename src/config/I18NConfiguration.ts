@@ -76,7 +76,7 @@ export default class I18NConfiguration {
         // GT
         this.gt = new GT({ projectID, apiKey, defaultLanguage: defaultLocale, baseURL });
         // Other metadata
-        this.metadata = { projectID: this.projectID, defaultLanguage: this.defaultLocale, ...metadata };
+        this.metadata = { projectID: this.projectID, defaultLanguage: this.defaultLocale, dictionaryName, ...metadata };
         // Dictionary manager
         this._dictionaryManager = new DictionaryManager({
             cacheURL: cacheURL,

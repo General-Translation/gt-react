@@ -79,7 +79,7 @@ class I18NConfiguration {
         // GT
         this.gt = new generaltranslation_1.default({ projectID, apiKey, defaultLanguage: defaultLocale, baseURL });
         // Other metadata
-        this.metadata = Object.assign({ projectID: this.projectID, defaultLanguage: this.defaultLocale }, metadata);
+        this.metadata = Object.assign({ projectID: this.projectID, defaultLanguage: this.defaultLocale, dictionaryName }, metadata);
         // Dictionary manager
         this._dictionaryManager = new DictionaryManager_1.default({
             cacheURL: cacheURL,
