@@ -61,9 +61,9 @@ class I18NConfiguration {
         // Dictionaries
         dictionary, dictionaryName, 
         // Batching config
-        maxConcurrentRequests, batchInterval } = _a, 
+        maxConcurrentRequests, batchInterval, 
         // Other metadata
-        metadata = __rest(_a, ["apiKey", "projectID", "baseURL", "cacheURL", "getLocale", "defaultLocale", "approvedLocales", "renderMethod", "dictionary", "dictionaryName", "maxConcurrentRequests", "batchInterval"]);
+        getMetadata } = _a, metadata = __rest(_a, ["apiKey", "projectID", "baseURL", "cacheURL", "getLocale", "defaultLocale", "approvedLocales", "renderMethod", "dictionary", "dictionaryName", "maxConcurrentRequests", "batchInterval", "getMetadata"]);
         // Cloud integration
         this.apiKey = apiKey;
         this.projectID = projectID;
@@ -79,6 +79,7 @@ class I18NConfiguration {
         // GT
         this.gt = new generaltranslation_1.default({ projectID, apiKey, defaultLanguage: defaultLocale, baseURL });
         // Other metadata
+        this.getMetadata = getMetadata;
         this.metadata = Object.assign({ projectID: this.projectID, defaultLanguage: this.defaultLocale, dictionaryName }, metadata);
         // Dictionary manager
         this._dictionaryManager = new DictionaryManager_1.default({
@@ -186,7 +187,7 @@ class I18NConfiguration {
                         content: params.content,
                         targetLanguage: params.targetLanguage,
                         projectID: this.projectID,
-                        metadata: Object.assign(Object.assign({}, params.options), this.metadata)
+                        metadata: Object.assign(Object.assign(Object.assign({}, this.metadata), this.getMetadata()), params.options)
                     },
                     resolve,
                     reject
@@ -213,7 +214,7 @@ class I18NConfiguration {
                     data: {
                         children: params.children,
                         targetLanguage: params.targetLanguage,
-                        metadata: Object.assign(Object.assign({}, params.metadata), this.metadata)
+                        metadata: Object.assign(Object.assign(Object.assign({}, this.metadata), this.getMetadata()), params.metadata)
                     },
                     resolve,
                     reject

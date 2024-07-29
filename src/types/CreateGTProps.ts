@@ -17,6 +17,7 @@ type CreateGTProps = {
     maxConcurrentRequests?: number;
     batchInterval?: number; // ms
     // Other metadata
+    getMetadata?: () => Record<string, any>
     [key: string]: any;
 }
 

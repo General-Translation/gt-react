@@ -35,5 +35,5 @@ export declare function createVariables({ approvedLocales, defaultLocale, getLoc
  * @param {Object} [...metadata] - Any additional metadata. Used for experimental variables.
  * @returns {GeneralTranslation} An object containing internationalization and translation functions.
  */
-export declare function createGT({ approvedLocales, defaultLocale, getLocale, ...metadata }?: CreateGTProps): GeneralTranslation;
+export declare function createGT({ approvedLocales, defaultLocale, getLocale, getMetadata, ...metadata }?: CreateGTProps): GeneralTranslation;
 //# sourceMappingURL=next.d.ts.map

@@ -29,7 +29,7 @@ function I18NResolver({ children, fallback }) {
         let isMounted = true;
         const resolveChildren = () => __awaiter(this, void 0, void 0, function* () {
             try {
-                const resolved = yield children;
+                const resolved = yield Promise.resolve(children);
                 if (isMounted) {
                     setResolvedChildren(resolved);
                 }

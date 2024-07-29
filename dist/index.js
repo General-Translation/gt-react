@@ -61,7 +61,8 @@ function createGT(_a = {
     dictionaryName: "default",
     dictionary: {},
     maxConcurrentRequests: 2,
-    batchInterval: 1000
+    batchInterval: 1000,
+    getMetadata: () => { return {}; }
 }) {
     var { 
     // Cloud integration
@@ -73,14 +74,15 @@ function createGT(_a = {
     // Dictionaries
     dictionaryName = "default", dictionary = {}, 
     // Batching config
-    maxConcurrentRequests = 2, batchInterval = 1000 } = _a, 
+    maxConcurrentRequests = 2, batchInterval = 1000, 
     // Other metadata
-    metadata = __rest(_a, ["apiKey", "projectID", "cacheURL", "baseURL", "approvedLocales", "defaultLocale", "getLocale", "renderMethod", "dictionaryName", "dictionary", "maxConcurrentRequests", "batchInterval"]);
+    getMetadata = () => { return {}; } } = _a, metadata = __rest(_a, ["apiKey", "projectID", "cacheURL", "baseURL", "approvedLocales", "defaultLocale", "getLocale", "renderMethod", "dictionaryName", "dictionary", "maxConcurrentRequests", "batchInterval", "getMetadata"]);
     const I18NConfig = new I18NConfiguration_1.default(Object.assign({ apiKey, projectID, cacheURL, baseURL,
         getLocale, defaultLocale, approvedLocales,
         renderMethod,
         dictionary, dictionaryName: (0, getDefaultFromEnv_1.default)('GT_DICTIONARY_NAME') || dictionaryName, // override from .env
-        maxConcurrentRequests, batchInterval }, metadata));
+        maxConcurrentRequests, batchInterval,
+        getMetadata }, metadata));
     // ----- <I18N> ------ //
     const I18N = (0, createI18NComponent_1.default)(Object.assign({ I18NConfig }, metadata));
     // ----- intl() ------ //

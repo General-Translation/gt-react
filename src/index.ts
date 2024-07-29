@@ -55,6 +55,7 @@ export function createGT({
     maxConcurrentRequests = 2,
     batchInterval = 1000,
     // Other metadata
+    getMetadata = () => { return {} },
     ...metadata
 }: CreateI18NConfigProps = {
     apiKey: getDefaultFromEnv('GT_API_KEY'),
@@ -68,7 +69,8 @@ export function createGT({
     dictionaryName: "default",
     dictionary: {},
     maxConcurrentRequests: 2,
-    batchInterval: 1000
+    batchInterval: 1000,
+    getMetadata: () => { return {} }
 }): GeneralTranslation {
 
     const I18NConfig = new I18NConfiguration({
@@ -78,6 +80,7 @@ export function createGT({
         dictionary, 
         dictionaryName: getDefaultFromEnv('GT_DICTIONARY_NAME') || dictionaryName, // override from .env
         maxConcurrentRequests, batchInterval,
+        getMetadata,
         ...metadata
     });
 

@@ -52,12 +52,12 @@ export function createVariables({
 export function createGT({
     approvedLocales,
     defaultLocale = approvedLocales?.[0] || 'en',
-    getLocale,
+    getLocale, getMetadata,
     ...metadata
 }: CreateGTProps = {
     defaultLocale: 'en'
 }): GeneralTranslation  {
     const finalGetLocale = getLocale || (() => { return getNextLocale(defaultLocale, approvedLocales) });
-    // const domain = getNextDomain();
-    return createBaseGT({ defaultLocale, getLocale: finalGetLocale, ...metadata });
+    const finalGetMetadata = getMetadata || (() => { return { domain: getNextDomain() } });
+    return createBaseGT({ defaultLocale, getLocale: finalGetLocale, getMetadata: finalGetMetadata, ...metadata });
 }

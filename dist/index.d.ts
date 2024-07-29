@@ -22,7 +22,7 @@ import Variables from './types/VariableInterface';
  * @returns {GeneralTranslation} An object containing internationalization and translation functions.
  */
 export declare function createGT({ apiKey, projectID, cacheURL, baseURL, approvedLocales, defaultLocale, getLocale, renderMethod, // "hang", "subtle"
-dictionaryName, dictionary, maxConcurrentRequests, batchInterval, ...metadata }?: CreateI18NConfigProps): GeneralTranslation;
+dictionaryName, dictionary, maxConcurrentRequests, batchInterval, getMetadata, ...metadata }?: CreateI18NConfigProps): GeneralTranslation;
 /**
  * A lightweight configuration function which defines a set of variable components which can be used in a GT dictionary.
  *

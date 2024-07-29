@@ -12,6 +12,7 @@ type I18NConfigurationParams = {
     dictionaryName: string;
     maxConcurrentRequests: number;
     batchInterval: number;
+    getMetadata: () => Record<string, any>;
     [key: string]: any;
 };
 export default class I18NConfiguration {
@@ -25,13 +26,14 @@ export default class I18NConfiguration {
     dictionary: Record<string, any>;
     private _dictionaryManager;
     gt: GT;
+    getMetadata: () => Record<string, any>;
     metadata: Record<string, any>;
     maxConcurrentRequests: number;
     batchInterval: number;
     private _queue;
     private _activeRequests;
     private _translationCache;
-    constructor({ apiKey, projectID, baseURL, cacheURL, getLocale, defaultLocale, approvedLocales, renderMethod, dictionary, dictionaryName, maxConcurrentRequests, batchInterval, ...metadata }: I18NConfigurationParams);
+    constructor({ apiKey, projectID, baseURL, cacheURL, getLocale, defaultLocale, approvedLocales, renderMethod, dictionary, dictionaryName, maxConcurrentRequests, batchInterval, getMetadata, ...metadata }: I18NConfigurationParams);
     /**
      * Gets the application's default locale
      * @returns {string} A BCP-47 language tag

@@ -54,9 +54,9 @@ function createVariables({ approvedLocales = [], defaultLocale = (approvedLocale
 function createGT(_a = {
     defaultLocale: 'en'
 }) {
-    var { approvedLocales, defaultLocale = (approvedLocales === null || approvedLocales === void 0 ? void 0 : approvedLocales[0]) || 'en', getLocale } = _a, metadata = __rest(_a, ["approvedLocales", "defaultLocale", "getLocale"]);
+    var { approvedLocales, defaultLocale = (approvedLocales === null || approvedLocales === void 0 ? void 0 : approvedLocales[0]) || 'en', getLocale, getMetadata } = _a, metadata = __rest(_a, ["approvedLocales", "defaultLocale", "getLocale", "getMetadata"]);
     const finalGetLocale = getLocale || (() => { return (0, requestFunctions_1.getNextLocale)(defaultLocale, approvedLocales); });
-    // const domain = getNextDomain();
-    return (0, _1.createGT)(Object.assign({ defaultLocale, getLocale: finalGetLocale }, metadata));
+    const finalGetMetadata = getMetadata || (() => { return { domain: (0, requestFunctions_1.getNextDomain)() }; });
+    return (0, _1.createGT)(Object.assign({ defaultLocale, getLocale: finalGetLocale, getMetadata: finalGetMetadata }, metadata));
 }
 //# sourceMappingURL=next.js.map

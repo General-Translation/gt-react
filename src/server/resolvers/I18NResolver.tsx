@@ -26,7 +26,7 @@ export default function I18NResolver({ children, fallback }: I18NResolverProps):
 
         const resolveChildren = async () => {
             try {
-                const resolved = await children;
+                const resolved = await Promise.resolve(children);
                 if (isMounted) {
                     setResolvedChildren(resolved);
                 }

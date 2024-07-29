@@ -11,6 +11,7 @@ type CreateGTProps = {
     dictionary?: Record<string, any>;
     maxConcurrentRequests?: number;
     batchInterval?: number;
+    getMetadata?: () => Record<string, any>;
     [key: string]: any;
 };
 export default CreateGTProps;

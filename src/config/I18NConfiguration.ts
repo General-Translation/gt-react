@@ -15,6 +15,7 @@ type I18NConfigurationParams = {
     dictionaryName: string;
     maxConcurrentRequests: number;
     batchInterval: number;
+    getMetadata: () => Record<string, any>;
     [key: string]: any;
 }
 
@@ -35,6 +36,7 @@ export default class I18NConfiguration {
     // GT
     gt: GT;
     // Other metadata
+    getMetadata: () => Record<string, any>;
     metadata: Record<string, any>
     // Batching config
     maxConcurrentRequests: number;
@@ -59,6 +61,7 @@ export default class I18NConfiguration {
         // Batching config
         maxConcurrentRequests, batchInterval,
         // Other metadata
+        getMetadata,
         ...metadata
     }: I18NConfigurationParams) {
         // Cloud integration
@@ -76,6 +79,7 @@ export default class I18NConfiguration {
         // GT
         this.gt = new GT({ projectID, apiKey, defaultLanguage: defaultLocale, baseURL });
         // Other metadata
+        this.getMetadata = getMetadata;
         this.metadata = { projectID: this.projectID, defaultLanguage: this.defaultLocale, dictionaryName, ...metadata };
         // Dictionary manager
         this._dictionaryManager = new DictionaryManager({
@@ -184,7 +188,7 @@ export default class I18NConfiguration {
                     content: params.content,
                     targetLanguage: params.targetLanguage,
                     projectID: this.projectID,
-                    metadata: { ...params.options, ...this.metadata }
+                    metadata: { ...this.metadata, ...this.getMetadata(), ...params.options }
                 },
                 resolve,
                 reject
@@ -210,7 +214,7 @@ export default class I18NConfiguration {
                 data: {
                     children: params.children,
                     targetLanguage: params.targetLanguage,
-                    metadata: { ...params.metadata, ...this.metadata }
+                    metadata: { ...this.metadata, ...this.getMetadata(), ...params.metadata }
                 },
                 resolve,
                 reject
