@@ -37,8 +37,6 @@ export default function ClientNumeric({ children, n, ranges, ...branches }: Nume
         return <RenderClientVariable variables={(typeof n === 'number') ? { n } : undefined}>{branch}</RenderClientVariable>
     }, [n, branch])
 
-    console.log(renderedChildren)
-
     return (
         <span>
             {renderedChildren}

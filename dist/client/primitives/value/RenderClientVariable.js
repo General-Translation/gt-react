@@ -54,7 +54,6 @@ function SingleChild({ children, variables }) {
             let variableType;
             let name;
             let options;
-            console.log(props);
             if (transformation === null || transformation === void 0 ? void 0 : transformation.startsWith("variable")) {
                 variableType = ((_a = transformation.split('-')) === null || _a === void 0 ? void 0 : _a[1]) || "variable";
                 name = props.name || defaultVariableNames_1.default[variableType];

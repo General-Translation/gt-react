@@ -42,7 +42,6 @@ function ClientNumeric(_a) {
     const renderedChildren = (0, react_1.useMemo)(() => {
         return (0, jsx_runtime_1.jsx)(RenderClientVariable_1.default, { variables: (typeof n === 'number') ? { n } : undefined, children: branch });
     }, [n, branch]);
-    console.log(renderedChildren);
     return ((0, jsx_runtime_1.jsx)("span", { children: renderedChildren }));
 }
 ;

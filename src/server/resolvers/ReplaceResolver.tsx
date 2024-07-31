@@ -16,7 +16,7 @@ interface I18NResolverProps {
  * @param {I18NResolverProps} props - The properties for the component.
  * @returns {JSX.Element} - The rendered component.
  */
-export default function I18NResolver({ children, fallback }: I18NResolverProps): JSX.Element {
+export default function ReplaceResolver({ children, fallback }: I18NResolverProps): JSX.Element {
     
     const [resolvedChildren, setResolvedChildren] = useState<ReactNode>(fallback);
     

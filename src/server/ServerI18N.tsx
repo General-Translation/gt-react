@@ -1,9 +1,10 @@
-import React, { ReactNode } from 'react'
+import React, { ReactNode, Suspense } from 'react'
 import addGTIdentifier from './helpers/addGTIdentifier.js';
 import writeChildrenAsObjects from './helpers/writeChildrenAsObjects.js';
 import generateHash from './helpers/generateHash.js';
 import renderChildren from './renderChildren.js';
-import I18NResolver from './resolvers/I18NResolver.js';
+import ReplaceResolver from './resolvers/ReplaceResolver.js';
+import SkeletonResolver from './resolvers/SkeletonResolver.js';
 import { getLanguageDirection } from 'generaltranslation';
 import I18NConfiguration from '../config/I18NConfiguration.js';
 
@@ -74,23 +75,37 @@ export default async function ServerI18N({
     const renderMethod = props?.renderMethod || renderSettings.method;
     const timeout = renderSettings?.timeout;
 
-    if (renderMethod === "replace") {
-        // Return the site in the default language
+    if (renderMethod === "skeleton") {
+        // Return the site but without text
         // Replace with translated site when ready
 
-        const InnerResolver = async () => {
-            const renderPromise = I18NChildrenPromise.then(target => renderChildren({ source: taggedChildren, target, renderAttributes, locale, defaultLocale }))
-            if (typeof timeout === 'number') {
-                const timeoutPromise = new Promise((resolve) => setTimeout(() => resolve(children), timeout));
-                return await Promise.race([renderPromise, timeoutPromise])
-            }
-            return await renderPromise;
+        let promise: Promise<any> = I18NChildrenPromise.then(target => renderChildren({ source: taggedChildren, target, renderAttributes, locale, defaultLocale }));
+        if (typeof timeout === 'number') {
+            const timeoutPromise = new Promise((resolve) => setTimeout(() => resolve(children), timeout));
+            promise = Promise.race([promise, timeoutPromise])
         }
     
         return (
             <>
-                {/* @ts-expect-error Server Component */}
-                <I18NResolver fallback={children}><InnerResolver/></I18NResolver>
+                <SkeletonResolver fallback={children}>{promise}</SkeletonResolver>
+                
+            </>
+        )
+    }
+
+    if (renderMethod === "replace") {
+        // Return the site in the default language
+        // Replace with translated site when ready
+
+        let promise: Promise<any> = I18NChildrenPromise.then(target => renderChildren({ source: taggedChildren, target, renderAttributes, locale, defaultLocale }));
+        if (typeof timeout === 'number') {
+            const timeoutPromise = new Promise((resolve) => setTimeout(() => resolve(children), timeout));
+            promise = Promise.race([promise, timeoutPromise])
+        }
+    
+        return (
+            <>
+                <ReplaceResolver fallback={children}>{promise}</ReplaceResolver>
             </>
         )
     }

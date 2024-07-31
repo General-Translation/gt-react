@@ -43,7 +43,7 @@ const createCurrencyVariableComponent_1 = __importDefault(require("./primitives/
  * @param {string[]} [params.approvedLocales] - List of approved locales. Default is an empty array.
  * @param {string} [params.defaultLocale] - Default locale for the translation. Default is the first locale in `approvedLocales` or 'en'.
  * @param {Function} [params.getLocale] - Function to get the current locale. Default returns the `defaultLocale`.
- * @param {string} [params.renderMethod] - How translations are rendered for the first time. options are "replace", "hang", "subtle". Default is "replace".
+ * @param {string} [params.renderMethod] - How translations are rendered for the first time. options are "replace", "hang", "subtle". Default is "skeleton".
  * @param {string} [params.renderTimeout] - Timeout before rendering a new translation is called off.
  * @param {string} [params.dictionaryName] - Name of the dictionary to use. Default is "default".
  * @param {Object} [params.dictionary] - Dictionary object containing default language content.
@@ -62,12 +62,12 @@ function createGT(_a = {
     automaticTranslation: true,
     defaultLocale: 'en',
     getLocale: () => 'en',
-    renderMethod: "replace",
+    renderMethod: "skeleton",
     renderTimeout: 8500,
     dictionaryName: "default",
     dictionary: {},
     maxConcurrentRequests: 2,
-    batchInterval: 1000,
+    batchInterval: 500,
     getMetadata: () => { return {}; }
 }) {
     var { 
@@ -76,7 +76,7 @@ function createGT(_a = {
     // Locale info
     approvedLocales, defaultLocale = (approvedLocales === null || approvedLocales === void 0 ? void 0 : approvedLocales[0]) || 'en', getLocale = () => { return defaultLocale; }, 
     // Rendering
-    renderMethod = "replace", // "hang", "subtle"
+    renderMethod = "skeleton", // "replace", "hang", "subtle"
     renderTimeout = 8500, 
     // Dictionaries
     dictionaryName = "default", dictionary = {}, translations, 

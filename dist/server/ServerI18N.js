@@ -29,7 +29,8 @@ const addGTIdentifier_js_1 = __importDefault(require("./helpers/addGTIdentifier.
 const writeChildrenAsObjects_js_1 = __importDefault(require("./helpers/writeChildrenAsObjects.js"));
 const generateHash_js_1 = __importDefault(require("./helpers/generateHash.js"));
 const renderChildren_js_1 = __importDefault(require("./renderChildren.js"));
-const I18NResolver_js_1 = __importDefault(require("./resolvers/I18NResolver.js"));
+const ReplaceResolver_js_1 = __importDefault(require("./resolvers/ReplaceResolver.js"));
+const SkeletonResolver_js_1 = __importDefault(require("./resolvers/SkeletonResolver.js"));
 const generaltranslation_1 = require("generaltranslation");
 function ServerI18N(_a) {
     return __awaiter(this, void 0, void 0, function* () {
@@ -67,18 +68,25 @@ function ServerI18N(_a) {
         const I18NChildrenPromise = I18NConfig.translateChildren({ children: childrenAsObjects, targetLanguage: locale, metadata: Object.assign({}, props) });
         const renderMethod = (props === null || props === void 0 ? void 0 : props.renderMethod) || renderSettings.method;
         const timeout = renderSettings === null || renderSettings === void 0 ? void 0 : renderSettings.timeout;
+        if (renderMethod === "skeleton") {
+            // Return the site but without text
+            // Replace with translated site when ready
+            let promise = I18NChildrenPromise.then(target => (0, renderChildren_js_1.default)({ source: taggedChildren, target, renderAttributes, locale, defaultLocale }));
+            if (typeof timeout === 'number') {
+                const timeoutPromise = new Promise((resolve) => setTimeout(() => resolve(children), timeout));
+                promise = Promise.race([promise, timeoutPromise]);
+            }
+            return ((0, jsx_runtime_1.jsx)(jsx_runtime_1.Fragment, { children: (0, jsx_runtime_1.jsx)(SkeletonResolver_js_1.default, { fallback: children, children: promise }) }));
+        }
         if (renderMethod === "replace") {
             // Return the site in the default language
             // Replace with translated site when ready
-            const InnerResolver = () => __awaiter(this, void 0, void 0, function* () {
-                const renderPromise = I18NChildrenPromise.then(target => (0, renderChildren_js_1.default)({ source: taggedChildren, target, renderAttributes, locale, defaultLocale }));
-                if (typeof timeout === 'number') {
-                    const timeoutPromise = new Promise((resolve) => setTimeout(() => resolve(children), timeout));
-                    return yield Promise.race([renderPromise, timeoutPromise]);
-                }
-                return yield renderPromise;
-            });
-            return ((0, jsx_runtime_1.jsx)(jsx_runtime_1.Fragment, { children: (0, jsx_runtime_1.jsx)(I18NResolver_js_1.default, { fallback: children, children: (0, jsx_runtime_1.jsx)(InnerResolver, {}) }) }));
+            let promise = I18NChildrenPromise.then(target => (0, renderChildren_js_1.default)({ source: taggedChildren, target, renderAttributes, locale, defaultLocale }));
+            if (typeof timeout === 'number') {
+                const timeoutPromise = new Promise((resolve) => setTimeout(() => resolve(children), timeout));
+                promise = Promise.race([promise, timeoutPromise]);
+            }
+            return ((0, jsx_runtime_1.jsx)(jsx_runtime_1.Fragment, { children: (0, jsx_runtime_1.jsx)(ReplaceResolver_js_1.default, { fallback: children, children: promise }) }));
         }
         if (renderMethod === "hang") {
             // Wait until the site is translated to return

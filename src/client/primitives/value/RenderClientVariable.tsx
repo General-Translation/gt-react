@@ -26,7 +26,6 @@ function SingleChild({children, variables}: {children: any, variables?: Record<s
             let variableType;
             let name;
             let options;
-            console.log(props)
             if (transformation?.startsWith("variable")) {
                 variableType = transformation.split('-')?.[1] || "variable";
                 name = props.name || defaultVariableNames[variableType];
