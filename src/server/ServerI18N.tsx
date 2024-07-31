@@ -57,6 +57,14 @@ export default async function ServerI18N({
         )
     }
 
+    // Check if a new translation for this site can be created
+
+    if (!I18NConfig.hasRemoteSource()) {
+        return (
+            <>{children}</>
+        )
+    }
+
     // Create a new translation for this site and render it
     
     const I18NChildrenPromise = I18NConfig.translateChildren({ children: childrenAsObjects, targetLanguage: locale, metadata: { ...props } });

@@ -58,6 +58,10 @@ function ServerI18N(_a) {
             const I18NChildren = (0, renderChildren_js_1.default)({ source: taggedChildren, target: translation, renderAttributes, locale, defaultLocale });
             return ((0, jsx_runtime_1.jsx)(jsx_runtime_1.Fragment, { children: I18NChildren }));
         }
+        // Check if a new translation for this site can be created
+        if (!I18NConfig.hasRemoteSource()) {
+            return ((0, jsx_runtime_1.jsx)(jsx_runtime_1.Fragment, { children: children }));
+        }
         // Create a new translation for this site and render it
         const I18NChildrenPromise = I18NConfig.translateChildren({ children: childrenAsObjects, targetLanguage: locale, metadata: Object.assign({}, props) });
         const renderMethod = (props === null || props === void 0 ? void 0 : props.renderMethod) || I18NConfig.getRenderMethod();

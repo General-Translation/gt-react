@@ -47,26 +47,28 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const generaltranslation_1 = __importStar(require("generaltranslation"));
-const DictionaryManager_1 = __importDefault(require("./DictionaryManager"));
+const RemoteDictionaryManager_1 = __importDefault(require("./RemoteDictionaryManager"));
 const getDictionaryEntry_1 = __importDefault(require("../dictionary/getDictionaryEntry"));
+const LocalDictionaryManager_1 = __importDefault(require("./LocalDictionaryManager"));
 class I18NConfiguration {
     constructor(_a) {
         var { 
         // Cloud integration
-        apiKey, projectID, baseURL, cacheURL, 
+        apiKey, projectID, baseURL, cacheURL, remoteSource, 
         // Locale info
         getLocale, defaultLocale, approvedLocales, 
         // Render method
         renderMethod, 
         // Dictionaries
-        dictionary, dictionaryName, 
+        dictionary, dictionaryName, translations, 
         // Batching config
         maxConcurrentRequests, batchInterval, 
         // Other metadata
-        getMetadata } = _a, metadata = __rest(_a, ["apiKey", "projectID", "baseURL", "cacheURL", "getLocale", "defaultLocale", "approvedLocales", "renderMethod", "dictionary", "dictionaryName", "maxConcurrentRequests", "batchInterval", "getMetadata"]);
+        getMetadata } = _a, metadata = __rest(_a, ["apiKey", "projectID", "baseURL", "cacheURL", "remoteSource", "getLocale", "defaultLocale", "approvedLocales", "renderMethod", "dictionary", "dictionaryName", "translations", "maxConcurrentRequests", "batchInterval", "getMetadata"]);
         // Cloud integration
         this.apiKey = apiKey;
         this.projectID = projectID;
+        this.remoteSource = remoteSource;
         // Locales
         this.getLocale = getLocale;
         this.defaultLocale = defaultLocale;
@@ -76,16 +78,24 @@ class I18NConfiguration {
         // Dictionaries
         this.dictionary = dictionary;
         this.dictionaryName = dictionaryName;
+        this.translations = translations;
         // GT
         this.gt = new generaltranslation_1.default({ projectID, apiKey, defaultLanguage: defaultLocale, baseURL });
         // Other metadata
         this.getMetadata = getMetadata;
         this.metadata = Object.assign({ projectID: this.projectID, defaultLanguage: this.defaultLocale, dictionaryName }, metadata);
-        // Dictionary manager
-        this._dictionaryManager = new DictionaryManager_1.default({
-            cacheURL: cacheURL,
-            projectID: this.projectID
-        });
+        // Dictionary managers
+        if (this.translations) {
+            this._localDictionaryManager = new LocalDictionaryManager_1.default({
+                translations: this.translations
+            });
+        }
+        if (this.remoteSource) {
+            this._remoteDictionaryManager = new RemoteDictionaryManager_1.default({
+                cacheURL: cacheURL,
+                projectID: this.projectID
+            });
+        }
         // Batching
         this.maxConcurrentRequests = maxConcurrentRequests;
         this.batchInterval = batchInterval;
@@ -122,6 +132,9 @@ class I18NConfiguration {
     getDictionaryEntry(id) {
         return (0, getDictionaryEntry_1.default)(id, this.dictionary);
     }
+    hasRemoteSource() {
+        return this.remoteSource;
+    }
     /**
      * Get the render method
      * @returns The current render method. As of 7/26/24: "replace", "hang", "subtle"
@@ -139,7 +152,7 @@ class I18NConfiguration {
             return false;
         if (this.approvedLocales && !this.approvedLocales.some(approvedLocale => (0, generaltranslation_1.isSameLanguage)(locale, approvedLocale)))
             return false;
-        if ((0, generaltranslation_1.getLanguageName)(locale) === (0, generaltranslation_1.getLanguageName)(this.defaultLocale))
+        if ((0, generaltranslation_1.isSameLanguage)(locale, this.defaultLocale))
             return false;
         return true;
     }
@@ -151,7 +164,17 @@ class I18NConfiguration {
     */
     getTranslations(locale_1) {
         return __awaiter(this, arguments, void 0, function* (locale, dictionaryName = this.dictionaryName) {
-            return yield this._dictionaryManager.getDictionary(locale, dictionaryName);
+            if (this._localDictionaryManager) {
+                const translations = yield this._localDictionaryManager.getDictionary(locale);
+                if (translations)
+                    return translations;
+            }
+            if (this._remoteDictionaryManager) {
+                const translations = yield this._remoteDictionaryManager.getDictionary(locale, dictionaryName);
+                if (translations)
+                    return translations;
+            }
+            return null;
         });
     }
     /**
@@ -159,7 +182,7 @@ class I18NConfiguration {
      * @param locale - The user's locale
      * @param key - Key in the dictionary. For strings, the original language version of that string. For React children, a hash.
      * @param dictionaryName - User-defined dictionary name, for distinguishing between multiple translation dictionaries for a single language.
-     * @returns A promise that resolves to the a value in the translations..
+     * @returns A promise that resolves to the a value in the translations.
     */
     getTranslation(locale_1, key_1) {
         return __awaiter(this, arguments, void 0, function* (locale, key, id = key, dictionaryName = this.dictionaryName) {
@@ -239,8 +262,8 @@ class I18NConfiguration {
                         return resolveBatchError(item);
                     if (result && typeof result === 'object') {
                         item.resolve(result.translation);
-                        if (result.translation && result.language && result.reference) {
-                            this._dictionaryManager.setDictionary(result.language, result.reference.dictionaryName, result.reference.key, result.reference.id, result.translation);
+                        if (result.translation && result.language && result.reference && this._remoteDictionaryManager) {
+                            this._remoteDictionaryManager.setDictionary(result.language, result.reference.dictionaryName, result.reference.key, result.reference.id, result.translation);
                         }
                     }
                 });

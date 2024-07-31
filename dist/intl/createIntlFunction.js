@@ -30,9 +30,11 @@ function createIntlFunction(_a) {
         const translation = yield I18NConfig.getTranslation(options.targetLanguage, content, options.id, options.dictionaryName);
         if (translation)
             return translation;
-        const translationPromise = I18NConfig.intl({ content, targetLanguage: options.targetLanguage, options });
-        if (I18NConfig.getRenderMethod() !== "subtle") {
-            return yield translationPromise;
+        if (I18NConfig.hasRemoteSource()) {
+            const translationPromise = I18NConfig.intl({ content, targetLanguage: options.targetLanguage, options });
+            if (I18NConfig.getRenderMethod() !== "subtle") {
+                return yield translationPromise;
+            }
         }
         return content;
     });

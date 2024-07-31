@@ -7,7 +7,7 @@ type DictionaryManagerParams = {
     projectID: string;
 }
 
-export default class DictionaryManager {
+export default class RemoteDictionaryManager {
     
     cacheURL: string;
     projectID: string;

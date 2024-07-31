@@ -1,18 +1,22 @@
-import GT, { isSameLanguage, getLanguageName } from "generaltranslation";
-import DictionaryManager from "./DictionaryManager";
+import GT, { isSameLanguage } from "generaltranslation";
+import RemoteDictionaryManager from "./RemoteDictionaryManager";
 import getDictionaryEntry from "../dictionary/getDictionaryEntry";
+import LocalDictionaryManager from "./LocalDictionaryManager";
+
 
 type I18NConfigurationParams = {
     apiKey: string;
     projectID: string;
     cacheURL: string;
     baseURL: string, 
+    remoteSource: boolean;
     getLocale: () => string;
     defaultLocale: string, 
     approvedLocales?: string[],
     renderMethod: string, 
     dictionary: Record<string, any>, 
     dictionaryName: string;
+    translations: Record<string, () => Promise<Record<string, any>>> | null;
     maxConcurrentRequests: number;
     batchInterval: number;
     getMetadata: () => Record<string, any>;
@@ -23,6 +27,7 @@ export default class I18NConfiguration {
     // Cloud integration
     apiKey: string;
     projectID: string;
+    remoteSource: boolean;
     // Locale info
     getLocale: () => string;
     defaultLocale: string;
@@ -32,7 +37,9 @@ export default class I18NConfiguration {
     // Dictionaries
     dictionaryName: string;
     dictionary: Record<string, any>;
-    private _dictionaryManager: DictionaryManager; // Dictionary manager
+    translations: Record<string, () => Promise<Record<string, any>>> | null;
+    private _localDictionaryManager: LocalDictionaryManager | undefined;
+    private _remoteDictionaryManager: RemoteDictionaryManager | undefined;
     // GT
     gt: GT;
     // Other metadata
@@ -50,6 +57,7 @@ export default class I18NConfiguration {
         // Cloud integration
         apiKey, projectID,
         baseURL, cacheURL, 
+        remoteSource,
         // Locale info
         getLocale,
         defaultLocale,
@@ -57,7 +65,7 @@ export default class I18NConfiguration {
         // Render method
         renderMethod,
         // Dictionaries
-        dictionary, dictionaryName,
+        dictionary, dictionaryName, translations,
         // Batching config
         maxConcurrentRequests, batchInterval,
         // Other metadata
@@ -67,6 +75,7 @@ export default class I18NConfiguration {
         // Cloud integration
         this.apiKey = apiKey;
         this.projectID = projectID;
+        this.remoteSource = remoteSource;
         // Locales
         this.getLocale = getLocale;
         this.defaultLocale = defaultLocale;
@@ -76,16 +85,24 @@ export default class I18NConfiguration {
         // Dictionaries
         this.dictionary = dictionary;
         this.dictionaryName = dictionaryName;
+        this.translations = translations;
         // GT
         this.gt = new GT({ projectID, apiKey, defaultLanguage: defaultLocale, baseURL });
         // Other metadata
         this.getMetadata = getMetadata;
         this.metadata = { projectID: this.projectID, defaultLanguage: this.defaultLocale, dictionaryName, ...metadata };
-        // Dictionary manager
-        this._dictionaryManager = new DictionaryManager({
-            cacheURL: cacheURL,
-            projectID: this.projectID
-        });
+        // Dictionary managers
+        if (this.translations) {
+            this._localDictionaryManager = new LocalDictionaryManager({
+                translations: this.translations
+            })
+        }
+        if (this.remoteSource) {
+            this._remoteDictionaryManager = new RemoteDictionaryManager({
+                cacheURL: cacheURL,
+                projectID: this.projectID
+            });
+        }
         // Batching
         this.maxConcurrentRequests = maxConcurrentRequests;
         this.batchInterval = batchInterval;
@@ -119,13 +136,16 @@ export default class I18NConfiguration {
         return this.dictionary;
     }
 
-
     /**
      * Get an entry from the dictionary
      * @returns An entry from the dictionary determined by id
     */
     getDictionaryEntry(id: string): any {
         return getDictionaryEntry(id, this.dictionary);
+    }
+
+    hasRemoteSource(): boolean {
+        return this.remoteSource;
     }
 
     /**
@@ -144,7 +164,7 @@ export default class I18NConfiguration {
     translationRequired(locale: string): boolean {
         if (!this.apiKey || !this.projectID || !locale) return false;
         if (this.approvedLocales && !this.approvedLocales.some(approvedLocale => isSameLanguage(locale, approvedLocale))) return false;
-        if (getLanguageName(locale) === getLanguageName(this.defaultLocale)) return false;
+        if (isSameLanguage(locale, this.defaultLocale)) return false;
         return true;
     }
 
@@ -155,7 +175,15 @@ export default class I18NConfiguration {
      * @returns A promise that resolves to the translations.
     */
     async getTranslations(locale: string, dictionaryName: string = this.dictionaryName): Promise<Record<string, any> | null> {
-        return await this._dictionaryManager.getDictionary(locale, dictionaryName);
+        if (this._localDictionaryManager) {
+            const translations = await this._localDictionaryManager.getDictionary(locale);
+            if (translations) return translations;
+        }
+        if (this._remoteDictionaryManager) {
+            const translations = await this._remoteDictionaryManager.getDictionary(locale, dictionaryName);
+            if (translations) return translations;
+        }
+        return null;
     }
 
     /**
@@ -163,7 +191,7 @@ export default class I18NConfiguration {
      * @param locale - The user's locale
      * @param key - Key in the dictionary. For strings, the original language version of that string. For React children, a hash.
      * @param dictionaryName - User-defined dictionary name, for distinguishing between multiple translation dictionaries for a single language.
-     * @returns A promise that resolves to the a value in the translations..
+     * @returns A promise that resolves to the a value in the translations.
     */
     async getTranslation(locale: string, key: string, id: string = key, dictionaryName: string = this.dictionaryName): Promise<any | null> {
         const translations = await this.getTranslations(locale, dictionaryName);
@@ -237,8 +265,8 @@ export default class I18NConfiguration {
                 if (!result || result.error) return resolveBatchError(item);
                 if (result && typeof result === 'object') {
                     item.resolve(result.translation);
-                    if (result.translation && result.language && result.reference) {
-                        this._dictionaryManager.setDictionary(
+                    if (result.translation && result.language && result.reference && this._remoteDictionaryManager) {
+                        this._remoteDictionaryManager.setDictionary(
                             result.language,
                             result.reference.dictionaryName,
                             result.reference.key,

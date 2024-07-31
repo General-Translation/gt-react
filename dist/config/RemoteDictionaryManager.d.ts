@@ -2,7 +2,7 @@ type DictionaryManagerParams = {
     cacheURL?: string;
     projectID: string;
 };
-export default class DictionaryManager {
+export default class RemoteDictionaryManager {
     cacheURL: string;
     projectID: string;
     private dictionaryMap;
@@ -13,4 +13,4 @@ export default class DictionaryManager {
     setDictionary(locale: string, dictionaryName: string, key: string, id: string | undefined, translation: any): void;
 }
 export {};
-//# sourceMappingURL=DictionaryManager.d.ts.map
+//# sourceMappingURL=RemoteDictionaryManager.d.ts.map

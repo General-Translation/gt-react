@@ -12,7 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const getDictionaryReference = (locale, dictionaryName) => {
     return `${encodeURIComponent(locale)}/${encodeURIComponent(dictionaryName)}`;
 };
-class DictionaryManager {
+class RemoteDictionaryManager {
     constructor({ cacheURL = "https://cache.gtx.dev", projectID }) {
         this.cacheURL = cacheURL;
         this.projectID = projectID;
@@ -62,5 +62,5 @@ class DictionaryManager {
         this.dictionaryMap.set(reference, Object.assign(Object.assign({}, currentDictionary), { [id]: { k: key, t: translation } }));
     }
 }
-exports.default = DictionaryManager;
-//# sourceMappingURL=DictionaryManager.js.map
+exports.default = RemoteDictionaryManager;
+//# sourceMappingURL=RemoteDictionaryManager.js.map

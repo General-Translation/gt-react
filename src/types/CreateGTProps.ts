@@ -4,6 +4,7 @@ type CreateGTProps = {
     projectID?: string;
     baseURL?: string;
     cacheURL?: string;
+    remoteSource?: boolean;
     // Locale info
     approvedLocales?: string[];
     defaultLocale?: string;
@@ -13,6 +14,7 @@ type CreateGTProps = {
     // Dictionaries
     dictionaryName?: string;
     dictionary?: Record<string, any>
+    translations?: Record<string, () => Promise<Record<string, any>>> | null;
     // Batching config
     maxConcurrentRequests?: number;
     batchInterval?: number; // ms

@@ -4,12 +4,14 @@ type I18NConfigurationParams = {
     projectID: string;
     cacheURL: string;
     baseURL: string;
+    remoteSource: boolean;
     getLocale: () => string;
     defaultLocale: string;
     approvedLocales?: string[];
     renderMethod: string;
     dictionary: Record<string, any>;
     dictionaryName: string;
+    translations: Record<string, () => Promise<Record<string, any>>> | null;
     maxConcurrentRequests: number;
     batchInterval: number;
     getMetadata: () => Record<string, any>;
@@ -18,13 +20,16 @@ type I18NConfigurationParams = {
 export default class I18NConfiguration {
     apiKey: string;
     projectID: string;
+    remoteSource: boolean;
     getLocale: () => string;
     defaultLocale: string;
     approvedLocales: string[] | undefined;
     renderMethod: string;
     dictionaryName: string;
     dictionary: Record<string, any>;
-    private _dictionaryManager;
+    translations: Record<string, () => Promise<Record<string, any>>> | null;
+    private _localDictionaryManager;
+    private _remoteDictionaryManager;
     gt: GT;
     getMetadata: () => Record<string, any>;
     metadata: Record<string, any>;
@@ -33,7 +38,7 @@ export default class I18NConfiguration {
     private _queue;
     private _activeRequests;
     private _translationCache;
-    constructor({ apiKey, projectID, baseURL, cacheURL, getLocale, defaultLocale, approvedLocales, renderMethod, dictionary, dictionaryName, maxConcurrentRequests, batchInterval, getMetadata, ...metadata }: I18NConfigurationParams);
+    constructor({ apiKey, projectID, baseURL, cacheURL, remoteSource, getLocale, defaultLocale, approvedLocales, renderMethod, dictionary, dictionaryName, translations, maxConcurrentRequests, batchInterval, getMetadata, ...metadata }: I18NConfigurationParams);
     /**
      * Gets the application's default locale
      * @returns {string} A BCP-47 language tag
@@ -54,6 +59,7 @@ export default class I18NConfiguration {
      * @returns An entry from the dictionary determined by id
     */
     getDictionaryEntry(id: string): any;
+    hasRemoteSource(): boolean;
     /**
      * Get the render method
      * @returns The current render method. As of 7/26/24: "replace", "hang", "subtle"
@@ -77,7 +83,7 @@ export default class I18NConfiguration {
      * @param locale - The user's locale
      * @param key - Key in the dictionary. For strings, the original language version of that string. For React children, a hash.
      * @param dictionaryName - User-defined dictionary name, for distinguishing between multiple translation dictionaries for a single language.
-     * @returns A promise that resolves to the a value in the translations..
+     * @returns A promise that resolves to the a value in the translations.
     */
     getTranslation(locale: string, key: string, id?: string, dictionaryName?: string): Promise<any | null>;
     /**

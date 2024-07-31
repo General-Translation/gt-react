@@ -38,12 +38,14 @@ const createCurrencyVariableComponent_1 = __importDefault(require("./primitives/
  * @param {string} [params.projectID] - Project ID for cloud integration. Default is fetched from environment variable `GT_PROJECT_ID`.
  * @param {string} [params.cacheURL] - URL for caching. Default is "https://cache.gtx.dev".
  * @param {string} [params.baseURL] - Base URL for API requests. Default is "https://prod.gtx.dev".
+ * @param {Object} [params.remoteSource] - Boolean which determines whether library interacts with cloud serrvices.
  * @param {string[]} [params.approvedLocales] - List of approved locales. Default is an empty array.
  * @param {string} [params.defaultLocale] - Default locale for the translation. Default is the first locale in `approvedLocales` or 'en'.
  * @param {Function} [params.getLocale] - Function to get the current locale. Default returns the `defaultLocale`.
  * @param {string} [params.renderMethod] - How translations are rendered for the first time. options are "replace", "hang", "subtle". Default is "replace".
  * @param {string} [params.dictionaryName] - Name of the dictionary to use. Default is "default".
- * @param {Object} [params.dictionary] - Dictionary object containing translations.
+ * @param {Object} [params.dictionary] - Dictionary object containing default language content.
+ * @param {Object} [params.translations] - An object which contains strings which correspond to locales and functions which define translation dictionaries associated with those locales.
  * @param {number} [params.maxConcurrentRequests] - Maximum number of concurrent requests. Default is 2.
  * @param {number} [params.batchInterval] - Interval for batching requests in milliseconds. Default is 1000.
  * @param {Object} [...metadata] - Any additional metadata. Used for experimental variables.
@@ -60,27 +62,29 @@ function createGT(_a = {
     renderMethod: "replace",
     dictionaryName: "default",
     dictionary: {},
+    translations: null,
     maxConcurrentRequests: 2,
     batchInterval: 1000,
     getMetadata: () => { return {}; }
 }) {
     var { 
     // Cloud integration
-    apiKey = (0, getDefaultFromEnv_1.default)('GT_API_KEY'), projectID = (0, getDefaultFromEnv_1.default)('GT_PROJECT_ID'), cacheURL = "https://cache.gtx.dev", baseURL = "https://prod.gtx.dev", 
+    apiKey = (0, getDefaultFromEnv_1.default)('GT_API_KEY'), projectID = (0, getDefaultFromEnv_1.default)('GT_PROJECT_ID'), cacheURL = "https://cache.gtx.dev", baseURL = "https://prod.gtx.dev", remoteSource = true, 
     // Locale info
     approvedLocales, defaultLocale = (approvedLocales === null || approvedLocales === void 0 ? void 0 : approvedLocales[0]) || 'en', getLocale = () => { return defaultLocale; }, 
     // Rendering
     renderMethod = "replace", // "hang", "subtle"
     // Dictionaries
-    dictionaryName = "default", dictionary = {}, 
+    dictionaryName = "default", dictionary = {}, translations = null, 
     // Batching config
     maxConcurrentRequests = 2, batchInterval = 1000, 
     // Other metadata
-    getMetadata = () => { return {}; } } = _a, metadata = __rest(_a, ["apiKey", "projectID", "cacheURL", "baseURL", "approvedLocales", "defaultLocale", "getLocale", "renderMethod", "dictionaryName", "dictionary", "maxConcurrentRequests", "batchInterval", "getMetadata"]);
-    const I18NConfig = new I18NConfiguration_1.default(Object.assign({ apiKey, projectID, cacheURL, baseURL,
+    getMetadata = () => { return {}; } } = _a, metadata = __rest(_a, ["apiKey", "projectID", "cacheURL", "baseURL", "remoteSource", "approvedLocales", "defaultLocale", "getLocale", "renderMethod", "dictionaryName", "dictionary", "translations", "maxConcurrentRequests", "batchInterval", "getMetadata"]);
+    const I18NConfig = new I18NConfiguration_1.default(Object.assign({ apiKey, projectID, cacheURL, baseURL, remoteSource,
         getLocale, defaultLocale, approvedLocales,
         renderMethod,
         dictionary, dictionaryName: (0, getDefaultFromEnv_1.default)('GT_DICTIONARY_NAME') || dictionaryName, // override from .env
+        translations,
         maxConcurrentRequests, batchInterval,
         getMetadata }, metadata));
     // ----- <I18N> ------ //

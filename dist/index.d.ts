@@ -10,19 +10,21 @@ import Variables from './types/VariableInterface';
  * @param {string} [params.projectID] - Project ID for cloud integration. Default is fetched from environment variable `GT_PROJECT_ID`.
  * @param {string} [params.cacheURL] - URL for caching. Default is "https://cache.gtx.dev".
  * @param {string} [params.baseURL] - Base URL for API requests. Default is "https://prod.gtx.dev".
+ * @param {Object} [params.remoteSource] - Boolean which determines whether library interacts with cloud serrvices.
  * @param {string[]} [params.approvedLocales] - List of approved locales. Default is an empty array.
  * @param {string} [params.defaultLocale] - Default locale for the translation. Default is the first locale in `approvedLocales` or 'en'.
  * @param {Function} [params.getLocale] - Function to get the current locale. Default returns the `defaultLocale`.
  * @param {string} [params.renderMethod] - How translations are rendered for the first time. options are "replace", "hang", "subtle". Default is "replace".
  * @param {string} [params.dictionaryName] - Name of the dictionary to use. Default is "default".
- * @param {Object} [params.dictionary] - Dictionary object containing translations.
+ * @param {Object} [params.dictionary] - Dictionary object containing default language content.
+ * @param {Object} [params.translations] - An object which contains strings which correspond to locales and functions which define translation dictionaries associated with those locales.
  * @param {number} [params.maxConcurrentRequests] - Maximum number of concurrent requests. Default is 2.
  * @param {number} [params.batchInterval] - Interval for batching requests in milliseconds. Default is 1000.
  * @param {Object} [...metadata] - Any additional metadata. Used for experimental variables.
  * @returns {GeneralTranslation} An object containing internationalization and translation functions.
  */
-export declare function createGT({ apiKey, projectID, cacheURL, baseURL, approvedLocales, defaultLocale, getLocale, renderMethod, // "hang", "subtle"
-dictionaryName, dictionary, maxConcurrentRequests, batchInterval, getMetadata, ...metadata }?: CreateI18NConfigProps): GeneralTranslation;
+export declare function createGT({ apiKey, projectID, cacheURL, baseURL, remoteSource, approvedLocales, defaultLocale, getLocale, renderMethod, // "hang", "subtle"
+dictionaryName, dictionary, translations, maxConcurrentRequests, batchInterval, getMetadata, ...metadata }?: CreateI18NConfigProps): GeneralTranslation;
 /**
  * A lightweight configuration function which defines a set of variable components which can be used in a GT dictionary.
  *
