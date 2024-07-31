@@ -10,7 +10,8 @@ import Variables from './types/VariableInterface';
  * @param {string} [params.projectID] - Project ID for cloud integration. Default is fetched from environment variable `GT_PROJECT_ID`.
  * @param {string} [params.cacheURL] - URL for caching. Default is "https://cache.gtx.dev".
  * @param {string} [params.baseURL] - Base URL for API requests. Default is "https://prod.gtx.dev".
- * @param {Object} [params.remoteSource] - Boolean which determines whether library interacts with cloud serrvices.
+ * @param {Object} [params.remoteSource] - Boolean which determines whether library fetches a dictionary from a remote cache.
+ * @param {Object} [params.automaticTranslation] - Boolean which determines whether library translates using cloud services.
  * @param {string[]} [params.approvedLocales] - List of approved locales. Default is an empty array.
  * @param {string} [params.defaultLocale] - Default locale for the translation. Default is the first locale in `approvedLocales` or 'en'.
  * @param {Function} [params.getLocale] - Function to get the current locale. Default returns the `defaultLocale`.
@@ -24,7 +25,7 @@ import Variables from './types/VariableInterface';
  * @param {Object} [...metadata] - Any additional metadata. Used for experimental variables.
  * @returns {GeneralTranslation} An object containing internationalization and translation functions.
  */
-export declare function createGT({ apiKey, projectID, cacheURL, baseURL, remoteSource, approvedLocales, defaultLocale, getLocale, renderMethod, // "hang", "subtle"
+export declare function createGT({ apiKey, projectID, cacheURL, baseURL, remoteSource, automaticTranslation, approvedLocales, defaultLocale, getLocale, renderMethod, // "hang", "subtle"
 renderTimeout, dictionaryName, dictionary, translations, maxConcurrentRequests, batchInterval, getMetadata, ...metadata }?: CreateI18NConfigProps): GeneralTranslation;
 /**
  * A lightweight configuration function which defines a set of variable components which can be used in a GT dictionary.

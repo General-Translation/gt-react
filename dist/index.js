@@ -38,7 +38,8 @@ const createCurrencyVariableComponent_1 = __importDefault(require("./primitives/
  * @param {string} [params.projectID] - Project ID for cloud integration. Default is fetched from environment variable `GT_PROJECT_ID`.
  * @param {string} [params.cacheURL] - URL for caching. Default is "https://cache.gtx.dev".
  * @param {string} [params.baseURL] - Base URL for API requests. Default is "https://prod.gtx.dev".
- * @param {Object} [params.remoteSource] - Boolean which determines whether library interacts with cloud serrvices.
+ * @param {Object} [params.remoteSource] - Boolean which determines whether library fetches a dictionary from a remote cache.
+ * @param {Object} [params.automaticTranslation] - Boolean which determines whether library translates using cloud services.
  * @param {string[]} [params.approvedLocales] - List of approved locales. Default is an empty array.
  * @param {string} [params.defaultLocale] - Default locale for the translation. Default is the first locale in `approvedLocales` or 'en'.
  * @param {Function} [params.getLocale] - Function to get the current locale. Default returns the `defaultLocale`.
@@ -57,7 +58,8 @@ function createGT(_a = {
     projectID: (0, getDefaultFromEnv_1.default)('GT_PROJECT_ID'),
     cacheURL: "https://cache.gtx.dev",
     baseURL: "https://prod.gtx.dev",
-    approvedLocales: [],
+    remoteSource: true,
+    automaticTranslation: true,
     defaultLocale: 'en',
     getLocale: () => 'en',
     renderMethod: "replace",
@@ -70,7 +72,7 @@ function createGT(_a = {
 }) {
     var { 
     // Cloud integration
-    apiKey = (0, getDefaultFromEnv_1.default)('GT_API_KEY'), projectID = (0, getDefaultFromEnv_1.default)('GT_PROJECT_ID'), cacheURL = "https://cache.gtx.dev", baseURL = "https://prod.gtx.dev", remoteSource = true, 
+    apiKey = (0, getDefaultFromEnv_1.default)('GT_API_KEY'), projectID = (0, getDefaultFromEnv_1.default)('GT_PROJECT_ID'), cacheURL = "https://cache.gtx.dev", baseURL = "https://prod.gtx.dev", remoteSource = true, automaticTranslation = true, 
     // Locale info
     approvedLocales, defaultLocale = (approvedLocales === null || approvedLocales === void 0 ? void 0 : approvedLocales[0]) || 'en', getLocale = () => { return defaultLocale; }, 
     // Rendering
@@ -81,8 +83,8 @@ function createGT(_a = {
     // Batching config
     maxConcurrentRequests = 2, batchInterval = 1000, 
     // Other metadata
-    getMetadata = () => { return {}; } } = _a, metadata = __rest(_a, ["apiKey", "projectID", "cacheURL", "baseURL", "remoteSource", "approvedLocales", "defaultLocale", "getLocale", "renderMethod", "renderTimeout", "dictionaryName", "dictionary", "translations", "maxConcurrentRequests", "batchInterval", "getMetadata"]);
-    const I18NConfig = new I18NConfiguration_1.default(Object.assign({ apiKey, projectID, cacheURL, baseURL, remoteSource,
+    getMetadata = () => { return {}; } } = _a, metadata = __rest(_a, ["apiKey", "projectID", "cacheURL", "baseURL", "remoteSource", "automaticTranslation", "approvedLocales", "defaultLocale", "getLocale", "renderMethod", "renderTimeout", "dictionaryName", "dictionary", "translations", "maxConcurrentRequests", "batchInterval", "getMetadata"]);
+    const I18NConfig = new I18NConfiguration_1.default(Object.assign({ apiKey, projectID, cacheURL, baseURL, remoteSource, automaticTranslation,
         getLocale, defaultLocale, approvedLocales,
         renderMethod, renderTimeout,
         dictionary, dictionaryName: (0, getDefaultFromEnv_1.default)('GT_DICTIONARY_NAME') || dictionaryName, // override from .env

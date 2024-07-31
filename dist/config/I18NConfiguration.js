@@ -54,7 +54,7 @@ class I18NConfiguration {
     constructor(_a) {
         var { 
         // Cloud integration
-        apiKey, projectID, baseURL, cacheURL, remoteSource, 
+        apiKey, projectID, baseURL, cacheURL, remoteSource, automaticTranslation, 
         // Locale info
         getLocale, defaultLocale, approvedLocales, 
         // Render method
@@ -64,11 +64,11 @@ class I18NConfiguration {
         // Batching config
         maxConcurrentRequests, batchInterval, 
         // Other metadata
-        getMetadata } = _a, metadata = __rest(_a, ["apiKey", "projectID", "baseURL", "cacheURL", "remoteSource", "getLocale", "defaultLocale", "approvedLocales", "renderMethod", "renderTimeout", "dictionary", "dictionaryName", "translations", "maxConcurrentRequests", "batchInterval", "getMetadata"]);
+        getMetadata } = _a, metadata = __rest(_a, ["apiKey", "projectID", "baseURL", "cacheURL", "remoteSource", "automaticTranslation", "getLocale", "defaultLocale", "approvedLocales", "renderMethod", "renderTimeout", "dictionary", "dictionaryName", "translations", "maxConcurrentRequests", "batchInterval", "getMetadata"]);
         // Cloud integration
-        this.apiKey = apiKey;
         this.projectID = projectID;
         this.remoteSource = remoteSource;
+        this.automaticTranslation = automaticTranslation;
         // Locales
         this.getLocale = getLocale;
         this.defaultLocale = defaultLocale;
@@ -137,8 +137,8 @@ class I18NConfiguration {
      * Get an entry from the dictionary
      * @returns An entry from the dictionary determined by id
     */
-    hasRemoteSource() {
-        return this.remoteSource;
+    automaticTranslationEnabled() {
+        return this.automaticTranslation;
     }
     /**
      * Get the rendering instructions
@@ -158,7 +158,7 @@ class I18NConfiguration {
      * @returns True if translation is required, otherwise false
      */
     translationRequired(locale) {
-        if (!this.apiKey || !this.projectID || !locale)
+        if (!locale)
             return false;
         if (this.approvedLocales && !this.approvedLocales.some(approvedLocale => (0, generaltranslation_1.isSameLanguage)(locale, approvedLocale)))
             return false;

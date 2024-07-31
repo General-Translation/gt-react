@@ -10,7 +10,7 @@ export default function createIntlFunction({
         if (!content || typeof content !== 'string' || !I18NConfig.translationRequired(options.targetLanguage)) return content;
         const translation = await I18NConfig.getTranslation(options.targetLanguage, content, options.id, options.dictionaryName);
         if (translation) return translation;
-        if (I18NConfig.hasRemoteSource()) {
+        if (I18NConfig.automaticTranslationEnabled()) {
             const translationPromise = I18NConfig.intl({ content, targetLanguage: options.targetLanguage, options });
             const renderSettings = I18NConfig.getRenderSettings()
             if (renderSettings.method !== "subtle") {

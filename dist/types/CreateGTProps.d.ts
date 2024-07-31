@@ -4,6 +4,7 @@ type CreateGTProps = {
     baseURL?: string;
     cacheURL?: string;
     remoteSource?: boolean;
+    automaticTranslation?: boolean;
     approvedLocales?: string[];
     defaultLocale?: string;
     getLocale?: () => string;

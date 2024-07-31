@@ -10,6 +10,7 @@ type I18NConfigurationParams = {
     cacheURL: string;
     baseURL: string, 
     remoteSource: boolean;
+    automaticTranslation: boolean;
     getLocale: () => string;
     defaultLocale: string, 
     approvedLocales?: string[],
@@ -26,9 +27,9 @@ type I18NConfigurationParams = {
 
 export default class I18NConfiguration {
     // Cloud integration
-    apiKey: string;
     projectID: string;
     remoteSource: boolean;
+    automaticTranslation: boolean;
     // Locale info
     getLocale: () => string;
     defaultLocale: string;
@@ -59,7 +60,7 @@ export default class I18NConfiguration {
         // Cloud integration
         apiKey, projectID,
         baseURL, cacheURL, 
-        remoteSource,
+        remoteSource, automaticTranslation,
         // Locale info
         getLocale,
         defaultLocale,
@@ -75,9 +76,9 @@ export default class I18NConfiguration {
         ...metadata
     }: I18NConfigurationParams) {
         // Cloud integration
-        this.apiKey = apiKey;
         this.projectID = projectID;
         this.remoteSource = remoteSource;
+        this.automaticTranslation = automaticTranslation;
         // Locales
         this.getLocale = getLocale;
         this.defaultLocale = defaultLocale;
@@ -151,8 +152,8 @@ export default class I18NConfiguration {
      * Get an entry from the dictionary
      * @returns An entry from the dictionary determined by id
     */
-    hasRemoteSource(): boolean {
-        return this.remoteSource;
+    automaticTranslationEnabled(): boolean {
+        return this.automaticTranslation;
     }
 
     /**
@@ -174,7 +175,7 @@ export default class I18NConfiguration {
      * @returns True if translation is required, otherwise false
      */
     translationRequired(locale: string): boolean {
-        if (!this.apiKey || !this.projectID || !locale) return false;
+        if (!locale) return false;
         if (this.approvedLocales && !this.approvedLocales.some(approvedLocale => isSameLanguage(locale, approvedLocale))) return false;
         if (isSameLanguage(locale, this.defaultLocale)) return false;
         return true;

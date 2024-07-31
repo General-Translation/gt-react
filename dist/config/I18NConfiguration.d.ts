@@ -5,6 +5,7 @@ type I18NConfigurationParams = {
     cacheURL: string;
     baseURL: string;
     remoteSource: boolean;
+    automaticTranslation: boolean;
     getLocale: () => string;
     defaultLocale: string;
     approvedLocales?: string[];
@@ -19,9 +20,9 @@ type I18NConfigurationParams = {
     [key: string]: any;
 };
 export default class I18NConfiguration {
-    apiKey: string;
     projectID: string;
     remoteSource: boolean;
+    automaticTranslation: boolean;
     getLocale: () => string;
     defaultLocale: string;
     approvedLocales: string[] | undefined;
@@ -40,7 +41,7 @@ export default class I18NConfiguration {
     private _queue;
     private _activeRequests;
     private _translationCache;
-    constructor({ apiKey, projectID, baseURL, cacheURL, remoteSource, getLocale, defaultLocale, approvedLocales, renderMethod, renderTimeout, dictionary, dictionaryName, translations, maxConcurrentRequests, batchInterval, getMetadata, ...metadata }: I18NConfigurationParams);
+    constructor({ apiKey, projectID, baseURL, cacheURL, remoteSource, automaticTranslation, getLocale, defaultLocale, approvedLocales, renderMethod, renderTimeout, dictionary, dictionaryName, translations, maxConcurrentRequests, batchInterval, getMetadata, ...metadata }: I18NConfigurationParams);
     /**
      * Gets the application's default locale
      * @returns {string} A BCP-47 language tag
@@ -65,7 +66,7 @@ export default class I18NConfiguration {
      * Get an entry from the dictionary
      * @returns An entry from the dictionary determined by id
     */
-    hasRemoteSource(): boolean;
+    automaticTranslationEnabled(): boolean;
     /**
      * Get the rendering instructions
      * @returns An object containing the current method and timeout.

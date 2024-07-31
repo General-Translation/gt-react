@@ -25,7 +25,8 @@ import Variables from './types/VariableInterface';
  * @param {string} [params.projectID] - Project ID for cloud integration. Default is fetched from environment variable `GT_PROJECT_ID`.
  * @param {string} [params.cacheURL] - URL for caching. Default is "https://cache.gtx.dev".
  * @param {string} [params.baseURL] - Base URL for API requests. Default is "https://prod.gtx.dev".
- * @param {Object} [params.remoteSource] - Boolean which determines whether library interacts with cloud serrvices.
+ * @param {Object} [params.remoteSource] - Boolean which determines whether library fetches a dictionary from a remote cache.
+ * @param {Object} [params.automaticTranslation] - Boolean which determines whether library translates using cloud services.
  * @param {string[]} [params.approvedLocales] - List of approved locales. Default is an empty array.
  * @param {string} [params.defaultLocale] - Default locale for the translation. Default is the first locale in `approvedLocales` or 'en'.
  * @param {Function} [params.getLocale] - Function to get the current locale. Default returns the `defaultLocale`.
@@ -46,6 +47,7 @@ export function createGT({
     cacheURL = "https://cache.gtx.dev",
     baseURL = "https://prod.gtx.dev",
     remoteSource = true,
+    automaticTranslation = true,
     // Locale info
     approvedLocales,
     defaultLocale = approvedLocales?.[0] || 'en',
@@ -68,7 +70,8 @@ export function createGT({
     projectID: getDefaultFromEnv('GT_PROJECT_ID'),
     cacheURL: "https://cache.gtx.dev",
     baseURL: "https://prod.gtx.dev",
-    approvedLocales: [],
+    remoteSource: true,
+    automaticTranslation: true,
     defaultLocale: 'en',
     getLocale: () => 'en',
     renderMethod: "replace",
@@ -81,7 +84,7 @@ export function createGT({
 }): GeneralTranslation {
 
     const I18NConfig = new I18NConfiguration({
-        apiKey, projectID, cacheURL, baseURL, remoteSource,
+        apiKey, projectID, cacheURL, baseURL, remoteSource, automaticTranslation,
         getLocale, defaultLocale, approvedLocales,
         renderMethod, renderTimeout,
         dictionary, 

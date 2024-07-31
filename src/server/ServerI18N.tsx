@@ -59,7 +59,9 @@ export default async function ServerI18N({
 
     // Check if a new translation for this site can be created
 
-    if (!I18NConfig.hasRemoteSource()) {
+    const renderSettings = I18NConfig.getRenderSettings();
+
+    if (!I18NConfig.automaticTranslationEnabled()) {
         return (
             <>{children}</>
         )
@@ -69,7 +71,6 @@ export default async function ServerI18N({
     
     const I18NChildrenPromise = I18NConfig.translateChildren({ children: childrenAsObjects, targetLanguage: locale, metadata: { ...props } });
     
-    const renderSettings = I18NConfig.getRenderSettings();
     const renderMethod = props?.renderMethod || renderSettings.method;
     const timeout = renderSettings?.timeout;
 
