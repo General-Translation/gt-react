@@ -58,13 +58,13 @@ class I18NConfiguration {
         // Locale info
         getLocale, defaultLocale, approvedLocales, 
         // Render method
-        renderMethod, 
+        renderMethod, renderTimeout, 
         // Dictionaries
         dictionary, dictionaryName, translations, 
         // Batching config
         maxConcurrentRequests, batchInterval, 
         // Other metadata
-        getMetadata } = _a, metadata = __rest(_a, ["apiKey", "projectID", "baseURL", "cacheURL", "remoteSource", "getLocale", "defaultLocale", "approvedLocales", "renderMethod", "dictionary", "dictionaryName", "translations", "maxConcurrentRequests", "batchInterval", "getMetadata"]);
+        getMetadata } = _a, metadata = __rest(_a, ["apiKey", "projectID", "baseURL", "cacheURL", "remoteSource", "getLocale", "defaultLocale", "approvedLocales", "renderMethod", "renderTimeout", "dictionary", "dictionaryName", "translations", "maxConcurrentRequests", "batchInterval", "getMetadata"]);
         // Cloud integration
         this.apiKey = apiKey;
         this.projectID = projectID;
@@ -75,6 +75,7 @@ class I18NConfiguration {
         this.approvedLocales = approvedLocales;
         // Render method
         this.renderMethod = renderMethod;
+        this.renderTimeout = renderTimeout;
         // Dictionaries
         this.dictionary = dictionary;
         this.dictionaryName = dictionaryName;
@@ -132,15 +133,24 @@ class I18NConfiguration {
     getDictionaryEntry(id) {
         return (0, getDictionaryEntry_1.default)(id, this.dictionary);
     }
+    /**
+     * Get an entry from the dictionary
+     * @returns An entry from the dictionary determined by id
+    */
     hasRemoteSource() {
         return this.remoteSource;
     }
     /**
-     * Get the render method
-     * @returns The current render method. As of 7/26/24: "replace", "hang", "subtle"
+     * Get the rendering instructions
+     * @returns An object containing the current method and timeout.
+     * As of 7/26/24: method is "replace", "hang", "subtle".
+     * Timeout is a number or null, representing no assigned timeout.
     */
-    getRenderMethod() {
-        return this.renderMethod;
+    getRenderSettings() {
+        return {
+            method: this.renderMethod,
+            timeout: this.renderTimeout
+        };
     }
     /**
      * Check if translation is required based on the user's locale

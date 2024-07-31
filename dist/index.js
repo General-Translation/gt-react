@@ -43,6 +43,7 @@ const createCurrencyVariableComponent_1 = __importDefault(require("./primitives/
  * @param {string} [params.defaultLocale] - Default locale for the translation. Default is the first locale in `approvedLocales` or 'en'.
  * @param {Function} [params.getLocale] - Function to get the current locale. Default returns the `defaultLocale`.
  * @param {string} [params.renderMethod] - How translations are rendered for the first time. options are "replace", "hang", "subtle". Default is "replace".
+ * @param {string} [params.renderTimeout] - Timeout before rendering a new translation is called off.
  * @param {string} [params.dictionaryName] - Name of the dictionary to use. Default is "default".
  * @param {Object} [params.dictionary] - Dictionary object containing default language content.
  * @param {Object} [params.translations] - An object which contains strings which correspond to locales and functions which define translation dictionaries associated with those locales.
@@ -60,9 +61,9 @@ function createGT(_a = {
     defaultLocale: 'en',
     getLocale: () => 'en',
     renderMethod: "replace",
+    renderTimeout: 8500,
     dictionaryName: "default",
     dictionary: {},
-    translations: null,
     maxConcurrentRequests: 2,
     batchInterval: 1000,
     getMetadata: () => { return {}; }
@@ -74,15 +75,16 @@ function createGT(_a = {
     approvedLocales, defaultLocale = (approvedLocales === null || approvedLocales === void 0 ? void 0 : approvedLocales[0]) || 'en', getLocale = () => { return defaultLocale; }, 
     // Rendering
     renderMethod = "replace", // "hang", "subtle"
+    renderTimeout = 8500, 
     // Dictionaries
-    dictionaryName = "default", dictionary = {}, translations = null, 
+    dictionaryName = "default", dictionary = {}, translations, 
     // Batching config
     maxConcurrentRequests = 2, batchInterval = 1000, 
     // Other metadata
-    getMetadata = () => { return {}; } } = _a, metadata = __rest(_a, ["apiKey", "projectID", "cacheURL", "baseURL", "remoteSource", "approvedLocales", "defaultLocale", "getLocale", "renderMethod", "dictionaryName", "dictionary", "translations", "maxConcurrentRequests", "batchInterval", "getMetadata"]);
+    getMetadata = () => { return {}; } } = _a, metadata = __rest(_a, ["apiKey", "projectID", "cacheURL", "baseURL", "remoteSource", "approvedLocales", "defaultLocale", "getLocale", "renderMethod", "renderTimeout", "dictionaryName", "dictionary", "translations", "maxConcurrentRequests", "batchInterval", "getMetadata"]);
     const I18NConfig = new I18NConfiguration_1.default(Object.assign({ apiKey, projectID, cacheURL, baseURL, remoteSource,
         getLocale, defaultLocale, approvedLocales,
-        renderMethod,
+        renderMethod, renderTimeout,
         dictionary, dictionaryName: (0, getDefaultFromEnv_1.default)('GT_DICTIONARY_NAME') || dictionaryName, // override from .env
         translations,
         maxConcurrentRequests, batchInterval,

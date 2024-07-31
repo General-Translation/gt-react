@@ -11,10 +11,11 @@ type CreateGTProps = {
     getLocale?: () => string;
     // Rendering
     renderMethod?: string;
+    renderTimeout?: number | null;
     // Dictionaries
     dictionaryName?: string;
     dictionary?: Record<string, any>
-    translations?: Record<string, () => Promise<Record<string, any>>> | null;
+    translations?: Record<string, () => Promise<Record<string, any>>>;
     // Batching config
     maxConcurrentRequests?: number;
     batchInterval?: number; // ms

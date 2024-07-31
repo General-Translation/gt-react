@@ -64,20 +64,30 @@ function ServerI18N(_a) {
         }
         // Create a new translation for this site and render it
         const I18NChildrenPromise = I18NConfig.translateChildren({ children: childrenAsObjects, targetLanguage: locale, metadata: Object.assign({}, props) });
-        const renderMethod = (props === null || props === void 0 ? void 0 : props.renderMethod) || I18NConfig.getRenderMethod();
+        const renderSettings = I18NConfig.getRenderSettings();
+        const renderMethod = (props === null || props === void 0 ? void 0 : props.renderMethod) || renderSettings.method;
+        const timeout = renderSettings === null || renderSettings === void 0 ? void 0 : renderSettings.timeout;
         if (renderMethod === "replace") {
             // Return the site in the default language
             // Replace with translated site when ready
             const InnerResolver = () => __awaiter(this, void 0, void 0, function* () {
-                const I18NChildren = yield I18NChildrenPromise;
-                return (0, renderChildren_js_1.default)({ source: taggedChildren, target: I18NChildren, renderAttributes, locale, defaultLocale });
+                const renderPromise = I18NChildrenPromise.then(target => (0, renderChildren_js_1.default)({ source: taggedChildren, target, renderAttributes, locale, defaultLocale }));
+                if (typeof timeout === 'number') {
+                    const timeoutPromise = new Promise((resolve) => setTimeout(() => resolve(children), timeout));
+                    return yield Promise.race([renderPromise, timeoutPromise]);
+                }
+                return yield renderPromise;
             });
             return ((0, jsx_runtime_1.jsx)(jsx_runtime_1.Fragment, { children: (0, jsx_runtime_1.jsx)(I18NResolver_js_1.default, { fallback: children, children: (0, jsx_runtime_1.jsx)(InnerResolver, {}) }) }));
         }
         if (renderMethod === "hang") {
             // Wait until the site is translated to return
-            const I18NChildren = (0, renderChildren_js_1.default)({ source: taggedChildren, target: yield I18NChildrenPromise, renderAttributes, locale, defaultLocale });
-            return ((0, jsx_runtime_1.jsx)(jsx_runtime_1.Fragment, { children: I18NChildren }));
+            const renderPromise = I18NChildrenPromise.then(target => (0, renderChildren_js_1.default)({ source: taggedChildren, target, renderAttributes, locale, defaultLocale }));
+            if (typeof timeout === 'number') {
+                const timeoutPromise = new Promise((resolve) => setTimeout(() => resolve(children), timeout));
+                return ((0, jsx_runtime_1.jsx)(jsx_runtime_1.Fragment, { children: yield Promise.race([renderPromise, timeoutPromise]) }));
+            }
+            return ((0, jsx_runtime_1.jsx)(jsx_runtime_1.Fragment, { children: yield renderPromise }));
         }
         return (
         // return the children, with no special rendering

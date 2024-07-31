@@ -8,9 +8,10 @@ type CreateGTProps = {
     defaultLocale?: string;
     getLocale?: () => string;
     renderMethod?: string;
+    renderTimeout?: number | null;
     dictionaryName?: string;
     dictionary?: Record<string, any>;
-    translations?: Record<string, () => Promise<Record<string, any>>> | null;
+    translations?: Record<string, () => Promise<Record<string, any>>>;
     maxConcurrentRequests?: number;
     batchInterval?: number;
     getMetadata?: () => Record<string, any>;

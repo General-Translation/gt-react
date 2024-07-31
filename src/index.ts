@@ -30,6 +30,7 @@ import Variables from './types/VariableInterface';
  * @param {string} [params.defaultLocale] - Default locale for the translation. Default is the first locale in `approvedLocales` or 'en'.
  * @param {Function} [params.getLocale] - Function to get the current locale. Default returns the `defaultLocale`.
  * @param {string} [params.renderMethod] - How translations are rendered for the first time. options are "replace", "hang", "subtle". Default is "replace".
+ * @param {string} [params.renderTimeout] - Timeout before rendering a new translation is called off.
  * @param {string} [params.dictionaryName] - Name of the dictionary to use. Default is "default".
  * @param {Object} [params.dictionary] - Dictionary object containing default language content.
  * @param {Object} [params.translations] - An object which contains strings which correspond to locales and functions which define translation dictionaries associated with those locales.
@@ -51,10 +52,11 @@ export function createGT({
     getLocale = () => { return defaultLocale },
     // Rendering
     renderMethod = "replace", // "hang", "subtle"
+    renderTimeout = 8500,
     // Dictionaries
     dictionaryName = "default",
     dictionary = {},
-    translations = null,
+    translations,
     // Batching config
     maxConcurrentRequests = 2,
     batchInterval = 1000,
@@ -70,9 +72,9 @@ export function createGT({
     defaultLocale: 'en',
     getLocale: () => 'en',
     renderMethod: "replace",
+    renderTimeout: 8500,
     dictionaryName: "default",
     dictionary: {},
-    translations: null,
     maxConcurrentRequests: 2,
     batchInterval: 1000,
     getMetadata: () => { return {} }
@@ -81,7 +83,7 @@ export function createGT({
     const I18NConfig = new I18NConfiguration({
         apiKey, projectID, cacheURL, baseURL, remoteSource,
         getLocale, defaultLocale, approvedLocales,
-        renderMethod, 
+        renderMethod, renderTimeout,
         dictionary, 
         dictionaryName: getDefaultFromEnv('GT_DICTIONARY_NAME') || dictionaryName, // override from .env
         translations,

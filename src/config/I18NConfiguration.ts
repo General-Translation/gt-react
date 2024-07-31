@@ -14,9 +14,10 @@ type I18NConfigurationParams = {
     defaultLocale: string, 
     approvedLocales?: string[],
     renderMethod: string, 
+    renderTimeout: number | null,
     dictionary: Record<string, any>, 
     dictionaryName: string;
-    translations: Record<string, () => Promise<Record<string, any>>> | null;
+    translations?: Record<string, () => Promise<Record<string, any>>>;
     maxConcurrentRequests: number;
     batchInterval: number;
     getMetadata: () => Record<string, any>;
@@ -34,10 +35,11 @@ export default class I18NConfiguration {
     approvedLocales: string[] | undefined;
     // Rendering
     renderMethod: string;
+    renderTimeout: number | null;
     // Dictionaries
     dictionaryName: string;
     dictionary: Record<string, any>;
-    translations: Record<string, () => Promise<Record<string, any>>> | null;
+    translations?: Record<string, () => Promise<Record<string, any>>>;
     private _localDictionaryManager: LocalDictionaryManager | undefined;
     private _remoteDictionaryManager: RemoteDictionaryManager | undefined;
     // GT
@@ -63,7 +65,7 @@ export default class I18NConfiguration {
         defaultLocale,
         approvedLocales,
         // Render method
-        renderMethod,
+        renderMethod, renderTimeout,
         // Dictionaries
         dictionary, dictionaryName, translations,
         // Batching config
@@ -82,6 +84,7 @@ export default class I18NConfiguration {
         this.approvedLocales = approvedLocales;
         // Render method
         this.renderMethod = renderMethod;
+        this.renderTimeout = renderTimeout;
         // Dictionaries
         this.dictionary = dictionary;
         this.dictionaryName = dictionaryName;
@@ -144,16 +147,25 @@ export default class I18NConfiguration {
         return getDictionaryEntry(id, this.dictionary);
     }
 
+    /**
+     * Get an entry from the dictionary
+     * @returns An entry from the dictionary determined by id
+    */
     hasRemoteSource(): boolean {
         return this.remoteSource;
     }
 
     /**
-     * Get the render method
-     * @returns The current render method. As of 7/26/24: "replace", "hang", "subtle"
+     * Get the rendering instructions
+     * @returns An object containing the current method and timeout. 
+     * As of 7/26/24: method is "replace", "hang", "subtle".
+     * Timeout is a number or null, representing no assigned timeout.
     */
-    getRenderMethod(): string {
-        return this.renderMethod;
+    getRenderSettings(): { method: string, timeout: number | null } {
+        return {
+            method: this.renderMethod,
+            timeout: this.renderTimeout
+        }
     }
 
     /**

@@ -12,7 +12,13 @@ export default function createIntlFunction({
         if (translation) return translation;
         if (I18NConfig.hasRemoteSource()) {
             const translationPromise = I18NConfig.intl({ content, targetLanguage: options.targetLanguage, options });
-            if (I18NConfig.getRenderMethod() !== "subtle") {
+            const renderSettings = I18NConfig.getRenderSettings()
+            if (renderSettings.method !== "subtle") {
+                const timeout = renderSettings.timeout;
+                if (typeof timeout === 'number') {
+                    const timeoutPromise = new Promise<string>((resolve) => setTimeout(() => resolve(content), timeout));
+                    return await Promise.race([translationPromise, timeoutPromise]);
+                }
                 return await translationPromise;
             }
         }

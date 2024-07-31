@@ -68,15 +68,22 @@ export default async function ServerI18N({
     // Create a new translation for this site and render it
     
     const I18NChildrenPromise = I18NConfig.translateChildren({ children: childrenAsObjects, targetLanguage: locale, metadata: { ...props } });
-    const renderMethod = props?.renderMethod || I18NConfig.getRenderMethod();
+    
+    const renderSettings = I18NConfig.getRenderSettings();
+    const renderMethod = props?.renderMethod || renderSettings.method;
+    const timeout = renderSettings?.timeout;
 
     if (renderMethod === "replace") {
         // Return the site in the default language
         // Replace with translated site when ready
 
         const InnerResolver = async () => {
-            const I18NChildren = await I18NChildrenPromise;
-            return renderChildren({ source: taggedChildren, target: I18NChildren, renderAttributes, locale, defaultLocale });
+            const renderPromise = I18NChildrenPromise.then(target => renderChildren({ source: taggedChildren, target, renderAttributes, locale, defaultLocale }))
+            if (typeof timeout === 'number') {
+                const timeoutPromise = new Promise((resolve) => setTimeout(() => resolve(children), timeout));
+                return await Promise.race([renderPromise, timeoutPromise])
+            }
+            return await renderPromise;
         }
     
         return (
@@ -89,10 +96,18 @@ export default async function ServerI18N({
 
     if (renderMethod === "hang") {
         // Wait until the site is translated to return
-        const I18NChildren = renderChildren({ source: taggedChildren, target: await I18NChildrenPromise, renderAttributes, locale, defaultLocale });
+        const renderPromise = I18NChildrenPromise.then(target => renderChildren({ source: taggedChildren, target, renderAttributes, locale, defaultLocale }))
+        if (typeof timeout === 'number') {
+            const timeoutPromise = new Promise((resolve) => setTimeout(() => resolve(children), timeout));
+            return (
+                <>
+                    {await Promise.race([renderPromise, timeoutPromise])}
+                </>
+            )
+        }
         return (
             <>
-                {I18NChildren}
+                {await renderPromise}
             </>
         )
     }

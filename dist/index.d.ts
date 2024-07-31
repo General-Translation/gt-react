@@ -15,6 +15,7 @@ import Variables from './types/VariableInterface';
  * @param {string} [params.defaultLocale] - Default locale for the translation. Default is the first locale in `approvedLocales` or 'en'.
  * @param {Function} [params.getLocale] - Function to get the current locale. Default returns the `defaultLocale`.
  * @param {string} [params.renderMethod] - How translations are rendered for the first time. options are "replace", "hang", "subtle". Default is "replace".
+ * @param {string} [params.renderTimeout] - Timeout before rendering a new translation is called off.
  * @param {string} [params.dictionaryName] - Name of the dictionary to use. Default is "default".
  * @param {Object} [params.dictionary] - Dictionary object containing default language content.
  * @param {Object} [params.translations] - An object which contains strings which correspond to locales and functions which define translation dictionaries associated with those locales.
@@ -24,7 +25,7 @@ import Variables from './types/VariableInterface';
  * @returns {GeneralTranslation} An object containing internationalization and translation functions.
  */
 export declare function createGT({ apiKey, projectID, cacheURL, baseURL, remoteSource, approvedLocales, defaultLocale, getLocale, renderMethod, // "hang", "subtle"
-dictionaryName, dictionary, translations, maxConcurrentRequests, batchInterval, getMetadata, ...metadata }?: CreateI18NConfigProps): GeneralTranslation;
+renderTimeout, dictionaryName, dictionary, translations, maxConcurrentRequests, batchInterval, getMetadata, ...metadata }?: CreateI18NConfigProps): GeneralTranslation;
 /**
  * A lightweight configuration function which defines a set of variable components which can be used in a GT dictionary.
  *

@@ -9,9 +9,10 @@ type I18NConfigurationParams = {
     defaultLocale: string;
     approvedLocales?: string[];
     renderMethod: string;
+    renderTimeout: number | null;
     dictionary: Record<string, any>;
     dictionaryName: string;
-    translations: Record<string, () => Promise<Record<string, any>>> | null;
+    translations?: Record<string, () => Promise<Record<string, any>>>;
     maxConcurrentRequests: number;
     batchInterval: number;
     getMetadata: () => Record<string, any>;
@@ -25,9 +26,10 @@ export default class I18NConfiguration {
     defaultLocale: string;
     approvedLocales: string[] | undefined;
     renderMethod: string;
+    renderTimeout: number | null;
     dictionaryName: string;
     dictionary: Record<string, any>;
-    translations: Record<string, () => Promise<Record<string, any>>> | null;
+    translations?: Record<string, () => Promise<Record<string, any>>>;
     private _localDictionaryManager;
     private _remoteDictionaryManager;
     gt: GT;
@@ -38,7 +40,7 @@ export default class I18NConfiguration {
     private _queue;
     private _activeRequests;
     private _translationCache;
-    constructor({ apiKey, projectID, baseURL, cacheURL, remoteSource, getLocale, defaultLocale, approvedLocales, renderMethod, dictionary, dictionaryName, translations, maxConcurrentRequests, batchInterval, getMetadata, ...metadata }: I18NConfigurationParams);
+    constructor({ apiKey, projectID, baseURL, cacheURL, remoteSource, getLocale, defaultLocale, approvedLocales, renderMethod, renderTimeout, dictionary, dictionaryName, translations, maxConcurrentRequests, batchInterval, getMetadata, ...metadata }: I18NConfigurationParams);
     /**
      * Gets the application's default locale
      * @returns {string} A BCP-47 language tag
@@ -59,12 +61,21 @@ export default class I18NConfiguration {
      * @returns An entry from the dictionary determined by id
     */
     getDictionaryEntry(id: string): any;
+    /**
+     * Get an entry from the dictionary
+     * @returns An entry from the dictionary determined by id
+    */
     hasRemoteSource(): boolean;
     /**
-     * Get the render method
-     * @returns The current render method. As of 7/26/24: "replace", "hang", "subtle"
+     * Get the rendering instructions
+     * @returns An object containing the current method and timeout.
+     * As of 7/26/24: method is "replace", "hang", "subtle".
+     * Timeout is a number or null, representing no assigned timeout.
     */
-    getRenderMethod(): string;
+    getRenderSettings(): {
+        method: string;
+        timeout: number | null;
+    };
     /**
      * Check if translation is required based on the user's locale
      * @param locale - The user's locale
