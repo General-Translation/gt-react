@@ -1,5 +1,4 @@
 'use client'
-
 import React, { ReactNode, useState, useEffect } from 'react';
 import { Suspense } from 'react';
 
@@ -8,44 +7,45 @@ interface I18NResolverProps {
     fallback: ReactNode;
 }
 
-/**
- * I18NResolver component handles the rendering of children which may be a promise.
- * If the promise resolves, the children are rendered inside a Suspense component.
- * If the promise fails, the fallback is rendered permanently.
- * 
- * @param {I18NResolverProps} props - The properties for the component.
- * @returns {JSX.Element} - The rendered component.
- */
 export default function I18NResolver({ children, fallback }: I18NResolverProps): JSX.Element {
-
-    const [resolvedChildren, setResolvedChildren] = useState<ReactNode>(fallback);
+    
+    const [resolvedChildren, setResolvedChildren] = useState<any>(fallback);
     const [hasError, setHasError] = useState(false);
 
     useEffect(() => {
         let isMounted = true;
+        let abortController = new AbortController();
 
         const resolveChildren = async () => {
             try {
-                const resolved = await Promise.resolve(children);
-                if (isMounted) {
-                    setResolvedChildren(resolved);
+                if (children instanceof Promise) {
+                    const resolved = await Promise.race([
+                        children,
+                        new Promise((_, reject) => {
+                            abortController.signal.addEventListener('abort', () => 
+                                reject(new Error('Connection closed'))
+                            );
+                        })
+                    ]);
+                    if (isMounted) {
+                        setResolvedChildren(resolved);
+                    }
+                } else {
+                    setResolvedChildren(children);
                 }
             } catch (error) {
-                console.error(error)
+                console.error('Error resolving children:', error);
                 if (isMounted) {
                     setHasError(true);
                 }
             }
         };
 
-        if (children instanceof Promise) {
-            resolveChildren();
-        } else {
-            setResolvedChildren(children);
-        }
+        resolveChildren();
 
         return () => {
             isMounted = false;
+            abortController.abort();
         };
     }, [children]);
 
