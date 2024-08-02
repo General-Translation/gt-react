@@ -1,4 +1,3 @@
-"use strict";
 var __rest = (this && this.__rest) || function (s, e) {
     var t = {};
     for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
@@ -10,26 +9,20 @@ var __rest = (this && this.__rest) || function (s, e) {
         }
     return t;
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.createGT = createGT;
-exports.createVariables = createVariables;
-require("server-only");
-const getDefaultFromEnv_1 = __importDefault(require("./local/getDefaultFromEnv"));
-const createI18NComponent_1 = __importDefault(require("./server/createI18NComponent"));
-const I18NConfiguration_1 = __importDefault(require("./config/I18NConfiguration"));
-const createIntlFunction_1 = __importDefault(require("./intl/createIntlFunction"));
-const createGTProviderComponent_1 = __importDefault(require("./client/createGTProviderComponent"));
-const createTFunction_1 = __importDefault(require("./dictionary/createTFunction"));
-const createDictFunction_1 = __importDefault(require("./dictionary/createDictFunction"));
-const createValueComponent_1 = __importDefault(require("./primitives/value/createValueComponent"));
-const createNumericComponent_1 = __importDefault(require("./primitives/numeric/createNumericComponent"));
-const createVariableComponent_1 = __importDefault(require("./primitives/variables/Variable/createVariableComponent"));
-const createNumberVariableComponent_1 = __importDefault(require("./primitives/variables/NumberVariable/createNumberVariableComponent"));
-const createDateVariableComponent_1 = __importDefault(require("./primitives/variables/DateVariable/createDateVariableComponent"));
-const createCurrencyVariableComponent_1 = __importDefault(require("./primitives/variables/CurrencyVariable/createCurrencyVariableComponent"));
+import 'server-only';
+import getDefaultFromEnv from "./local/getDefaultFromEnv";
+import createI18NComponent from './server/createI18NComponent';
+import I18NConfiguration from './config/I18NConfiguration';
+import createIntlFunction from './intl/createIntlFunction';
+import createGTProviderComponent from './client/createGTProviderComponent';
+import createTFunction from './dictionary/createTFunction';
+import createDictFunction from './dictionary/createDictFunction';
+import createValueComponent from './primitives/value/createValueComponent';
+import createNumericComponent from './primitives/numeric/createNumericComponent';
+import createVariableComponent from './primitives/variables/Variable/createVariableComponent';
+import createNumberVariableComponent from './primitives/variables/NumberVariable/createNumberVariableComponent';
+import createDateVariableComponent from './primitives/variables/DateVariable/createDateVariableComponent';
+import createCurrencyVariableComponent from './primitives/variables/CurrencyVariable/createCurrencyVariableComponent';
 /**
  * Initializes the `gt-react` i18n library.
  *
@@ -53,9 +46,9 @@ const createCurrencyVariableComponent_1 = __importDefault(require("./primitives/
  * @param {Object} [...metadata] - Any additional metadata. Used for experimental variables.
  * @returns {GeneralTranslation} An object containing internationalization and translation functions.
  */
-function createGT(_a = {
-    apiKey: (0, getDefaultFromEnv_1.default)('GT_API_KEY'),
-    projectID: (0, getDefaultFromEnv_1.default)('GT_PROJECT_ID'),
+export function createGT(_a = {
+    apiKey: getDefaultFromEnv('GT_API_KEY'),
+    projectID: getDefaultFromEnv('GT_PROJECT_ID'),
     cacheURL: "https://cache.gtx.dev",
     baseURL: "https://prod.gtx.dev",
     remoteSource: true,
@@ -72,7 +65,7 @@ function createGT(_a = {
 }) {
     var { 
     // Cloud integration
-    apiKey = (0, getDefaultFromEnv_1.default)('GT_API_KEY'), projectID = (0, getDefaultFromEnv_1.default)('GT_PROJECT_ID'), cacheURL = "https://cache.gtx.dev", baseURL = "https://prod.gtx.dev", remoteSource = true, automaticTranslation = true, 
+    apiKey = getDefaultFromEnv('GT_API_KEY'), projectID = getDefaultFromEnv('GT_PROJECT_ID'), cacheURL = "https://cache.gtx.dev", baseURL = "https://prod.gtx.dev", remoteSource = true, automaticTranslation = true, 
     // Locale info
     approvedLocales, defaultLocale = (approvedLocales === null || approvedLocales === void 0 ? void 0 : approvedLocales[0]) || 'en', getLocale = () => { return defaultLocale; }, 
     // Rendering
@@ -84,29 +77,29 @@ function createGT(_a = {
     maxConcurrentRequests = 2, batchInterval = 1000, 
     // Other metadata
     getMetadata = () => { return {}; } } = _a, metadata = __rest(_a, ["apiKey", "projectID", "cacheURL", "baseURL", "remoteSource", "automaticTranslation", "approvedLocales", "defaultLocale", "getLocale", "renderMethod", "renderTimeout", "dictionaryName", "dictionary", "translations", "maxConcurrentRequests", "batchInterval", "getMetadata"]);
-    const I18NConfig = new I18NConfiguration_1.default(Object.assign({ apiKey, projectID, cacheURL, baseURL, remoteSource, automaticTranslation,
+    const I18NConfig = new I18NConfiguration(Object.assign({ apiKey, projectID, cacheURL, baseURL, remoteSource, automaticTranslation,
         getLocale, defaultLocale, approvedLocales,
         renderMethod, renderTimeout,
-        dictionary, dictionaryName: (0, getDefaultFromEnv_1.default)('GT_DICTIONARY_NAME') || dictionaryName, // override from .env
+        dictionary, dictionaryName: getDefaultFromEnv('GT_DICTIONARY_NAME') || dictionaryName, // override from .env
         translations,
         maxConcurrentRequests, batchInterval,
         getMetadata }, metadata));
     // ----- <I18N> ------ //
-    const I18N = (0, createI18NComponent_1.default)(Object.assign({ I18NConfig }, metadata));
+    const I18N = createI18NComponent(Object.assign({ I18NConfig }, metadata));
     // ----- intl() ------ //
-    const intl = (0, createIntlFunction_1.default)(Object.assign({ I18NConfig }, metadata));
+    const intl = createIntlFunction(Object.assign({ I18NConfig }, metadata));
     // ----- <GTProvider> ------ //
-    const GTProvider = (0, createGTProviderComponent_1.default)(Object.assign({ I18NConfig, I18N, intl }, metadata));
+    const GTProvider = createGTProviderComponent(Object.assign({ I18NConfig, I18N, intl }, metadata));
     // ----- Dictionary ------ //
-    const t = (0, createTFunction_1.default)({ I18NConfig, I18N });
-    const dict = (0, createDictFunction_1.default)(I18NConfig);
+    const t = createTFunction({ I18NConfig, I18N });
+    const dict = createDictFunction(I18NConfig);
     // ----- Variables ----- //
-    const Value = (0, createValueComponent_1.default)(getLocale);
-    const Numeric = (0, createNumericComponent_1.default)(getLocale);
-    const Variable = (0, createVariableComponent_1.default)();
-    const NumberVariable = (0, createNumberVariableComponent_1.default)(getLocale);
-    const DateVariable = (0, createDateVariableComponent_1.default)(getLocale);
-    const CurrencyVariable = (0, createCurrencyVariableComponent_1.default)(getLocale);
+    const Value = createValueComponent(getLocale, defaultLocale);
+    const Numeric = createNumericComponent(getLocale, defaultLocale);
+    const Variable = createVariableComponent();
+    const NumberVariable = createNumberVariableComponent(getLocale, defaultLocale);
+    const DateVariable = createDateVariableComponent(getLocale, defaultLocale);
+    const CurrencyVariable = createCurrencyVariableComponent(getLocale, defaultLocale);
     // ----- Helper Functions ------ //
     const getDefaultLocale = I18NConfig.getDefaultLocale;
     return {
@@ -127,17 +120,17 @@ function createGT(_a = {
  * @param {Function} [params.getLocale] - Function to get the current locale. Default returns the `defaultLocale`.
  * @returns {Variables} - An object containing branching and variable components such as Value, Numeric, Variable, NumberVariable, DateVariable, and CurrencyVariable.
  */
-function createVariables({ approvedLocales = [], defaultLocale = (approvedLocales === null || approvedLocales === void 0 ? void 0 : approvedLocales[0]) || 'en', getLocale = () => { return defaultLocale; }, } = {
+export function createVariables({ approvedLocales = [], defaultLocale = (approvedLocales === null || approvedLocales === void 0 ? void 0 : approvedLocales[0]) || 'en', getLocale = () => { return defaultLocale; }, } = {
     defaultLocale: 'en',
     getLocale: () => { return 'en'; }
 }) {
     // ----- Variables ----- //
-    const Value = (0, createValueComponent_1.default)(getLocale);
-    const Numeric = (0, createNumericComponent_1.default)(getLocale);
-    const Variable = (0, createVariableComponent_1.default)();
-    const NumberVariable = (0, createNumberVariableComponent_1.default)(getLocale);
-    const DateVariable = (0, createDateVariableComponent_1.default)(getLocale);
-    const CurrencyVariable = (0, createCurrencyVariableComponent_1.default)(getLocale);
+    const Value = createValueComponent(getLocale, defaultLocale);
+    const Numeric = createNumericComponent(getLocale, defaultLocale);
+    const Variable = createVariableComponent();
+    const NumberVariable = createNumberVariableComponent(getLocale, defaultLocale);
+    const DateVariable = createDateVariableComponent(getLocale, defaultLocale);
+    const CurrencyVariable = createCurrencyVariableComponent(getLocale, defaultLocale);
     return {
         Value, Numeric, Variable,
         NumberVariable, DateVariable, CurrencyVariable

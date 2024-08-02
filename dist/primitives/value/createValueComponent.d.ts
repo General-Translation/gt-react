@@ -1,4 +1,4 @@
-export default function createValueComponent(getLocale: () => string): {
+export default function createValueComponent(getLocale: () => string, defaultLocale: string): {
     ({ children, ...props }: {
         children?: any;
         [key: string]: any;

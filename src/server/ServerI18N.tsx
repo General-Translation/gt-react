@@ -1,12 +1,13 @@
-import React, { ReactNode, Suspense } from 'react'
-import addGTIdentifier from './helpers/addGTIdentifier.js';
-import writeChildrenAsObjects from './helpers/writeChildrenAsObjects.js';
-import generateHash from './helpers/generateHash.js';
-import renderChildren from './renderChildren.js';
-import ReplaceResolver from './resolvers/ReplaceResolver.js';
-import SkeletonResolver from './resolvers/SkeletonResolver.js';
+import React, { ReactNode, Suspense, lazy } from 'react'
+import addGTIdentifier from './helpers/addGTIdentifier';
+import writeChildrenAsObjects from './helpers/writeChildrenAsObjects';
+import generateHash from './helpers/generateHash';
+import renderChildren from './renderChildren';
 import { getLanguageDirection } from 'generaltranslation';
-import I18NConfiguration from '../config/I18NConfiguration.js';
+import I18NConfiguration from '../config/I18NConfiguration';
+
+const ReplaceResolver = lazy(() => import('./resolvers/ReplaceResolver'));
+const SkeletonResolver = lazy(() => import('./resolvers/SkeletonResolver'));
 
 type ServerI18NProps = {
     I18NConfig: I18NConfiguration
@@ -88,7 +89,6 @@ export default async function ServerI18N({
         return (
             <>
                 <SkeletonResolver fallback={children}>{promise}</SkeletonResolver>
-                
             </>
         )
     }

@@ -1,10 +1,4 @@
-"use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.default = processBranches;
-const react_1 = __importDefault(require("react"));
+import React from "react";
 function isValidNestedGTNode(node) {
     return (node === null ||
         typeof node === 'undefined' ||
@@ -12,7 +6,7 @@ function isValidNestedGTNode(node) {
         typeof node === 'string' ||
         typeof node === 'number' ||
         typeof node === 'boolean' ||
-        react_1.default.isValidElement(node) ||
+        React.isValidElement(node) ||
         (Array.isArray(node) && node.every(isValidNestedGTNode)));
 }
 function isValidGTNode(node) {
@@ -21,7 +15,7 @@ function isValidGTNode(node) {
         typeof node === 'string' ||
         typeof node === 'number' ||
         typeof node === 'boolean' ||
-        react_1.default.isValidElement(node) ||
+        React.isValidElement(node) ||
         (Array.isArray(node) && node.every(isValidNestedGTNode)));
 }
 /**
@@ -31,7 +25,7 @@ function isValidGTNode(node) {
  * @param {Function} f The function to apply to each leaf node of the tree.
  * @returns {any} The processed tree structure with the function applied to each leaf node.
  */
-function processBranches(branches, f) {
+export default function processBranches(branches, f) {
     if (isValidGTNode(branches)) {
         return f(branches);
     }

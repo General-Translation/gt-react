@@ -1,4 +1,4 @@
-export default function createNumericComponent(getLocale: () => string): {
+export default function createNumericComponent(getLocale: () => string, defaultLocale: string): {
     ({ children, ...props }: {
         children?: any;
         [key: string]: any;

@@ -1,12 +1,8 @@
-"use strict";
 'use client';
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-const jsx_runtime_1 = require("react/jsx-runtime");
-const react_1 = require("react");
-const useLocale_1 = __importDefault(require("../../hooks/useLocale"));
+import { jsx as _jsx } from "react/jsx-runtime";
+import { useEffect, useState } from 'react';
+import useLocale from '../../hooks/useLocale';
+import useDefaultLocale from '../../hooks/useDefaultLocale';
 /**
  * DateVariable component formats and displays a date based on the current language settings.
  * It converts different types of date inputs and formats them according to the locale.
@@ -19,10 +15,9 @@ const useLocale_1 = __importDefault(require("../../hooks/useLocale"));
  * @returns {ReactNode} A span element containing the formatted date with specific data attributes
  */
 const ClientDateVariable = ({ children, name = "date", defaultValue, options = {} } = { name: "date" }) => {
-    // Retrieve the current language using a custom hook
-    const locale = (0, useLocale_1.default)();
-    const [formattedValue, setFormattedValue] = (0, react_1.useState)('');
-    (0, react_1.useEffect)(() => {
+    const locales = [useLocale(), useDefaultLocale()];
+    const [formattedValue, setFormattedValue] = useState('');
+    useEffect(() => {
         let dateValue;
         // Determine the default value to use
         defaultValue = (typeof children !== 'undefined' && typeof defaultValue === 'undefined') ? children : defaultValue;
@@ -43,14 +38,14 @@ const ClientDateVariable = ({ children, name = "date", defaultValue, options = {
         // Return an empty string if dateValue is undefined
         if (typeof dateValue !== 'undefined') {
             // Format the date using Intl.DateTimeFormat or toLocaleString
-            const dateString = new Intl.DateTimeFormat(locale, Object.assign({ calendar: "gregory", numberingSystem: "latn" }, options)).format(dateValue) || (dateValue === null || dateValue === void 0 ? void 0 : dateValue.toLocaleString(locale, Object.assign({ calendar: "gregory", numberingSystem: "latn" }, options))) || '';
+            const dateString = new Intl.DateTimeFormat(locales, Object.assign({ calendar: "gregory", numberingSystem: "latn" }, options)).format(dateValue) || (dateValue === null || dateValue === void 0 ? void 0 : dateValue.toLocaleString(locales, Object.assign({ calendar: "gregory", numberingSystem: "latn" }, options))) || '';
             setFormattedValue(dateString.replace(/[\u200F\u202B\u202E]/g, ''));
         }
-    }, [children, defaultValue, options, locale]);
+    }, [children, defaultValue, options, locales]);
     // Render the formatted date within a span element
-    return ((0, jsx_runtime_1.jsx)("span", { "data-gt-variable-name": name, "data-gt-variable-type": "date", "data-gt-variable-options": options, children: formattedValue }));
+    return (_jsx("span", { "data-gt-variable-name": name, "data-gt-variable-type": "date", "data-gt-variable-options": options, children: formattedValue }));
 };
 // Static property for transformation type
 ClientDateVariable.gtTransformation = "variable-date";
-exports.default = ClientDateVariable;
+export default ClientDateVariable;
 //# sourceMappingURL=ClientDateVariable.js.map

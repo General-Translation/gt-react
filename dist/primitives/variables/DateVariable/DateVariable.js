@@ -1,4 +1,3 @@
-"use strict";
 var __rest = (this && this.__rest) || function (s, e) {
     var t = {};
     for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
@@ -10,8 +9,7 @@ var __rest = (this && this.__rest) || function (s, e) {
         }
     return t;
 };
-Object.defineProperty(exports, "__esModule", { value: true });
-const jsx_runtime_1 = require("react/jsx-runtime");
+import { jsx as _jsx } from "react/jsx-runtime";
 /**
  * DateVariable component formats and displays a date based on the current language settings.
  * It converts different types of date inputs and formats them according to the locale.
@@ -24,7 +22,7 @@ const jsx_runtime_1 = require("react/jsx-runtime");
  * @returns {JSX.Element} A span element containing the formatted date with specific data attributes
  */
 const DateVariable = (_a) => {
-    var { children, locale, name = "date", defaultValue, options = {} } = _a, props = __rest(_a, ["children", "locale", "name", "defaultValue", "options"]);
+    var { children, locales, name = "date", defaultValue, options = {} } = _a, props = __rest(_a, ["children", "locales", "name", "defaultValue", "options"]);
     // Extract general translation data from props
     const { "data-generaltranslation": generaltranslation } = props;
     // Determine the default value to use
@@ -32,7 +30,7 @@ const DateVariable = (_a) => {
         defaultValue = children;
     }
     if (!defaultValue) {
-        return ((0, jsx_runtime_1.jsx)("span", { "data-generaltranslation": generaltranslation, "data-gt-variable-name": name, "data-gt-variable-type": "date", "data-gt-variable-options": options }));
+        return (_jsx("span", { "data-generaltranslation": generaltranslation, "data-gt-variable-name": name, "data-gt-variable-type": "date", "data-gt-variable-options": options }));
     }
     // Convert defaultValue to a Date object if it's a Unix time, string, or Date object
     let dateValue;
@@ -46,11 +44,11 @@ const DateVariable = (_a) => {
         dateValue = defaultValue;
     }
     // Format the date according to the locale and options
-    const dateString = new Intl.DateTimeFormat(locale, Object.assign({ calendar: "gregory", numberingSystem: "latn" }, options)).format(dateValue) || (dateValue === null || dateValue === void 0 ? void 0 : dateValue.toLocaleString(locale, Object.assign({ calendar: "gregory", numberingSystem: "latn" }, options))) || '';
+    const dateString = new Intl.DateTimeFormat(locales, Object.assign({ calendar: "gregory", numberingSystem: "latn" }, options)).format(dateValue) || (dateValue === null || dateValue === void 0 ? void 0 : dateValue.toLocaleString(locales, Object.assign({ calendar: "gregory", numberingSystem: "latn" }, options))) || '';
     const formattedValue = dateString.replace(/[\u200F\u202B\u202E]/g, '');
     // Render the formatted date within a span element
-    return ((0, jsx_runtime_1.jsx)("span", { "data-generaltranslation": generaltranslation, "data-gt-variable-name": name, "data-gt-variable-type": "date", "data-gt-variable-options": options, children: formattedValue }));
+    return (_jsx("span", { "data-generaltranslation": generaltranslation, "data-gt-variable-name": name, "data-gt-variable-type": "date", "data-gt-variable-options": options, children: formattedValue }));
 };
 DateVariable.gtTransformation = "variable-date";
-exports.default = DateVariable;
+export default DateVariable;
 //# sourceMappingURL=DateVariable.js.map

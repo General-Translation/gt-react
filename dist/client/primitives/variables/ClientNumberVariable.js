@@ -1,12 +1,8 @@
-"use strict";
 'use client';
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-const jsx_runtime_1 = require("react/jsx-runtime");
-const react_1 = require("react");
-const useLocale_1 = __importDefault(require("../../hooks/useLocale"));
+import { jsx as _jsx } from "react/jsx-runtime";
+import { useEffect, useState } from 'react';
+import useLocale from '../../hooks/useLocale';
+import useDefaultLocale from '../../hooks/useDefaultLocale';
 /**
  * NumberVariable component formats and displays a number based on the current language settings.
  * It attempts a number conversion and defaults to returning defaultValue if provided.
@@ -19,21 +15,21 @@ const useLocale_1 = __importDefault(require("../../hooks/useLocale"));
  * @returns {ReactNode} A span element containing the formatted number with specific data attributes
  */
 const ClientNumberVariable = ({ children, name = "n", defaultValue, options = {} } = { name: "n" }) => {
-    const locale = (0, useLocale_1.default)();
-    const [formattedValue, setFormattedValue] = (0, react_1.useState)('');
-    (0, react_1.useEffect)(() => {
+    const locales = [useLocale(), useDefaultLocale()];
+    const [formattedValue, setFormattedValue] = useState('');
+    useEffect(() => {
         let value = (typeof children !== 'undefined' && typeof defaultValue === 'undefined') ? children : defaultValue;
         value = (typeof value === 'string') ? parseFloat(value) : value;
         if (typeof value === 'number') {
             // Using Intl.NumberFormat for consistent number formatting
-            setFormattedValue(new Intl.NumberFormat(locale, Object.assign({ numberingSystem: 'latn' }, options)).format(value));
+            setFormattedValue(new Intl.NumberFormat(locales, Object.assign({ numberingSystem: 'latn' }, options)).format(value));
         }
         else {
             setFormattedValue(value);
         }
-    }, [children, defaultValue, locale, options]);
-    return ((0, jsx_runtime_1.jsx)("span", { "data-gt-variable-name": name, "data-gt-variable-type": "number", "data-gt-variable-options": JSON.stringify(options), children: formattedValue }));
+    }, [children, defaultValue, locales, options]);
+    return (_jsx("span", { "data-gt-variable-name": name, "data-gt-variable-type": "number", "data-gt-variable-options": JSON.stringify(options), children: formattedValue }));
 };
 ClientNumberVariable.gtTransformation = "variable-number";
-exports.default = ClientNumberVariable;
+export default ClientNumberVariable;
 //# sourceMappingURL=ClientNumberVariable.js.map

@@ -1,27 +1,3 @@
-"use strict";
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    var desc = Object.getOwnPropertyDescriptor(m, k);
-    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
-      desc = { enumerable: true, get: function() { return m[k]; } };
-    }
-    Object.defineProperty(o, k2, desc);
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
-    Object.defineProperty(o, "default", { enumerable: true, value: v });
-}) : function(o, v) {
-    o["default"] = v;
-});
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
-    __setModuleDefault(result, mod);
-    return result;
-};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -42,15 +18,11 @@ var __rest = (this && this.__rest) || function (s, e) {
         }
     return t;
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-const generaltranslation_1 = __importStar(require("generaltranslation"));
-const RemoteDictionaryManager_1 = __importDefault(require("./RemoteDictionaryManager"));
-const getDictionaryEntry_1 = __importDefault(require("../dictionary/getDictionaryEntry"));
-const LocalDictionaryManager_1 = __importDefault(require("./LocalDictionaryManager"));
-class I18NConfiguration {
+import GT, { isSameLanguage } from "generaltranslation";
+import RemoteDictionaryManager from "./RemoteDictionaryManager";
+import getDictionaryEntry from "../dictionary/getDictionaryEntry";
+import LocalDictionaryManager from "./LocalDictionaryManager";
+export default class I18NConfiguration {
     constructor(_a) {
         var { 
         // Cloud integration
@@ -81,18 +53,18 @@ class I18NConfiguration {
         this.dictionaryName = dictionaryName;
         this.translations = translations;
         // GT
-        this.gt = new generaltranslation_1.default({ projectID, apiKey, defaultLanguage: defaultLocale, baseURL });
+        this.gt = new GT({ projectID, apiKey, defaultLanguage: defaultLocale, baseURL });
         // Other metadata
         this.getMetadata = getMetadata;
         this.metadata = Object.assign({ projectID: this.projectID, defaultLanguage: this.defaultLocale, dictionaryName }, metadata);
         // Dictionary managers
         if (this.translations) {
-            this._localDictionaryManager = new LocalDictionaryManager_1.default({
+            this._localDictionaryManager = new LocalDictionaryManager({
                 translations: this.translations
             });
         }
         if (this.remoteSource) {
-            this._remoteDictionaryManager = new RemoteDictionaryManager_1.default({
+            this._remoteDictionaryManager = new RemoteDictionaryManager({
                 cacheURL: cacheURL,
                 projectID: this.projectID
             });
@@ -131,7 +103,7 @@ class I18NConfiguration {
      * @returns An entry from the dictionary determined by id
     */
     getDictionaryEntry(id) {
-        return (0, getDictionaryEntry_1.default)(id, this.dictionary);
+        return getDictionaryEntry(id, this.dictionary);
     }
     /**
      * Get an entry from the dictionary
@@ -160,9 +132,9 @@ class I18NConfiguration {
     translationRequired(locale) {
         if (!locale)
             return false;
-        if (this.approvedLocales && !this.approvedLocales.some(approvedLocale => (0, generaltranslation_1.isSameLanguage)(locale, approvedLocale)))
+        if (this.approvedLocales && !this.approvedLocales.some(approvedLocale => isSameLanguage(locale, approvedLocale)))
             return false;
-        if ((0, generaltranslation_1.isSameLanguage)(locale, this.defaultLocale))
+        if (isSameLanguage(locale, this.defaultLocale))
             return false;
         return true;
     }
@@ -299,7 +271,6 @@ class I18NConfiguration {
         }, this.batchInterval);
     }
 }
-exports.default = I18NConfiguration;
 // Resolve errors in the batch request
 const resolveBatchError = (item) => {
     if (item.type === "react")

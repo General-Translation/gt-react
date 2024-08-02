@@ -6,7 +6,7 @@ type VariableProps = {
     name?: string;
     defaultValue?: any;
     "data-generaltranslation"?: Record<string, any> | undefined,
-    locale: string;
+    locales: string[];
     options?: Record<string, any>
 }
 
@@ -21,7 +21,7 @@ type VariableProps = {
  * @param {Record<string, any>} [props.options] - Options for number formatting.
  * @returns {JSX.Element} A span element containing the formatted number with specific data attributes
  */
-const NumberVariable = ({ children, locale, name = "n", defaultValue, options = {}, ...props }: VariableProps): ReactNode => {
+const NumberVariable = ({ children, locales, name = "n", defaultValue, options = {}, ...props }: VariableProps): ReactNode => {
 
     const { "data-generaltranslation": generaltranslation } = props;
 
@@ -30,7 +30,7 @@ const NumberVariable = ({ children, locale, name = "n", defaultValue, options = 
     value = (typeof value === 'string') ? parseFloat(value) : value;
 
     // Format the number according to the locale
-    const formattedValue = (typeof value === 'number') ? new Intl.NumberFormat(locale, { numberingSystem: 'latn', ...options }).format(value) : defaultValue;
+    const formattedValue = (typeof value === 'number') ? new Intl.NumberFormat(locales, { numberingSystem: 'latn', ...options }).format(value) : defaultValue;
 
     return (
         <span 

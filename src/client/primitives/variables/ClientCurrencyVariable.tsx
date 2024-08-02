@@ -2,6 +2,7 @@
 
 import React, { ReactNode, useEffect, useMemo, useState } from 'react';
 import useLocale from '../../hooks/useLocale';
+import useDefaultLocale from '../../hooks/useDefaultLocale';
 
 /**
  * Props for the ClientCurrencyVariable component.
@@ -35,7 +36,7 @@ type VariableProps = {
  */
 const ClientCurrencyVariable = ({ children, name = "cost", defaultValue, currency = "USD", options = {} }: VariableProps = { name: "cost" }): ReactNode => {
 
-    const locale = useLocale();
+    const locales = [useLocale(), useDefaultLocale()]
 
     const [formattedValue, setFormattedValue] = useState('');
 
@@ -45,11 +46,11 @@ const ClientCurrencyVariable = ({ children, name = "cost", defaultValue, currenc
         value = (typeof value === 'string') ? parseFloat(value) : value;
         // Format the value using Intl.NumberFormat
         if (typeof value === 'number') {
-            setFormattedValue(new Intl.NumberFormat(locale, { style: 'currency', currency, numberingSystem: 'latn', ...options }).format(value))
+            setFormattedValue(new Intl.NumberFormat(locales, { style: 'currency', currency, numberingSystem: 'latn', ...options }).format(value))
         } else {
             setFormattedValue(value);
         }
-    }, [children, defaultValue, locale, currency, options]);
+    }, [children, defaultValue, locales, currency, options]);
 
     return (
         <span data-gt-variable-name={name} data-gt-variable-type={"currency"} data-gt-variable-options={{ style: 'currency', currency, ...options }}>

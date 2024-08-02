@@ -115,12 +115,12 @@ export function createGT({
 
     // ----- Variables ----- //
 
-    const Value = createValueComponent(getLocale);
-    const Numeric = createNumericComponent(getLocale);
+    const Value = createValueComponent(getLocale, defaultLocale);
+    const Numeric = createNumericComponent(getLocale, defaultLocale);
     const Variable = createVariableComponent();
-    const NumberVariable = createNumberVariableComponent(getLocale);
-    const DateVariable = createDateVariableComponent(getLocale);
-    const CurrencyVariable = createCurrencyVariableComponent(getLocale);
+    const NumberVariable = createNumberVariableComponent(getLocale, defaultLocale);
+    const DateVariable = createDateVariableComponent(getLocale, defaultLocale);
+    const CurrencyVariable = createCurrencyVariableComponent(getLocale, defaultLocale);
 
     // ----- Helper Functions ------ //
 
@@ -162,12 +162,12 @@ export function createVariables({
     
     // ----- Variables ----- //
 
-    const Value = createValueComponent(getLocale);
-    const Numeric = createNumericComponent(getLocale);
+    const Value = createValueComponent(getLocale, defaultLocale);
+    const Numeric = createNumericComponent(getLocale, defaultLocale);
     const Variable = createVariableComponent();
-    const NumberVariable = createNumberVariableComponent(getLocale);
-    const DateVariable = createDateVariableComponent(getLocale);
-    const CurrencyVariable = createCurrencyVariableComponent(getLocale);
+    const NumberVariable = createNumberVariableComponent(getLocale, defaultLocale);
+    const DateVariable = createDateVariableComponent(getLocale, defaultLocale);
+    const CurrencyVariable = createCurrencyVariableComponent(getLocale, defaultLocale);
 
     return {
         Value, Numeric, Variable, 

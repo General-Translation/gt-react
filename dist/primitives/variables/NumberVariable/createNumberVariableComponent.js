@@ -1,4 +1,3 @@
-"use strict";
 var __rest = (this && this.__rest) || function (s, e) {
     var t = {};
     for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
@@ -10,18 +9,13 @@ var __rest = (this && this.__rest) || function (s, e) {
         }
     return t;
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.default = createNumberVariableComponent;
-const jsx_runtime_1 = require("react/jsx-runtime");
-const NumberVariable_1 = __importDefault(require("./NumberVariable"));
-function createNumberVariableComponent(getLocale) {
+import { jsx as _jsx } from "react/jsx-runtime";
+import NumberVariable from "./NumberVariable";
+export default function createNumberVariableComponent(getLocale, defaultLocale) {
     const NumberVariableComponent = (_a) => {
         var { children } = _a, props = __rest(_a, ["children"]);
-        const locale = getLocale();
-        return (0, jsx_runtime_1.jsx)(NumberVariable_1.default, Object.assign({ locale: locale }, props, { children: children }));
+        const locales = [getLocale(), defaultLocale];
+        return _jsx(NumberVariable, Object.assign({ locales: locales }, props, { children: children }));
     };
     // Assign a static property to the returned function
     NumberVariableComponent.gtTransformation = "variable-number";

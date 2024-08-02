@@ -1,4 +1,3 @@
-"use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -19,16 +18,11 @@ var __rest = (this && this.__rest) || function (s, e) {
         }
     return t;
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.default = GTProvider;
-const jsx_runtime_1 = require("react/jsx-runtime");
+import { jsx as _jsx } from "react/jsx-runtime";
 // On the server
-require("server-only");
-const react_1 = __importDefault(require("react"));
-const ClientProvider_1 = __importDefault(require("./ClientProvider"));
+import 'server-only';
+import React from 'react';
+import ClientProvider from './ClientProvider';
 /**
  * Checks if the provided value is a promise.
  * @param {*} value - The value to check.
@@ -48,7 +42,7 @@ function flattenObject(obj, prefix = '') {
     for (const key in obj) {
         if (obj.hasOwnProperty(key)) {
             const newKey = prefix ? `${prefix}.${key}` : key;
-            if (typeof obj[key] === 'object' && obj[key] !== null && !Array.isArray(obj[key]) && !(react_1.default.isValidElement(obj[key]))) {
+            if (typeof obj[key] === 'object' && obj[key] !== null && !Array.isArray(obj[key]) && !(React.isValidElement(obj[key]))) {
                 Object.assign(flattened, flattenObject(obj[key], newKey));
             }
             else {
@@ -66,7 +60,7 @@ dictionary = {
     "greeting.text.withparams": intl("Hello, world", { context: "Be informal." })
 }
 */
-function GTProvider(_a) {
+export default function GTProvider(_a) {
     return __awaiter(this, void 0, void 0, function* () {
         var { children, I18N, intl, I18NConfig, locale, defaultLocale, id = '', dictionary = id ? {} : flattenObject(I18NConfig.getDictionary()) } = _a, props = __rest(_a, ["children", "I18N", "intl", "I18NConfig", "locale", "defaultLocale", "id", "dictionary"]);
         let providerID = id;
@@ -75,7 +69,7 @@ function GTProvider(_a) {
         }
         const translationRequired = (children && I18NConfig.translationRequired(locale)) ? true : false;
         if (!translationRequired) {
-            return ((0, jsx_runtime_1.jsx)(ClientProvider_1.default, { locale: locale, defaultLocale: defaultLocale, dictionary: dictionary, children: children }));
+            return (_jsx(ClientProvider, { locale: locale, defaultLocale: defaultLocale, dictionary: dictionary, children: children }));
         }
         let translatedDictionary = {};
         yield Promise.all(Object.keys(dictionary).map((id) => __awaiter(this, void 0, void 0, function* () {
@@ -86,10 +80,10 @@ function GTProvider(_a) {
                 translatedDictionary[id] = yield intl(dictionary[id], Object.assign(Object.assign({ targetLanguage: locale }, props), { id: `${providerID ? `${providerID}.` : ''}${id}` }));
             }
             else {
-                translatedDictionary[id] = (0, jsx_runtime_1.jsx)(I18N, Object.assign({ id: `${providerID ? `${providerID}.` : ''}${id}` }, props, { children: dictionary[id] }));
+                translatedDictionary[id] = _jsx(I18N, Object.assign({ id: `${providerID ? `${providerID}.` : ''}${id}` }, props, { children: dictionary[id] }));
             }
         })));
-        return ((0, jsx_runtime_1.jsx)(ClientProvider_1.default, { locale: locale, defaultLocale: defaultLocale, dictionary: translatedDictionary, children: children }));
+        return (_jsx(ClientProvider, { locale: locale, defaultLocale: defaultLocale, dictionary: translatedDictionary, children: children }));
     });
 }
 //# sourceMappingURL=GTProvider.js.map

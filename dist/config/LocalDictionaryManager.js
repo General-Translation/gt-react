@@ -1,4 +1,3 @@
-"use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -8,13 +7,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-Object.defineProperty(exports, "__esModule", { value: true });
-const generaltranslation_1 = require("generaltranslation");
+import { isSameLanguage } from "generaltranslation";
 /**
  * LocalDictionaryManager is responsible for managing dictionaries loaded from local file paths.
  * @class
  */
-class LocalDictionaryManager {
+export default class LocalDictionaryManager {
     /**
      * Creates an instance of LocalDictionaryManager.
      * @param {Object} params - Parameters object.
@@ -47,7 +45,7 @@ class LocalDictionaryManager {
                 finalLocale = this.localeCache.get(locale) || '';
                 if (!finalLocale) {
                     for (const key of Object.keys(this.translations)) {
-                        if ((0, generaltranslation_1.isSameLanguage)(key, locale)) {
+                        if (isSameLanguage(key, locale)) {
                             finalLocale = key;
                             break;
                         }
@@ -91,5 +89,4 @@ class LocalDictionaryManager {
         });
     }
 }
-exports.default = LocalDictionaryManager;
 //# sourceMappingURL=LocalDictionaryManager.js.map

@@ -15,7 +15,7 @@ type VariableProps = {
     children?: any;
     name?: string;
     defaultValue?: any;
-    locale: string;
+    locales: string[];
     currency?: string;
     "data-generaltranslation"?: Record<string, any>;
     options?: Record<string, any>;
@@ -33,7 +33,7 @@ type VariableProps = {
  * @param {Record<string, any>} [props.options] - Options for number formatting.
  * @returns {JSX.Element} A span element containing the formatted currency with specific data attributes
  */
-const CurrencyVariable = ({ children, locale, name = "cost", defaultValue, currency = "USD", options = {}, ...props }: VariableProps): ReactNode => {
+const CurrencyVariable = ({ children, locales, name = "cost", defaultValue, currency = "USD", options = {}, ...props }: VariableProps): ReactNode => {
 
     const { "data-generaltranslation": generaltranslation } = props;
 
@@ -43,7 +43,7 @@ const CurrencyVariable = ({ children, locale, name = "cost", defaultValue, curre
 
     // Format the number as currency according to the locale
     const formattedValue = (typeof value === 'number') 
-        ? new Intl.NumberFormat(locale, { style: 'currency', currency, numberingSystem: 'latn', ...options }).format(value) 
+        ? new Intl.NumberFormat(locales, { style: 'currency', currency, numberingSystem: 'latn', ...options }).format(value) 
         : value;
 
     return (

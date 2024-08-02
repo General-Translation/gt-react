@@ -1,4 +1,3 @@
-"use strict";
 var __rest = (this && this.__rest) || function (s, e) {
     var t = {};
     for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
@@ -10,8 +9,7 @@ var __rest = (this && this.__rest) || function (s, e) {
         }
     return t;
 };
-Object.defineProperty(exports, "__esModule", { value: true });
-const jsx_runtime_1 = require("react/jsx-runtime");
+import { jsx as _jsx } from "react/jsx-runtime";
 /**
  * Variable component to conditionally render either children or a default value.
  * It also attaches data attributes for variable name and type.
@@ -27,8 +25,8 @@ const Variable = (_a) => {
     const { "data-generaltranslation": generaltranslation } = props;
     if (typeof children !== 'undefined' && typeof defaultValue === 'undefined')
         defaultValue = children;
-    return ((0, jsx_runtime_1.jsx)("span", { "data-generaltranslation": generaltranslation, "data-gt-variable-name": name, "data-gt-variable-type": "variable", children: defaultValue }));
+    return (_jsx("span", { "data-generaltranslation": generaltranslation, "data-gt-variable-name": name, "data-gt-variable-type": "variable", children: defaultValue }));
 };
 Variable.gtTransformation = "variable-variable"; // keep this because Variable is imported in other functions
-exports.default = Variable;
+export default Variable;
 //# sourceMappingURL=Variable.js.map

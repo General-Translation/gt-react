@@ -1,4 +1,4 @@
-export default function createCurrencyVariableComponent(getLocale: () => string): {
+export default function createCurrencyVariableComponent(getLocale: () => string, defaultLocale: string): {
     ({ children, ...props }: {
         children?: any;
         [key: string]: any;

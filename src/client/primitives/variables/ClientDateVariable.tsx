@@ -2,6 +2,7 @@
 
 import React, { ReactNode, useEffect, useMemo, useState } from 'react';
 import useLocale from '../../hooks/useLocale';
+import useDefaultLocale from '../../hooks/useDefaultLocale';
 
 // VariableProps type defines the properties accepted by the component
 type VariableProps = {
@@ -24,8 +25,7 @@ type VariableProps = {
  */
 const ClientDateVariable = ({ children, name = "date", defaultValue, options = {} }: VariableProps = { name: "date" }): ReactNode => {
 
-    // Retrieve the current language using a custom hook
-    const locale = useLocale();
+    const locales = [useLocale(), useDefaultLocale()]
 
     const [formattedValue, setFormattedValue] = useState('');
 
@@ -52,11 +52,11 @@ const ClientDateVariable = ({ children, name = "date", defaultValue, options = {
     
         if (typeof dateValue !== 'undefined') {
             // Format the date using Intl.DateTimeFormat or toLocaleString
-            const dateString = new Intl.DateTimeFormat(locale, { calendar: "gregory", numberingSystem: "latn", ...options }).format(dateValue) || dateValue?.toLocaleString(locale, { calendar: "gregory", numberingSystem: "latn", ...options }) || '';
+            const dateString = new Intl.DateTimeFormat(locales, { calendar: "gregory", numberingSystem: "latn", ...options }).format(dateValue) || dateValue?.toLocaleString(locales, { calendar: "gregory", numberingSystem: "latn", ...options }) || '';
             setFormattedValue(dateString.replace(/[\u200F\u202B\u202E]/g, ''));
         }
 
-    }, [children, defaultValue, options, locale]);
+    }, [children, defaultValue, options, locales]);
 
     // Render the formatted date within a span element
     return (

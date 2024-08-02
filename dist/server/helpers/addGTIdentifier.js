@@ -1,4 +1,3 @@
-"use strict";
 var __rest = (this && this.__rest) || function (s, e) {
     var t = {};
     for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
@@ -10,13 +9,8 @@ var __rest = (this && this.__rest) || function (s, e) {
         }
     return t;
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.default = addGTIdentifier;
-const react_1 = __importDefault(require("react"));
-const processBranches_1 = __importDefault(require("../../primitives/value/processBranches"));
+import React from 'react';
+import processBranches from '../../primitives/value/processBranches';
 /**
  * Helper function to validate the properties of the component to prevent nested translations
  * @param props - The properties of the current React element
@@ -32,7 +26,7 @@ const validateProps = (props) => {
  * @param children - The children elements to which GT identifiers will be added
  * @returns - The children with added GT identifiers
  */
-function addGTIdentifier(children) {
+export default function addGTIdentifier(children) {
     // Object to keep track of the current index for GT IDs
     let indexObject = { index: 0 };
     /**
@@ -111,7 +105,7 @@ function addGTIdentifier(children) {
             else if (transformation === "value") {
                 const { "branches": rawBranches } = props;
                 if (rawBranches) {
-                    branches = (0, processBranches_1.default)(rawBranches, (branch) => { updateIndices(); return addIdentifierRecursively(branch); });
+                    branches = processBranches(rawBranches, (branch) => { updateIndices(); return addIdentifierRecursively(branch); });
                 }
                 newProps.branches = branches;
             }
@@ -130,7 +124,7 @@ function addGTIdentifier(children) {
             }
         }
         // return the element with new props
-        return react_1.default.cloneElement(child, newProps);
+        return React.cloneElement(child, newProps);
     };
     /**
      * Function to handle a single child element and determine if it's a valid React element
@@ -138,7 +132,7 @@ function addGTIdentifier(children) {
      * @returns - The handled child element
      */
     const handleSingleChild = (child) => {
-        if (react_1.default.isValidElement(child))
+        if (React.isValidElement(child))
             return handleValidReactElement(child);
         return child;
     };

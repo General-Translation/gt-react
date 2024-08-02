@@ -1,10 +1,3 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.getNextHeaders = getNextHeaders;
-exports.getNextCookies = getNextCookies;
-exports.getNextResponse = getNextResponse;
-exports.getNextRequestCookies = getNextRequestCookies;
-exports.getNextResponseCookies = getNextResponseCookies;
 let cookies = null;
 let headers = null;
 /**
@@ -22,12 +15,12 @@ function loadNextHeaders() {
         console.warn('next/headers is not available. Running in non-Next.js environment.');
     }
 }
-function getNextHeaders() {
+export function getNextHeaders() {
     if (!headers)
         loadNextHeaders();
     return headers;
 }
-function getNextCookies() {
+export function getNextCookies() {
     if (!cookies)
         loadNextHeaders();
     return cookies;
@@ -48,7 +41,7 @@ function loadNextServer() {
         console.warn('next/server is not available. Running in non-Next.js environment.');
     }
 }
-function getNextResponse() {
+export function getNextResponse() {
     if (!NextResponse)
         loadNextServer();
     return NextResponse;
@@ -71,12 +64,12 @@ function loadNextSpecExtensionCookies() {
         console.warn('next/server is not available. Running in non-Next.js environment.');
     }
 }
-function getNextRequestCookies() {
+export function getNextRequestCookies() {
     if (!RequestCookies)
         loadNextSpecExtensionCookies();
     return RequestCookies;
 }
-function getNextResponseCookies() {
+export function getNextResponseCookies() {
     if (!ResponseCookies)
         loadNextSpecExtensionCookies();
     return ResponseCookies;

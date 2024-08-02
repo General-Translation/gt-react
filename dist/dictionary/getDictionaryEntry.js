@@ -1,7 +1,4 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.default = getDictionaryEntry;
-function getDictionaryEntry(id, dictionary) {
+export default function getDictionaryEntry(id, dictionary) {
     if (!id || typeof id !== 'string' || !dictionary || typeof dictionary !== 'object')
         return null;
     let current = dictionary;

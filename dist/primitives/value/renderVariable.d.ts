@@ -5,5 +5,5 @@
  * @param {string} locale - The user's locale.
  * @returns {any} The rendered children elements.
  */
-export default function renderVariable(children: any, locale: string, variables?: Record<string, any>): any;
+export default function renderVariable(children: any, locales: string[], variables?: Record<string, any>): any;
 //# sourceMappingURL=renderVariable.d.ts.map

@@ -2,7 +2,7 @@ type VariableProps = {
     children?: any;
     name?: string;
     defaultValue?: any;
-    locale: string;
+    locales: string[];
     options?: Record<string, any>;
     "data-generaltranslation"?: Record<string, any> | undefined;
 };
@@ -18,7 +18,7 @@ type VariableProps = {
  * @returns {JSX.Element} A span element containing the formatted date with specific data attributes
  */
 declare const DateVariable: {
-    ({ children, locale, name, defaultValue, options, ...props }: VariableProps): JSX.Element;
+    ({ children, locales, name, defaultValue, options, ...props }: VariableProps): JSX.Element;
     gtTransformation: string;
 };
 export default DateVariable;

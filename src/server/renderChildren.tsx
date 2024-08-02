@@ -50,8 +50,8 @@ const renderElement = ({ sourceElement, targetElement, ...metadata }: { sourceEl
             if (transformation === "numeric") {
 
                 const { 'data-generaltranslation': generaltranslation, n, ...branches } = props; // 'data-generaltranslation' necessary here to fully destructure relevant ...branches
-                const sourceBranch = getNumericBranch(n, metadata.locale || metadata.defaultLocale, branches) || props.children;
-                const targetBranch = getNumericBranch(n, metadata.locale || metadata.defaultLocale, targetBranches) || targetChildren;
+                const sourceBranch = getNumericBranch(n, [metadata.locale, metadata.defaultLocale], branches) || props.children;
+                const targetBranch = getNumericBranch(n, [metadata.locale, metadata.defaultLocale], targetBranches) || targetChildren;
             
                 const children = renderChildren({source: sourceBranch, target: targetBranch, variables: { ...metadata.variables, n: n }, ...metadata});
                 
@@ -176,13 +176,13 @@ export default function renderChildren({
                     value = metadata.variables[key];
                 }
                 if (targetChild.variable === "number") {
-                    return <NumberVariable locale={metadata.locale} key={`var_${index}`} defaultValue={value} name={key} options={{...metadata?.variableOptions?.[key]}}/>
+                    return <NumberVariable locales={[metadata.locale, metadata.defaultLocale]} key={`var_${index}`} defaultValue={value} name={key} options={{...metadata?.variableOptions?.[key]}}/>
                 }
                 if (targetChild.variable === "date") {
-                    return <DateVariable locale={metadata.locale} key={`var_${index}`} defaultValue={value} name={key} options={{...metadata?.variableOptions?.[key]}}/>
+                    return <DateVariable locales={[metadata.locale, metadata.defaultLocale]} key={`var_${index}`} defaultValue={value} name={key} options={{...metadata?.variableOptions?.[key]}}/>
                 }
                 if (targetChild.variable === "currency") {
-                    return <CurrencyVariable locale={metadata.locale} key={`var_${index}`} defaultValue={value} name={key} currency={metadata?.variableOptions?.[key]?.currency || undefined} options={{...metadata?.variableOptions?.[key]}}/>
+                    return <CurrencyVariable locales={[metadata.locale, metadata.defaultLocale]} key={`var_${index}`} defaultValue={value} name={key} currency={metadata?.variableOptions?.[key]?.currency || undefined} options={{...metadata?.variableOptions?.[key]}}/>
                 }
                 return <Variable key={`var_${index}`} defaultValue={isValidReactNode(value) ? value : undefined} name={key}/>
             }

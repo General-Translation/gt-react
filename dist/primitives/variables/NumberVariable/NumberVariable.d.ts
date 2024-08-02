@@ -4,7 +4,7 @@ type VariableProps = {
     name?: string;
     defaultValue?: any;
     "data-generaltranslation"?: Record<string, any> | undefined;
-    locale: string;
+    locales: string[];
     options?: Record<string, any>;
 };
 /**
@@ -19,7 +19,7 @@ type VariableProps = {
  * @returns {JSX.Element} A span element containing the formatted number with specific data attributes
  */
 declare const NumberVariable: {
-    ({ children, locale, name, defaultValue, options, ...props }: VariableProps): ReactNode;
+    ({ children, locales, name, defaultValue, options, ...props }: VariableProps): ReactNode;
     gtTransformation: string;
 };
 export default NumberVariable;

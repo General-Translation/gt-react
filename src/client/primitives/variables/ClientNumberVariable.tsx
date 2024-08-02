@@ -2,6 +2,7 @@
 
 import React, { ReactNode, useEffect, useMemo, useState } from 'react';
 import useLocale from '../../hooks/useLocale';
+import useDefaultLocale from '../../hooks/useDefaultLocale';
 
 // Type definition for the props that ClientNumberVariable component accepts
 type VariableProps = {
@@ -23,7 +24,8 @@ type VariableProps = {
  * @returns {ReactNode} A span element containing the formatted number with specific data attributes
  */
 const ClientNumberVariable = ({ children, name = "n", defaultValue, options = {} }: VariableProps = { name: "n" }): ReactNode => {
-    const locale = useLocale();
+    
+    const locales = [useLocale(), useDefaultLocale()]
 
     const [formattedValue, setFormattedValue] = useState('')
     useEffect(() => {
@@ -31,11 +33,11 @@ const ClientNumberVariable = ({ children, name = "n", defaultValue, options = {}
         value = (typeof value === 'string') ? parseFloat(value) : value;
         if (typeof value === 'number') {
             // Using Intl.NumberFormat for consistent number formatting
-            setFormattedValue(new Intl.NumberFormat(locale, { numberingSystem: 'latn', ...options }).format(value))
+            setFormattedValue(new Intl.NumberFormat(locales, { numberingSystem: 'latn', ...options }).format(value))
         } else {
             setFormattedValue(value);
         }
-    }, [children, defaultValue, locale, options]);
+    }, [children, defaultValue, locales, options]);
 
     return (
         <span data-gt-variable-name={name} data-gt-variable-type={"number"} data-gt-variable-options={JSON.stringify(options)}>

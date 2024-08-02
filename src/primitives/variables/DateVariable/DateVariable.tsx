@@ -5,7 +5,7 @@ type VariableProps = {
     children?: any;
     name?: string;
     defaultValue?: any; // The default value which can be number, string, or Date
-    locale: string;
+    locales: string[];
     options?: Record<string, any>; // Optional formatting options for the date
     "data-generaltranslation"?: Record<string, any> | undefined; // Optional general translation data
 }
@@ -21,7 +21,7 @@ type VariableProps = {
  * @param {Record<string, any>} [props.options] - Options for date formatting.
  * @returns {JSX.Element} A span element containing the formatted date with specific data attributes
  */
-const DateVariable = ({ children, locale, name = "date", defaultValue, options = {}, ...props }: VariableProps): JSX.Element => {
+const DateVariable = ({ children, locales, name = "date", defaultValue, options = {}, ...props }: VariableProps): JSX.Element => {
 
     // Extract general translation data from props
     const { "data-generaltranslation": generaltranslation } = props;
@@ -53,7 +53,7 @@ const DateVariable = ({ children, locale, name = "date", defaultValue, options =
     }
 
     // Format the date according to the locale and options
-    const dateString = new Intl.DateTimeFormat(locale, { calendar: "gregory", numberingSystem: "latn", ...options }).format(dateValue) || dateValue?.toLocaleString(locale, { calendar: "gregory", numberingSystem: "latn", ...options }) || '';
+    const dateString = new Intl.DateTimeFormat(locales, { calendar: "gregory", numberingSystem: "latn", ...options }).format(dateValue) || dateValue?.toLocaleString(locales, { calendar: "gregory", numberingSystem: "latn", ...options }) || '';
     const formattedValue = dateString.replace(/[\u200F\u202B\u202E]/g, '')
 
     // Render the formatted date within a span element

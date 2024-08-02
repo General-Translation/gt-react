@@ -14,7 +14,7 @@ type VariableProps = {
     children?: any;
     name?: string;
     defaultValue?: any;
-    locale: string;
+    locales: string[];
     currency?: string;
     "data-generaltranslation"?: Record<string, any>;
     options?: Record<string, any>;
@@ -32,7 +32,7 @@ type VariableProps = {
  * @returns {JSX.Element} A span element containing the formatted currency with specific data attributes
  */
 declare const CurrencyVariable: {
-    ({ children, locale, name, defaultValue, currency, options, ...props }: VariableProps): ReactNode;
+    ({ children, locales, name, defaultValue, currency, options, ...props }: VariableProps): ReactNode;
     gtTransformation: string;
 };
 export default CurrencyVariable;

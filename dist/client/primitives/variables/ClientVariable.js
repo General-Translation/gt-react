@@ -1,8 +1,6 @@
-"use strict";
 'use client';
-Object.defineProperty(exports, "__esModule", { value: true });
-const jsx_runtime_1 = require("react/jsx-runtime");
-const react_1 = require("react");
+import { jsx as _jsx } from "react/jsx-runtime";
+import { useMemo } from 'react';
 /**
  * Variable component to conditionally render either children or a default value.
  * It also attaches data attributes for variable name and type.
@@ -14,13 +12,13 @@ const react_1 = require("react");
  * @returns {ReactNode} The rendered output.
  */
 const ClientVariable = ({ children, name, defaultValue }) => {
-    const renderedValue = (0, react_1.useMemo)(() => {
+    const renderedValue = useMemo(() => {
         if ((typeof children !== 'undefined' && typeof defaultValue === 'undefined'))
             return children;
         return defaultValue;
     }, [children, defaultValue]);
-    return ((0, jsx_runtime_1.jsx)("span", { "data-gt-variable-name": name, "data-gt-variable-type": "variable", children: renderedValue }));
+    return (_jsx("span", { "data-gt-variable-name": name, "data-gt-variable-type": "variable", children: renderedValue }));
 };
 ClientVariable.gtTransformation = "variable-variable";
-exports.default = ClientVariable;
+export default ClientVariable;
 //# sourceMappingURL=ClientVariable.js.map

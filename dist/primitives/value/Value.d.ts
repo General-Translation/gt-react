@@ -1,7 +1,7 @@
 import 'server-only';
 import { ReactNode } from 'react';
 type ValueProps = {
-    locale: string;
+    locales: string[];
     children?: any;
     branches?: Record<string, any>;
     values?: Record<string, any>;
@@ -17,7 +17,7 @@ type ValueProps = {
  * @returns {JSX.Element}
  */
 declare const Value: {
-    ({ children, branches, values, locale, ...props }: ValueProps): ReactNode;
+    ({ children, branches, values, locales, ...props }: ValueProps): ReactNode;
     gtTransformation: string;
 };
 export default Value;

@@ -5,8 +5,8 @@
  * @param {Record<string, any>} options - The options containing possible branch names.
  * @returns {string} The determined branch name.
  */
-function getBranchNameFromNumber(n: number, locale: string, options: Record<string, any>): string {
-    const pluralRules = new Intl.PluralRules(locale);
+function getBranchNameFromNumber(n: number, locales: string[], options: Record<string, any>): string {
+    const pluralRules = new Intl.PluralRules(locales);
     const provisionalBranchName = pluralRules.select(n);
     // aliases
     // 0
@@ -63,11 +63,11 @@ function getBranchFromRanges(n: number, ranges: Range[]): any | undefined {
  * @param {any} branches - The object containing possible branches and their corresponding ranges and options.
  * @returns {any} The determined branch.
  */
-export default function getNumericBranch(n: number, locale: string, branches: any) {
+export default function getNumericBranch(n: number, locales: string[], branches: any) {
     let branchName = '';
     let branch = null;
     if (typeof n === 'number' && branches?.ranges) branch = getBranchFromRanges(n, branches.ranges);
-    if (typeof n === 'number' && !branch && branches) branchName = getBranchNameFromNumber(n, locale, branches);
+    if (typeof n === 'number' && !branch && branches) branchName = getBranchNameFromNumber(n, locales, branches);
     if (branchName && !branch) branch = branches[branchName];
     return branch;
 }

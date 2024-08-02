@@ -1,4 +1,3 @@
-"use strict";
 var __rest = (this && this.__rest) || function (s, e) {
     var t = {};
     for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
@@ -10,14 +9,9 @@ var __rest = (this && this.__rest) || function (s, e) {
         }
     return t;
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.default = writeChildrenAsObjects;
-const react_1 = __importDefault(require("react"));
-const processBranches_1 = __importDefault(require("../../primitives/value/processBranches"));
-const defaultVariableNames_1 = __importDefault(require("../../primitives/helpers/defaultVariableNames"));
+import React from 'react';
+import processBranches from '../../primitives/value/processBranches';
+import defaultVariableNames from '../../primitives/helpers/defaultVariableNames';
 /**
  * Checks if the props indicate that the component should be not be processed.
  * @param {Record<string, any>} props - The props to check.
@@ -65,7 +59,7 @@ const handleValidReactElement = (child) => {
         const generaltranslation = props['data-generaltranslation'];
         let result = Object.assign({}, generaltranslation);
         if (generaltranslation.transformation && generaltranslation.transformation === "variable") {
-            const variableName = props.name || defaultVariableNames_1.default[generaltranslation.variableType] || "value";
+            const variableName = props.name || defaultVariableNames[generaltranslation.variableType] || "value";
             return { variable: generaltranslation.variableType || "variable", key: variableName };
         }
         // Write all the branches as objects
@@ -86,7 +80,7 @@ const handleValidReactElement = (child) => {
             // Write the branches of a value variable transformation
             else if (transformation === "value") {
                 if (generaltranslation.branches) {
-                    result.branches = (0, processBranches_1.default)(generaltranslation.branches, (branch) => writeChildrenAsObjects(branch));
+                    result.branches = processBranches(generaltranslation.branches, (branch) => writeChildrenAsObjects(branch));
                 }
             }
             // Write defaultChildren
@@ -107,7 +101,7 @@ const handleValidReactElement = (child) => {
  * @returns {object} - The processed child or the original child if no transformation is needed.
  */
 const handleSingleChild = (child) => {
-    if (react_1.default.isValidElement(child))
+    if (React.isValidElement(child))
         return handleValidReactElement(child);
     else if (child && typeof child === 'object') {
         return { variable: true, keys: Object.keys(child) };
@@ -120,7 +114,7 @@ const handleSingleChild = (child) => {
  * @param {Children} children - The children to process.
  * @returns {object} - The processed children as objects.
 */
-function writeChildrenAsObjects(children) {
+export default function writeChildrenAsObjects(children) {
     if (Array.isArray(children)) {
         return children.map(child => handleSingleChild(child));
     }

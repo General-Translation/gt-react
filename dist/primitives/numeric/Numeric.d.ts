@@ -5,7 +5,7 @@ type NumericProps = {
     n?: number;
     children?: any;
     ranges?: Range[];
-    locale: string;
+    locales: string[];
     [key: string]: any;
 };
 /**
@@ -17,6 +17,6 @@ type NumericProps = {
  * @param {Record<string, any>} ...branches - Named branches, e.g. "singular", "plural" and their associated branches.
  * @returns {JSX.Element}
  */
-export default function Numeric({ children, n, ranges, locale, ...branches }: NumericProps): ReactNode;
+export default function Numeric({ children, n, ranges, locales, ...branches }: NumericProps): ReactNode;
 export {};
 //# sourceMappingURL=Numeric.d.ts.map

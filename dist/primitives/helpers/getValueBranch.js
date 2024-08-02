@@ -1,11 +1,5 @@
-"use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.default = getValueBranch;
-const react_1 = __importDefault(require("react"));
-const isValidReactNode_1 = __importDefault(require("./isValidReactNode"));
+import React from 'react';
+import isValidReactNode from './isValidReactNode';
 /*
 {
     "gender": {
@@ -32,7 +26,7 @@ const isValidReactNode_1 = __importDefault(require("./isValidReactNode"));
  * @param {Record<string, any>} branches - An object representing the branches to be navigated based on the values.
  * @returns {any} - Returns the matched React node or undefined if no match is found.
  */
-function getValueBranch(values, branches) {
+export default function getValueBranch(values, branches) {
     let currentDefault = null;
     /**
      * Handles the navigation through a given branch object.
@@ -52,7 +46,7 @@ function getValueBranch(values, branches) {
                         return branch[key][value];
                     }
                     /* @ts-expect-error Lazy components are meant to return a promise */
-                    if ((0, isValidReactNode_1.default)(branch[key][value]) || branch[key][value].$$typeof === react_1.default.lazy(() => { }).$$typeof) {
+                    if (isValidReactNode(branch[key][value]) || branch[key][value].$$typeof === React.lazy(() => { }).$$typeof) {
                         return branch[key][value];
                     }
                     return handleBranch(branch[key][value]);

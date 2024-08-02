@@ -1,8 +1,5 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.default = createNextMiddleware;
-const generaltranslation_1 = require("generaltranslation");
-const imports_1 = require("../next/imports/imports");
+import { isValidLanguageCode, isSameLanguage } from "generaltranslation";
+import { getNextHeaders, getNextResponse, getNextRequestCookies, getNextResponseCookies } from "../next/imports/imports";
 /**
  * Extracts the locale from the given pathname.
  *
@@ -19,13 +16,13 @@ function extractLocale(pathname) {
  * via
  */
 function applyNewCookies(req, res) {
-    const NextResponse = (0, imports_1.getNextResponse)();
+    const NextResponse = getNextResponse();
     if (!NextResponse)
         return;
-    const ResponseCookies = (0, imports_1.getNextResponseCookies)();
+    const ResponseCookies = getNextResponseCookies();
     if (!ResponseCookies)
         return;
-    const RequestCookies = (0, imports_1.getNextRequestCookies)();
+    const RequestCookies = getNextRequestCookies();
     if (!RequestCookies)
         return;
     // 1. Parse Set-Cookie header from the response
@@ -49,13 +46,13 @@ function applyNewCookies(req, res) {
  * Middleware to set a cookie based on the locale.
  * @param {NextRequest} req - The incoming request object.
  */
-function createNextMiddleware({ defaultLocale = 'en', approvedLocales, localeRouting = true } = { defaultLocale: 'en', localeRouting: true }) {
+export default function createNextMiddleware({ defaultLocale = 'en', approvedLocales, localeRouting = true } = { defaultLocale: 'en', localeRouting: true }) {
     return (req) => {
         var _a, _b;
-        const NextResponse = (0, imports_1.getNextResponse)();
+        const NextResponse = getNextResponse();
         if (!NextResponse)
             return;
-        const headers = (0, imports_1.getNextHeaders)();
+        const headers = getNextHeaders();
         if (!headers)
             return;
         const headerList = headers();
@@ -69,7 +66,7 @@ function createNextMiddleware({ defaultLocale = 'en', approvedLocales, localeRou
             if (locale) {
                 if (approvedLocales) {
                     for (const approvedLocale of approvedLocales) {
-                        if ((0, generaltranslation_1.isSameLanguage)(approvedLocale, locale)) {
+                        if (isSameLanguage(approvedLocale, locale)) {
                             userLocale = approvedLocale;
                             pathnameHasLocale = true;
                             break;
@@ -77,7 +74,7 @@ function createNextMiddleware({ defaultLocale = 'en', approvedLocales, localeRou
                     }
                 }
                 else {
-                    if ((0, generaltranslation_1.isValidLanguageCode)(locale)) {
+                    if (isValidLanguageCode(locale)) {
                         userLocale = locale;
                         pathnameHasLocale = true;
                     }
@@ -96,7 +93,7 @@ function createNextMiddleware({ defaultLocale = 'en', approvedLocales, localeRou
                     let refererLocaleIsValid = false;
                     if (approvedLocales) {
                         for (const approvedLocale of approvedLocales) {
-                            if ((0, generaltranslation_1.isSameLanguage)(approvedLocale, refererLocale)) {
+                            if (isSameLanguage(approvedLocale, refererLocale)) {
                                 userLocale = approvedLocale;
                                 refererLocaleIsValid = true;
                                 break;
@@ -104,7 +101,7 @@ function createNextMiddleware({ defaultLocale = 'en', approvedLocales, localeRou
                         }
                     }
                     else {
-                        if ((0, generaltranslation_1.isValidLanguageCode)(refererLocale)) {
+                        if (isValidLanguageCode(refererLocale)) {
                             userLocale = refererLocale;
                             refererLocaleIsValid = true;
                         }
@@ -122,7 +119,7 @@ function createNextMiddleware({ defaultLocale = 'en', approvedLocales, localeRou
             if (approvedLocales) {
                 for (const locale of acceptedLocales) {
                     for (const approvedLocale of approvedLocales) {
-                        if ((0, generaltranslation_1.isSameLanguage)(locale, approvedLocale)) {
+                        if (isSameLanguage(locale, approvedLocale)) {
                             userLocale = approvedLocale;
                             break;
                         }

@@ -6,7 +6,7 @@ import getValueBranch from '../helpers/getValueBranch';
 
 // ValueProps type
 type ValueProps = {
-    locale: string;
+    locales: string[];
     children?: any;
     branches?: Record<string, any>;
     values?: Record<string, any>
@@ -22,7 +22,7 @@ type ValueProps = {
  * @param {Record<string, any>} ...values - Values to branch and translate around.
  * @returns {JSX.Element}
  */
-const Value = ({ children, branches, values, locale, ...props }: ValueProps): ReactNode => {
+const Value = ({ children, branches, values, locales, ...props }: ValueProps): ReactNode => {
 
     let { 'data-generaltranslation': generaltranslation }: any = props;
 
@@ -32,7 +32,7 @@ const Value = ({ children, branches, values, locale, ...props }: ValueProps): Re
 
     let branch = ((typeof values !== 'undefined' && typeof branches !== 'undefined') ? getValueBranch(values, branches) : null) || children;
     
-    let renderedChildren = renderVariable(branch, locale, values ? values : undefined);
+    let renderedChildren = renderVariable(branch, locales, values ? values : undefined);
 
     return (
         <span data-values={values} data-unrendered-branches={branches} data-generaltranslation={generaltranslation}>

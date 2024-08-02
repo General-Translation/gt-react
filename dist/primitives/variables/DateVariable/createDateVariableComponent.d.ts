@@ -1,4 +1,4 @@
-export default function createDateVariableComponent(getLocale: () => string): {
+export default function createDateVariableComponent(getLocale: () => string, defaultLocale: string): {
     ({ children, ...props }: {
         children?: any;
         [key: string]: any;

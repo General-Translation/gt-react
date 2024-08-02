@@ -8,7 +8,7 @@ type NumericProps = {
     n?: number;
     children?: any;
     ranges?: Range[];
-    locale: string;
+    locales: string[];
     [key: string]: any;
 }
 
@@ -21,7 +21,7 @@ type NumericProps = {
  * @param {Record<string, any>} ...branches - Named branches, e.g. "singular", "plural" and their associated branches.
  * @returns {JSX.Element}
  */
-export default function Numeric({ children, n, ranges, locale, ...branches }: NumericProps): ReactNode {
+export default function Numeric({ children, n, ranges, locales, ...branches }: NumericProps): ReactNode {
 
     if (typeof n !== 'number') {
         console.warn(`WARNING: No values provided to <Numeric> component with children ${JSON.stringify(children)}.`)
@@ -31,9 +31,9 @@ export default function Numeric({ children, n, ranges, locale, ...branches }: Nu
 
     branches = { ...otherParams, ranges: ranges };
     
-    let branch = ((typeof n === 'number' && branches) ? getNumericBranch(n, locale, branches) : null) || children;
+    let branch = ((typeof n === 'number' && branches) ? getNumericBranch(n, locales, branches) : null) || children;
 
-    const renderedChildren = renderNumeric(branch, locale, (typeof n === 'number') ? { n } : undefined);
+    const renderedChildren = renderNumeric(branch, locales, (typeof n === 'number') ? { n } : undefined);
 
     return (
         <span data-n={n} data-unrendered-branches={branches} data-generaltranslation={generaltranslation}>

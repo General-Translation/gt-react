@@ -13,7 +13,7 @@ import defaultVariableNames from '../helpers/defaultVariableNames';
  * @param {any} child - The child element to handle.
  * @returns {any} The handled child element.
  */
-const handleSingleChild = (child: any, locale: string, variables?: Record<string, any>): any =>  {
+const handleSingleChild = (child: any, locales: string[], variables?: Record<string, any>): any =>  {
     if (React.isValidElement(child)) {
         const { props, type }: any = child;  
         // Check if a variable component
@@ -24,20 +24,20 @@ const handleSingleChild = (child: any, locale: string, variables?: Record<string
             const value = variables[name];
             const options = props?.options || {};
             if (variableType === "number") {
-                return <NumberVariable locale={locale} defaultValue={value} name={name} options={options}/>
+                return <NumberVariable locales={locales} defaultValue={value} name={name} options={options}/>
             }
             if (variableType === "date") {
-                return <DateVariable locale={locale} defaultValue={value} name={name} options={options}/>
+                return <DateVariable locales={locales} defaultValue={value} name={name} options={options}/>
             }
             if (variableType === "currency") {
-                return <CurrencyVariable locale={locale} defaultValue={value} name={name} options={options}/>
+                return <CurrencyVariable locales={locales} defaultValue={value} name={name} options={options}/>
             }
             return <Variable defaultValue={value} name={name} />
         }
         let newProps = { ...props };
         
         if (props?.children) {
-            newProps.children = renderVariable(props.children, locale, variables);
+            newProps.children = renderVariable(props.children, locales, variables);
         }
         return React.cloneElement(child, newProps)
     }
@@ -51,7 +51,7 @@ const handleSingleChild = (child: any, locale: string, variables?: Record<string
  * @param {string} locale - The user's locale.
  * @returns {any} The rendered children elements.
  */
-export default function renderVariable(children: any, locale: string, variables?: Record<string, any>): any {
-    if (Array.isArray(children)) return children.map((child: any, index: number) => <React.Fragment key={index}>{handleSingleChild(child, locale, variables)}</React.Fragment>);
-    else return handleSingleChild(children, locale, variables)
+export default function renderVariable(children: any, locales: string[], variables?: Record<string, any>): any {
+    if (Array.isArray(children)) return children.map((child: any, index: number) => <React.Fragment key={index}>{handleSingleChild(child, locales, variables)}</React.Fragment>);
+    else return handleSingleChild(children, locales, variables)
 }

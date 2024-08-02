@@ -1,14 +1,11 @@
-"use strict";
 'use client';
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.default = useDefaultLocale;
-const react_1 = require("react");
-const ClientProvider_1 = require("../ClientProvider");
+import { useContext } from "react";
+import { GTContext } from "../ClientProvider";
 /**
  * @returns {string} The default locale or an empty string if not set.
  */
-function useDefaultLocale() {
-    const ctx = (0, react_1.useContext)(ClientProvider_1.GTContext);
+export default function useDefaultLocale() {
+    const ctx = useContext(GTContext);
     if (ctx === null || ctx === void 0 ? void 0 : ctx.defaultLocale) {
         return ctx.defaultLocale;
     }

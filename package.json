@@ -89,6 +89,6 @@
     "i18n"
   ],
   "dependencies": {
-    "generaltranslation": "^2.0.18"
+    "generaltranslation": "^2.0.20"
   }
 }

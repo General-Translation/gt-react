@@ -1,10 +1,10 @@
 import React from "react";
 import CurrencyVariable from "./CurrencyVariable";
 
-export default function createCurrencyVariableComponent(getLocale: () => string) {
+export default function createCurrencyVariableComponent(getLocale: () => string, defaultLocale: string) {
     const CurrencyVariableComponent = ({ children, ...props }: { children?: any, [key: string]: any }) => {
-        const locale = getLocale();
-        return <CurrencyVariable locale={locale} {...props}>{children}</CurrencyVariable>
+        const locales = [getLocale(), defaultLocale];
+        return <CurrencyVariable locales={locales} {...props}>{children}</CurrencyVariable>
     }
     CurrencyVariableComponent.gtTransformation = "variable-currency";
     return CurrencyVariableComponent;

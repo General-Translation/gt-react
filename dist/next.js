@@ -1,4 +1,3 @@
-"use strict";
 var __rest = (this && this.__rest) || function (s, e) {
     var t = {};
     for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
@@ -10,12 +9,9 @@ var __rest = (this && this.__rest) || function (s, e) {
         }
     return t;
 };
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.createVariables = createVariables;
-exports.createGT = createGT;
-const _1 = require(".");
-const requestFunctions_1 = require("./next/requestFunctions");
-const _2 = require(".");
+import { createGT as createBaseGT } from ".";
+import { getNextDomain, getNextLocale } from "./next/requestFunctions";
+import { createVariables as createBaseVariables } from ".";
 /**
  * Configures and returns variable components for the `gt-react` i18n library,
  * adapted for Next.js environment.
@@ -26,11 +22,11 @@ const _2 = require(".");
  * @param {Function} [params.getLocale] - Function to get the current locale. Uses `getNextLocale` if not provided.
  * @returns {Variables} An object containing various variable components like Value, Numeric, Variable, etc.
  */
-function createVariables({ approvedLocales = [], defaultLocale = (approvedLocales === null || approvedLocales === void 0 ? void 0 : approvedLocales[0]) || 'en', getLocale, } = {
+export function createVariables({ approvedLocales = [], defaultLocale = (approvedLocales === null || approvedLocales === void 0 ? void 0 : approvedLocales[0]) || 'en', getLocale, } = {
     defaultLocale: 'en'
 }) {
     const finalGetLocale = getLocale || (() => { return 'en'; }); //(() => { return getNextLocale(defaultLocale, approvedLocales) });
-    return (0, _2.createVariables)({ approvedLocales, defaultLocale, getLocale: finalGetLocale });
+    return createBaseVariables({ approvedLocales, defaultLocale, getLocale: finalGetLocale });
 }
 /**
  * Initializes the `gt-react` i18n library with Next.js specific configurations.
@@ -51,12 +47,12 @@ function createVariables({ approvedLocales = [], defaultLocale = (approvedLocale
  * @param {Object} [...metadata] - Any additional metadata. Used for experimental variables.
  * @returns {GeneralTranslation} An object containing internationalization and translation functions.
  */
-function createGT(_a = {
+export function createGT(_a = {
     defaultLocale: 'en'
 }) {
     var { approvedLocales, defaultLocale = (approvedLocales === null || approvedLocales === void 0 ? void 0 : approvedLocales[0]) || 'en', getLocale, getMetadata } = _a, metadata = __rest(_a, ["approvedLocales", "defaultLocale", "getLocale", "getMetadata"]);
-    const finalGetLocale = getLocale || (() => { return (0, requestFunctions_1.getNextLocale)(defaultLocale, approvedLocales); });
-    const finalGetMetadata = getMetadata || (() => { return { domain: (0, requestFunctions_1.getNextDomain)() }; });
-    return (0, _1.createGT)(Object.assign({ defaultLocale, getLocale: finalGetLocale, getMetadata: finalGetMetadata }, metadata));
+    const finalGetLocale = getLocale || (() => { return getNextLocale(defaultLocale, approvedLocales); });
+    const finalGetMetadata = getMetadata || (() => { return { domain: getNextDomain() }; });
+    return createBaseGT(Object.assign({ defaultLocale, getLocale: finalGetLocale, getMetadata: finalGetMetadata }, metadata));
 }
 //# sourceMappingURL=next.js.map

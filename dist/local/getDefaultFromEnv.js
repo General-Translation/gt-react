@@ -1,6 +1,3 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.default = getDefaultFromEnv;
 /**
  * Retrieves the value of an environment variable as a string.
  *
@@ -11,7 +8,7 @@ exports.default = getDefaultFromEnv;
  * @param {string} VARIABLE - The name of the environment variable to retrieve.
  * @returns {string} The value of the environment variable, or an empty string if the variable is not set.
  */
-function getDefaultFromEnv(VARIABLE) {
+export default function getDefaultFromEnv(VARIABLE) {
     var _a;
     if (typeof process !== 'undefined' && ((_a = process === null || process === void 0 ? void 0 : process.env) === null || _a === void 0 ? void 0 : _a[VARIABLE])) {
         return process.env[VARIABLE];

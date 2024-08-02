@@ -1,8 +1,5 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.default = determineLocale;
-const generaltranslation_1 = require("generaltranslation");
-function determineLocale(approvedLocales, possibleLocales, defaultLocale = '') {
+import { isSameLanguage } from "generaltranslation";
+export default function determineLocale(approvedLocales, possibleLocales, defaultLocale = '') {
     if (typeof possibleLocales === 'string')
         possibleLocales = [possibleLocales];
     if (!possibleLocales || !Array.isArray(possibleLocales))
@@ -21,7 +18,7 @@ function determineLocale(approvedLocales, possibleLocales, defaultLocale = '') {
     // check for a linguistic match
     for (const locale of possibleLocales) {
         for (const approvedLocale of approvedLocales) {
-            if ((0, generaltranslation_1.isSameLanguage)(locale, approvedLocale)) {
+            if (isSameLanguage(locale, approvedLocale)) {
                 return approvedLocale;
             }
         }

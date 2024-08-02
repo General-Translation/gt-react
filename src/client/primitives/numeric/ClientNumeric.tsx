@@ -4,6 +4,7 @@ import React, { ReactNode,  useMemo } from 'react';
 import getNumericBranch, { Range } from '../../../primitives/helpers/getNumericBranch';
 import RenderClientVariable from '../value/RenderClientVariable';
 import useLocale from '../../hooks/useLocale';
+import useDefaultLocale from '../../hooks/useDefaultLocale';
 
 type NumericProps = {
     n?: number;
@@ -27,11 +28,11 @@ export default function ClientNumeric({ children, n, ranges, ...branches }: Nume
         return { ...branches, ranges };
     }, [branches, ranges])
 
-    const locale = useLocale(); // user's language
+    const locales = [useLocale(), useDefaultLocale()]; // user's language
 
     const branch = useMemo(() => {
-        return ((typeof n === 'number' && completeBranches) ? getNumericBranch(n, locale, completeBranches) : null) || children;
-    }, [n, completeBranches, children, locale])
+        return ((typeof n === 'number' && completeBranches) ? getNumericBranch(n, locales, completeBranches) : null) || children;
+    }, [n, completeBranches, children, locales])
 
     const renderedChildren = useMemo(() => {
         return <RenderClientVariable variables={(typeof n === 'number') ? { n } : undefined}>{branch}</RenderClientVariable>
