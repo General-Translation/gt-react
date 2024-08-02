@@ -91,7 +91,7 @@ export function createGT(_a = {
     // ----- <GTProvider> ------ //
     const GTProvider = createGTProviderComponent(Object.assign({ I18NConfig, I18N, intl }, metadata));
     // ----- Dictionary ------ //
-    const t = createTFunction({ I18NConfig, I18N });
+    const t = createTFunction({ I18NConfig, I18N, intl });
     const dict = createDictFunction(I18NConfig);
     // ----- Variables ----- //
     const Value = createValueComponent(getLocale, defaultLocale);

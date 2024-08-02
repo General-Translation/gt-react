@@ -109,7 +109,7 @@ export function createGT({
 
     // ----- Dictionary ------ //
 
-    const t = createTFunction({ I18NConfig, I18N });
+    const t = createTFunction({ I18NConfig, I18N, intl });
 
     const dict = createDictFunction(I18NConfig);
 
