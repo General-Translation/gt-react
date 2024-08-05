@@ -53,11 +53,12 @@ export default class RemoteDictionaryManager {
     }
     // setDictionary: given a locale, dictionaryName, id and a key, write a new entry in locale/dictionaryName of { [id]: { k: key, t: translation } }
     setDictionary(locale, dictionaryName, key, id = key, translation) {
-        if (!(locale && dictionaryName && key && translation))
-            return;
+        if (!(locale && dictionaryName && key && id && translation))
+            return false;
         const reference = getDictionaryReference(locale, dictionaryName);
         const currentDictionary = this.dictionaryMap.get(reference);
         this.dictionaryMap.set(reference, Object.assign(Object.assign({}, currentDictionary), { [id]: { k: key, t: translation } }));
+        return true;
     }
 }
 //# sourceMappingURL=RemoteDictionaryManager.js.map

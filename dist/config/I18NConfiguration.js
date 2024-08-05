@@ -65,8 +65,7 @@ export default class I18NConfiguration {
         }
         if (this.remoteSource) {
             this._remoteDictionaryManager = new RemoteDictionaryManager({
-                cacheURL: cacheURL,
-                projectID: this.projectID
+                cacheURL, projectID
             });
         }
         // Batching

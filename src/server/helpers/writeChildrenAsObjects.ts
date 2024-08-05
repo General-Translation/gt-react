@@ -6,13 +6,6 @@ type Child = ReactNode | Record<string, any>;
 type Children = Child | Child[];
 
 /**
- * Checks if the props indicate that the component should be not be processed.
- * @param {Record<string, any>} props - The props to check.
- * @returns {boolean} - True if the component is private, otherwise false.
- */
-const isPrivate = (props: Record<string, any>): boolean => props['data-generaltranslation']?.transformation === "private";
-
-/**
  * Gets the tag name of a React element.
  * @param {ReactElement} child - The React element.
  * @returns {string} - The tag name of the React element.
@@ -36,11 +29,12 @@ const getTagName = (child: ReactElement): string => {
  * @returns {object} - The processed element with its type and transformed props.
  */
 const handleValidReactElement = (child: ReactElement): object => {
+    
     const { type, props } = child;
     let newProps: any = {};
 
     // Transform children if they exist and are not private
-    if (props.children && !isPrivate(props)) {
+    if (props.children) {
         newProps.children = writeChildrenAsObjects(props.children)
     }
 
@@ -80,11 +74,11 @@ const handleValidReactElement = (child: ReactElement): object => {
                 }
             }
 
-            // Write defaultChildren
-            if (generaltranslation.defaultChildren) {
-                result.defaultChildren =  writeChildrenAsObjects(generaltranslation.defaultChildren)
-            }
+        }
 
+        // Write defaultChildren
+        if (generaltranslation.defaultChildren) {
+            result.defaultChildren = writeChildrenAsObjects(generaltranslation.defaultChildren)
         }
 
         newProps['data-generaltranslation'] = result;

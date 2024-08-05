@@ -122,7 +122,7 @@ export default function addGTIdentifier(children) {
             indexObject.index = championIndex;
         }
         // if no transformation is required
-        if (!transformation) {
+        if (transformation !== "numeric" && transformation !== "value") {
             if (props.children) {
                 newProps.children = addIdentifierRecursively(props.children);
             }

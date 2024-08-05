@@ -3,7 +3,6 @@ import RemoteDictionaryManager from "./RemoteDictionaryManager";
 import getDictionaryEntry from "../dictionary/getDictionaryEntry";
 import LocalDictionaryManager from "./LocalDictionaryManager";
 
-
 type I18NConfigurationParams = {
     apiKey: string;
     projectID: string;
@@ -103,8 +102,7 @@ export default class I18NConfiguration {
         }
         if (this.remoteSource) {
             this._remoteDictionaryManager = new RemoteDictionaryManager({
-                cacheURL: cacheURL,
-                projectID: this.projectID
+                cacheURL, projectID
             });
         }
         // Batching

@@ -13,12 +13,6 @@ import React from 'react';
 import processBranches from '../value/processBranches';
 import defaultVariableNames from '../../primitives/defaultVariableNames';
 /**
- * Checks if the props indicate that the component should be not be processed.
- * @param {Record<string, any>} props - The props to check.
- * @returns {boolean} - True if the component is private, otherwise false.
- */
-const isPrivate = (props) => { var _a; return ((_a = props['data-generaltranslation']) === null || _a === void 0 ? void 0 : _a.transformation) === "private"; };
-/**
  * Gets the tag name of a React element.
  * @param {ReactElement} child - The React element.
  * @returns {string} - The tag name of the React element.
@@ -51,7 +45,7 @@ const handleValidReactElement = (child) => {
     const { type, props } = child;
     let newProps = {};
     // Transform children if they exist and are not private
-    if (props.children && !isPrivate(props)) {
+    if (props.children) {
         newProps.children = writeChildrenAsObjects(props.children);
     }
     // Write the branches of 'data-generaltranslation' as objects
@@ -83,10 +77,10 @@ const handleValidReactElement = (child) => {
                     result.branches = processBranches(generaltranslation.branches, (branch) => writeChildrenAsObjects(branch));
                 }
             }
-            // Write defaultChildren
-            if (generaltranslation.defaultChildren) {
-                result.defaultChildren = writeChildrenAsObjects(generaltranslation.defaultChildren);
-            }
+        }
+        // Write defaultChildren
+        if (generaltranslation.defaultChildren) {
+            result.defaultChildren = writeChildrenAsObjects(generaltranslation.defaultChildren);
         }
         newProps['data-generaltranslation'] = result;
     }
