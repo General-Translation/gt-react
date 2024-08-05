@@ -29,7 +29,7 @@ const ServerT = async ({
         )
     }
 
-    // Fetch translations
+    // Fetch translations promise
     const translationsPromise = I18NConfig.getTranslations(locale, props.dictionaryName);
 
     const defaultLocale = I18NConfig.getDefaultLocale();
@@ -43,8 +43,7 @@ const ServerT = async ({
     const key: string = await generateHash(childrenAsObjects);
     const id = props.id ? props.id : key;
     
-    const translations = await translationsPromise;
-    const translation = (translations && translations[id] && translations[id].k === key) ? translations[id].t : null;
+    const translation = await I18NConfig.getTranslation(locale, key, id, props.dictionaryName ?? undefined, await translationsPromise)
     
     // Check if a translation for this site already exists and return it if it does
     const translationExists: boolean = translation ? true : false;

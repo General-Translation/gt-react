@@ -89,15 +89,22 @@ export default class I18NConfiguration {
      * @param dictionaryName - User-defined dictionary name, for distinguishing between multiple translation dictionaries for a single language.
      * @returns A promise that resolves to the translations.
     */
-    getTranslations(locale: string, dictionaryName?: string): Promise<Record<string, any> | null>;
+    getTranslations(locale: string, dictionaryName?: string): Promise<{
+        local?: any;
+        remote?: any;
+    }>;
     /**
      * Get the entry in the translation dictionary for the user's locale, if it exists
      * @param locale - The user's locale
      * @param key - Key in the dictionary. For strings, the original language version of that string. For React children, a hash.
      * @param dictionaryName - User-defined dictionary name, for distinguishing between multiple translation dictionaries for a single language.
+     * @param translations - Optional translations to search.
      * @returns A promise that resolves to the a value in the translations.
     */
-    getTranslation(locale: string, key: string, id?: string, dictionaryName?: string): Promise<any | null>;
+    getTranslation(locale: string, key: string, id?: string, dictionaryName?: string, translations?: {
+        local?: any;
+        remote?: any;
+    }): Promise<any | null>;
     /**
      * Translate content into language
      * @param params - Parameters for translation

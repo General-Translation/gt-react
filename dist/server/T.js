@@ -27,13 +27,14 @@ import renderChildren from './renderChildren';
 import { getLanguageDirection } from 'generaltranslation';
 import Resolver from './helpers/Resolver';
 const ServerT = (_a) => __awaiter(void 0, void 0, void 0, function* () {
+    var _b;
     var { I18NConfig, children, locale } = _a, props = __rest(_a, ["I18NConfig", "children", "locale"]);
     // Handle case where translation is not required, for example if the user's browser is in the default locale
     const translationRequired = (children && I18NConfig.translationRequired(locale)) ? true : false;
     if (!translationRequired) {
         return (_jsx(_Fragment, { children: children }));
     }
-    // Fetch translations
+    // Fetch translations promise
     const translationsPromise = I18NConfig.getTranslations(locale, props.dictionaryName);
     const defaultLocale = I18NConfig.getDefaultLocale();
     let renderAttributes = {};
@@ -44,8 +45,7 @@ const ServerT = (_a) => __awaiter(void 0, void 0, void 0, function* () {
     const childrenAsObjects = writeChildrenAsObjects(taggedChildren);
     const key = yield generateHash(childrenAsObjects);
     const id = props.id ? props.id : key;
-    const translations = yield translationsPromise;
-    const translation = (translations && translations[id] && translations[id].k === key) ? translations[id].t : null;
+    const translation = yield I18NConfig.getTranslation(locale, key, id, (_b = props.dictionaryName) !== null && _b !== void 0 ? _b : undefined, yield translationsPromise);
     // Check if a translation for this site already exists and return it if it does
     const translationExists = translation ? true : false;
     if (translationExists) {

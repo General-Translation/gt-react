@@ -146,17 +146,17 @@ export default class I18NConfiguration {
     */
     getTranslations(locale_1) {
         return __awaiter(this, arguments, void 0, function* (locale, dictionaryName = this.dictionaryName) {
-            if (this._localDictionaryManager) {
-                const translations = yield this._localDictionaryManager.getDictionary(locale);
-                if (translations)
-                    return translations;
+            let translations = {};
+            const localPromise = this._localDictionaryManager ? this._localDictionaryManager.getDictionary(locale) : Promise.resolve(undefined);
+            const remotePromise = this._remoteDictionaryManager ? this._remoteDictionaryManager.getDictionary(locale, dictionaryName) : Promise.resolve(undefined);
+            const [local, remote] = yield Promise.all([localPromise, remotePromise]);
+            if (local !== undefined) {
+                translations.local = local;
             }
-            if (this._remoteDictionaryManager) {
-                const translations = yield this._remoteDictionaryManager.getDictionary(locale, dictionaryName);
-                if (translations)
-                    return translations;
+            if (remote !== undefined) {
+                translations.remote = remote;
             }
-            return null;
+            return translations;
         });
     }
     /**
@@ -164,13 +164,21 @@ export default class I18NConfiguration {
      * @param locale - The user's locale
      * @param key - Key in the dictionary. For strings, the original language version of that string. For React children, a hash.
      * @param dictionaryName - User-defined dictionary name, for distinguishing between multiple translation dictionaries for a single language.
+     * @param translations - Optional translations to search.
      * @returns A promise that resolves to the a value in the translations.
     */
     getTranslation(locale_1, key_1) {
-        return __awaiter(this, arguments, void 0, function* (locale, key, id = key, dictionaryName = this.dictionaryName) {
-            const translations = yield this.getTranslations(locale, dictionaryName);
-            if (translations && translations[id] && translations[id].k === key)
-                return translations[id].t;
+        return __awaiter(this, arguments, void 0, function* (locale, key, id = key, dictionaryName = this.dictionaryName, translations) {
+            translations = translations || (yield this.getTranslations(locale, dictionaryName));
+            if (translations.local) {
+                const translation = getDictionaryEntry(id, translations.local);
+                if (translation)
+                    return translation;
+            }
+            if (translations.remote) {
+                if (translations.remote[id] && translations.remote[id].k === key)
+                    return translations.remote[id].t;
+            }
             return null;
         });
     }

@@ -187,16 +187,20 @@ export default class I18NConfiguration {
      * @param dictionaryName - User-defined dictionary name, for distinguishing between multiple translation dictionaries for a single language.
      * @returns A promise that resolves to the translations.
     */
-    async getTranslations(locale: string, dictionaryName: string = this.dictionaryName): Promise<Record<string, any> | null> {
-        if (this._localDictionaryManager) {
-            const translations = await this._localDictionaryManager.getDictionary(locale);
-            if (translations) return translations;
+    async getTranslations(locale: string, dictionaryName: string = this.dictionaryName): Promise<{
+        local?: any, remote?: any
+    }> {
+        let translations: { local?: any, remote?: any } = {};
+        const localPromise = this._localDictionaryManager ? this._localDictionaryManager.getDictionary(locale) : Promise.resolve(undefined);
+        const remotePromise = this._remoteDictionaryManager ? this._remoteDictionaryManager.getDictionary(locale, dictionaryName) : Promise.resolve(undefined);
+        const [local, remote] = await Promise.all([localPromise, remotePromise]);
+        if (local !== undefined) {
+            translations.local = local;
         }
-        if (this._remoteDictionaryManager) {
-            const translations = await this._remoteDictionaryManager.getDictionary(locale, dictionaryName);
-            if (translations) return translations;
+        if (remote !== undefined) {
+            translations.remote = remote;
         }
-        return null;
+        return translations;
     }
 
     /**
@@ -204,11 +208,18 @@ export default class I18NConfiguration {
      * @param locale - The user's locale
      * @param key - Key in the dictionary. For strings, the original language version of that string. For React children, a hash.
      * @param dictionaryName - User-defined dictionary name, for distinguishing between multiple translation dictionaries for a single language.
+     * @param translations - Optional translations to search.
      * @returns A promise that resolves to the a value in the translations.
     */
-    async getTranslation(locale: string, key: string, id: string = key, dictionaryName: string = this.dictionaryName): Promise<any | null> {
-        const translations = await this.getTranslations(locale, dictionaryName);
-        if (translations && translations[id] && translations[id].k === key) return translations[id].t;
+    async getTranslation(locale: string, key: string, id: string = key, dictionaryName: string = this.dictionaryName, translations?: { local?: any, remote?: any }): Promise<any | null> {
+        translations = translations || await this.getTranslations(locale, dictionaryName);
+        if (translations.local) {
+            const translation = getDictionaryEntry(id, translations.local);
+            if (translation) return translation;
+        }
+        if (translations.remote) {
+            if (translations.remote[id] && translations.remote[id].k === key) return translations.remote[id].t;
+        }
         return null;
     }
    
