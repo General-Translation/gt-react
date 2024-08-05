@@ -11,6 +11,10 @@ var __rest = (this && this.__rest) || function (s, e) {
 };
 import React from 'react';
 import processBranches from '../value/processBranches';
+const acceptedNumericProps = {
+    "singular": true, "dual": true, "plural": true,
+    "zero": true, "one": true, "two": true, "few": true, "many": true, "other": true
+};
 /**
  * Helper function to validate the properties of the component to prevent nested translations
  * @param props - The properties of the current React element
@@ -88,14 +92,14 @@ export default function addGTIdentifier(children) {
             let branches = {};
             // add identifier to number branches (e.g. singular, plural, ranges)
             if (transformation === "numeric") {
-                const { n, children } = props, options = __rest(props, ["n", "children"]);
+                const { n, children, locales } = props, options = __rest(props, ["n", "children", "locales"]);
                 let { ranges } = options, others = __rest(options, ["ranges"]);
                 if (ranges)
                     branches.ranges = options.ranges.map((range) => {
                         updateIndices();
                         return { min: range.min, max: range.max, children: addIdentifierRecursively(range.children) };
                     });
-                for (const option of Object.keys(others)) {
+                for (const option of Object.keys(others).filter(item => acceptedNumericProps[item] ? true : false)) {
                     updateIndices();
                     branches[option] = addIdentifierRecursively(others[option]);
                 }

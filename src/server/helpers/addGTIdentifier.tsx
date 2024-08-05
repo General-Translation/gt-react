@@ -9,6 +9,11 @@ type GTProp = {
     [key: string]: any;
 }
 
+const acceptedNumericProps: Record<string, boolean> = {
+    "singular": true, "dual": true, "plural": true,
+    "zero": true, "one": true, "two": true, "few": true, "many": true, "other": true
+}
+
 /**
  * Helper function to validate the properties of the component to prevent nested translations
  * @param props - The properties of the current React element
@@ -105,13 +110,13 @@ export default function addGTIdentifier(children: Children) {
             
             // add identifier to number branches (e.g. singular, plural, ranges)
             if (transformation === "numeric") {
-                const { n, children, ...options } = props;
+                const { n, children, locales, ...options } = props;
                 let { ranges, ...others } = options;
                 if (ranges) branches.ranges = options.ranges.map((range: any) => {
                     updateIndices();
                     return { min: range.min, max: range.max, children: addIdentifierRecursively(range.children) }
                 }); 
-                for (const option of Object.keys(others)) {
+                for (const option of Object.keys(others).filter(item => acceptedNumericProps[item] ? true : false)) {
                     updateIndices();
                     branches[option] = addIdentifierRecursively(others[option]);
                 }

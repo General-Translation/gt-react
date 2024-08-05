@@ -23,6 +23,7 @@ import createVarComponent from './server/variables/Var/createVarComponent';
 import createNumComponent from './server/variables/Num/createNumComponent';
 import createDateTimeComponent from './server/variables/DateTime/createDateTimeComponent';
 import createCurrencyComponent from './server/variables/Currency/createCurrencyComponent';
+import defaultGTProps from './types/defaultGTProps';
 /**
  * Initializes the `gt-react` i18n library.
  *
@@ -47,36 +48,36 @@ import createCurrencyComponent from './server/variables/Currency/createCurrencyC
  * @returns {GeneralTranslation} An object containing internationalization and translation functions.
  */
 export function createGT(_a = {
-    apiKey: getDefaultFromEnv('GT_API_KEY'),
-    projectID: getDefaultFromEnv('GT_PROJECT_ID'),
-    cacheURL: "https://cache.gtx.dev",
-    baseURL: "https://prod.gtx.dev",
-    remoteSource: true,
-    automaticTranslation: true,
-    defaultLocale: 'en',
-    getLocale: () => 'en',
-    renderMethod: "skeleton",
-    renderTimeout: 8500,
-    dictionaryName: "default",
-    dictionary: {},
-    maxConcurrentRequests: 2,
-    batchInterval: 500,
-    getMetadata: () => { return {}; }
+    apiKey: defaultGTProps.apiKey,
+    projectID: defaultGTProps.projectID,
+    cacheURL: defaultGTProps.cacheURL,
+    baseURL: defaultGTProps.baseURL,
+    remoteSource: defaultGTProps.remoteSource,
+    automaticTranslation: defaultGTProps.automaticTranslation,
+    defaultLocale: defaultGTProps.defaultLocale,
+    getLocale: defaultGTProps.getLocale,
+    renderMethod: defaultGTProps.renderMethod,
+    renderTimeout: defaultGTProps.renderTimeout,
+    dictionaryName: defaultGTProps.dictionaryName,
+    dictionary: defaultGTProps.dictionary,
+    maxConcurrentRequests: defaultGTProps.maxConcurrentRequests,
+    batchInterval: defaultGTProps.batchInterval,
+    getMetadata: defaultGTProps.getMetadata
 }) {
     var { 
     // Cloud integration
-    apiKey = getDefaultFromEnv('GT_API_KEY'), projectID = getDefaultFromEnv('GT_PROJECT_ID'), cacheURL = "https://cache.gtx.dev", baseURL = "https://prod.gtx.dev", remoteSource = true, automaticTranslation = true, 
+    apiKey = defaultGTProps.apiKey, projectID = defaultGTProps.projectID, cacheURL = defaultGTProps.cacheURL, baseURL = defaultGTProps.baseURL, remoteSource = defaultGTProps.remoteSource, automaticTranslation = defaultGTProps.automaticTranslation, 
     // Locale info
-    approvedLocales, defaultLocale = (approvedLocales === null || approvedLocales === void 0 ? void 0 : approvedLocales[0]) || 'en', getLocale = () => { return defaultLocale; }, 
+    approvedLocales, defaultLocale = (approvedLocales === null || approvedLocales === void 0 ? void 0 : approvedLocales[0]) || defaultGTProps.defaultLocale, getLocale = () => { return defaultLocale; }, 
     // Rendering
-    renderMethod = "skeleton", // "replace", "hang", "subtle"
-    renderTimeout = 8500, 
+    renderMethod = defaultGTProps.renderMethod, // "replace", "hang", "subtle"
+    renderTimeout = defaultGTProps.renderTimeout, 
     // Dictionaries
-    dictionaryName = "default", dictionary = {}, translations, 
+    dictionaryName = defaultGTProps.dictionaryName, dictionary = defaultGTProps.dictionary, translations, 
     // Batching config
-    maxConcurrentRequests = 2, batchInterval = 1000, 
+    maxConcurrentRequests = defaultGTProps.maxConcurrentRequests, batchInterval = defaultGTProps.batchInterval, 
     // Other metadata
-    getMetadata = () => { return {}; } } = _a, metadata = __rest(_a, ["apiKey", "projectID", "cacheURL", "baseURL", "remoteSource", "automaticTranslation", "approvedLocales", "defaultLocale", "getLocale", "renderMethod", "renderTimeout", "dictionaryName", "dictionary", "translations", "maxConcurrentRequests", "batchInterval", "getMetadata"]);
+    getMetadata = defaultGTProps.getMetadata } = _a, metadata = __rest(_a, ["apiKey", "projectID", "cacheURL", "baseURL", "remoteSource", "automaticTranslation", "approvedLocales", "defaultLocale", "getLocale", "renderMethod", "renderTimeout", "dictionaryName", "dictionary", "translations", "maxConcurrentRequests", "batchInterval", "getMetadata"]);
     const I18NConfig = new I18NConfiguration(Object.assign({ apiKey, projectID, cacheURL, baseURL, remoteSource, automaticTranslation,
         getLocale, defaultLocale, approvedLocales,
         renderMethod, renderTimeout,
