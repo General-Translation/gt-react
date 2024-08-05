@@ -1,5 +1,5 @@
 import React, { ReactNode, ReactElement } from 'react'
-import processBranches from '../../primitives/value/processBranches';
+import processBranches from '../value/processBranches';
 
 type Child = ReactNode | Record<string, any>;
 type Children = Child[] | Child;
@@ -15,8 +15,8 @@ type GTProp = {
  */
 const validateProps = (props: Record<string, any>): void => {
     if (props && props['data-generaltranslation'] && typeof props['data-generaltranslation'].id === 'number') {
-        throw new Error(`Nesting of I18N components is not permitted. This prevents components from being translated twice. 
-            Found nested component with ID: ${props['data-generaltranslation'].id}`);
+        throw new Error(`Nesting of T components is not permitted. This prevents components from being translated twice. 
+            Found nested component with content: ${props?.children}`);
     }
 }
 

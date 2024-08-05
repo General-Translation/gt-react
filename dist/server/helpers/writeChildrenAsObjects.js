@@ -10,8 +10,8 @@ var __rest = (this && this.__rest) || function (s, e) {
     return t;
 };
 import React from 'react';
-import processBranches from '../../primitives/value/processBranches';
-import defaultVariableNames from '../../primitives/helpers/defaultVariableNames';
+import processBranches from '../value/processBranches';
+import defaultVariableNames from '../../primitives/defaultVariableNames';
 /**
  * Checks if the props indicate that the component should be not be processed.
  * @param {Record<string, any>} props - The props to check.

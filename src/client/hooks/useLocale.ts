@@ -8,8 +8,9 @@ import { GTContext } from "../ClientProvider";
  */
 export default function useLocale(): string {
     const ctx = useContext(GTContext);
-    if (ctx?.locale) {
-        return ctx.locale;
+    if (!ctx) {
+        console.error(`useLocale(): No context provided. useLocale() can only be used inside a GTProvider.`);
+        return "";
     }
-    return "";
+    return ctx.locale || "";
 }

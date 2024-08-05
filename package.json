@@ -1,6 +1,6 @@
 {
   "name": "gt-react",
-  "version": "3.0.14",
+  "version": "3.1.0",
   "description": "",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -41,12 +41,12 @@
       "types": "./dist/next.d.ts"
     },
     "./next.js": "./dist/next.js",
-    "./client": {
-      "import": "./dist/client.js",
-      "require": "./dist/client.js",
-      "types": "./dist/client.d.ts"
+    "./server": {
+      "import": "./dist/server.js",
+      "require": "./dist/server.js",
+      "types": "./dist/server.d.ts"
     },
-    "./client.js": "./dist/client.js",
+    "./server.js": "./dist/server.js",
     "./middleware": {
       "import": "./dist/middleware.js",
       "require": "./dist/middleware.js",
@@ -59,8 +59,8 @@
       "next": [
         "./dist/next.d.ts"
       ],
-      "client": [
-        "./dist/client.d.ts"
+      "server": [
+        "./dist/server.d.ts"
       ],
       "middleware": [
         "./dist/middleware.d.ts"
@@ -73,11 +73,11 @@
       "gt-react/next": [
         "/dist/next"
       ],
-      "gt-react/client": [
-        "/dist/client"
+      "gt-react/server": [
+        "/dist/server"
       ],
       "gt-react/middleware": [
-        "/dist/client"
+        "/dist/middleware"
       ]
     }
   },

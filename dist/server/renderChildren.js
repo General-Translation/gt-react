@@ -11,14 +11,14 @@ var __rest = (this && this.__rest) || function (s, e) {
 };
 import { jsx as _jsx } from "react/jsx-runtime";
 import React from 'react';
-import getNumericBranch from '../primitives/helpers/getNumericBranch';
-import getValueBranch from '../primitives/helpers/getValueBranch';
-import isValidReactNode from '../primitives/helpers/isValidReactNode';
-import Variable from '../primitives/variables/Variable/Variable';
-import DateVariable from '../primitives/variables/DateVariable/DateVariable';
-import NumberVariable from '../primitives/variables/NumberVariable/NumberVariable';
-import CurrencyVariable from '../primitives/variables/CurrencyVariable/CurrencyVariable';
-import defaultVariableNames from '../primitives/helpers/defaultVariableNames';
+import getNumericBranch from '../primitives/getNumericBranch';
+import getValueBranch from '../primitives/getValueBranch';
+import isValidReactNode from '../primitives/isValidReactNode';
+import Var from './variables/Var/Var';
+import DateTime from './variables/DateTime/DateTime';
+import Num from './variables/Num/Num';
+import Currency from './variables/Currency/Currency';
+import defaultVariableNames from '../primitives/defaultVariableNames';
 /**
  * Renders a React element based on the provided source and target elements.
  * Handles transformation and variable branching if necessary.
@@ -140,15 +140,15 @@ export default function renderChildren(_a) {
                     value = metadata.variables[key];
                 }
                 if (targetChild.variable === "number") {
-                    return _jsx(NumberVariable, { locales: [metadata.locale, metadata.defaultLocale], defaultValue: value, name: key, options: Object.assign({}, (_a = metadata === null || metadata === void 0 ? void 0 : metadata.variableOptions) === null || _a === void 0 ? void 0 : _a[key]) }, `var_${index}`);
+                    return _jsx(Num, { locales: [metadata.locale, metadata.defaultLocale], defaultValue: value, name: key, options: Object.assign({}, (_a = metadata === null || metadata === void 0 ? void 0 : metadata.variableOptions) === null || _a === void 0 ? void 0 : _a[key]) }, `var_${index}`);
                 }
                 if (targetChild.variable === "date") {
-                    return _jsx(DateVariable, { locales: [metadata.locale, metadata.defaultLocale], defaultValue: value, name: key, options: Object.assign({}, (_b = metadata === null || metadata === void 0 ? void 0 : metadata.variableOptions) === null || _b === void 0 ? void 0 : _b[key]) }, `var_${index}`);
+                    return _jsx(DateTime, { locales: [metadata.locale, metadata.defaultLocale], defaultValue: value, name: key, options: Object.assign({}, (_b = metadata === null || metadata === void 0 ? void 0 : metadata.variableOptions) === null || _b === void 0 ? void 0 : _b[key]) }, `var_${index}`);
                 }
                 if (targetChild.variable === "currency") {
-                    return _jsx(CurrencyVariable, { locales: [metadata.locale, metadata.defaultLocale], defaultValue: value, name: key, currency: ((_d = (_c = metadata === null || metadata === void 0 ? void 0 : metadata.variableOptions) === null || _c === void 0 ? void 0 : _c[key]) === null || _d === void 0 ? void 0 : _d.currency) || undefined, options: Object.assign({}, (_e = metadata === null || metadata === void 0 ? void 0 : metadata.variableOptions) === null || _e === void 0 ? void 0 : _e[key]) }, `var_${index}`);
+                    return _jsx(Currency, { locales: [metadata.locale, metadata.defaultLocale], defaultValue: value, name: key, currency: ((_d = (_c = metadata === null || metadata === void 0 ? void 0 : metadata.variableOptions) === null || _c === void 0 ? void 0 : _c[key]) === null || _d === void 0 ? void 0 : _d.currency) || undefined, options: Object.assign({}, (_e = metadata === null || metadata === void 0 ? void 0 : metadata.variableOptions) === null || _e === void 0 ? void 0 : _e[key]) }, `var_${index}`);
                 }
-                return _jsx(Variable, { defaultValue: isValidReactNode(value) ? value : undefined, name: key }, `var_${index}`);
+                return _jsx(Var, { defaultValue: isValidReactNode(value) ? value : undefined, name: key }, `var_${index}`);
             }
             // If target is a normal ReactElement
             const matchingSource = findMatchingSource(targetChild);

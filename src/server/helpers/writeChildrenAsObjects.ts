@@ -1,6 +1,6 @@
 import React, { ReactNode, ReactElement } from 'react'
-import processBranches from '../../primitives/value/processBranches';
-import defaultVariableNames from '../../primitives/helpers/defaultVariableNames';
+import processBranches from '../value/processBranches';
+import defaultVariableNames from '../../primitives/defaultVariableNames';
 
 type Child = ReactNode | Record<string, any>;
 type Children = Child | Child[];

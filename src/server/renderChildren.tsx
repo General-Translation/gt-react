@@ -1,13 +1,12 @@
 import React, { ReactElement, ReactNode } from 'react'
-
-import getNumericBranch from '../primitives/helpers/getNumericBranch';
-import getValueBranch from '../primitives/helpers/getValueBranch';
-import isValidReactNode from '../primitives/helpers/isValidReactNode'
-import Variable from '../primitives/variables/Variable/Variable'
-import DateVariable from '../primitives/variables/DateVariable/DateVariable'
-import NumberVariable from '../primitives/variables/NumberVariable/NumberVariable'
-import CurrencyVariable from '../primitives/variables/CurrencyVariable/CurrencyVariable'
-import defaultVariableNames from '../primitives/helpers/defaultVariableNames';
+import getNumericBranch from '../primitives/getNumericBranch';
+import getValueBranch from '../primitives/getValueBranch';
+import isValidReactNode from '../primitives/isValidReactNode';
+import Var from './variables/Var/Var';
+import DateTime from './variables/DateTime/DateTime';
+import Num from './variables/Num/Num';
+import Currency from './variables/Currency/Currency';
+import defaultVariableNames from '../primitives/defaultVariableNames';
 
 type TargetElement = Record<string, any>;
 type TargetChild = TargetElement | string | number | boolean | object;
@@ -176,15 +175,15 @@ export default function renderChildren({
                     value = metadata.variables[key];
                 }
                 if (targetChild.variable === "number") {
-                    return <NumberVariable locales={[metadata.locale, metadata.defaultLocale]} key={`var_${index}`} defaultValue={value} name={key} options={{...metadata?.variableOptions?.[key]}}/>
+                    return <Num locales={[metadata.locale, metadata.defaultLocale]} key={`var_${index}`} defaultValue={value} name={key} options={{...metadata?.variableOptions?.[key]}}/>
                 }
                 if (targetChild.variable === "date") {
-                    return <DateVariable locales={[metadata.locale, metadata.defaultLocale]} key={`var_${index}`} defaultValue={value} name={key} options={{...metadata?.variableOptions?.[key]}}/>
+                    return <DateTime locales={[metadata.locale, metadata.defaultLocale]} key={`var_${index}`} defaultValue={value} name={key} options={{...metadata?.variableOptions?.[key]}}/>
                 }
                 if (targetChild.variable === "currency") {
-                    return <CurrencyVariable locales={[metadata.locale, metadata.defaultLocale]} key={`var_${index}`} defaultValue={value} name={key} currency={metadata?.variableOptions?.[key]?.currency || undefined} options={{...metadata?.variableOptions?.[key]}}/>
+                    return <Currency locales={[metadata.locale, metadata.defaultLocale]} key={`var_${index}`} defaultValue={value} name={key} currency={metadata?.variableOptions?.[key]?.currency || undefined} options={{...metadata?.variableOptions?.[key]}}/>
                 }
-                return <Variable key={`var_${index}`} defaultValue={isValidReactNode(value) ? value : undefined} name={key}/>
+                return <Var key={`var_${index}`} defaultValue={isValidReactNode(value) ? value : undefined} name={key}/>
             }
             
             // If target is a normal ReactElement

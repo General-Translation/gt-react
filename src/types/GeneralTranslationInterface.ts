@@ -1,9 +1,9 @@
-import React, { ComponentType } from 'react'
+import React, { ComponentType, ReactNode } from 'react'
 
 export default interface GeneralTranslation {
 
     /**
-    * The `<I18N>` component. Translates its ReactNode children into the user's locale.
+    * The `<T>` component. Translates its ReactNode children into the user's locale.
     * 
     * `children?` - (any) - Children to translate.
     * 
@@ -11,7 +11,7 @@ export default interface GeneralTranslation {
     * 
     * `...props` - ([key: string]: any) - Optional metadata which will override the global `gt-react` configuration. See https://docs.generaltranslation.com for a full list of possible props.
     */
-    I18N: ComponentType<{ 
+    T: ComponentType<{ 
         children?: any;
         id?: string;
         [key: string]: any;
@@ -57,7 +57,7 @@ export default interface GeneralTranslation {
     }>;
   
     /**
-    * Server-side function which gets an entry from the default dictionary and wraps it in the `<I18N>` component.
+    * Server-side function which gets an entry from the default dictionary and wraps it in the `<T>` component.
     * 
     * `id` - (string) - ID of the item in the dictionary.
     * 
@@ -73,7 +73,7 @@ export default interface GeneralTranslation {
     dict: (id: string) => any;
   
     /**
-     * Component for rendering localized values.
+     *  Type of <T> translation component which renders content around variables.
      * 
      * `children?` - (any) - The default content to render if no conditions are met.
      * 
@@ -88,7 +88,7 @@ export default interface GeneralTranslation {
     }>;
 
     /**
-     * Component for rendering localized numeric values.
+     *  Type of <T> translation component which renders content around numbers.
      * 
      * `children?` - (any) - The default content to render if no numeric conditions are met.
      * 
@@ -99,6 +99,12 @@ export default interface GeneralTranslation {
     Numeric: ComponentType<{
         children?: any;
         n: number;
+        zero?: ReactNode;
+        one?: ReactNode;
+        two?: ReactNode;
+        few?: ReactNode;
+        many?: ReactNode;
+        other?: ReactNode;
         ranges?: { min: number, max: number, children: any }[];
     }>;
 
@@ -111,7 +117,7 @@ export default interface GeneralTranslation {
      * 
      * `defaultValue?` - (any) - The default value to display if `children` is not provided.
     **/
-    Variable: ComponentType<{
+    Var: ComponentType<{
         children?: any;
         name?: string;
         defaultValue?: any;
@@ -128,7 +134,7 @@ export default interface GeneralTranslation {
      * 
      * `options?` - (Record<string, any>) - Additional options for `Intl.NumberFormat` for formatting the number.
     **/
-    NumberVariable: ComponentType<{
+    Num: ComponentType<{
         children?: any;
         name?: string;
         defaultValue?: any;
@@ -146,7 +152,7 @@ export default interface GeneralTranslation {
      * 
      * `options?` - (Record<string, any>) - Additional options for `Intl.DateTimeFormat` for formatting the date.
     **/
-    DateVariable: ComponentType<{
+    DateTime: ComponentType<{
         children?: any;
         name?: string;
         defaultValue?: any;
@@ -166,7 +172,7 @@ export default interface GeneralTranslation {
      * 
      * `options?` - (Record<string, any>) - Additional options for `Intl.NumberFormat` for formatting the currency.
     **/
-    CurrencyVariable: ComponentType<{
+    Currency: ComponentType<{
         children?: any;
         name?: string;
         defaultValue?: any;

@@ -19,10 +19,17 @@ export default function useGT(id?: string): Function {
 
     // Get the translation context
     const ctx = useContext(GTContext);
+    if (!ctx) {
+        console.error(`t('${id}'): No context provided. useGT() can only be used inside a GTProvider.`);
+    }
 
     // Return a translation function if available, otherwise return a no-op function
     if (ctx?.translate) {
-        return (id: string) => ctx.translate(`${prefix}${id}`);
+        return (id: string) => {
+            const translation = ctx.translate(`${prefix}${id}`);
+            if (!translation) console.warn(`t('${id}') finding no translation for dictionary item ${prefix}${id} !`)
+            return translation;
+        }
     }
     return () => {};
 }

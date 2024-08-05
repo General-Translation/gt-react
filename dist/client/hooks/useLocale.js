@@ -6,9 +6,10 @@ import { GTContext } from "../ClientProvider";
  */
 export default function useLocale() {
     const ctx = useContext(GTContext);
-    if (ctx === null || ctx === void 0 ? void 0 : ctx.locale) {
-        return ctx.locale;
+    if (!ctx) {
+        console.error(`useLocale(): No context provided. useLocale() can only be used inside a GTProvider.`);
+        return "";
     }
-    return "";
+    return ctx.locale || "";
 }
 //# sourceMappingURL=useLocale.js.map

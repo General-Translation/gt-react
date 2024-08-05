@@ -1,34 +1,7 @@
-import { createGT as createBaseGT } from ".";
+import { createGT as createBaseGT } from "./server";
 import { getNextDomain, getNextLocale } from "./next/requestFunctions";
 import CreateGTProps from './types/CreateGTProps';
 import GeneralTranslation from "./types/GeneralTranslationInterface";
-import { createVariables as createBaseVariables } from ".";
-import Variables from "./types/VariableInterface";
-
-/**
- * Configures and returns variable components for the `gt-react` i18n library, 
- * adapted for Next.js environment.
- * 
- * @param {Object} [params] - Configuration options for creating variables.
- * @param {string[]} [params.approvedLocales] - List of approved locales. Default is an empty array.
- * @param {string} [params.defaultLocale] - Default locale for the variables. Default is the first locale in `approvedLocales` or 'en'.
- * @param {Function} [params.getLocale] - Function to get the current locale. Uses `getNextLocale` if not provided.
- * @returns {Variables} An object containing various variable components like Value, Numeric, Variable, etc.
- */
-export function createVariables({
-    approvedLocales = [],
-    defaultLocale = approvedLocales?.[0] || 'en',
-    getLocale,
-}: {
-    approvedLocales?: string[],
-    defaultLocale?: string;
-    getLocale?: () => string;
-} = {
-    defaultLocale: 'en'
-}): Variables {
-    const finalGetLocale = getLocale || (() => { return 'en' }) //(() => { return getNextLocale(defaultLocale, approvedLocales) });
-    return createBaseVariables({ approvedLocales, defaultLocale, getLocale: finalGetLocale });
-}
 
 /**
  * Initializes the `gt-react` i18n library with Next.js specific configurations.

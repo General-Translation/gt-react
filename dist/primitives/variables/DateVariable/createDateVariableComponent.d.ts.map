@@ -1,1 +1,0 @@
-{"version":3,"file":"createDateVariableComponent.d.ts","sourceRoot":"","sources":["../../../../src/primitives/variables/DateVariable/createDateVariableComponent.tsx"],"names":[],"mappings":"AAGA,MAAM,CAAC,OAAO,UAAU,2BAA2B,CAAC,SAAS,EAAE,MAAM,MAAM,EAAE,aAAa,EAAE,MAAM;6BACvC;QAAE,QAAQ,CAAC,EAAE,GAAG,CAAC;QAAC,CAAC,GAAG,EAAE,MAAM,GAAG,GAAG,CAAA;KAAE;;EAMhG"}
