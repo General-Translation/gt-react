@@ -1,5 +1,5 @@
 const getDictionaryReference = (locale: string, dictionaryName: string): string => {
-    return `${encodeURIComponent(locale)}/${encodeURIComponent(dictionaryName)}`;
+    return `${encodeURIComponent(dictionaryName)}/${encodeURIComponent(locale)}`;
 }
 
 type DictionaryManagerParams = {

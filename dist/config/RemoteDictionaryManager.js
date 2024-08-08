@@ -8,7 +8,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 const getDictionaryReference = (locale, dictionaryName) => {
-    return `${encodeURIComponent(locale)}/${encodeURIComponent(dictionaryName)}`;
+    return `${encodeURIComponent(dictionaryName)}/${encodeURIComponent(locale)}`;
 };
 export default class RemoteDictionaryManager {
     constructor({ cacheURL = "https://cache.gtx.dev", projectID }) {
