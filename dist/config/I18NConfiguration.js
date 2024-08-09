@@ -282,7 +282,7 @@ export default class I18NConfiguration {
 // Resolve errors in the batch request
 const resolveBatchError = (item) => {
     if (item.type === "react")
-        return item.resolve(item.data.children);
+        return item.resolve(null);
     if (item.type === "intl")
         return item.resolve(item.data.content);
     return item.resolve("");
