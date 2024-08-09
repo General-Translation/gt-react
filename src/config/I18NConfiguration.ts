@@ -1,5 +1,5 @@
 import GT, { isSameLanguage } from "generaltranslation";
-import RemoteDictionaryManager from "./RemoteDictionaryManager";
+import remoteDictionaryManager, { RemoteDictionaryManager } from "./RemoteDictionaryManager";
 import getDictionaryEntry from "../dictionary/getDictionaryEntry";
 import LocalDictionaryManager from "./LocalDictionaryManager";
 
@@ -101,9 +101,10 @@ export default class I18NConfiguration {
             })
         }
         if (this.remoteSource) {
-            this._remoteDictionaryManager = new RemoteDictionaryManager({
+            this._remoteDictionaryManager = remoteDictionaryManager;
+            this._remoteDictionaryManager.setConfig({
                 cacheURL, projectID
-            });
+            })
         }
         // Batching
         this.maxConcurrentRequests = maxConcurrentRequests;

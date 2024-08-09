@@ -19,7 +19,7 @@ var __rest = (this && this.__rest) || function (s, e) {
     return t;
 };
 import GT, { isSameLanguage } from "generaltranslation";
-import RemoteDictionaryManager from "./RemoteDictionaryManager";
+import remoteDictionaryManager from "./RemoteDictionaryManager";
 import getDictionaryEntry from "../dictionary/getDictionaryEntry";
 import LocalDictionaryManager from "./LocalDictionaryManager";
 export default class I18NConfiguration {
@@ -64,7 +64,8 @@ export default class I18NConfiguration {
             });
         }
         if (this.remoteSource) {
-            this._remoteDictionaryManager = new RemoteDictionaryManager({
+            this._remoteDictionaryManager = remoteDictionaryManager;
+            this._remoteDictionaryManager.setConfig({
                 cacheURL, projectID
             });
         }
