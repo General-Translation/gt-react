@@ -14,6 +14,7 @@ import GeneralTranslation from './types/GeneralTranslationInterface';
  * @param {string[]} [params.approvedLocales] - List of approved locales. Default is an empty array.
  * @param {string} [params.defaultLocale] - Default locale for the translation. Default is the first locale in `approvedLocales` or 'en'.
  * @param {Function} [params.getLocale] - Function to get the current locale. Default returns the `defaultLocale`.
+ * @param {boolean} [params.renderPrevious] - Experimental. If there's a previous translation on file remotely, use it as a placeholder while the new translation loads, replacing the role of the default language children in "replace" and "subtle", and the skeleton in "skeleton".
  * @param {string} [params.renderMethod] - How translations are rendered for the first time. options are "replace", "hang", "subtle". Default is "skeleton".
  * @param {string} [params.renderTimeout] - Timeout before rendering a new translation is called off.
  * @param {string} [params.dictionaryName] - Name of the dictionary to use. Default is "default".
@@ -24,6 +25,6 @@ import GeneralTranslation from './types/GeneralTranslationInterface';
  * @param {Object} [...metadata] - Any additional metadata. Used for experimental variables.
  * @returns {GeneralTranslation} An object containing internationalization and translation functions.
  */
-export declare function createGT({ apiKey, projectID, cacheURL, baseURL, remoteSource, automaticTranslation, approvedLocales, defaultLocale, getLocale, renderMethod, // "replace", "hang", "subtle"
+export declare function createGT({ apiKey, projectID, cacheURL, baseURL, remoteSource, automaticTranslation, approvedLocales, defaultLocale, getLocale, renderPrevious, renderMethod, // "replace", "hang", "subtle"
 renderTimeout, dictionaryName, dictionary, translations, maxConcurrentRequests, batchInterval, getMetadata, ...metadata }?: CreateI18NConfigProps): GeneralTranslation;
 //# sourceMappingURL=server.d.ts.map

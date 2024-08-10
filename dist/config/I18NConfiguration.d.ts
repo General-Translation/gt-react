@@ -9,6 +9,7 @@ type I18NConfigurationParams = {
     getLocale: () => string;
     defaultLocale: string;
     approvedLocales?: string[];
+    renderPrevious: boolean;
     renderMethod: string;
     renderTimeout: number | null;
     dictionary: Record<string, any>;
@@ -26,6 +27,7 @@ export default class I18NConfiguration {
     getLocale: () => string;
     defaultLocale: string;
     approvedLocales: string[] | undefined;
+    renderPrevious: boolean;
     renderMethod: string;
     renderTimeout: number | null;
     dictionaryName: string;
@@ -41,7 +43,7 @@ export default class I18NConfiguration {
     private _queue;
     private _activeRequests;
     private _translationCache;
-    constructor({ apiKey, projectID, baseURL, cacheURL, remoteSource, automaticTranslation, getLocale, defaultLocale, approvedLocales, renderMethod, renderTimeout, dictionary, dictionaryName, translations, maxConcurrentRequests, batchInterval, getMetadata, ...metadata }: I18NConfigurationParams);
+    constructor({ apiKey, projectID, baseURL, cacheURL, remoteSource, automaticTranslation, getLocale, defaultLocale, approvedLocales, renderPrevious, renderMethod, renderTimeout, dictionary, dictionaryName, translations, maxConcurrentRequests, batchInterval, getMetadata, ...metadata }: I18NConfigurationParams);
     /**
      * Gets the application's default locale
      * @returns {string} A BCP-47 language tag
@@ -76,6 +78,7 @@ export default class I18NConfiguration {
     getRenderSettings(): {
         method: string;
         timeout: number | null;
+        renderPrevious: boolean;
     };
     /**
      * Check if translation is required based on the user's locale

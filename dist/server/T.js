@@ -45,7 +45,8 @@ const ServerT = (_a) => __awaiter(void 0, void 0, void 0, function* () {
     const childrenAsObjects = writeChildrenAsObjects(taggedChildren);
     const key = yield generateHash(childrenAsObjects);
     const id = props.id ? props.id : key;
-    const translation = yield I18NConfig.getTranslation(locale, key, id, (_b = props.dictionaryName) !== null && _b !== void 0 ? _b : undefined, yield translationsPromise);
+    const translations = yield translationsPromise;
+    const translation = yield I18NConfig.getTranslation(locale, key, id, (_b = props.dictionaryName) !== null && _b !== void 0 ? _b : undefined, translations);
     // Check if a translation for this site already exists and return it if it does
     const translationExists = translation ? true : false;
     if (translationExists) {
@@ -66,24 +67,34 @@ const ServerT = (_a) => __awaiter(void 0, void 0, void 0, function* () {
         const timeoutPromise = new Promise((resolve) => setTimeout(() => resolve(children), timeout));
         promise = Promise.race([promise, timeoutPromise]);
     }
+    // Render methods
+    let loadingFallback = children;
+    let errorFallback = children;
     if (renderMethod === "skeleton") {
-        // Return the site but without text
-        // Replace with translated site when ready
-        return (_jsx(Suspense, { fallback: _jsx(_Fragment, {}), children: _jsx(Resolver, { fallback: children, children: promise }) }));
+        loadingFallback = _jsx(_Fragment, {});
+        errorFallback = children;
     }
-    if (renderMethod === "replace") {
-        // Return the site in the default language
-        // Replace with translated site when ready
-        return (_jsx(Suspense, { fallback: children, children: _jsx(Resolver, { fallback: children, children: promise }) }));
+    else if (renderMethod === "replace") {
+        loadingFallback = children;
+        errorFallback = loadingFallback;
     }
     if (renderMethod === "hang") {
         // Wait until the site is translated to return
         return (_jsx(_Fragment, { children: yield promise }));
     }
+    if (renderSettings.renderPrevious && translations.remote && translations.remote[id] && translations.remote[id].k) {
+        // in case there's a previous translation on file
+        loadingFallback = renderChildren({ source: taggedChildren, target: translations.remote[id].t, renderAttributes, locale, defaultLocale });
+        errorFallback = loadingFallback;
+    }
+    if (renderMethod === "skeleton" || renderMethod === "replace") {
+        return (_jsx(Suspense, { fallback: loadingFallback, children: _jsx(Resolver, { fallback: errorFallback, children: promise }) }));
+    }
+    // If none of those 
     return (
     // return the children, with no special rendering
     // a translation may be available from a cached translation dictionary next time the component is loaded
-    _jsx(_Fragment, { children: children }));
+    _jsx(_Fragment, { children: errorFallback }));
 });
 ServerT.gtTransformation = "translate";
 export default ServerT;

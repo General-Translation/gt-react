@@ -42,8 +42,9 @@ const ServerT = async ({
     
     const key: string = await generateHash(childrenAsObjects);
     const id = props.id ? props.id : key;
-    
-    const translation = await I18NConfig.getTranslation(locale, key, id, props.dictionaryName ?? undefined, await translationsPromise)
+
+    const translations = await translationsPromise;
+    const translation = await I18NConfig.getTranslation(locale, key, id, props.dictionaryName ?? undefined, translations)
     
     // Check if a translation for this site already exists and return it if it does
     const translationExists: boolean = translation ? true : false;
@@ -78,26 +79,15 @@ const ServerT = async ({
         promise = Promise.race([promise, timeoutPromise])
     }
 
-    if (renderMethod === "skeleton") {
-        // Return the site but without text
-        // Replace with translated site when ready
-        return (
-            <Suspense fallback={<></>}>
-                {/* @ts-expect-error Server Component */}
-                <Resolver fallback={children}>{promise}</Resolver>
-            </Suspense>
-        )
-    }
+    // Render methods
 
-    if (renderMethod === "replace") {
-        // Return the site in the default language
-        // Replace with translated site when ready
-        return (
-            <Suspense fallback={children}>
-                {/* @ts-expect-error Server Component */}
-                <Resolver fallback={children}>{promise}</Resolver>
-            </Suspense>
-        )
+    let loadingFallback = children; let errorFallback = children;
+    if (renderMethod === "skeleton") {
+        loadingFallback = <></>;
+        errorFallback = children;
+    } else if (renderMethod === "replace") {
+        loadingFallback = children;
+        errorFallback = loadingFallback;
     }
 
     if (renderMethod === "hang") {
@@ -109,13 +99,30 @@ const ServerT = async ({
         )
     }
 
+    if (renderSettings.renderPrevious && translations.remote && translations.remote[id] && translations.remote[id].k) {
+        // in case there's a previous translation on file
+        loadingFallback = renderChildren({ source: taggedChildren, target: translations.remote[id].t, renderAttributes, locale, defaultLocale });
+        errorFallback = loadingFallback;
+    }
+
+    if (renderMethod === "skeleton" || renderMethod === "replace") {
+        return (
+            <Suspense fallback={loadingFallback}>
+                {/* @ts-expect-error Server Component */}
+                <Resolver fallback={errorFallback}>{promise}</Resolver>
+            </Suspense>
+        )
+    }
+
+    // If none of those 
+
     return (
         // return the children, with no special rendering
         // a translation may be available from a cached translation dictionary next time the component is loaded
         <> 
-            {children}
+            {errorFallback}
         </>
-    )
+    );
     
 }
 

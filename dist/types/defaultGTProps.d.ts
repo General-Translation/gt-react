@@ -7,6 +7,7 @@ declare const defaultGTProps: {
     automaticTranslation: boolean;
     defaultLocale: string;
     getLocale: () => string;
+    renderPrevious: boolean;
     renderMethod: string;
     renderTimeout: number;
     dictionaryName: string;

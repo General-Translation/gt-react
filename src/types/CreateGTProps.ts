@@ -11,6 +11,7 @@ type CreateGTProps = {
     defaultLocale?: string;
     getLocale?: () => string;
     // Rendering
+    renderPrevious?: boolean,
     renderMethod?: string;
     renderTimeout?: number | null;
     // Dictionaries

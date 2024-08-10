@@ -8,6 +8,7 @@ type CreateGTProps = {
     approvedLocales?: string[];
     defaultLocale?: string;
     getLocale?: () => string;
+    renderPrevious?: boolean;
     renderMethod?: string;
     renderTimeout?: number | null;
     dictionaryName?: string;

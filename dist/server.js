@@ -37,6 +37,7 @@ import defaultGTProps from './types/defaultGTProps';
  * @param {string[]} [params.approvedLocales] - List of approved locales. Default is an empty array.
  * @param {string} [params.defaultLocale] - Default locale for the translation. Default is the first locale in `approvedLocales` or 'en'.
  * @param {Function} [params.getLocale] - Function to get the current locale. Default returns the `defaultLocale`.
+ * @param {boolean} [params.renderPrevious] - Experimental. If there's a previous translation on file remotely, use it as a placeholder while the new translation loads, replacing the role of the default language children in "replace" and "subtle", and the skeleton in "skeleton".
  * @param {string} [params.renderMethod] - How translations are rendered for the first time. options are "replace", "hang", "subtle". Default is "skeleton".
  * @param {string} [params.renderTimeout] - Timeout before rendering a new translation is called off.
  * @param {string} [params.dictionaryName] - Name of the dictionary to use. Default is "default".
@@ -56,6 +57,7 @@ export function createGT(_a = {
     automaticTranslation: defaultGTProps.automaticTranslation,
     defaultLocale: defaultGTProps.defaultLocale,
     getLocale: defaultGTProps.getLocale,
+    renderPrevious: defaultGTProps.renderPrevious,
     renderMethod: defaultGTProps.renderMethod,
     renderTimeout: defaultGTProps.renderTimeout,
     dictionaryName: defaultGTProps.dictionaryName,
@@ -70,17 +72,17 @@ export function createGT(_a = {
     // Locale info
     approvedLocales, defaultLocale = (approvedLocales === null || approvedLocales === void 0 ? void 0 : approvedLocales[0]) || defaultGTProps.defaultLocale, getLocale = () => { return defaultLocale; }, 
     // Rendering
-    renderMethod = defaultGTProps.renderMethod, // "replace", "hang", "subtle"
+    renderPrevious = defaultGTProps.renderPrevious, renderMethod = defaultGTProps.renderMethod, // "replace", "hang", "subtle"
     renderTimeout = defaultGTProps.renderTimeout, 
     // Dictionaries
     dictionaryName = defaultGTProps.dictionaryName, dictionary = defaultGTProps.dictionary, translations, 
     // Batching config
     maxConcurrentRequests = defaultGTProps.maxConcurrentRequests, batchInterval = defaultGTProps.batchInterval, 
     // Other metadata
-    getMetadata = defaultGTProps.getMetadata } = _a, metadata = __rest(_a, ["apiKey", "projectID", "cacheURL", "baseURL", "remoteSource", "automaticTranslation", "approvedLocales", "defaultLocale", "getLocale", "renderMethod", "renderTimeout", "dictionaryName", "dictionary", "translations", "maxConcurrentRequests", "batchInterval", "getMetadata"]);
+    getMetadata = defaultGTProps.getMetadata } = _a, metadata = __rest(_a, ["apiKey", "projectID", "cacheURL", "baseURL", "remoteSource", "automaticTranslation", "approvedLocales", "defaultLocale", "getLocale", "renderPrevious", "renderMethod", "renderTimeout", "dictionaryName", "dictionary", "translations", "maxConcurrentRequests", "batchInterval", "getMetadata"]);
     const I18NConfig = new I18NConfiguration(Object.assign({ apiKey, projectID, cacheURL, baseURL, remoteSource, automaticTranslation,
         getLocale, defaultLocale, approvedLocales,
-        renderMethod, renderTimeout,
+        renderPrevious, renderMethod, renderTimeout,
         dictionary, dictionaryName: getDefaultFromEnv('GT_DICTIONARY_NAME') || dictionaryName, // override from .env
         translations,
         maxConcurrentRequests, batchInterval,

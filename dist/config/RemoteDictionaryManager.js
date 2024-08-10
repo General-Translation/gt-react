@@ -30,7 +30,6 @@ export class RemoteDictionaryManager {
         };
         this.dictionaryMap = new Map();
         this.fetchPromises = new Map();
-        console.log('new remote dictionary manager');
     }
     /**
      * Sets the configuration for the RemoteDictionaryManager.

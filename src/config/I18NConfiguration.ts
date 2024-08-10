@@ -13,6 +13,7 @@ type I18NConfigurationParams = {
     getLocale: () => string;
     defaultLocale: string, 
     approvedLocales?: string[],
+    renderPrevious: boolean,
     renderMethod: string, 
     renderTimeout: number | null,
     dictionary: Record<string, any>, 
@@ -34,6 +35,7 @@ export default class I18NConfiguration {
     defaultLocale: string;
     approvedLocales: string[] | undefined;
     // Rendering
+    renderPrevious: boolean;
     renderMethod: string;
     renderTimeout: number | null;
     // Dictionaries
@@ -65,7 +67,7 @@ export default class I18NConfiguration {
         defaultLocale,
         approvedLocales,
         // Render method
-        renderMethod, renderTimeout,
+        renderPrevious, renderMethod, renderTimeout,
         // Dictionaries
         dictionary, dictionaryName, translations,
         // Batching config
@@ -83,6 +85,7 @@ export default class I18NConfiguration {
         this.defaultLocale = defaultLocale;
         this.approvedLocales = approvedLocales;
         // Render method
+        this.renderPrevious = renderPrevious;
         this.renderMethod = renderMethod;
         this.renderTimeout = renderTimeout;
         // Dictionaries
@@ -167,10 +170,11 @@ export default class I18NConfiguration {
      * As of 7/31/24: method is "skeleton", "replace", "hang", "subtle".
      * Timeout is a number or null, representing no assigned timeout.
     */
-    getRenderSettings(): { method: string, timeout: number | null } {
+    getRenderSettings(): { method: string, timeout: number | null, renderPrevious: boolean } {
         return {
             method: this.renderMethod,
-            timeout: this.renderTimeout
+            timeout: this.renderTimeout,
+            renderPrevious: this.renderPrevious
         }
     }
 

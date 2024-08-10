@@ -30,13 +30,13 @@ export default class I18NConfiguration {
         // Locale info
         getLocale, defaultLocale, approvedLocales, 
         // Render method
-        renderMethod, renderTimeout, 
+        renderPrevious, renderMethod, renderTimeout, 
         // Dictionaries
         dictionary, dictionaryName, translations, 
         // Batching config
         maxConcurrentRequests, batchInterval, 
         // Other metadata
-        getMetadata } = _a, metadata = __rest(_a, ["apiKey", "projectID", "baseURL", "cacheURL", "remoteSource", "automaticTranslation", "getLocale", "defaultLocale", "approvedLocales", "renderMethod", "renderTimeout", "dictionary", "dictionaryName", "translations", "maxConcurrentRequests", "batchInterval", "getMetadata"]);
+        getMetadata } = _a, metadata = __rest(_a, ["apiKey", "projectID", "baseURL", "cacheURL", "remoteSource", "automaticTranslation", "getLocale", "defaultLocale", "approvedLocales", "renderPrevious", "renderMethod", "renderTimeout", "dictionary", "dictionaryName", "translations", "maxConcurrentRequests", "batchInterval", "getMetadata"]);
         // Cloud integration
         this.projectID = projectID;
         this.remoteSource = remoteSource;
@@ -46,6 +46,7 @@ export default class I18NConfiguration {
         this.defaultLocale = defaultLocale;
         this.approvedLocales = approvedLocales;
         // Render method
+        this.renderPrevious = renderPrevious;
         this.renderMethod = renderMethod;
         this.renderTimeout = renderTimeout;
         // Dictionaries
@@ -121,7 +122,8 @@ export default class I18NConfiguration {
     getRenderSettings() {
         return {
             method: this.renderMethod,
-            timeout: this.renderTimeout
+            timeout: this.renderTimeout,
+            renderPrevious: this.renderPrevious
         };
     }
     /**
