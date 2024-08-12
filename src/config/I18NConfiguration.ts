@@ -169,6 +169,7 @@ export default class I18NConfiguration {
      * @returns An object containing the current method and timeout. 
      * As of 7/31/24: method is "skeleton", "replace", "hang", "subtle".
      * Timeout is a number or null, representing no assigned timeout.
+     * renderPrevious determines whether a non-matching previous entry should be rendered while the new translation loads.
     */
     getRenderSettings(): { method: string, timeout: number | null, renderPrevious: boolean } {
         return {
@@ -191,7 +192,7 @@ export default class I18NConfiguration {
     }
 
     /**
-     * Get the entry in the translation dictionary for the user's locale, if it exists
+     * Get the translation dictionaries for this user's locale, if they exist
      * @param locale - The language set by the user
      * @param dictionaryName - User-defined dictionary name, for distinguishing between multiple translation dictionaries for a single language.
      * @returns A promise that resolves to the translations.
@@ -242,15 +243,18 @@ export default class I18NConfiguration {
         if (this._translationCache.has(cacheKey)) {
             return this._translationCache.get(cacheKey);
         }
+        const { content, targetLanguage, options }: { content: string, targetLanguage: string, options: Record<string, any> } = params;
+        const dictionaryName: string = params.options?.dictionaryName || this.dictionaryName;
         const translationPromise = new Promise<string>((resolve, reject) => {
             this._queue.push({
                 type: "intl",
                 data: {
-                    content: params.content,
-                    targetLanguage: params.targetLanguage,
+                    content,
+                    targetLanguage,
                     projectID: this.projectID,
-                    metadata: { ...this.metadata, ...this.getMetadata(), ...params.options }
+                    metadata: { ...this.metadata, ...this.getMetadata(), ...options }
                 },
+                cache: (this._remoteDictionaryManager) ? this._remoteDictionaryManager.getTranslationRequested(targetLanguage, dictionaryName) : false,
                 resolve,
                 reject
             });
@@ -269,14 +273,17 @@ export default class I18NConfiguration {
         if (this._translationCache.has(cacheKey)) {
             return this._translationCache.get(cacheKey);
         }
+        const { children, targetLanguage, metadata }: { children: any, targetLanguage: string, metadata: Record<string, any> } = params;
+        const dictionaryName: string = params.options?.dictionaryName || this.dictionaryName;
         const translationPromise = new Promise<any>((resolve, reject) => {
             this._queue.push({
                 type: "react",
                 data: {
-                    children: params.children,
-                    targetLanguage: params.targetLanguage,
-                    metadata: { ...this.metadata, ...this.getMetadata(), ...params.metadata }
+                    children,
+                    targetLanguage,
+                    metadata: { ...this.metadata, ...this.getMetadata(), ...metadata }
                 },
+                cache: (this._remoteDictionaryManager) ? this._remoteDictionaryManager.getTranslationRequested(targetLanguage, dictionaryName) : false,
                 resolve,
                 reject
             });
@@ -292,7 +299,11 @@ export default class I18NConfiguration {
     private async _sendBatchRequest(batch: Array<any>): Promise<void> {
         this._activeRequests++;
         try {
-            const results = await this.gt.bundleRequests(batch);
+            const bundlePromise = this.gt.bundleRequests(batch);
+            batch.forEach((request) => {
+                if (this._remoteDictionaryManager && request.cache) this._remoteDictionaryManager.setTranslationRequested(request.data.targetLanguage, request.data.metadata.dictionaryName);
+            })
+            const results = await bundlePromise;
             batch.forEach((item, index) => {
                 const result = results[index];
                 if (!result || result.error) return resolveBatchError(item);

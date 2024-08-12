@@ -74,6 +74,7 @@ export default class I18NConfiguration {
      * @returns An object containing the current method and timeout.
      * As of 7/31/24: method is "skeleton", "replace", "hang", "subtle".
      * Timeout is a number or null, representing no assigned timeout.
+     * renderPrevious determines whether a non-matching previous entry should be rendered while the new translation loads.
     */
     getRenderSettings(): {
         method: string;
@@ -87,7 +88,7 @@ export default class I18NConfiguration {
      */
     translationRequired(locale: string): boolean;
     /**
-     * Get the entry in the translation dictionary for the user's locale, if it exists
+     * Get the translation dictionaries for this user's locale, if they exist
      * @param locale - The language set by the user
      * @param dictionaryName - User-defined dictionary name, for distinguishing between multiple translation dictionaries for a single language.
      * @returns A promise that resolves to the translations.

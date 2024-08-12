@@ -10,15 +10,15 @@ var __rest = (this && this.__rest) || function (s, e) {
     return t;
 };
 import { jsx as _jsx } from "react/jsx-runtime";
-import InnerNumeric from "./InnerNumeric";
+import Numeric from "./InnerNumeric";
 export default function createNumericComponent({ T, getLocale, defaultLocale }) {
-    const Numeric = (_a) => {
+    const NumericT = (_a) => {
         var { children, n, ranges, zero, one, two, few, many, other, singular, dual, plural } = _a, props = __rest(_a, ["children", "n", "ranges", "zero", "one", "two", "few", "many", "other", "singular", "dual", "plural"]);
         const innerProps = { n, ranges, zero, one, two, few, many, other, singular, dual, plural };
         const locales = [getLocale(), defaultLocale];
-        return _jsx(T, Object.assign({}, props, { children: _jsx(InnerNumeric, Object.assign({ locales: locales }, innerProps, { children: children })) }));
+        return _jsx(T, Object.assign({}, props, { children: _jsx(Numeric, Object.assign({ locales: locales }, innerProps, { children: children })) }));
     };
-    Numeric.gtTransformation = "translate-numeric";
-    return Numeric;
+    NumericT.gtTransformation = "translate-numeric";
+    return NumericT;
 }
 //# sourceMappingURL=createNumericComponent.js.map

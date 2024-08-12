@@ -10,15 +10,15 @@ var __rest = (this && this.__rest) || function (s, e) {
     return t;
 };
 import { jsx as _jsx } from "react/jsx-runtime";
-import InnerValue from "./InnerValue";
+import Value from "./InnerValue";
 export default function createValueComponent({ T, getLocale, defaultLocale }) {
-    const Value = (_a) => {
+    const ValueT = (_a) => {
         var { children, values, branches } = _a, props = __rest(_a, ["children", "values", "branches"]);
         const innerProps = { values, branches };
         const locales = [getLocale(), defaultLocale];
-        return _jsx(T, Object.assign({}, props, { children: _jsx(InnerValue, Object.assign({ locales: locales }, innerProps, { children: children })) }));
+        return _jsx(T, Object.assign({}, props, { children: _jsx(Value, Object.assign({ locales: locales }, innerProps, { children: children })) }));
     };
-    Value.gtTransformation = "translate-value";
-    return Value;
+    ValueT.gtTransformation = "translate-value";
+    return ValueT;
 }
 //# sourceMappingURL=createValueComponent.js.map

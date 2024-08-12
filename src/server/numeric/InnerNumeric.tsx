@@ -19,7 +19,7 @@ type NumericProps = {
  * @param {Record<string, any>} ...branches - Named branches, e.g. "singular", "plural" and their associated branches.
  * @returns {JSX.Element}
  */
-const InnerNumeric = ({ children, n, ranges, locales, ...branches }: NumericProps): ReactNode => {
+const Numeric = ({ children, n, ranges, locales, ...branches }: NumericProps): ReactNode => {
 
     if (typeof n !== 'number') {
         console.warn(`WARNING: No 'n' parameter provided to <Numeric> component with children ${JSON.stringify(children)}.`)
@@ -41,6 +41,6 @@ const InnerNumeric = ({ children, n, ranges, locales, ...branches }: NumericProp
 
 };
 
-InnerNumeric.gtTransformation = "numeric";
+Numeric.gtTransformation = "numeric";
 
-export default InnerNumeric;
+export default Numeric;

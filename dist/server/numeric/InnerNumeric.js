@@ -21,7 +21,7 @@ import getNumericBranch from '../../primitives/getNumericBranch';
  * @param {Record<string, any>} ...branches - Named branches, e.g. "singular", "plural" and their associated branches.
  * @returns {JSX.Element}
  */
-const InnerNumeric = (_a) => {
+const Numeric = (_a) => {
     var { children, n, ranges, locales } = _a, branches = __rest(_a, ["children", "n", "ranges", "locales"]);
     if (typeof n !== 'number') {
         console.warn(`WARNING: No 'n' parameter provided to <Numeric> component with children ${JSON.stringify(children)}.`);
@@ -32,6 +32,6 @@ const InnerNumeric = (_a) => {
     const renderedChildren = renderNumeric(branch, locales, (typeof n === 'number') ? { n } : undefined);
     return (_jsx("span", { "data-n": n, "data-unrendered-branches": branches, "data-generaltranslation": generaltranslation, children: renderedChildren }));
 };
-InnerNumeric.gtTransformation = "numeric";
-export default InnerNumeric;
+Numeric.gtTransformation = "numeric";
+export default Numeric;
 //# sourceMappingURL=InnerNumeric.js.map

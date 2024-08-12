@@ -21,7 +21,7 @@ import getValueBranch from '../../primitives/getValueBranch';
  * @param {Record<string, any>} ...values - Values to branch and translate around.
  * @returns {JSX.Element}
  */
-const InnerValue = (_a) => {
+const Value = (_a) => {
     var { children, branches, values, locales } = _a, props = __rest(_a, ["children", "branches", "values", "locales"]);
     let { 'data-generaltranslation': generaltranslation } = props;
     if (!values || Object.keys(values).length < 1) {
@@ -31,6 +31,6 @@ const InnerValue = (_a) => {
     let renderedChildren = renderVariable(branch, locales, values ? values : undefined);
     return (_jsx("span", { "data-values": values, "data-unrendered-branches": branches, "data-generaltranslation": generaltranslation, children: renderedChildren }));
 };
-InnerValue.gtTransformation = "value";
-export default InnerValue;
+Value.gtTransformation = "value";
+export default Value;
 //# sourceMappingURL=InnerValue.js.map

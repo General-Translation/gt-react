@@ -20,7 +20,7 @@ type ValueProps = {
  * @param {Record<string, any>} ...values - Values to branch and translate around.
  * @returns {JSX.Element}
  */
-const InnerValue = ({ children, branches, values, locales, ...props }: ValueProps): ReactNode => {
+const Value = ({ children, branches, values, locales, ...props }: ValueProps): ReactNode => {
 
     let { 'data-generaltranslation': generaltranslation }: any = props;
 
@@ -40,6 +40,6 @@ const InnerValue = ({ children, branches, values, locales, ...props }: ValueProp
 
 };
 
-InnerValue.gtTransformation = "value";
+Value.gtTransformation = "value";
 
-export default InnerValue;
+export default Value;

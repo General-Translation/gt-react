@@ -16,9 +16,9 @@ type NumericProps = {
  * @param {Record<string, any>} ...branches - Named branches, e.g. "singular", "plural" and their associated branches.
  * @returns {JSX.Element}
  */
-declare const InnerNumeric: {
+declare const Numeric: {
     ({ children, n, ranges, locales, ...branches }: NumericProps): ReactNode;
     gtTransformation: string;
 };
-export default InnerNumeric;
+export default Numeric;
 //# sourceMappingURL=InnerNumeric.d.ts.map

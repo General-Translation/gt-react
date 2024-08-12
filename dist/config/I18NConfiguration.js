@@ -118,6 +118,7 @@ export default class I18NConfiguration {
      * @returns An object containing the current method and timeout.
      * As of 7/31/24: method is "skeleton", "replace", "hang", "subtle".
      * Timeout is a number or null, representing no assigned timeout.
+     * renderPrevious determines whether a non-matching previous entry should be rendered while the new translation loads.
     */
     getRenderSettings() {
         return {
@@ -141,7 +142,7 @@ export default class I18NConfiguration {
         return true;
     }
     /**
-     * Get the entry in the translation dictionary for the user's locale, if it exists
+     * Get the translation dictionaries for this user's locale, if they exist
      * @param locale - The language set by the user
      * @param dictionaryName - User-defined dictionary name, for distinguishing between multiple translation dictionaries for a single language.
      * @returns A promise that resolves to the translations.
@@ -191,19 +192,23 @@ export default class I18NConfiguration {
      */
     intl(params) {
         return __awaiter(this, void 0, void 0, function* () {
+            var _a;
             const cacheKey = JSON.stringify(params);
             if (this._translationCache.has(cacheKey)) {
                 return this._translationCache.get(cacheKey);
             }
+            const { content, targetLanguage, options } = params;
+            const dictionaryName = ((_a = params.options) === null || _a === void 0 ? void 0 : _a.dictionaryName) || this.dictionaryName;
             const translationPromise = new Promise((resolve, reject) => {
                 this._queue.push({
                     type: "intl",
                     data: {
-                        content: params.content,
-                        targetLanguage: params.targetLanguage,
+                        content,
+                        targetLanguage,
                         projectID: this.projectID,
-                        metadata: Object.assign(Object.assign(Object.assign({}, this.metadata), this.getMetadata()), params.options)
+                        metadata: Object.assign(Object.assign(Object.assign({}, this.metadata), this.getMetadata()), options)
                     },
+                    cache: (this._remoteDictionaryManager) ? this._remoteDictionaryManager.getTranslationRequested(targetLanguage, dictionaryName) : false,
                     resolve,
                     reject
                 });
@@ -219,18 +224,22 @@ export default class I18NConfiguration {
     */
     translateChildren(params) {
         return __awaiter(this, void 0, void 0, function* () {
+            var _a;
             const cacheKey = JSON.stringify(params);
             if (this._translationCache.has(cacheKey)) {
                 return this._translationCache.get(cacheKey);
             }
+            const { children, targetLanguage, metadata } = params;
+            const dictionaryName = ((_a = params.options) === null || _a === void 0 ? void 0 : _a.dictionaryName) || this.dictionaryName;
             const translationPromise = new Promise((resolve, reject) => {
                 this._queue.push({
                     type: "react",
                     data: {
-                        children: params.children,
-                        targetLanguage: params.targetLanguage,
-                        metadata: Object.assign(Object.assign(Object.assign({}, this.metadata), this.getMetadata()), params.metadata)
+                        children,
+                        targetLanguage,
+                        metadata: Object.assign(Object.assign(Object.assign({}, this.metadata), this.getMetadata()), metadata)
                     },
+                    cache: (this._remoteDictionaryManager) ? this._remoteDictionaryManager.getTranslationRequested(targetLanguage, dictionaryName) : false,
                     resolve,
                     reject
                 });
@@ -247,7 +256,12 @@ export default class I18NConfiguration {
         return __awaiter(this, void 0, void 0, function* () {
             this._activeRequests++;
             try {
-                const results = yield this.gt.bundleRequests(batch);
+                const bundlePromise = this.gt.bundleRequests(batch);
+                batch.forEach((request) => {
+                    if (this._remoteDictionaryManager && request.cache)
+                        this._remoteDictionaryManager.setTranslationRequested(request.data.targetLanguage, request.data.metadata.dictionaryName);
+                });
+                const results = yield bundlePromise;
                 batch.forEach((item, index) => {
                     const result = results[index];
                     if (!result || result.error)

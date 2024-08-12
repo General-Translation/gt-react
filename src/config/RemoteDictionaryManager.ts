@@ -23,7 +23,8 @@ export class RemoteDictionaryManager {
     private config: RemoteDictionaryConfig;
     private dictionaryMap: Map<string, Record<string, any>>;
     private fetchPromises: Map<string, Promise<Record<string, any> | null>>;
-    
+    private requestedTranslations: Map<string, boolean>;
+
     /**
      * Creates an instance of RemoteDictionaryManager.
      */
@@ -34,6 +35,7 @@ export class RemoteDictionaryManager {
         };
         this.dictionaryMap = new Map();
         this.fetchPromises = new Map();
+        this.requestedTranslations = new Map();
     }
 
     /**
@@ -57,7 +59,7 @@ export class RemoteDictionaryManager {
                 return result;
             }
         } catch (error) {
-            console.error('dictionaryManager error', error);
+            console.error('Remote dictionary error:', error);
         }
         return null;
     }
@@ -105,6 +107,23 @@ export class RemoteDictionaryManager {
         this.dictionaryMap.set(reference, { ...currentDictionary, [id]: { k: key, t: translation }});
         return true;
     }
+
+    /**
+     * Marks a translation as requested for a given locale and dictionary
+     */
+    setTranslationRequested(locale: string, dictionaryName: string) {
+        const reference = getDictionaryReference(locale, dictionaryName);
+        this.requestedTranslations.set(reference, true);
+    }
+
+    /**
+     * Checks if a translation has been requested for a given locale and dictionary
+     */
+    getTranslationRequested(locale: string, dictionaryName: string): boolean {
+        const reference = getDictionaryReference(locale, dictionaryName);
+        return this.requestedTranslations.get(reference) ? true : false;
+    }
+    
 }
 
 const remoteDictionaryManager = new RemoteDictionaryManager();

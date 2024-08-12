@@ -12,6 +12,7 @@ export declare class RemoteDictionaryManager {
     private config;
     private dictionaryMap;
     private fetchPromises;
+    private requestedTranslations;
     /**
      * Creates an instance of RemoteDictionaryManager.
      */
@@ -44,6 +45,14 @@ export declare class RemoteDictionaryManager {
      * @returns {boolean} True if the entry was set successfully, false otherwise.
      */
     setDictionary(locale: string, dictionaryName: string, key: string, id: string | undefined, translation: any): boolean;
+    /**
+     * Marks a translation as requested for a given locale and dictionary
+     */
+    setTranslationRequested(locale: string, dictionaryName: string): void;
+    /**
+     * Checks if a translation has been requested for a given locale and dictionary
+     */
+    getTranslationRequested(locale: string, dictionaryName: string): boolean;
 }
 declare const remoteDictionaryManager: RemoteDictionaryManager;
 export default remoteDictionaryManager;

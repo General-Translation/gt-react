@@ -1,16 +1,16 @@
 import React from "react";
-import InnerNumeric from "./InnerNumeric"
+import Numeric from "./InnerNumeric"
 
 export default function createNumericComponent({ T, getLocale, defaultLocale }: { T: any, getLocale: () => string, defaultLocale: string }) {
-    const Numeric = ({ 
+    const NumericT = ({ 
         children, 
         n, ranges, zero, one, two, few, many, other, singular, dual, plural,
         ...props
     }: { children?: any, [key: string]: any }) => {
         const innerProps = { n, ranges, zero, one, two, few, many, other, singular, dual, plural };
         const locales = [getLocale(), defaultLocale];
-        return <T {...props}><InnerNumeric locales={locales} {...innerProps}>{children}</InnerNumeric></T>
+        return <T {...props}><Numeric locales={locales} {...innerProps}>{children}</Numeric></T>
     };
-    Numeric.gtTransformation = "translate-numeric";
-    return Numeric;
+    NumericT.gtTransformation = "translate-numeric";
+    return NumericT;
 }

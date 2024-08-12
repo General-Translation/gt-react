@@ -15,9 +15,9 @@ type ValueProps = {
  * @param {Record<string, any>} ...values - Values to branch and translate around.
  * @returns {JSX.Element}
  */
-declare const InnerValue: {
+declare const Value: {
     ({ children, branches, values, locales, ...props }: ValueProps): ReactNode;
     gtTransformation: string;
 };
-export default InnerValue;
+export default Value;
 //# sourceMappingURL=InnerValue.d.ts.map
