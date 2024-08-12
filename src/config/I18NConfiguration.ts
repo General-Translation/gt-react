@@ -300,8 +300,8 @@ export default class I18NConfiguration {
         this._activeRequests++;
         try {
             const bundlePromise = this.gt.bundleRequests(batch);
-            batch.forEach((request) => {
-                if (this._remoteDictionaryManager && request.cache) this._remoteDictionaryManager.setTranslationRequested(request.data.targetLanguage, request.data.metadata.dictionaryName);
+            batch.forEach((item) => {
+                if (this._remoteDictionaryManager && item.cache) this._remoteDictionaryManager.setTranslationRequested(item.data.targetLanguage, item.data.metadata.dictionaryName);
             })
             const results = await bundlePromise;
             batch.forEach((item, index) => {
