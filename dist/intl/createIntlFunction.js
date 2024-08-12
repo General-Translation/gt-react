@@ -31,11 +31,6 @@ export default function createIntlFunction(_a) {
             const translationPromise = I18NConfig.intl({ content, targetLanguage: options.targetLanguage, options });
             const renderSettings = I18NConfig.getRenderSettings();
             if (renderSettings.method !== "subtle") {
-                const timeout = renderSettings.timeout;
-                if (typeof timeout === 'number') {
-                    const timeoutPromise = new Promise((resolve) => setTimeout(() => resolve(content), timeout));
-                    return yield Promise.race([translationPromise, timeoutPromise]);
-                }
                 return yield translationPromise;
             }
         }

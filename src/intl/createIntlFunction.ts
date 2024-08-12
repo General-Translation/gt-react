@@ -14,11 +14,6 @@ export default function createIntlFunction({
             const translationPromise = I18NConfig.intl({ content, targetLanguage: options.targetLanguage, options });
             const renderSettings = I18NConfig.getRenderSettings()
             if (renderSettings.method !== "subtle") {
-                const timeout = renderSettings.timeout;
-                if (typeof timeout === 'number') {
-                    const timeoutPromise = new Promise<string>((resolve) => setTimeout(() => resolve(content), timeout));
-                    return await Promise.race([translationPromise, timeoutPromise]);
-                }
                 return await translationPromise;
             }
         }

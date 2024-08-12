@@ -57,7 +57,7 @@ export default class I18NConfiguration {
         this.gt = new GT({ projectID, apiKey, defaultLanguage: defaultLocale, baseURL });
         // Other metadata
         this.getMetadata = getMetadata;
-        this.metadata = Object.assign(Object.assign({ projectID: this.projectID, defaultLanguage: this.defaultLocale, dictionaryName }, (this.renderTimeout && { renderTimeout: this.renderTimeout })), metadata);
+        this.metadata = Object.assign(Object.assign({ projectID: this.projectID, defaultLanguage: this.defaultLocale, dictionaryName }, (this.renderTimeout && { timeout: this.renderTimeout - batchInterval })), metadata);
         // Dictionary managers
         if (this.translations) {
             this._localDictionaryManager = new LocalDictionaryManager({
@@ -257,9 +257,9 @@ export default class I18NConfiguration {
             this._activeRequests++;
             try {
                 const bundlePromise = this.gt.bundleRequests(batch);
-                batch.forEach((request) => {
-                    if (this._remoteDictionaryManager && request.cache)
-                        this._remoteDictionaryManager.setTranslationRequested(request.data.targetLanguage, request.data.metadata.dictionaryName);
+                batch.forEach((item) => {
+                    if (this._remoteDictionaryManager && item.cache)
+                        this._remoteDictionaryManager.setTranslationRequested(item.data.targetLanguage, item.data.metadata.dictionaryName);
                 });
                 const results = yield bundlePromise;
                 batch.forEach((item, index) => {

@@ -72,12 +72,7 @@ const ServerT = async ({
     const I18NChildrenPromise = I18NConfig.translateChildren({ children: childrenAsObjects, targetLanguage: locale, metadata: { ...props } });
     
     const renderMethod = props?.renderMethod || renderSettings.method;
-    const timeout = renderSettings?.timeout;
     let promise: Promise<any> = I18NChildrenPromise.then(target => renderChildren({ source: taggedChildren, target, renderAttributes, locale, defaultLocale }));
-    if (typeof timeout === 'number') {
-        const timeoutPromise = new Promise((resolve) => setTimeout(() => resolve(children), timeout));
-        promise = Promise.race([promise, timeoutPromise])
-    }
 
     // Render methods
 

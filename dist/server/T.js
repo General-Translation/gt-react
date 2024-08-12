@@ -61,12 +61,7 @@ const ServerT = (_a) => __awaiter(void 0, void 0, void 0, function* () {
     // Create a new translation for this site and render it
     const I18NChildrenPromise = I18NConfig.translateChildren({ children: childrenAsObjects, targetLanguage: locale, metadata: Object.assign({}, props) });
     const renderMethod = (props === null || props === void 0 ? void 0 : props.renderMethod) || renderSettings.method;
-    const timeout = renderSettings === null || renderSettings === void 0 ? void 0 : renderSettings.timeout;
     let promise = I18NChildrenPromise.then(target => renderChildren({ source: taggedChildren, target, renderAttributes, locale, defaultLocale }));
-    if (typeof timeout === 'number') {
-        const timeoutPromise = new Promise((resolve) => setTimeout(() => resolve(children), timeout));
-        promise = Promise.race([promise, timeoutPromise]);
-    }
     // Render methods
     let loadingFallback = children;
     let errorFallback = children;

@@ -100,7 +100,7 @@ export default class I18NConfiguration {
             projectID: this.projectID, 
             defaultLanguage: this.defaultLocale, 
             dictionaryName,
-            ...(this.renderTimeout && { renderTimeout: this.renderTimeout }),
+            ...(this.renderTimeout && { timeout: this.renderTimeout - batchInterval }),
             ...metadata
         };
         // Dictionary managers
