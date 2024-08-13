@@ -26,13 +26,13 @@ export default function ClientValue({ children, id, branches, values }: ValuePro
 
     const ctx = useContext(GTContext);
     if (!ctx) {
-        console.error(`<Value>, with children:\n\n${children}\n\nid:\n\n${id}\n\nNo context provided. Did you mean to import the server component instead?`);
+        console.error(`<Value>, with children:\n\n${children}\n\nid: ${id}\n\nNo context provided. Did you mean to import the server component instead?`);
         return <RenderClientVariable variables={values ? values : undefined}>{children}</RenderClientVariable>;
     }
     
     const translation = useMemo(() => { return ctx?.translate(id) }, [children, id]);
     if (!translation) {
-        console.warn(`<Value>, with children:\n\n${children}\n\nid:\n\n${id}\n\nNo translation found.`);
+        console.warn(`<Value>, with children:\n\n${children}\n\nid: ${id}\n\nNo translation found.`);
         return children;
     }
 

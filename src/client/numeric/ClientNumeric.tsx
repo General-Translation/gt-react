@@ -29,7 +29,7 @@ export default function ClientNumeric({ children, id, n, ranges, ...branches }: 
 
     const ctx = useContext(GTContext);
     if (!ctx) {
-        console.error(`<Numeric>, with children:\n\n${children}\n\nid:\n\n${id}\n\nNo context provided. Did you mean to import the server component instead?`);
+        console.error(`<Numeric>, with children:\n\n${children}\n\nid: ${id}\n\nNo context provided. Did you mean to import the server component instead?`);
         return <RenderClientVariable variables={(typeof n === 'number') ? { n } : undefined}>{children}</RenderClientVariable>;
     }
 

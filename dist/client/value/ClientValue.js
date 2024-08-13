@@ -16,12 +16,12 @@ import { GTContext } from '../ClientProvider';
 export default function ClientValue({ children, id, branches, values }) {
     const ctx = useContext(GTContext);
     if (!ctx) {
-        console.error(`<Value>, with children:\n\n${children}\n\nid:\n\n${id}\n\nNo context provided. Did you mean to import the server component instead?`);
+        console.error(`<Value>, with children:\n\n${children}\n\nid: ${id}\n\nNo context provided. Did you mean to import the server component instead?`);
         return _jsx(RenderClientVariable, { variables: values ? values : undefined, children: children });
     }
     const translation = useMemo(() => { return ctx === null || ctx === void 0 ? void 0 : ctx.translate(id); }, [children, id]);
     if (!translation) {
-        console.warn(`<Value>, with children:\n\n${children}\n\nid:\n\n${id}\n\nNo translation found.`);
+        console.warn(`<Value>, with children:\n\n${children}\n\nid: ${id}\n\nNo translation found.`);
         return children;
     }
     const branch = useMemo(() => {
