@@ -2,6 +2,7 @@ import GT, { isSameLanguage } from "generaltranslation";
 import remoteDictionaryManager, { RemoteDictionaryManager } from "./RemoteDictionaryManager";
 import getDictionaryEntry from "../dictionary/getDictionaryEntry";
 import LocalDictionaryManager from "./LocalDictionaryManager";
+import defaultGTProps from "../types/defaultGTProps";
 
 type I18NConfigurationParams = {
     apiKey: string;
@@ -76,6 +77,14 @@ export default class I18NConfiguration {
         getMetadata,
         ...metadata
     }: I18NConfigurationParams) {
+        console.log(apiKey, 'apiKey123123')
+        // Validate required parameters
+        if (!apiKey && (automaticTranslation && baseURL === defaultGTProps.baseURL)) {
+            throw new Error("gt-react Error: Automatic translation requires an API key! Get an API key at www.generaltranslation.com.");
+        }
+        if (!projectID && ((automaticTranslation && baseURL === defaultGTProps.baseURL) || (remoteSource && cacheURL === defaultGTProps.cacheURL))) {
+            throw new Error("gt-react Error: General Translation cloud services require a project ID! Find yours at www.generaltranslation.com/dashboard.");
+        }
         // Cloud integration
         this.projectID = projectID;
         this.remoteSource = remoteSource;

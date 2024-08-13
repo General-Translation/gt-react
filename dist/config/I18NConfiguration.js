@@ -22,6 +22,7 @@ import GT, { isSameLanguage } from "generaltranslation";
 import remoteDictionaryManager from "./RemoteDictionaryManager";
 import getDictionaryEntry from "../dictionary/getDictionaryEntry";
 import LocalDictionaryManager from "./LocalDictionaryManager";
+import defaultGTProps from "../types/defaultGTProps";
 export default class I18NConfiguration {
     constructor(_a) {
         var { 
@@ -37,6 +38,14 @@ export default class I18NConfiguration {
         maxConcurrentRequests, batchInterval, 
         // Other metadata
         getMetadata } = _a, metadata = __rest(_a, ["apiKey", "projectID", "baseURL", "cacheURL", "remoteSource", "automaticTranslation", "getLocale", "defaultLocale", "approvedLocales", "renderPrevious", "renderMethod", "renderTimeout", "dictionary", "dictionaryName", "translations", "maxConcurrentRequests", "batchInterval", "getMetadata"]);
+        console.log(apiKey, 'apiKey123123');
+        // Validate required parameters
+        if (!apiKey && (automaticTranslation && baseURL === defaultGTProps.baseURL)) {
+            throw new Error("gt-react Error: Automatic translation requires an API key! Get an API key at www.generaltranslation.com.");
+        }
+        if (!projectID && ((automaticTranslation && baseURL === defaultGTProps.baseURL) || (remoteSource && cacheURL === defaultGTProps.cacheURL))) {
+            throw new Error("gt-react Error: General Translation cloud services require a project ID! Find yours at www.generaltranslation.com/dashboard.");
+        }
         // Cloud integration
         this.projectID = projectID;
         this.remoteSource = remoteSource;
