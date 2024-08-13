@@ -22,10 +22,10 @@ import { Fragment as _Fragment, jsx as _jsx } from "react/jsx-runtime";
 import { Suspense } from 'react';
 import addGTIdentifier from './helpers/addGTIdentifier';
 import writeChildrenAsObjects from './helpers/writeChildrenAsObjects';
-import generateHash from '../primitives/generateHash';
 import renderChildren from './renderChildren';
 import { getLanguageDirection } from 'generaltranslation';
 import Resolver from './helpers/Resolver';
+import calculateID from '../primitives/calculateID';
 const ServerT = (_a) => __awaiter(void 0, void 0, void 0, function* () {
     var _b;
     var { I18NConfig, children, locale } = _a, props = __rest(_a, ["I18NConfig", "children", "locale"]);
@@ -43,7 +43,8 @@ const ServerT = (_a) => __awaiter(void 0, void 0, void 0, function* () {
         renderAttributes = Object.assign(Object.assign({}, renderAttributes), { dir });
     const taggedChildren = addGTIdentifier(children);
     const childrenAsObjects = writeChildrenAsObjects(taggedChildren);
-    const key = yield generateHash(childrenAsObjects);
+    const key = yield calculateID(childrenAsObjects);
+    console.log(key);
     const id = props.id ? props.id : key;
     const translations = yield translationsPromise;
     const translation = yield I18NConfig.getTranslation(locale, key, id, (_b = props.dictionaryName) !== null && _b !== void 0 ? _b : undefined, translations);

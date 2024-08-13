@@ -17,7 +17,6 @@ import RenderClientVariable from '../value/RenderClientVariable';
 import useLocale from '../hooks/useLocale';
 import useDefaultLocale from '../hooks/useDefaultLocale';
 import { GTContext } from '../ClientProvider';
-import generateHash from '../../primitives/generateHash';
 /**
  * Numeric component that processes a given number and renders the appropriate branch or children.
  *
@@ -31,14 +30,7 @@ export default function ClientNumeric(_a) {
     var { children, id, n, ranges } = _a, branches = __rest(_a, ["children", "id", "n", "ranges"]);
     const ctx = useContext(GTContext);
     if (!ctx) {
-        if (!id) {
-            generateHash(children).then(hash => {
-                console.error(`<Numeric>, with children:\n\n${children}\n\nid:\n\n${hash}\n\nNo context provided. Did you mean to import the server component instead?`);
-            });
-        }
-        else {
-            console.error(`<Numeric>, with children:\n\n${children}\n\nid:\n\n${id}\n\nNo context provided. Did you mean to import the server component instead?`);
-        }
+        console.error(`<Numeric>, with children:\n\n${children}\n\nid:\n\n${id}\n\nNo context provided. Did you mean to import the server component instead?`);
         return _jsx(RenderClientVariable, { variables: (typeof n === 'number') ? { n } : undefined, children: children });
     }
     const translation = useMemo(() => { return (ctx === null || ctx === void 0 ? void 0 : ctx.translate(id)) || children; }, [children, id]);

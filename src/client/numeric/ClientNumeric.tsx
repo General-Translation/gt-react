@@ -7,11 +7,10 @@ import useLocale from '../hooks/useLocale';
 import useDefaultLocale from '../hooks/useDefaultLocale';
 import useGT from '../hooks/useGT';
 import { GTContext } from '../ClientProvider';
-import generateHash from '../../primitives/generateHash';
 
 type NumericProps = {
     n?: number;
-    id: string;
+    id?: string;
     children?: any;
     ranges?: Range[];
     [key: string]: any;
@@ -30,13 +29,7 @@ export default function ClientNumeric({ children, id, n, ranges, ...branches }: 
 
     const ctx = useContext(GTContext);
     if (!ctx) {
-        if (!id) {
-            generateHash(children).then(hash => {
-                console.error(`<Numeric>, with children:\n\n${children}\n\nid:\n\n${hash}\n\nNo context provided. Did you mean to import the server component instead?`);
-            })
-        } else {
-            console.error(`<Numeric>, with children:\n\n${children}\n\nid:\n\n${id}\n\nNo context provided. Did you mean to import the server component instead?`);
-        }
+        console.error(`<Numeric>, with children:\n\n${children}\n\nid:\n\n${id}\n\nNo context provided. Did you mean to import the server component instead?`);
         return <RenderClientVariable variables={(typeof n === 'number') ? { n } : undefined}>{children}</RenderClientVariable>;
     }
 

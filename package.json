@@ -35,6 +35,12 @@
       "require": "./dist/index.js",
       "types": "./dist/index.d.ts"
     },
+    "./client": {
+      "import": "./dist/client.js",
+      "require": "./dist/client.js",
+      "types": "./dist/client.d.ts"
+    },
+    "./client.js": "./dist/client.js",
     "./next": {
       "import": "./dist/next.js",
       "require": "./dist/next.js",
@@ -56,6 +62,9 @@
   },
   "typesVersions": {
     "*": {
+      "client": [
+        "./dist/client.d.ts"
+      ],
       "next": [
         "./dist/next.d.ts"
       ],
@@ -70,6 +79,9 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
+      "gt-react/client": [
+        "/dist/client"
+      ],
       "gt-react/next": [
         "/dist/next"
       ],
@@ -89,6 +101,7 @@
     "i18n"
   ],
   "dependencies": {
-    "generaltranslation": "^2.0.21"
+    "generaltranslation": "^2.0.41",
+    "xxhash-wasm": "^1.0.2"
   }
 }

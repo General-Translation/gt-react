@@ -18,13 +18,14 @@ var __rest = (this && this.__rest) || function (s, e) {
         }
     return t;
 };
+import calculateID from "../primitives/calculateID";
 export default function createIntlFunction(_a) {
     var { I18NConfig } = _a, defaultOptions = __rest(_a, ["I18NConfig"]);
     return (content_1, ...args_1) => __awaiter(this, [content_1, ...args_1], void 0, function* (content, options = Object.assign({}, defaultOptions)) {
         options.targetLanguage = options.targetLanguage || I18NConfig.getLocale();
         if (!content || typeof content !== 'string' || !I18NConfig.translationRequired(options.targetLanguage))
             return content;
-        const translation = yield I18NConfig.getTranslation(options.targetLanguage, content, options.id, options.dictionaryName);
+        const translation = yield I18NConfig.getTranslation(options.targetLanguage, yield calculateID(content), options.id, options.dictionaryName);
         if (translation)
             return translation;
         if (I18NConfig.automaticTranslationEnabled()) {

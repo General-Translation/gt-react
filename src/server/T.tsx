@@ -1,11 +1,11 @@
-import React, { ReactNode, Suspense, lazy } from 'react'
+import React, { ReactNode, Suspense } from 'react'
 import addGTIdentifier from './helpers/addGTIdentifier';
 import writeChildrenAsObjects from './helpers/writeChildrenAsObjects';
-import generateHash from '../primitives/generateHash';
 import renderChildren from './renderChildren';
 import { getLanguageDirection } from 'generaltranslation';
 import I18NConfiguration from '../config/I18NConfiguration';
 import Resolver from './helpers/Resolver';
+import calculateID from '../primitives/calculateID';
 
 type ServerTProps = {
     I18NConfig: I18NConfiguration
@@ -40,7 +40,8 @@ const ServerT = async ({
     const taggedChildren = addGTIdentifier(children);
     const childrenAsObjects = writeChildrenAsObjects(taggedChildren);
     
-    const key: string = await generateHash(childrenAsObjects);
+    const key: string = await calculateID(childrenAsObjects);
+    console.log(key)
     const id = props.id ? props.id : key;
 
     const translations = await translationsPromise;

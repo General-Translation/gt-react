@@ -4,7 +4,6 @@ import React, { ReactNode, useContext, useMemo } from 'react';
 import getValueBranch from '../../primitives/getValueBranch';
 import RenderClientVariable from './RenderClientVariable';
 import { GTContext } from '../ClientProvider';
-import generateHash from '../../primitives/generateHash';
 
 // ValueProps type
 type ValueProps = {
@@ -27,25 +26,13 @@ export default function ClientValue({ children, id, branches, values }: ValuePro
 
     const ctx = useContext(GTContext);
     if (!ctx) {
-        if (!id) {
-            generateHash(children).then(hash => {
-                console.error(`<Value>, with children:\n\n${children}\n\nid:\n\n${hash}\n\nNo context provided. Did you mean to import the server component instead?`);
-            })
-        } else {
-            console.error(`<Value>, with children:\n\n${children}\n\nid:\n\n${id}\n\nNo context provided. Did you mean to import the server component instead?`);
-        }
+        console.error(`<Value>, with children:\n\n${children}\n\nid:\n\n${id}\n\nNo context provided. Did you mean to import the server component instead?`);
         return <RenderClientVariable variables={values ? values : undefined}>{children}</RenderClientVariable>;
     }
     
     const translation = useMemo(() => { return ctx?.translate(id) }, [children, id]);
     if (!translation) {
-        if (!id) {
-            generateHash(children).then(hash => {
-                console.warn(`<Value>, with children:\n\n${children}\n\nid:\n\n${hash}\n\nNo translation found.`);
-            })
-        } else {
-            console.warn(`<Value>, with children:\n\n${children}\n\nid:\n\n${id}\n\nNo translation found.`);
-        }
+        console.warn(`<Value>, with children:\n\n${children}\n\nid:\n\n${id}\n\nNo translation found.`);
         return children;
     }
 

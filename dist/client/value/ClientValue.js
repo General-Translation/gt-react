@@ -4,7 +4,6 @@ import { useContext, useMemo } from 'react';
 import getValueBranch from '../../primitives/getValueBranch';
 import RenderClientVariable from './RenderClientVariable';
 import { GTContext } from '../ClientProvider';
-import generateHash from '../../primitives/generateHash';
 /**
  * Client-side value variable component that processes the given values and branches,
  * and renders the appropriate content based on the branch logic.
@@ -17,26 +16,12 @@ import generateHash from '../../primitives/generateHash';
 export default function ClientValue({ children, id, branches, values }) {
     const ctx = useContext(GTContext);
     if (!ctx) {
-        if (!id) {
-            generateHash(children).then(hash => {
-                console.error(`<Value>, with children:\n\n${children}\n\nid:\n\n${hash}\n\nNo context provided. Did you mean to import the server component instead?`);
-            });
-        }
-        else {
-            console.error(`<Value>, with children:\n\n${children}\n\nid:\n\n${id}\n\nNo context provided. Did you mean to import the server component instead?`);
-        }
+        console.error(`<Value>, with children:\n\n${children}\n\nid:\n\n${id}\n\nNo context provided. Did you mean to import the server component instead?`);
         return _jsx(RenderClientVariable, { variables: values ? values : undefined, children: children });
     }
     const translation = useMemo(() => { return ctx === null || ctx === void 0 ? void 0 : ctx.translate(id); }, [children, id]);
     if (!translation) {
-        if (!id) {
-            generateHash(children).then(hash => {
-                console.warn(`<Value>, with children:\n\n${children}\n\nid:\n\n${hash}\n\nNo translation found.`);
-            });
-        }
-        else {
-            console.warn(`<Value>, with children:\n\n${children}\n\nid:\n\n${id}\n\nNo translation found.`);
-        }
+        console.warn(`<Value>, with children:\n\n${children}\n\nid:\n\n${id}\n\nNo translation found.`);
         return children;
     }
     const branch = useMemo(() => {

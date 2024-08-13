@@ -2,7 +2,7 @@ import { ReactNode } from 'react';
 import { Range } from '../../primitives/getNumericBranch';
 type NumericProps = {
     n?: number;
-    id: string;
+    id?: string;
     children?: any;
     ranges?: Range[];
     [key: string]: any;
