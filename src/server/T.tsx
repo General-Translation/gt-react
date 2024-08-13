@@ -41,7 +41,6 @@ const ServerT = async ({
     const childrenAsObjects = writeChildrenAsObjects(taggedChildren);
     
     const key: string = await calculateID(childrenAsObjects);
-    console.log(key)
     const id = props.id ? props.id : key;
 
     const translations = await translationsPromise;

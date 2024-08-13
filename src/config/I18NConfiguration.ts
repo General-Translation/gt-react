@@ -77,7 +77,6 @@ export default class I18NConfiguration {
         getMetadata,
         ...metadata
     }: I18NConfigurationParams) {
-        console.log(apiKey, 'apiKey123123')
         // Validate required parameters
         if (!apiKey && (automaticTranslation && baseURL === defaultGTProps.baseURL)) {
             throw new Error("gt-react Error: Automatic translation requires an API key! Get an API key at www.generaltranslation.com.");

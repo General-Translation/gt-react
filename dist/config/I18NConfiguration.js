@@ -38,7 +38,6 @@ export default class I18NConfiguration {
         maxConcurrentRequests, batchInterval, 
         // Other metadata
         getMetadata } = _a, metadata = __rest(_a, ["apiKey", "projectID", "baseURL", "cacheURL", "remoteSource", "automaticTranslation", "getLocale", "defaultLocale", "approvedLocales", "renderPrevious", "renderMethod", "renderTimeout", "dictionary", "dictionaryName", "translations", "maxConcurrentRequests", "batchInterval", "getMetadata"]);
-        console.log(apiKey, 'apiKey123123');
         // Validate required parameters
         if (!apiKey && (automaticTranslation && baseURL === defaultGTProps.baseURL)) {
             throw new Error("gt-react Error: Automatic translation requires an API key! Get an API key at www.generaltranslation.com.");

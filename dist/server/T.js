@@ -44,7 +44,6 @@ const ServerT = (_a) => __awaiter(void 0, void 0, void 0, function* () {
     const taggedChildren = addGTIdentifier(children);
     const childrenAsObjects = writeChildrenAsObjects(taggedChildren);
     const key = yield calculateID(childrenAsObjects);
-    console.log(key);
     const id = props.id ? props.id : key;
     const translations = yield translationsPromise;
     const translation = yield I18NConfig.getTranslation(locale, key, id, (_b = props.dictionaryName) !== null && _b !== void 0 ? _b : undefined, translations);
