@@ -69,7 +69,7 @@ const ServerT = async ({
 
     // Create a new translation for this site and render it
     
-    const I18NChildrenPromise = I18NConfig.translateChildren({ children: childrenAsObjects, targetLanguage: locale, metadata: { ...props } });
+    const I18NChildrenPromise = I18NConfig.translateChildren({ children: childrenAsObjects, targetLanguage: locale, metadata: { ...props, hash: key } });
     
     const renderMethod = props?.renderMethod || renderSettings.method;
     let promise: Promise<any> = I18NChildrenPromise.then(target => renderChildren({ source: taggedChildren, target, renderAttributes, locale, defaultLocale }));

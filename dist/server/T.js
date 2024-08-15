@@ -59,7 +59,7 @@ const ServerT = (_a) => __awaiter(void 0, void 0, void 0, function* () {
         return (_jsx(_Fragment, { children: children }));
     }
     // Create a new translation for this site and render it
-    const I18NChildrenPromise = I18NConfig.translateChildren({ children: childrenAsObjects, targetLanguage: locale, metadata: Object.assign({}, props) });
+    const I18NChildrenPromise = I18NConfig.translateChildren({ children: childrenAsObjects, targetLanguage: locale, metadata: Object.assign(Object.assign({}, props), { hash: key }) });
     const renderMethod = (props === null || props === void 0 ? void 0 : props.renderMethod) || renderSettings.method;
     let promise = I18NChildrenPromise.then(target => renderChildren({ source: taggedChildren, target, renderAttributes, locale, defaultLocale }));
     // Render methods
