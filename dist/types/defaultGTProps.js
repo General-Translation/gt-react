@@ -11,7 +11,7 @@ const defaultGTProps = {
     getLocale: () => { return 'en '; },
     // Rendering
     renderPrevious: true,
-    renderMethod: "skeleton", // "replace", "hang", "subtle"
+    renderMethod: "replace", // "skeleton", "hang", "subtle"
     renderTimeout: 12500,
     // Dictionaries
     dictionaryName: "default",

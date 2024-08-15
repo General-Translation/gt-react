@@ -31,7 +31,7 @@ import defaultGTProps from './types/defaultGTProps';
  * @param {string} [params.defaultLocale] - Default locale for the translation. Default is the first locale in `approvedLocales` or 'en'.
  * @param {Function} [params.getLocale] - Function to get the current locale. Default returns the `defaultLocale`.
  * @param {boolean} [params.renderPrevious] - Experimental. If there's a previous translation on file remotely, use it as a placeholder while the new translation loads, replacing the role of the default language children in "replace" and "subtle", and the skeleton in "skeleton".
- * @param {string} [params.renderMethod] - How translations are rendered for the first time. options are "replace", "hang", "subtle". Default is "skeleton".
+ * @param {string} [params.renderMethod] - How translations are rendered for the first time. options are "replace", "hang", "subtle". 
  * @param {string} [params.renderTimeout] - Timeout before rendering a new translation is called off.
  * @param {string} [params.dictionaryName] - Name of the dictionary to use. Default is "default".
  * @param {Object} [params.dictionary] - Dictionary object containing default language content.
