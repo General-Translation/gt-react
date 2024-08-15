@@ -1,12 +1,13 @@
 'use client'
 
-import React, { ReactNode, useEffect, useState } from 'react'
+import React, { ReactNode, useContext, useEffect, useState } from 'react'
 
 import ClientVar from '../variables/ClientVar';
 import ClientNum from '../variables/ClientNum';
 import ClientDateTime from '../variables/ClientDateTime';
 import ClientCurrency from '../variables/ClientCurrency';
 import defaultVariableNames from '../../primitives/defaultVariableNames';
+import { GTContext } from '../ClientProvider';
 
 /**
  * Handles a single child element by cloning it with new properties if it is a valid React element,
@@ -17,10 +18,21 @@ import defaultVariableNames from '../../primitives/defaultVariableNames';
  */
 
 function SingleChild({children, variables}: {children: any, variables?: Record<string, any>}): ReactNode {
+    
+    const ctx = useContext(GTContext);
+    
     if (!children || typeof children === 'string' || typeof children === 'number' || typeof children === 'boolean') return children;
     if (React.isValidElement(children)) {
         const { props, type }: any = children;
         const transformation: string = typeof type === 'function' ? ((type as any)?.gtTransformation || '') : '';
+        
+        // handle any nested <T> components
+        if (ctx && transformation?.startsWith("translate")) {
+            const translation = ctx.translate(props.id);
+            return <RenderClientVariable variables={variables}>{translation}</RenderClientVariable>;
+        }
+
+        // handle variables
         if (variables) {
             let value;
             let variableType;
@@ -52,6 +64,7 @@ function SingleChild({children, variables}: {children: any, variables?: Record<s
                 return <ClientVar defaultValue={value}  name={name}></ClientVar>
             }
         }
+
         let newProps = { ...props };
         if (props?.children) {
             newProps.children = React.Children.map(props.children, child => <SingleChild variables={variables}>{child}</SingleChild>);
@@ -67,7 +80,7 @@ export default function RenderClientVariable({ children, variables }: { children
 
     useEffect(() => {
         setRenderedChildren(React.Children.map(children, child => <SingleChild variables={variables}>{child}</SingleChild>))
-    }, [children, variables])
+    }, [children, variables]);
 
     return (
         <>

@@ -19,14 +19,14 @@ export default function ClientValue({ children, id, branches, values }) {
         console.error(`<Value>, with children:\n\n${children}\n\nid: ${id}\n\nNo context provided. Did you mean to import the server component instead?`);
         return _jsx(RenderClientVariable, { variables: values ? values : undefined, children: children });
     }
-    const translation = useMemo(() => { return ctx === null || ctx === void 0 ? void 0 : ctx.translate(id); }, [children, id]);
-    if (!translation) {
+    const defaultTranslation = useMemo(() => { return (ctx === null || ctx === void 0 ? void 0 : ctx.translate(id)) || children; }, [children, id]);
+    if (!defaultTranslation) {
         console.warn(`<Value>, with children:\n\n${children}\n\nid: ${id}\n\nNo translation found.`);
         return children;
     }
     const branch = useMemo(() => {
-        return ((typeof values !== 'undefined' && typeof branches !== 'undefined') ? getValueBranch(values, branches) : null) || translation;
-    }, [values, branches, translation]);
+        return ((typeof values !== 'undefined' && typeof branches !== 'undefined') ? getValueBranch(values, branches) : null) || defaultTranslation;
+    }, [values, branches, defaultTranslation]);
     const renderedChildren = useMemo(() => {
         return _jsx(RenderClientVariable, { variables: values ? values : undefined, children: branch });
     }, [branch, values]);

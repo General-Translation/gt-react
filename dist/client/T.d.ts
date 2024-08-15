@@ -1,6 +1,10 @@
 import { ReactNode } from "react";
-export default function T({ children, id }: {
-    children?: ReactNode;
-    id: string;
-}): any;
+declare const T: {
+    ({ children, id }: {
+        children?: ReactNode;
+        id: string;
+    }): any;
+    gtTransformation: string;
+};
+export default T;
 //# sourceMappingURL=T.d.ts.map

@@ -1,7 +1,7 @@
 'use client';
 import { useContext, useMemo } from "react";
 import { GTContext } from "./ClientProvider";
-export default function T({ children, id }) {
+const T = ({ children, id }) => {
     const ctx = useContext(GTContext);
     if (!ctx) {
         console.error(`<T>, with children:\n\n${children}\n\nid: ${id}\n\nNo context provided. Did you mean to import the server component instead?`);
@@ -13,5 +13,7 @@ export default function T({ children, id }) {
         return children;
     }
     return translation || children;
-}
+};
+T.gtTransformation = 'translate';
+export default T;
 //# sourceMappingURL=T.js.map

@@ -80,14 +80,16 @@ export default async function GTProvider({
     T, intl, I18NConfig,
     locale, defaultLocale,
     id='',
-    dictionary = id ? {} : flattenObject(I18NConfig.getDictionary()),
+    dictionary = id ? {} : I18NConfig.getDictionary(),
     ...props
 }: GTProviderProps): Promise<any> {
 
     let providerID: string = id;
     if (providerID) {
-        dictionary = { ...flattenObject(I18NConfig.getDictionaryEntry(providerID)), ...dictionary };
+        dictionary = { ...I18NConfig.getDictionaryEntry(providerID), ...dictionary };
     }
+
+    dictionary = flattenObject(dictionary);
 
     const translationRequired: boolean = (children && I18NConfig.translationRequired(locale)) ? true : false;
     if (!translationRequired) {

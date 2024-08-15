@@ -75,11 +75,12 @@ dictionary = {
 */
 export default function GTProvider(_a) {
     return __awaiter(this, void 0, void 0, function* () {
-        var { children, T, intl, I18NConfig, locale, defaultLocale, id = '', dictionary = id ? {} : flattenObject(I18NConfig.getDictionary()) } = _a, props = __rest(_a, ["children", "T", "intl", "I18NConfig", "locale", "defaultLocale", "id", "dictionary"]);
+        var { children, T, intl, I18NConfig, locale, defaultLocale, id = '', dictionary = id ? {} : I18NConfig.getDictionary() } = _a, props = __rest(_a, ["children", "T", "intl", "I18NConfig", "locale", "defaultLocale", "id", "dictionary"]);
         let providerID = id;
         if (providerID) {
-            dictionary = Object.assign(Object.assign({}, flattenObject(I18NConfig.getDictionaryEntry(providerID))), dictionary);
+            dictionary = Object.assign(Object.assign({}, I18NConfig.getDictionaryEntry(providerID)), dictionary);
         }
+        dictionary = flattenObject(dictionary);
         const translationRequired = (children && I18NConfig.translationRequired(locale)) ? true : false;
         if (!translationRequired) {
             return (_jsx(ClientProvider, { locale: locale, defaultLocale: defaultLocale, dictionary: dictionary, children: children }));

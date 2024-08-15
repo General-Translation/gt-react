@@ -33,7 +33,7 @@ export default function ClientNumeric({ children, id, n, ranges, ...branches }: 
         return <RenderClientVariable variables={(typeof n === 'number') ? { n } : undefined}>{children}</RenderClientVariable>;
     }
 
-    const translation = useMemo(() => { return ctx?.translate(id) || children; }, [children, id]);
+    const defaultTranslation = useMemo(() => { return ctx?.translate(id) || children; }, [children, id]);
 
     const completeBranches = useMemo(() => {
         if (!id) {
@@ -41,16 +41,16 @@ export default function ClientNumeric({ children, id, n, ranges, ...branches }: 
         } else {
             const t = (innerID: string) => ctx.translate(`${id}.${innerID}`);
             return { 
-                zero: t('zero') || branches.zero || undefined,
-                one: t('one') || branches.one || undefined,
-                two: t('two') || branches.two || undefined,
-                few: t('few') || branches.few || undefined,
-                many: t('many') || branches.many || undefined,
-                other: t('other') || branches.other || undefined,
-                singular: t('singular') || branches.singular || undefined,
-                dual: t('dual') || branches.dual || undefined,
-                plural: t('plural') || branches.plural || undefined,
-                ranges: t('ranges') || ranges || undefined,
+                zero: branches.zero || t('zero') || undefined,
+                one: branches.one || t('one') || undefined,
+                two: branches.two || t('two') || undefined,
+                few: branches.few || t('few') || undefined,
+                many: branches.many || t('many') || undefined,
+                other: branches.other || t('other') || undefined,
+                singular: branches.singular || t('singular') || undefined,
+                dual: branches.dual || t('dual') || undefined,
+                plural: branches.plural || t('plural') || undefined,
+                ranges: ranges || t('ranges') || undefined,
             }
         }
     }, [branches, ranges, id])
@@ -58,8 +58,8 @@ export default function ClientNumeric({ children, id, n, ranges, ...branches }: 
     const locales = [useLocale(), useDefaultLocale()]; // user's language
 
     const branch = useMemo(() => {
-        return ((typeof n === 'number' && completeBranches) ? getNumericBranch(n, locales, completeBranches) : null) || translation;
-    }, [n, completeBranches, translation, locales])
+        return ((typeof n === 'number' && completeBranches) ? getNumericBranch(n, locales, completeBranches) : null) || defaultTranslation;
+    }, [n, completeBranches, defaultTranslation, locales])
 
     const renderedChildren = useMemo(() => {
         return <RenderClientVariable variables={(typeof n === 'number') ? { n } : undefined}>{branch}</RenderClientVariable>

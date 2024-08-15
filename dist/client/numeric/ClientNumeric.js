@@ -33,7 +33,7 @@ export default function ClientNumeric(_a) {
         console.error(`<Numeric>, with children:\n\n${children}\n\nid: ${id}\n\nNo context provided. Did you mean to import the server component instead?`);
         return _jsx(RenderClientVariable, { variables: (typeof n === 'number') ? { n } : undefined, children: children });
     }
-    const translation = useMemo(() => { return (ctx === null || ctx === void 0 ? void 0 : ctx.translate(id)) || children; }, [children, id]);
+    const defaultTranslation = useMemo(() => { return (ctx === null || ctx === void 0 ? void 0 : ctx.translate(id)) || children; }, [children, id]);
     const completeBranches = useMemo(() => {
         if (!id) {
             return Object.assign(Object.assign({}, branches), { ranges });
@@ -41,23 +41,23 @@ export default function ClientNumeric(_a) {
         else {
             const t = (innerID) => ctx.translate(`${id}.${innerID}`);
             return {
-                zero: t('zero') || branches.zero || undefined,
-                one: t('one') || branches.one || undefined,
-                two: t('two') || branches.two || undefined,
-                few: t('few') || branches.few || undefined,
-                many: t('many') || branches.many || undefined,
-                other: t('other') || branches.other || undefined,
-                singular: t('singular') || branches.singular || undefined,
-                dual: t('dual') || branches.dual || undefined,
-                plural: t('plural') || branches.plural || undefined,
-                ranges: t('ranges') || ranges || undefined,
+                zero: branches.zero || t('zero') || undefined,
+                one: branches.one || t('one') || undefined,
+                two: branches.two || t('two') || undefined,
+                few: branches.few || t('few') || undefined,
+                many: branches.many || t('many') || undefined,
+                other: branches.other || t('other') || undefined,
+                singular: branches.singular || t('singular') || undefined,
+                dual: branches.dual || t('dual') || undefined,
+                plural: branches.plural || t('plural') || undefined,
+                ranges: ranges || t('ranges') || undefined,
             };
         }
     }, [branches, ranges, id]);
     const locales = [useLocale(), useDefaultLocale()]; // user's language
     const branch = useMemo(() => {
-        return ((typeof n === 'number' && completeBranches) ? getNumericBranch(n, locales, completeBranches) : null) || translation;
-    }, [n, completeBranches, translation, locales]);
+        return ((typeof n === 'number' && completeBranches) ? getNumericBranch(n, locales, completeBranches) : null) || defaultTranslation;
+    }, [n, completeBranches, defaultTranslation, locales]);
     const renderedChildren = useMemo(() => {
         return _jsx(RenderClientVariable, { variables: (typeof n === 'number') ? { n } : undefined, children: branch });
     }, [n, branch]);
