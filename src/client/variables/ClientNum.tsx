@@ -7,7 +7,7 @@ import useDefaultLocale from '../hooks/useDefaultLocale';
 // Type definition for the props that ClientNum component accepts
 type VariableProps = {
     children?: any;
-    name: string;
+    name?: string;
     defaultValue?: any; // Optional default value for the number
     options?: Record<string, any> // Optional options for the number formatting
 }

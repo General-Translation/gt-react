@@ -1,7 +1,7 @@
 import { ReactNode } from 'react';
 type VariableProps = {
     children?: any;
-    name: string;
+    name?: string;
     defaultValue?: any;
     options?: Record<string, any>;
 };

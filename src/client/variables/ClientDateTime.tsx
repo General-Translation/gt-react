@@ -7,7 +7,7 @@ import useDefaultLocale from '../hooks/useDefaultLocale';
 // VariableProps type defines the properties accepted by the component
 type VariableProps = {
     children?: any;
-    name: string;
+    name?: string;
     defaultValue?: any; // The default value which can be string, number or Date
     options?: Record<string, any>; // Optional formatting options for the date
 }

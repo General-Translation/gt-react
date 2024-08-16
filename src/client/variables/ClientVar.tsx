@@ -5,7 +5,7 @@ import React, { useMemo, ReactNode } from 'react';
 // VariableProps type
 type VariableProps = {
     children?: any;
-    name: string;
+    name?: string;
     defaultValue?: any;
 }
 
