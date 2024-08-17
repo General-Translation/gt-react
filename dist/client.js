@@ -8,5 +8,5 @@ import ClientVar from "./client/variables/ClientVar";
 import ClientNum from "./client/variables/ClientNum";
 import ClientDateTime from "./client/variables/ClientDateTime";
 import ClientCurrency from "./client/variables/ClientCurrency";
-export { T, useGT, useLocale, useDefaultLocale, ClientValue as Value, ClientNumeric as Numeric, ClientVar as Var, ClientNum as Num, ClientDateTime as DateTime, ClientCurrency as Currency };
+export { T, useGT, useLocale, useDefaultLocale, ClientValue, ClientNumeric, ClientVar as Var, ClientNum as Num, ClientDateTime as DateTime, ClientCurrency as Currency };
 //# sourceMappingURL=client.js.map

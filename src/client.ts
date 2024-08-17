@@ -12,8 +12,8 @@ import ClientCurrency from "./client/variables/ClientCurrency";
 export {
     T, useGT, 
     useLocale, useDefaultLocale,
-    ClientValue as Value,
-    ClientNumeric as Numeric,
+    ClientValue,
+    ClientNumeric,
     ClientVar as Var,
     ClientNum as Num,
     ClientDateTime as DateTime,
