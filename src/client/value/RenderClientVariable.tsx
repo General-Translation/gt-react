@@ -7,7 +7,7 @@ import ClientNum from '../variables/ClientNum';
 import ClientDateTime from '../variables/ClientDateTime';
 import ClientCurrency from '../variables/ClientCurrency';
 import defaultVariableNames from '../../primitives/defaultVariableNames';
-import { GTContext } from '../ClientProvider';
+import { useGTContext } from '../ClientProvider';
 
 /**
  * Handles a single child element by cloning it with new properties if it is a valid React element,
@@ -19,7 +19,7 @@ import { GTContext } from '../ClientProvider';
 
 function SingleChild({children, variables}: {children: any, variables?: Record<string, any>}): ReactNode {
     
-    const ctx = useContext(GTContext);
+    let { translate } = useGTContext();
     
     if (!children || typeof children === 'string' || typeof children === 'number' || typeof children === 'boolean') return children;
     if (React.isValidElement(children)) {
@@ -27,8 +27,8 @@ function SingleChild({children, variables}: {children: any, variables?: Record<s
         const transformation: string = typeof type === 'function' ? ((type as any)?.gtTransformation || '') : '';
         
         // handle any nested <T> components
-        if (ctx && transformation?.startsWith("translate")) {
-            const translation = ctx.translate(props.id);
+        if (transformation?.startsWith("translate")) {
+            const translation = translate(props.id);
             return <RenderClientVariable variables={variables}>{translation}</RenderClientVariable>;
         }
 

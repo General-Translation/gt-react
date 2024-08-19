@@ -20,4 +20,37 @@ import GeneralTranslation from "./types/GeneralTranslationInterface";
  * @returns {GeneralTranslation} An object containing internationalization and translation functions.
  */
 export declare function createGT({ approvedLocales, defaultLocale, getLocale, getMetadata, ...metadata }?: CreateGTProps): GeneralTranslation;
+export declare function createVariables({ approvedLocales, defaultLocale, getLocale }?: {
+    approvedLocales?: string[];
+    defaultLocale: string;
+    getLocale?: () => string;
+}): {
+    Var: {
+        ({ ...props }: {
+            [x: string]: any;
+        }): import("react/jsx-runtime").JSX.Element;
+        gtTransformation: string;
+    };
+    Num: {
+        ({ children, ...props }: {
+            children?: any;
+            [key: string]: any;
+        }): import("react/jsx-runtime").JSX.Element;
+        gtTransformation: string;
+    };
+    Currency: {
+        ({ children, ...props }: {
+            children?: any;
+            [key: string]: any;
+        }): import("react/jsx-runtime").JSX.Element;
+        gtTransformation: string;
+    };
+    DateTime: {
+        ({ children, ...props }: {
+            children?: any;
+            [key: string]: any;
+        }): import("react/jsx-runtime").JSX.Element;
+        gtTransformation: string;
+    };
+};
 //# sourceMappingURL=next.d.ts.map

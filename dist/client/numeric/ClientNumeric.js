@@ -11,12 +11,12 @@ var __rest = (this && this.__rest) || function (s, e) {
     return t;
 };
 import { jsx as _jsx } from "react/jsx-runtime";
-import { useContext, useMemo } from 'react';
+import { useMemo } from 'react';
 import getNumericBranch from '../../primitives/getNumericBranch';
 import RenderClientVariable from '../value/RenderClientVariable';
 import useLocale from '../hooks/useLocale';
 import useDefaultLocale from '../hooks/useDefaultLocale';
-import { GTContext } from '../ClientProvider';
+import { useGTContext } from '../ClientProvider';
 /**
  * Numeric component that processes a given number and renders the appropriate branch or children.
  *
@@ -28,18 +28,22 @@ import { GTContext } from '../ClientProvider';
  */
 export default function ClientNumeric(_a) {
     var { children, id, n, ranges } = _a, branches = __rest(_a, ["children", "id", "n", "ranges"]);
-    const ctx = useContext(GTContext);
-    if (!ctx) {
-        console.error(`<Numeric>, with children:\n\n${children}\n\nid: ${id}\n\nNo context provided. Did you mean to import the server component instead?`);
-        return _jsx(RenderClientVariable, { variables: (typeof n === 'number') ? { n } : undefined, children: children });
+    let translate;
+    try {
+        ({ translate } = useGTContext());
     }
-    const defaultTranslation = useMemo(() => { return (ctx === null || ctx === void 0 ? void 0 : ctx.translate(id)) || children; }, [children, id]);
+    catch (_b) {
+        throw new Error(`<ClientNumeric>, with children:\n\n${children}\n\nid: ${id}\n\nNo context provided. Did you mean to import the server component instead?`);
+    }
+    const defaultTranslation = useMemo(() => {
+        return translate(id) || children;
+    }, [children, id]);
     const completeBranches = useMemo(() => {
         if (!id) {
             return Object.assign(Object.assign({}, branches), { ranges });
         }
         else {
-            const t = (innerID) => ctx.translate(`${id}.${innerID}`);
+            const t = (innerID) => translate(`${id}.${innerID}`);
             return {
                 zero: branches.zero || t('zero') || undefined,
                 one: branches.one || t('one') || undefined,

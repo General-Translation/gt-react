@@ -114,4 +114,16 @@ export function createGT(_a = {
         getLocale, getDefaultLocale
     };
 }
+export function createVariables({ approvedLocales, defaultLocale, getLocale, } = {
+    defaultLocale: defaultGTProps.defaultLocale,
+    getLocale: defaultGTProps.getLocale
+}) {
+    const Var = createVarComponent();
+    const Num = createNumComponent(getLocale, defaultLocale);
+    const DateTime = createDateTimeComponent(getLocale, defaultLocale);
+    const Currency = createCurrencyComponent(getLocale, defaultLocale);
+    return ({
+        Var, Num, Currency, DateTime
+    });
+}
 //# sourceMappingURL=server.js.map

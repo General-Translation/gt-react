@@ -30,17 +30,14 @@ import defaultVariableNames from '../primitives/defaultVariableNames';
  * @returns {ReactElement} The rendered React element.
  */
 const renderElement = (_a) => {
-    var _b, _c;
+    var _b;
     var { sourceElement, targetElement } = _a, metadata = __rest(_a, ["sourceElement", "targetElement"]);
     const { props } = sourceElement;
-    if (((_b = props === null || props === void 0 ? void 0 : props['data-generaltranslation']) === null || _b === void 0 ? void 0 : _b.transformation) === "private") {
-        return sourceElement;
-    }
     if (props.children) {
         const { 'data-generaltranslation': generaltranslation } = props;
         const targetProps = targetElement === null || targetElement === void 0 ? void 0 : targetElement.props;
         const targetChildren = targetProps === null || targetProps === void 0 ? void 0 : targetProps.children;
-        const targetBranches = (_c = targetProps === null || targetProps === void 0 ? void 0 : targetProps['data-generaltranslation']) === null || _c === void 0 ? void 0 : _c.branches;
+        const targetBranches = (_b = targetProps === null || targetProps === void 0 ? void 0 : targetProps['data-generaltranslation']) === null || _b === void 0 ? void 0 : _b.branches;
         // If an alternative branch (from a transformation) is necessary
         if ((generaltranslation === null || generaltranslation === void 0 ? void 0 : generaltranslation.transformation) && targetBranches) {
             const transformation = generaltranslation.transformation;

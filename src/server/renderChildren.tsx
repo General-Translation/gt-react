@@ -29,10 +29,6 @@ const renderElement = ({ sourceElement, targetElement, ...metadata }: { sourceEl
     
     const { props } = sourceElement;
 
-    if (props?.['data-generaltranslation']?.transformation === "private") {
-        return sourceElement;
-    }
-
     if (props.children) {
 
         const { 'data-generaltranslation': generaltranslation } = props;

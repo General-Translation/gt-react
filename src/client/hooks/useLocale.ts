@@ -1,16 +1,11 @@
 'use client'
 
-import { useContext } from "react";
-import { GTContext } from "../ClientProvider";
+import { useGTContext } from "../ClientProvider";
 
 /**
- * @returns {string} The current locale or an empty string if not set.
+ * @returns {string} The user's current locale.
  */
 export default function useLocale(): string {
-    const ctx = useContext(GTContext);
-    if (!ctx) {
-        console.error(`useLocale(): No context provided. useLocale() can only be used inside a GTProvider.`);
-        return "";
-    }
-    return ctx.locale || "";
+    const { locale } = useGTContext();
+    return locale;
 }

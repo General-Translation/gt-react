@@ -139,3 +139,26 @@ export function createGT({
     }
     
 }
+
+export function createVariables({
+    approvedLocales,
+    defaultLocale,
+    getLocale,
+}: {
+    approvedLocales?: string[],
+    defaultLocale: string;
+    getLocale: () => string;
+} = {
+    defaultLocale: defaultGTProps.defaultLocale,
+    getLocale: defaultGTProps.getLocale
+}) {
+
+    const Var = createVarComponent();
+    const Num = createNumComponent(getLocale, defaultLocale);
+    const DateTime = createDateTimeComponent(getLocale, defaultLocale);
+    const Currency = createCurrencyComponent(getLocale, defaultLocale);
+
+    return ({
+        Var, Num, Currency, DateTime
+    });
+}

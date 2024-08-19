@@ -1,9 +1,8 @@
 import { ReactNode } from 'react';
 type ValueProps = {
-    children?: any;
+    children: any;
     id?: string;
-    branches?: Record<string, any>;
-    values?: Record<string, any>;
+    values: Record<string, any>;
 };
 /**
  * Client-side value variable component that processes the given values and branches,
@@ -14,6 +13,6 @@ type ValueProps = {
  * @param {Record<string, any>} ...values - Values to branch and translate around.
  * @returns {ReactNode}
  */
-export default function ClientValue({ children, id, branches, values }: ValueProps): ReactNode;
+export default function ClientValue({ children, id, values }: ValueProps): ReactNode;
 export {};
 //# sourceMappingURL=ClientValue.d.ts.map

@@ -3,14 +3,13 @@
 import React, { ReactNode, useContext, useMemo } from 'react';
 import getValueBranch from '../../primitives/getValueBranch';
 import RenderClientVariable from './RenderClientVariable';
-import { GTContext } from '../ClientProvider';
+import { useGTContext } from '../ClientProvider';
 
 // ValueProps type
 type ValueProps = {
-    children?: any;
+    children: any;
     id?: string;
-    branches?: Record<string, any>;
-    values?: Record<string, any>;
+    values: Record<string, any>;
 }
 
 /**
@@ -22,27 +21,27 @@ type ValueProps = {
  * @param {Record<string, any>} ...values - Values to branch and translate around.
  * @returns {ReactNode}
  */
-export default function ClientValue({ children, id, branches, values }: ValueProps): ReactNode {
+export default function ClientValue({ children, id, values }: ValueProps): ReactNode {
 
-    const ctx = useContext(GTContext);
-    if (!ctx) {
-        console.error(`<Value>, with children:\n\n${children}\n\nid: ${id}\n\nNo context provided. Did you mean to import the server component instead?`);
-        return <RenderClientVariable variables={values ? values : undefined}>{children}</RenderClientVariable>;
+    let translate;
+    try {
+        ({ translate } = useGTContext());
+    } catch {
+        throw new Error(`No context provided to <ClientValue> with children: ${children} id: ${id}. Did you mean to import the server component instead?`)
     }
     
-    const defaultTranslation = useMemo(() => { return ctx?.translate(id) || children; }, [children, id]);
+    const defaultTranslation = useMemo(() => { 
+        return translate(id) || children; 
+    }, [children, id]);
+
     if (!defaultTranslation) {
-        console.warn(`<Value>, with children:\n\n${children}\n\nid: ${id}\n\nNo translation found.`);
+        console.warn(`<ClientValue>, with children: ${children} id: ${id} - No translation found.`);
         return children;
     }
 
-    const branch = useMemo(() => {
-        return ((typeof values !== 'undefined' && typeof branches !== 'undefined') ? getValueBranch(values, branches) : null) || defaultTranslation;
-    }, [values, branches, defaultTranslation])
-
     const renderedChildren = useMemo(() => {
-        return <RenderClientVariable variables={values ? values : undefined}>{branch}</RenderClientVariable>
-    }, [branch, values])
+        return <RenderClientVariable variables={values ? values : undefined}>{defaultTranslation}</RenderClientVariable>
+    }, [defaultTranslation, values])
 
     return (
         <span>

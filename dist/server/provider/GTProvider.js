@@ -24,19 +24,6 @@ import 'server-only';
 import React from 'react';
 import ClientProvider from '../../client/ClientProvider';
 /**
- * Checks if the provided value has an assigned GT transformation.
- * @param {*} value - The value to check.
- * @returns {boolean} - Returns true if the value has a GT transformation, otherwise false.
- */
-function hasTransformation(value) {
-    if (React.isValidElement(value)) {
-        const { type } = value;
-        const transformation = typeof type === 'function' ? ((type === null || type === void 0 ? void 0 : type.gtTransformation) || '') : '';
-        return Boolean(transformation);
-    }
-    return false;
-}
-/**
  * Checks if the provided value is a promise.
  * @param {*} value - The value to check.
  * @returns {boolean} - Returns true if the value is a promise, otherwise false.
@@ -87,10 +74,7 @@ export default function GTProvider(_a) {
         }
         let translatedDictionary = {};
         yield Promise.all(Object.keys(dictionary).map((id) => __awaiter(this, void 0, void 0, function* () {
-            if (hasTransformation(dictionary[id])) {
-                translatedDictionary[id] = dictionary[id];
-            }
-            else if (isPromise(dictionary[id])) {
+            if (isPromise(dictionary[id])) {
                 translatedDictionary[id] = yield dictionary[id];
             }
             else if (dictionary[id] && typeof dictionary[id] === 'string') {

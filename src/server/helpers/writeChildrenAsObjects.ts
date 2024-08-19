@@ -1,5 +1,4 @@
 import React, { ReactNode, ReactElement } from 'react'
-import processBranches from '../value/processBranches';
 import defaultVariableNames from '../../primitives/defaultVariableNames';
 
 type Child = ReactNode | Record<string, any>;
@@ -64,13 +63,6 @@ const handleValidReactElement = (child: ReactElement): object => {
                 }
                 for (const option of Object.keys(others)) {
                     result.branches[option] = writeChildrenAsObjects(others[option]);
-                }
-            }
-
-            // Write the branches of a value variable transformation
-            else if (transformation === "value") {
-                if (generaltranslation.branches) {
-                    result.branches = processBranches(generaltranslation.branches, (branch: any) => writeChildrenAsObjects(branch))
                 }
             }
 

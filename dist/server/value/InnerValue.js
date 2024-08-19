@@ -11,25 +11,14 @@ var __rest = (this && this.__rest) || function (s, e) {
 };
 import { jsx as _jsx } from "react/jsx-runtime";
 import renderVariable from './renderVariable';
-import getValueBranch from '../../primitives/getValueBranch';
-/**
- * Value variable component that processes the given values and branches,
- * and renders the appropriate content based on the branch logic.
- *
- * @param {any} children - Default children to render if no branches match.
- * @param {Record<string, any>} branches - Object containing conditionally rendered branches.
- * @param {Record<string, any>} ...values - Values to branch and translate around.
- * @returns {JSX.Element}
- */
 const Value = (_a) => {
-    var { children, branches, values, locales } = _a, props = __rest(_a, ["children", "branches", "values", "locales"]);
+    var { children, values, locales } = _a, props = __rest(_a, ["children", "values", "locales"]);
     let { 'data-generaltranslation': generaltranslation } = props;
     if (!values || Object.keys(values).length < 1) {
-        console.warn(`WARNING: No values provided to <Value> component with children ${JSON.stringify(children)}.`);
+        console.warn(`WARNING: No values provided to <Value> component with children ${children}.`);
     }
-    let branch = ((typeof values !== 'undefined' && typeof branches !== 'undefined') ? getValueBranch(values, branches) : null) || children;
-    let renderedChildren = renderVariable(branch, locales, values ? values : undefined);
-    return (_jsx("span", { "data-values": values, "data-unrendered-branches": branches, "data-generaltranslation": generaltranslation, children: renderedChildren }));
+    const renderedChildren = renderVariable(children, locales, values ? values : undefined);
+    return (_jsx("span", { "data-values": values, "data-generaltranslation": generaltranslation, children: renderedChildren }));
 };
 Value.gtTransformation = "value";
 export default Value;

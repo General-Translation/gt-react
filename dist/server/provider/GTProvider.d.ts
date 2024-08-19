@@ -1,6 +1,6 @@
 import 'server-only';
 import I18NConfiguration from '../../config/I18NConfiguration';
-type GTProviderProps = {
+export default function GTProvider({ children, T, intl, I18NConfig, locale, defaultLocale, id, dictionary, ...props }: {
     I18NConfig: I18NConfiguration;
     T: any;
     intl: any;
@@ -10,7 +10,5 @@ type GTProviderProps = {
     dictionary?: Record<string, any>;
     id?: string;
     [key: string]: any;
-};
-export default function GTProvider({ children, T, intl, I18NConfig, locale, defaultLocale, id, dictionary, ...props }: GTProviderProps): Promise<any>;
-export {};
+}): Promise<any>;
 //# sourceMappingURL=GTProvider.d.ts.map

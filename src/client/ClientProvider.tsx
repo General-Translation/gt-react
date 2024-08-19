@@ -1,6 +1,6 @@
 'use client'
 
-import { createContext, useState, useCallback, useEffect } from "react"
+import { createContext, useCallback, useContext } from "react"
 
 type GTContextType = {
     [key: string]: any
@@ -31,4 +31,16 @@ export default function ClientProvider({
             {children}
         </GTContext.Provider>
     );
+}
+
+/**
+ * Custom hook to use the GTContext
+ * @returns {GTContextType} The context value
+ */
+export function useGTContext(): GTContextType {
+    const context = useContext(GTContext);
+    if (context === undefined) {
+        throw new Error('useGTContext must be used within a GTProvider');
+    }
+    return context;
 }

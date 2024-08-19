@@ -1,12 +1,12 @@
 'use client';
 import { jsx as _jsx, Fragment as _Fragment } from "react/jsx-runtime";
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import ClientVar from '../variables/ClientVar';
 import ClientNum from '../variables/ClientNum';
 import ClientDateTime from '../variables/ClientDateTime';
 import ClientCurrency from '../variables/ClientCurrency';
 import defaultVariableNames from '../../primitives/defaultVariableNames';
-import { GTContext } from '../ClientProvider';
+import { useGTContext } from '../ClientProvider';
 /**
  * Handles a single child element by cloning it with new properties if it is a valid React element,
  * or wrapping it in a React Fragment if it is a valid React node object.
@@ -16,15 +16,15 @@ import { GTContext } from '../ClientProvider';
  */
 function SingleChild({ children, variables }) {
     var _a;
-    const ctx = useContext(GTContext);
+    let { translate } = useGTContext();
     if (!children || typeof children === 'string' || typeof children === 'number' || typeof children === 'boolean')
         return children;
     if (React.isValidElement(children)) {
         const { props, type } = children;
         const transformation = typeof type === 'function' ? ((type === null || type === void 0 ? void 0 : type.gtTransformation) || '') : '';
         // handle any nested <T> components
-        if (ctx && (transformation === null || transformation === void 0 ? void 0 : transformation.startsWith("translate"))) {
-            const translation = ctx.translate(props.id);
+        if (transformation === null || transformation === void 0 ? void 0 : transformation.startsWith("translate")) {
+            const translation = translate(props.id);
             return _jsx(RenderClientVariable, { variables: variables, children: translation });
         }
         // handle variables

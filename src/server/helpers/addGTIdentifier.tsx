@@ -1,5 +1,4 @@
 import React, { ReactNode, ReactElement } from 'react'
-import processBranches from '../value/processBranches';
 
 type Child = ReactNode | Record<string, any>;
 type Children = Child[] | Child;
@@ -20,8 +19,8 @@ const acceptedNumericProps: Record<string, boolean> = {
  */
 const validateProps = (props: Record<string, any>): void => {
     if (props && props['data-generaltranslation'] && typeof props['data-generaltranslation'].id === 'number') {
-        throw new Error(`Nesting of T components is not permitted. This prevents components from being translated twice. 
-            Found nested component with content: ${props?.children}`);
+        throw new Error(`Nesting of <T>, <Numeric>, <Value> components is not permitted. This prevents components from being translated twice!
+            Found nested component with id: ${props?.id}, content: ${props?.children}`);
     }
 }
 
@@ -51,11 +50,6 @@ export default function addGTIdentifier(children: Children) {
                 result.variableType = transformationParts?.[1] || "variable";
             } 
             result.transformation = transformationParts[0];
-            if (transformation === "private") {
-                if (typeof props.label === 'string') {
-                    result.label = props.label;
-                }
-            }
         }
         
         return result;
@@ -121,15 +115,6 @@ export default function addGTIdentifier(children: Children) {
                     branches[option] = addIdentifierRecursively(others[option]);
                 }
                 newProps = { ...newProps, ...branches };
-            }
-
-            // or add identifier to value branches, e.g. name={"Kernighan"}
-            else if (transformation === "value") {
-                const { "branches": rawBranches } = props;
-                if (rawBranches) {
-                    branches = processBranches(rawBranches, (branch: any) => { updateIndices(); return addIdentifierRecursively(branch); })
-                }
-                newProps.branches = branches;
             }
 
             // modify newProps if necessary

@@ -9,7 +9,7 @@ var __rest = (this && this.__rest) || function (s, e) {
         }
     return t;
 };
-import { createGT as createBaseGT } from "./server";
+import { createGT as createBaseGT, createVariables as createBaseVariables } from "./server";
 import { getNextDomain, getNextLocale } from "./next/requestFunctions";
 /**
  * Initializes the `gt-react` i18n library with Next.js specific configurations.
@@ -37,5 +37,11 @@ export function createGT(_a = {
     const finalGetLocale = getLocale || (() => { return getNextLocale(defaultLocale, approvedLocales); });
     const finalGetMetadata = getMetadata || (() => { return { domain: getNextDomain() }; });
     return createBaseGT(Object.assign({ defaultLocale, getLocale: finalGetLocale, getMetadata: finalGetMetadata }, metadata));
+}
+export function createVariables({ approvedLocales, defaultLocale = (approvedLocales === null || approvedLocales === void 0 ? void 0 : approvedLocales[0]) || 'en', getLocale } = {
+    defaultLocale: 'en',
+}) {
+    const finalGetLocale = getLocale || (() => { return getNextLocale(defaultLocale, approvedLocales); });
+    return createBaseVariables({ approvedLocales, defaultLocale, getLocale: finalGetLocale });
 }
 //# sourceMappingURL=next.js.map

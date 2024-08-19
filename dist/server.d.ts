@@ -27,4 +27,37 @@ import GeneralTranslation from './types/GeneralTranslationInterface';
  */
 export declare function createGT({ apiKey, projectID, cacheURL, baseURL, remoteSource, automaticTranslation, approvedLocales, defaultLocale, getLocale, renderPrevious, renderMethod, // "replace", "hang", "subtle"
 renderTimeout, dictionaryName, dictionary, translations, maxConcurrentRequests, batchInterval, getMetadata, ...metadata }?: CreateI18NConfigProps): GeneralTranslation;
+export declare function createVariables({ approvedLocales, defaultLocale, getLocale, }?: {
+    approvedLocales?: string[];
+    defaultLocale: string;
+    getLocale: () => string;
+}): {
+    Var: {
+        ({ ...props }: {
+            [x: string]: any;
+        }): import("react/jsx-runtime").JSX.Element;
+        gtTransformation: string;
+    };
+    Num: {
+        ({ children, ...props }: {
+            children?: any;
+            [key: string]: any;
+        }): import("react/jsx-runtime").JSX.Element;
+        gtTransformation: string;
+    };
+    Currency: {
+        ({ children, ...props }: {
+            children?: any;
+            [key: string]: any;
+        }): import("react/jsx-runtime").JSX.Element;
+        gtTransformation: string;
+    };
+    DateTime: {
+        ({ children, ...props }: {
+            children?: any;
+            [key: string]: any;
+        }): import("react/jsx-runtime").JSX.Element;
+        gtTransformation: string;
+    };
+};
 //# sourceMappingURL=server.d.ts.map

@@ -1,4 +1,3 @@
-import T from "./client/T";
 import useDefaultLocale from "./client/hooks/useDefaultLocale";
 import useLocale from "./client/hooks/useLocale";
 import useGT from "./client/hooks/useGT";
@@ -10,7 +9,7 @@ import ClientDateTime from "./client/variables/ClientDateTime";
 import ClientCurrency from "./client/variables/ClientCurrency";
 
 export {
-    T, useGT, 
+    useGT, 
     useLocale, useDefaultLocale,
     ClientValue,
     ClientNumeric,

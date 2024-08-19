@@ -10,7 +10,6 @@ var __rest = (this && this.__rest) || function (s, e) {
     return t;
 };
 import React from 'react';
-import processBranches from '../value/processBranches';
 import defaultVariableNames from '../../primitives/defaultVariableNames';
 /**
  * Gets the tag name of a React element.
@@ -69,12 +68,6 @@ const handleValidReactElement = (child) => {
                 }
                 for (const option of Object.keys(others)) {
                     result.branches[option] = writeChildrenAsObjects(others[option]);
-                }
-            }
-            // Write the branches of a value variable transformation
-            else if (transformation === "value") {
-                if (generaltranslation.branches) {
-                    result.branches = processBranches(generaltranslation.branches, (branch) => writeChildrenAsObjects(branch));
                 }
             }
         }

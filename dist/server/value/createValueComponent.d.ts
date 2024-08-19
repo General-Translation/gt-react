@@ -1,10 +1,11 @@
 export default function createValueComponent({ T, getLocale, defaultLocale }: {
-    T: any;
+    T?: any;
     getLocale: () => string;
     defaultLocale: string;
 }): {
-    ({ children, values, branches, ...props }: {
+    ({ children, values, ...props }: {
         children?: any;
+        values: Record<string, any>;
         [key: string]: any;
     }): import("react/jsx-runtime").JSX.Element;
     gtTransformation: string;

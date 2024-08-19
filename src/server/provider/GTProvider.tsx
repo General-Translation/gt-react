@@ -7,20 +7,6 @@ import ClientProvider from '../../client/ClientProvider';
 import I18NConfiguration from '../../config/I18NConfiguration';
 
 /**
- * Checks if the provided value has an assigned GT transformation.
- * @param {*} value - The value to check.
- * @returns {boolean} - Returns true if the value has a GT transformation, otherwise false.
- */
-function hasTransformation(value: any): boolean {
-    if (React.isValidElement(value)) {
-        const { type } = value;
-        const transformation: string = typeof type === 'function' ? ((type as any)?.gtTransformation || '') : '';
-        return Boolean(transformation);
-    }
-    return false;
-}
-
-/**
  * Checks if the provided value is a promise.
  * @param {*} value - The value to check.
  * @returns {boolean} - Returns true if the value is a promise, otherwise false.
@@ -54,18 +40,6 @@ function flattenObject(obj: Record<string, any>, prefix: string = ''): Record<st
 }
 
 
-type GTProviderProps = {
-    I18NConfig: I18NConfiguration
-    T: any;
-    intl: any;
-    children: any;
-    locale: string;
-    defaultLocale: string;
-    dictionary?: Record<string, any>;
-    id?: string;
-    [key: string]: any;
-}
-
 /*
 e.g.
 dictionary = {
@@ -82,7 +56,17 @@ export default async function GTProvider({
     id='',
     dictionary = id ? {} : I18NConfig.getDictionary(),
     ...props
-}: GTProviderProps): Promise<any> {
+}: {
+    I18NConfig: I18NConfiguration
+    T: any;
+    intl: any;
+    children: any;
+    locale: string;
+    defaultLocale: string;
+    dictionary?: Record<string, any>;
+    id?: string;
+    [key: string]: any;
+}): Promise<any> {
 
     let providerID: string = id;
     if (providerID) {
@@ -107,10 +91,7 @@ export default async function GTProvider({
     let translatedDictionary: Record<string, any> = {};
 
     await Promise.all(Object.keys(dictionary).map(async id => {
-        if (hasTransformation(dictionary[id])) {
-            translatedDictionary[id] = dictionary[id];
-        }
-        else if (isPromise(dictionary[id])) {
+        if (isPromise(dictionary[id])) {
             translatedDictionary[id] = await dictionary[id];
         }
         else if (dictionary[id] && typeof dictionary[id] === 'string') {

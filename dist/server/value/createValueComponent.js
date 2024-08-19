@@ -13,10 +13,9 @@ import { jsx as _jsx } from "react/jsx-runtime";
 import Value from "./InnerValue";
 export default function createValueComponent({ T, getLocale, defaultLocale }) {
     const ValueT = (_a) => {
-        var { children, values, branches } = _a, props = __rest(_a, ["children", "values", "branches"]);
-        const innerProps = { values, branches };
+        var { children, values } = _a, props = __rest(_a, ["children", "values"]);
         const locales = [getLocale(), defaultLocale];
-        return _jsx(T, Object.assign({}, props, { children: _jsx(Value, Object.assign({ locales: locales }, innerProps, { children: children })) }));
+        return _jsx(T, Object.assign({}, props, { children: _jsx(Value, { locales: locales, values: values, children: children }) }));
     };
     ValueT.gtTransformation = "translate-value";
     return ValueT;

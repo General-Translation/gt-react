@@ -10,7 +10,6 @@ var __rest = (this && this.__rest) || function (s, e) {
     return t;
 };
 import React from 'react';
-import processBranches from '../value/processBranches';
 const acceptedNumericProps = {
     "singular": true, "dual": true, "plural": true,
     "zero": true, "one": true, "two": true, "few": true, "many": true, "other": true
@@ -21,8 +20,8 @@ const acceptedNumericProps = {
  */
 const validateProps = (props) => {
     if (props && props['data-generaltranslation'] && typeof props['data-generaltranslation'].id === 'number') {
-        throw new Error(`Nesting of T components is not permitted. This prevents components from being translated twice. 
-            Found nested component with content: ${props === null || props === void 0 ? void 0 : props.children}`);
+        throw new Error(`Nesting of <T>, <Numeric>, <Value> components is not permitted. This prevents components from being translated twice!
+            Found nested component with id: ${props === null || props === void 0 ? void 0 : props.id}, content: ${props === null || props === void 0 ? void 0 : props.children}`);
     }
 };
 /**
@@ -49,11 +48,6 @@ export default function addGTIdentifier(children) {
                 result.variableType = (transformationParts === null || transformationParts === void 0 ? void 0 : transformationParts[1]) || "variable";
             }
             result.transformation = transformationParts[0];
-            if (transformation === "private") {
-                if (typeof props.label === 'string') {
-                    result.label = props.label;
-                }
-            }
         }
         return result;
     };
@@ -104,14 +98,6 @@ export default function addGTIdentifier(children) {
                     branches[option] = addIdentifierRecursively(others[option]);
                 }
                 newProps = Object.assign(Object.assign({}, newProps), branches);
-            }
-            // or add identifier to value branches, e.g. name={"Kernighan"}
-            else if (transformation === "value") {
-                const { "branches": rawBranches } = props;
-                if (rawBranches) {
-                    branches = processBranches(rawBranches, (branch) => { updateIndices(); return addIdentifierRecursively(branch); });
-                }
-                newProps.branches = branches;
             }
             // modify newProps if necessary
             if (Object.keys(branches).length > 0)

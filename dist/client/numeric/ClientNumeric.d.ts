@@ -1,11 +1,19 @@
 import { ReactNode } from 'react';
 import { Range } from '../../primitives/getNumericBranch';
 type NumericProps = {
-    n?: number;
+    children: any;
     id?: string;
-    children?: any;
+    n?: number;
     ranges?: Range[];
-    [key: string]: any;
+    zero?: any;
+    one?: any;
+    two?: any;
+    few?: any;
+    many?: any;
+    other?: any;
+    singular?: any;
+    dual?: any;
+    plural?: any;
 };
 /**
  * Numeric component that processes a given number and renders the appropriate branch or children.

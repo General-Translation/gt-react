@@ -77,14 +77,11 @@ export default interface GeneralTranslation {
      * 
      * `children?` - (any) - The default content to render if no conditions are met.
      * 
-     * `branches?` - (Record<string, any>) - An object containing conditional branches to render. Keys represent condition names, and values are the corresponding content.
-     * 
      * `values?` - (Record<string, any>) - A set of values used for conditional rendering.
      */
     Value: ComponentType<{
         children?: any;
-        branches?: Record<string, any>;
-        values?: Record<string, any>;
+        values: Record<string, any>;
     }>;
 
     /**

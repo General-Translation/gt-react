@@ -1,19 +1,27 @@
 'use client'
 
-import React, { ReactNode,  useContext,  useMemo } from 'react';
+import React, { ReactNode, useMemo } from 'react';
 import getNumericBranch, { Range } from '../../primitives/getNumericBranch';
 import RenderClientVariable from '../value/RenderClientVariable';
 import useLocale from '../hooks/useLocale';
 import useDefaultLocale from '../hooks/useDefaultLocale';
 import useGT from '../hooks/useGT';
-import { GTContext } from '../ClientProvider';
+import { useGTContext } from '../ClientProvider';
 
 type NumericProps = {
-    n?: number;
+    children: any;
     id?: string;
-    children?: any;
+    n?: number;
     ranges?: Range[];
-    [key: string]: any;
+    zero?: any;
+    one?: any;
+    two?: any;
+    few?: any;
+    many?: any;
+    other?: any;
+    singular?: any;
+    dual?: any;
+    plural?: any;
 }
 
 /**
@@ -27,19 +35,22 @@ type NumericProps = {
  */
 export default function ClientNumeric({ children, id, n, ranges, ...branches }: NumericProps): ReactNode {
 
-    const ctx = useContext(GTContext);
-    if (!ctx) {
-        console.error(`<Numeric>, with children:\n\n${children}\n\nid: ${id}\n\nNo context provided. Did you mean to import the server component instead?`);
-        return <RenderClientVariable variables={(typeof n === 'number') ? { n } : undefined}>{children}</RenderClientVariable>;
+    let translate;
+    try {
+        ({ translate } = useGTContext());
+    } catch {
+        throw new Error(`<ClientNumeric>, with children:\n\n${children}\n\nid: ${id}\n\nNo context provided. Did you mean to import the server component instead?`);
     }
 
-    const defaultTranslation = useMemo(() => { return ctx?.translate(id) || children; }, [children, id]);
+    const defaultTranslation = useMemo(() => { 
+        return translate(id) || children; 
+    }, [children, id]);
 
     const completeBranches = useMemo(() => {
         if (!id) {
             return { ...branches, ranges };
         } else {
-            const t = (innerID: string) => ctx.translate(`${id}.${innerID}`);
+            const t = (innerID: string) => translate(`${id}.${innerID}`);
             return { 
                 zero: branches.zero || t('zero') || undefined,
                 one: branches.one || t('one') || undefined,

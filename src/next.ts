@@ -1,4 +1,4 @@
-import { createGT as createBaseGT } from "./server";
+import { createGT as createBaseGT, createVariables as createBaseVariables } from "./server";
 import { getNextDomain, getNextLocale } from "./next/requestFunctions";
 import CreateGTProps from './types/CreateGTProps';
 import GeneralTranslation from "./types/GeneralTranslationInterface";
@@ -33,4 +33,19 @@ export function createGT({
     const finalGetLocale = getLocale || (() => { return getNextLocale(defaultLocale, approvedLocales) });
     const finalGetMetadata = getMetadata || (() => { return { domain: getNextDomain() } });
     return createBaseGT({ defaultLocale, getLocale: finalGetLocale, getMetadata: finalGetMetadata, ...metadata });
+}
+
+export function createVariables({
+    approvedLocales,
+    defaultLocale = approvedLocales?.[0] || 'en',
+    getLocale
+}: {
+    approvedLocales?: string[],
+    defaultLocale: string;
+    getLocale?: () => string;
+} = {
+    defaultLocale: 'en',
+}) {
+    const finalGetLocale = getLocale || (() => { return getNextLocale(defaultLocale, approvedLocales) });
+    return createBaseVariables({ approvedLocales, defaultLocale, getLocale: finalGetLocale });
 }

@@ -1,1 +1,1 @@
-{"version":3,"file":"useLocale.d.ts","sourceRoot":"","sources":["../../../src/client/hooks/useLocale.ts"],"names":[],"mappings":"AAKA;;GAEG;AACH,MAAM,CAAC,OAAO,UAAU,SAAS,IAAI,MAAM,CAO1C"}
+{"version":3,"file":"useLocale.d.ts","sourceRoot":"","sources":["../../../src/client/hooks/useLocale.ts"],"names":[],"mappings":"AAIA;;GAEG;AACH,MAAM,CAAC,OAAO,UAAU,SAAS,IAAI,MAAM,CAG1C"}
