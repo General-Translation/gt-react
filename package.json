@@ -101,7 +101,7 @@
     "i18n"
   ],
   "dependencies": {
-    "generaltranslation": "^2.0.41",
+    "generaltranslation": "^2.0.43",
     "xxhash-wasm": "^1.0.2"
   }
 }
