@@ -28,7 +28,11 @@ export default function useGT(id?: string): Function {
     }
 
     // Return a translation function if available, otherwise return a no-op function
-    return (id: string, options?: Record<string, any>) => {
+    return (id: string, options?: {
+        n?: number,
+        values?: Record<string, any>
+        [key: string]: any
+    }) => {
 
         const translation = translate(`${prefix}${id}`);
 

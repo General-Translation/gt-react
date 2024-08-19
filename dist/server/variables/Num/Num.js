@@ -10,17 +10,6 @@ var __rest = (this && this.__rest) || function (s, e) {
     return t;
 };
 import { jsx as _jsx } from "react/jsx-runtime";
-/**
- * Num component formats and displays a number based on the current locale.
- * It attempts a number conversion and defaults to returning defaultValue if provided.
- *
- * @param {VariableProps} props - The properties passed to the component
- * @param {ReactNode} [props.children] - The child elements to be rendered if provided.
- * @param {string} props.name - The name attribute for the variable.
- * @param {number} [props.defaultValue] - The default value to be rendered if children is not provided.
- * @param {Record<string, any>} [props.options] - Options for number formatting.
- * @returns {JSX.Element} A span element containing the formatted number with specific data attributes
- */
 const Num = (_a) => {
     var { children, locales, name = "n", defaultValue, options = {} } = _a, props = __rest(_a, ["children", "locales", "name", "defaultValue", "options"]);
     const { "data-generaltranslation": generaltranslation } = props;

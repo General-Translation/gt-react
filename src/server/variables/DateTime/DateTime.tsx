@@ -1,27 +1,13 @@
 import React from 'react';
 
-// VariableProps type defines the properties accepted by the component
-type VariableProps = {
+const DateTime = ({ children, locales, name = "date", defaultValue, options = {}, ...props }: {
     children?: any;
     name?: string;
     defaultValue?: any; // The default value which can be number, string, or Date
     locales: string[];
-    options?: Record<string, any>; // Optional formatting options for the date
+    options?: Intl.DateTimeFormatOptions; // Optional formatting options for the date
     "data-generaltranslation"?: Record<string, any> | undefined; // Optional general translation data
-}
-
-/**
- * DateTime component formats and displays a date based on the current language settings.
- * It converts different types of date inputs and formats them according to the locale.
- *
- * @param {VariableProps} props - The properties passed to the component
- * @param {ReactNode} [props.children] - The child elements to be rendered if provided.
- * @param {string} props.name - The name attribute for the variable.
- * @param {number | Date | string} [props.defaultValue] - The default value to be rendered if children is not provided.
- * @param {Record<string, any>} [props.options] - Options for date formatting.
- * @returns {JSX.Element} A span element containing the formatted date with specific data attributes
- */
-const DateTime = ({ children, locales, name = "date", defaultValue, options = {}, ...props }: VariableProps): JSX.Element => {
+}): JSX.Element => {
 
     // Extract general translation data from props
     const { "data-generaltranslation": generaltranslation } = props;

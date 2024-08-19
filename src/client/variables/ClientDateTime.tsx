@@ -4,26 +4,12 @@ import React, { ReactNode, useEffect, useMemo, useState } from 'react';
 import useLocale from '../hooks/useLocale';
 import useDefaultLocale from '../hooks/useDefaultLocale';
 
-// VariableProps type defines the properties accepted by the component
-type VariableProps = {
+const ClientDateTime = ({ children, name = "date", defaultValue, options = {} }: {
     children?: any;
     name?: string;
     defaultValue?: any; // The default value which can be string, number or Date
-    options?: Record<string, any>; // Optional formatting options for the date
-}
-
-/**
- * DateTime component formats and displays a date based on the current language settings.
- * It converts different types of date inputs and formats them according to the locale.
- *
- * @param {VariableProps} props - The properties passed to the component
- * @param {ReactNode} [props.children] - The child elements to be rendered if provided.
- * @param {string} props.name - The name attribute for the variable.
- * @param {number | Date | string} [props.defaultValue] - The default value to be rendered if children is not provided.
- * @param {Record<string, any>} [props.options] - Options for date formatting.
- * @returns {ReactNode} A span element containing the formatted date with specific data attributes
- */
-const ClientDateTime = ({ children, name = "date", defaultValue, options = {} }: VariableProps = { name: "date" }): ReactNode => {
+    options?: Intl.DateTimeFormatOptions; // Optional formatting options for the date
+} = { name: "date" }): ReactNode => {
 
     const locales = [useLocale(), useDefaultLocale()]
 

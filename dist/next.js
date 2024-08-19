@@ -38,9 +38,16 @@ export function createGT(_a = {
     const finalGetMetadata = getMetadata || (() => { return { domain: getNextDomain() }; });
     return createBaseGT(Object.assign({ defaultLocale, getLocale: finalGetLocale, getMetadata: finalGetMetadata }, metadata));
 }
-export function createVariables({ approvedLocales, defaultLocale = (approvedLocales === null || approvedLocales === void 0 ? void 0 : approvedLocales[0]) || 'en', getLocale } = {
-    defaultLocale: 'en',
-}) {
+/**
+ * Creates variable components only, for use in GT dictionaries.
+ *
+ * @param {Object} params - Configuration options.
+ * @param {string[]} [params.approvedLocales] - List of approved locales.
+ * @param {string} params.defaultLocale - Default locale for the translation.
+ * @param {() => string} params.getLocale - Function to get the current locale.
+ * @returns {Object} An object containing variable components.
+ */
+export function createVariables({ approvedLocales, defaultLocale, getLocale }) {
     const finalGetLocale = getLocale || (() => { return getNextLocale(defaultLocale, approvedLocales); });
     return createBaseVariables({ approvedLocales, defaultLocale, getLocale: finalGetLocale });
 }

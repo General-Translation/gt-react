@@ -1,6 +1,7 @@
-import React, { ComponentType, ReactNode } from 'react'
+import React, { ComponentType, ReactNode } from 'react';
+import Variables from './Variables';
 
-export default interface GeneralTranslation {
+type GeneralTranslation = Variables & {
 
     /**
     * The `<T>` component. Translates its ReactNode children into the user's locale.
@@ -63,7 +64,11 @@ export default interface GeneralTranslation {
     * 
     * `options?` - ({ [key: string]: any }) - Other parameters which override the global `gt-react` configuration. See https://docs.generaltranslation.com for a full list.
     */
-    t: (id: string, options?: Record<string, any>) => any;
+    t: (id: string, options?: {
+        n?: number,
+        values?: Record<string, any>,
+        [key: string]: any
+    }) => any;
   
     /**
     * Server-side function which gets an entry from the default dictionary, in its original language.
@@ -105,89 +110,6 @@ export default interface GeneralTranslation {
         ranges?: { min: number, max: number, children: any }[];
     }>;
 
-    /**
-     * Component for rendering variables.
-     * 
-     * `children?` - (any) - The content to render if provided. Overrides `defaultValue`.
-     * 
-     * `name?` - (string) - The name of the variable, used for identifying the component.
-     * 
-     * `defaultValue?` - (any) - The default value to display if `children` is not provided.
-    **/
-    Var: ComponentType<{
-        children?: any;
-        name?: string;
-        defaultValue?: any;
-    }>;
-
-    /**
-     * Component for rendering number variables.
-     * 
-     * `children?` - (any) - The content to render if provided. Overrides `defaultValue`.
-     * 
-     * `name?` - (string) - The name of the variable, used for identifying the component.
-     * 
-     * `defaultValue?` - (any) - The default value to display if `children` is not provided. This can be a number or a string representation of a number.
-     * 
-     * `options?` - (Record<string, any>) - Additional options for `Intl.NumberFormat` for formatting the number.
-    **/
-    Num: ComponentType<{
-        children?: any;
-        name?: string;
-        defaultValue?: any;
-        options?: Record<string, any>;
-    }>;
-
-    /**
-     * Component for rendering date variables.
-     * 
-     * `children?` - (any) - The content to render if provided. Overrides `defaultValue`.
-     * 
-     * `name?` - (string) - The name of the variable, used for identifying the component.
-     * 
-     * `defaultValue?` - (any) - The default value to display if `children` is not provided. This can be a number (Unix timestamp), string, or Date object.
-     * 
-     * `options?` - (Record<string, any>) - Additional options for `Intl.DateTimeFormat` for formatting the date.
-    **/
-    DateTime: ComponentType<{
-        children?: any;
-        name?: string;
-        defaultValue?: any;
-        options?: Record<string, any>;
-    }>;
-
-    /**
-     * Component for rendering currency variables.
-     * 
-     * `children?` - (any) - The content to render if provided. Overrides `defaultValue`.
-     * 
-     * `name?` - (string) - The name of the variable, used for identifying the component.
-     * 
-     * `defaultValue?` - (any) - The default value to display if `children` is not provided. This should be a number or a string representation of a number.
-     * 
-     * `currency?` - (string) - The currency code to use for formatting. Defaults to "USD".
-     * 
-     * `options?` - (Record<string, any>) - Additional options for `Intl.NumberFormat` for formatting the currency.
-    **/
-    Currency: ComponentType<{
-        children?: any;
-        name?: string;
-        defaultValue?: any;
-        currency?: string;
-        options?: Record<string, any>;
-    }>;
-
-  
-    /**
-    * Server-side function which gets the user's current locale.
-    * Returns a BCP 47 language code representing the user's language, e.g. `en-US`.
-    **/
-    getLocale: () => string;
-  
-    /** 
-     * Server-side function which gets the application's default locale.
-     * Returns a BCP 47 language code representing a language, e.g. `en-US`.
-    **/
-    getDefaultLocale: () => string;
-
 }
+
+export default GeneralTranslation;

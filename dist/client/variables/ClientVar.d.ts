@@ -1,9 +1,4 @@
 import { ReactNode } from 'react';
-type VariableProps = {
-    children?: any;
-    name?: string;
-    defaultValue?: any;
-};
 /**
  * Var component to conditionally render either children or a default value.
  * It also attaches data attributes for variable name and type.
@@ -15,7 +10,11 @@ type VariableProps = {
  * @returns {ReactNode} The rendered output.
  */
 declare const ClientVar: {
-    ({ children, name, defaultValue }: VariableProps): ReactNode;
+    ({ children, name, defaultValue }: {
+        children?: any;
+        name?: string;
+        defaultValue?: any;
+    }): ReactNode;
     gtTransformation: string;
 };
 export default ClientVar;

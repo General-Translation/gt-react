@@ -2,13 +2,6 @@
 
 import React, { useMemo, ReactNode } from 'react';
 
-// VariableProps type
-type VariableProps = {
-    children?: any;
-    name?: string;
-    defaultValue?: any;
-}
-
 /**
  * Var component to conditionally render either children or a default value.
  * It also attaches data attributes for variable name and type.
@@ -19,7 +12,11 @@ type VariableProps = {
  * @param {any} [props.defaultValue] - The default value to be rendered if children is not provided.
  * @returns {ReactNode} The rendered output.
  */
-const ClientVar = ({ children, name, defaultValue }: VariableProps): ReactNode => {
+const ClientVar = ({ children, name, defaultValue }: {
+    children?: any;
+    name?: string;
+    defaultValue?: any;
+}): ReactNode => {
 
     const renderedValue = useMemo(() => {
         if ((typeof children !== 'undefined' && typeof defaultValue === 'undefined')) return children;

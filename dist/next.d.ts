@@ -1,5 +1,6 @@
 import CreateGTProps from './types/CreateGTProps';
 import GeneralTranslation from "./types/GeneralTranslationInterface";
+import Variables from "./types/Variables";
 /**
  * Initializes the `gt-react` i18n library with Next.js specific configurations.
  *
@@ -20,37 +21,18 @@ import GeneralTranslation from "./types/GeneralTranslationInterface";
  * @returns {GeneralTranslation} An object containing internationalization and translation functions.
  */
 export declare function createGT({ approvedLocales, defaultLocale, getLocale, getMetadata, ...metadata }?: CreateGTProps): GeneralTranslation;
-export declare function createVariables({ approvedLocales, defaultLocale, getLocale }?: {
+/**
+ * Creates variable components only, for use in GT dictionaries.
+ *
+ * @param {Object} params - Configuration options.
+ * @param {string[]} [params.approvedLocales] - List of approved locales.
+ * @param {string} params.defaultLocale - Default locale for the translation.
+ * @param {() => string} params.getLocale - Function to get the current locale.
+ * @returns {Object} An object containing variable components.
+ */
+export declare function createVariables({ approvedLocales, defaultLocale, getLocale }: {
     approvedLocales?: string[];
-    defaultLocale: string;
+    defaultLocale?: string;
     getLocale?: () => string;
-}): {
-    Var: {
-        ({ ...props }: {
-            [x: string]: any;
-        }): import("react/jsx-runtime").JSX.Element;
-        gtTransformation: string;
-    };
-    Num: {
-        ({ children, ...props }: {
-            children?: any;
-            [key: string]: any;
-        }): import("react/jsx-runtime").JSX.Element;
-        gtTransformation: string;
-    };
-    Currency: {
-        ({ children, ...props }: {
-            children?: any;
-            [key: string]: any;
-        }): import("react/jsx-runtime").JSX.Element;
-        gtTransformation: string;
-    };
-    DateTime: {
-        ({ children, ...props }: {
-            children?: any;
-            [key: string]: any;
-        }): import("react/jsx-runtime").JSX.Element;
-        gtTransformation: string;
-    };
-};
+}): Variables;
 //# sourceMappingURL=next.d.ts.map

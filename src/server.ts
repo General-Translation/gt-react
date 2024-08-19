@@ -16,6 +16,7 @@ import createNumComponent from './server/variables/Num/createNumComponent';
 import createDateTimeComponent from './server/variables/DateTime/createDateTimeComponent';
 import createCurrencyComponent from './server/variables/Currency/createCurrencyComponent';
 import defaultGTProps from './types/defaultGTProps';
+import Variables from './types/Variables';
 
 /**
  * Initializes the `gt-react` i18n library.
@@ -140,18 +141,27 @@ export function createGT({
     
 }
 
+/**
+ * Creates variable components only, for use in GT dictionaries.
+ * 
+ * @param {Object} params - Configuration options.
+ * @param {string[]} [params.approvedLocales] - List of approved locales.
+ * @param {string} params.defaultLocale - Default locale for the translation.
+ * @param {() => string} params.getLocale - Function to get the current locale.
+ * @returns {Object} An object containing variable components.
+ */
 export function createVariables({
     approvedLocales,
-    defaultLocale,
-    getLocale,
+    defaultLocale = approvedLocales?.[0] || defaultGTProps.defaultLocale,
+    getLocale = () => { return defaultLocale }
 }: {
     approvedLocales?: string[],
-    defaultLocale: string;
-    getLocale: () => string;
+    defaultLocale?: string;
+    getLocale?: () => string;
 } = {
     defaultLocale: defaultGTProps.defaultLocale,
     getLocale: defaultGTProps.getLocale
-}) {
+}): Variables {
 
     const Var = createVarComponent();
     const Num = createNumComponent(getLocale, defaultLocale);
@@ -159,6 +169,7 @@ export function createVariables({
     const Currency = createCurrencyComponent(getLocale, defaultLocale);
 
     return ({
-        Var, Num, Currency, DateTime
+        Var, Num, Currency, DateTime,
+        getLocale, getDefaultLocale: () => defaultLocale
     });
 }

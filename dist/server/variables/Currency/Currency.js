@@ -10,18 +10,6 @@ var __rest = (this && this.__rest) || function (s, e) {
     return t;
 };
 import { jsx as _jsx } from "react/jsx-runtime";
-/**
- * Currency component formats a number as a currency string based on the current language settings.
- * It uses Intl.NumberFormat for currency formatting.
- *
- * @param {VariableProps} props - The properties passed to the component
- * @param {ReactNode} [props.children] - The child elements to be rendered if provided.
- * @param {string} props.name - The name attribute for the variable.
- * @param {number} [props.defaultValue] - The default value to be rendered if children is not provided.
- * @param {string} [props.currency="USD"] - The currency code to use for formatting.
- * @param {Record<string, any>} [props.options] - Options for number formatting.
- * @returns {JSX.Element} A span element containing the formatted currency with specific data attributes
- */
 const Currency = (_a) => {
     var { children, locales, name = "cost", defaultValue, currency = "USD", options = {} } = _a, props = __rest(_a, ["children", "locales", "name", "defaultValue", "currency", "options"]);
     const { "data-generaltranslation": generaltranslation } = props;
