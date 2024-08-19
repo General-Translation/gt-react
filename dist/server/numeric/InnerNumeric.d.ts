@@ -3,7 +3,7 @@ import { Range } from '../../primitives/getNumericBranch';
 declare const Numeric: {
     ({ locales, children, n, ranges, zero, one, two, few, many, other, singular, plural, dual, ...props }: {
         locales: string[];
-        children: any;
+        children?: any;
         n: number;
         ranges?: Range[];
         zero?: any;

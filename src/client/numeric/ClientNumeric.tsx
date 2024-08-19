@@ -5,24 +5,7 @@ import getNumericBranch, { Range } from '../../primitives/getNumericBranch';
 import RenderClientVariable from '../value/RenderClientVariable';
 import useLocale from '../hooks/useLocale';
 import useDefaultLocale from '../hooks/useDefaultLocale';
-import useGT from '../hooks/useGT';
 import { useGTContext } from '../ClientProvider';
-
-type NumericProps = {
-    children: any;
-    id?: string;
-    n?: number;
-    ranges?: Range[];
-    zero?: any;
-    one?: any;
-    two?: any;
-    few?: any;
-    many?: any;
-    other?: any;
-    singular?: any;
-    dual?: any;
-    plural?: any;
-}
 
 /**
  * Numeric component that processes a given number and renders the appropriate branch or children.
@@ -33,7 +16,21 @@ type NumericProps = {
  * @param {Record<string, any>} ...branches - Named branches, e.g. "singular", "plural" and their associated branches.
  * @returns {ReactNode}
  */
-export default function ClientNumeric({ children, id, n, ranges, ...branches }: NumericProps): ReactNode {
+export default function ClientNumeric({ children, id, n, ranges, ...branches }: {
+    children?: any;
+    id?: string;
+    n: number;
+    ranges?: Range[];
+    zero?: any;
+    one?: any;
+    two?: any;
+    few?: any;
+    many?: any;
+    other?: any;
+    singular?: any;
+    dual?: any;
+    plural?: any;
+}): ReactNode {
 
     let translate;
     try {
