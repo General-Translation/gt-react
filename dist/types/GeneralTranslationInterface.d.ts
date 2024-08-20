@@ -71,7 +71,7 @@ type GeneralTranslation = Variables & {
     * `id` - (string) - ID to be prepended.
     *
     */
-    getGT: (id: string) => any;
+    getGT: (id?: string) => any;
     /**
     * Server-side function which gets an entry from the default dictionary, in its original language.
     *
