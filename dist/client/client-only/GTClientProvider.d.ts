@@ -1,0 +1,2 @@
+export default function GTClientProvider({ children, projectID, dictionary, dictionaryName, approvedLocales, defaultLocale, locale, remoteSource, cacheURL }: any): import("react/jsx-runtime").JSX.Element;
+//# sourceMappingURL=GTClientProvider.d.ts.map

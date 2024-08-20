@@ -24,6 +24,7 @@ import createNumComponent from './server/variables/Num/createNumComponent';
 import createDateTimeComponent from './server/variables/DateTime/createDateTimeComponent';
 import createCurrencyComponent from './server/variables/Currency/createCurrencyComponent';
 import defaultGTProps from './types/defaultGTProps';
+import createGetGTFunction from './dictionary/createGetGTFunction';
 /**
  * Initializes the `gt-react` i18n library.
  *
@@ -95,6 +96,7 @@ export function createGT(_a = {
     const GTProvider = createGTProviderComponent(Object.assign({ I18NConfig, T, intl }, metadata));
     // ----- Dictionary ------ //
     const t = createTFunction({ I18NConfig, T, intl });
+    const getGT = createGetGTFunction(t);
     const dict = createDictFunction(I18NConfig);
     // ----- Variables ----- //
     const Value = createValueComponent({ T, getLocale, defaultLocale });
@@ -108,7 +110,7 @@ export function createGT(_a = {
     return {
         T, intl,
         GTProvider,
-        t, dict,
+        t, getGT, dict,
         Value, Plural,
         Var, Num, DateTime, Currency,
         getLocale, getDefaultLocale

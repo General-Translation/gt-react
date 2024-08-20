@@ -69,6 +69,15 @@ type GeneralTranslation = Variables & {
         values?: Record<string, any>,
         [key: string]: any
     }) => any;
+
+    /**
+    * Server-side function which prepares a `t()` function by prepending an ID. Useful with large nested dictionaries. You can also import `t()` directly.
+    * Equivalent to `useGT()` on the client-side.
+    * 
+    * `id` - (string) - ID to be prepended.
+    * 
+    */
+    getGT: (id: string) => any;
   
     /**
     * Server-side function which gets an entry from the default dictionary, in its original language.

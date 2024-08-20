@@ -17,6 +17,7 @@ import createDateTimeComponent from './server/variables/DateTime/createDateTimeC
 import createCurrencyComponent from './server/variables/Currency/createCurrencyComponent';
 import defaultGTProps from './types/defaultGTProps';
 import Variables from './types/Variables';
+import createGetGTFunction from './dictionary/createGetGTFunction';
 
 /**
  * Initializes the `gt-react` i18n library.
@@ -114,6 +115,8 @@ export function createGT({
     // ----- Dictionary ------ //
 
     const t = createTFunction({ I18NConfig, T, intl });
+    
+    const getGT = createGetGTFunction(t);
 
     const dict = createDictFunction(I18NConfig);
 
@@ -133,7 +136,7 @@ export function createGT({
     return {
         T, intl,
         GTProvider,
-        t, dict,
+        t, getGT, dict,
         Value, Plural,
         Var, Num, DateTime, Currency,
         getLocale, getDefaultLocale

@@ -3,8 +3,14 @@ import I18NConfiguration from "../config/I18NConfiguration";
 import Value from "../server/value/InnerValue";
 import Plural from "../server/plural/InnerPlural";
 
+export type tOptions = {
+    n?: number;
+    values?: Record<string, any>;
+    [key: string]: any
+}
+
 export default function createTFunction({ I18NConfig, T, intl }: { I18NConfig: I18NConfiguration, T: any, intl: any }) {
-    return (id: string, options?: Record<string, any>): JSX.Element | Promise<string> => {
+    return (id: string, options?: tOptions): JSX.Element | Promise<string> => {
         
         const entry = I18NConfig.getDictionaryEntry(id);
 
