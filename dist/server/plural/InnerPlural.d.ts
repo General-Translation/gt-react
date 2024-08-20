@@ -1,6 +1,6 @@
 import { ReactNode } from 'react';
-import { Range } from '../../primitives/getNumericBranch';
-declare const Numeric: {
+import { Range } from '../../primitives/getPluralBranch';
+declare const Plural: {
     ({ locales, children, n, ranges, zero, one, two, few, many, other, singular, plural, dual, ...props }: {
         locales: string[];
         children?: any;
@@ -19,5 +19,5 @@ declare const Numeric: {
     }): ReactNode;
     gtTransformation: string;
 };
-export default Numeric;
-//# sourceMappingURL=InnerNumeric.d.ts.map
+export default Plural;
+//# sourceMappingURL=InnerPlural.d.ts.map

@@ -1,8 +1,8 @@
 import React, { ReactNode } from 'react';
-import renderNumeric from '../value/renderVariable';
-import getNumericBranch, { Range } from '../../primitives/getNumericBranch';
+import renderPlural from '../value/renderVariable';
+import getPluralBranch, { Range } from '../../primitives/getPluralBranch';
 
-const Numeric = ({ 
+const Plural = ({ 
     locales, children, n, ranges,  
     zero, one, two, few, many, other, singular, plural, dual, ...props
 }: {
@@ -23,7 +23,7 @@ const Numeric = ({
 }): ReactNode => {
 
     if (typeof n !== 'number') {
-        console.warn(`WARNING: No 'n' parameter provided to <Numeric> component with children ${JSON.stringify(children)}.`)
+        console.warn(`WARNING: No 'n' parameter provided to <Plural> component with children ${JSON.stringify(children)}.`)
     }
 
     const { 'data-generaltranslation': generaltranslation }: any = props;
@@ -33,9 +33,9 @@ const Numeric = ({
             .filter(([_, value]) => value !== undefined)
     );
 
-    const branch = ((typeof n === 'number' && branches) ? getNumericBranch(n, locales, branches) : null) || children;
+    const branch = ((typeof n === 'number' && branches) ? getPluralBranch(n, locales, branches) : null) || children;
 
-    const renderedChildren = renderNumeric(branch, locales, (typeof n === 'number') ? { n } : undefined);
+    const renderedChildren = renderPlural(branch, locales, (typeof n === 'number') ? { n } : undefined);
 
     return (
         <span data-n={n} data-unrendered-branches={branches} data-generaltranslation={generaltranslation}>
@@ -45,6 +45,6 @@ const Numeric = ({
 
 };
 
-Numeric.gtTransformation = "numeric";
+Plural.gtTransformation = "plural";
 
-export default Numeric;
+export default Plural;

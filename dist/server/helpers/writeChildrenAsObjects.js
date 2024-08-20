@@ -59,7 +59,7 @@ const handleValidReactElement = (child) => {
         if (generaltranslation.transformation && generaltranslation.branches) {
             const transformation = generaltranslation.transformation;
             // Write the branches of a number variable transformation
-            if (transformation === "numeric") {
+            if (transformation === "plural") {
                 const _a = generaltranslation.branches, { ranges } = _a, others = __rest(_a, ["ranges"]);
                 if (ranges) {
                     result.branches.ranges = ranges.map((range) => {

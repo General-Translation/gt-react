@@ -63,7 +63,7 @@ function getBranchFromRanges(n: number, ranges: Range[]): any | undefined {
  * @param {any} branches - The object containing possible branches and their corresponding ranges and options.
  * @returns {any} The determined branch.
  */
-export default function getNumericBranch(n: number, locales: string[], branches: any) {
+export default function getPluralBranch(n: number, locales: string[], branches: any) {
     let branchName = '';
     let branch = null;
     if (typeof n === 'number' && branches?.ranges) branch = getBranchFromRanges(n, branches.ranges);

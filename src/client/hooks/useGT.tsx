@@ -3,7 +3,7 @@
 import { isValidElement, useMemo } from "react";
 import { useGTContext } from "../ClientProvider";
 import ClientValue from "../value/ClientValue";
-import ClientNumeric from "../numeric/ClientNumeric";
+import ClientPlural from "../plural/ClientPlural";
 
 /**
  * Custom hook to provide a translation function using a given context.
@@ -36,21 +36,7 @@ export default function useGT(id?: string): Function {
 
         const translation = translate(`${prefix}${id}`);
 
-        if (isValidElement(translation)) {
-            const { type } = translation;
-            const transformation: string = typeof type === 'function' ? ((type as any)?.gtTransformation || '') : '';
-            if (transformation.startsWith("marker")) {
-                const markerType = transformation.split('-')[1];
-                if (markerType === "numeric" && (!options || typeof options.n !== 'number')) {
-                    throw new Error(`No n value provided to dictionary entry with id ${id} marked as Numeric: ${JSON.stringify(translation)}`)
-                }
-                if (markerType === "value" && (!options || !options.values)) {
-                    throw new Error(`No values provided to dictionary entry with id ${id} marked as Value: ${JSON.stringify(translation)}`)
-                }
-            }
-        };
-
-        // If a numeric or value is required
+        // If a plural or value is required
         if (options) {
             const { 
                 n, values, 
@@ -59,20 +45,20 @@ export default function useGT(id?: string): Function {
             if (typeof n === 'number') {
                 const innerProps = { n, ranges, zero, one, two, few, many, other, singular, dual, plural };
                 if (values) {
-                    // Numeric + Value
+                    // Plural + Value
                     return (
                         <ClientValue values={values}>
-                            <ClientNumeric id={id} {...innerProps}>
+                            <ClientPlural id={id} {...innerProps}>
                                 {translation}
-                            </ClientNumeric>
+                            </ClientPlural>
                         </ClientValue>
                     );
                 } else {
-                    // Numeric only
+                    // Plural only
                     return (
-                        <ClientNumeric id={id} {...innerProps}>
+                        <ClientPlural id={id} {...innerProps}>
                             {translation}
-                        </ClientNumeric>
+                        </ClientPlural>
                     )
                 }
             } else if (values) {

@@ -10,5 +10,5 @@ export type Range = {
  * @param {any} branches - The object containing possible branches and their corresponding ranges and options.
  * @returns {any} The determined branch.
  */
-export default function getNumericBranch(n: number, locales: string[], branches: any): any;
-//# sourceMappingURL=getNumericBranch.d.ts.map
+export default function getPluralBranch(n: number, locales: string[], branches: any): any;
+//# sourceMappingURL=getPluralBranch.d.ts.map

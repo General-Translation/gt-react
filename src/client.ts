@@ -2,7 +2,7 @@ import useDefaultLocale from "./client/hooks/useDefaultLocale";
 import useLocale from "./client/hooks/useLocale";
 import useGT from "./client/hooks/useGT";
 import ClientValue from "./client/value/ClientValue";
-import ClientNumeric from "./client/numeric/ClientNumeric";
+import ClientPlural from "./client/plural/ClientPlural";
 import ClientVar from "./client/variables/ClientVar";
 import ClientNum from "./client/variables/ClientNum";
 import ClientDateTime from "./client/variables/ClientDateTime";
@@ -12,7 +12,7 @@ export {
     useGT, 
     useLocale, useDefaultLocale,
     ClientValue,
-    ClientNumeric,
+    ClientPlural,
     ClientVar as Var,
     ClientNum as Num,
     ClientDateTime as DateTime,

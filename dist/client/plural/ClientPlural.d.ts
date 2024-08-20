@@ -1,7 +1,7 @@
 import { ReactNode } from 'react';
-import { Range } from '../../primitives/getNumericBranch';
+import { Range } from '../../primitives/getPluralBranch';
 /**
- * Numeric component that processes a given number and renders the appropriate branch or children.
+ * Plural component that processes a given number and renders the appropriate branch or children.
  *
  * @param {ReactNode} children - Default children.
  * @param {number} n - Number to branch based on.
@@ -9,7 +9,7 @@ import { Range } from '../../primitives/getNumericBranch';
  * @param {Record<string, any>} ...branches - Named branches, e.g. "singular", "plural" and their associated branches.
  * @returns {ReactNode}
  */
-export default function ClientNumeric({ children, id, n, ranges, ...branches }: {
+export default function ClientPlural({ children, id, n, ranges, ...branches }: {
     children?: any;
     id?: string;
     n: number;
@@ -24,4 +24,4 @@ export default function ClientNumeric({ children, id, n, ranges, ...branches }: 
     dual?: any;
     plural?: any;
 }): ReactNode;
-//# sourceMappingURL=ClientNumeric.d.ts.map
+//# sourceMappingURL=ClientPlural.d.ts.map

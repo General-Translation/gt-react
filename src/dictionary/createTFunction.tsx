@@ -1,7 +1,7 @@
 import React, { isValidElement } from "react";
 import I18NConfiguration from "../config/I18NConfiguration";
 import Value from "../server/value/InnerValue";
-import Numeric from "../server/numeric/InnerNumeric";
+import Plural from "../server/plural/InnerPlural";
 
 export default function createTFunction({ I18NConfig, T, intl }: { I18NConfig: I18NConfiguration, T: any, intl: any }) {
     return (id: string, options?: Record<string, any>): JSX.Element | Promise<string> => {
@@ -11,7 +11,7 @@ export default function createTFunction({ I18NConfig, T, intl }: { I18NConfig: I
         // Turn into an async function if the target is a string
         if (typeof entry === 'string') return intl(entry, { id, ...options });
         
-        // If a numeric or value is required
+        // If a plural or value is required
         if (options) {
             const locales = [I18NConfig.getLocale(), I18NConfig.getDefaultLocale()];
             const { 
@@ -34,23 +34,23 @@ export default function createTFunction({ I18NConfig, T, intl }: { I18NConfig: I
                     plural: plural || entry?.plural
                 };
                 if (values) {
-                    // Numeric + Value
+                    // Plural + Value
                     return (
                         <T id={id} {...tOptions}>
                             <Value values={values} locales={locales}>
-                                <Numeric locales={locales} {...innerProps}>
+                                <Plural locales={locales} {...innerProps}>
                                     {entry}
-                                </Numeric>
+                                </Plural>
                             </Value>
                         </T>
                     );
                 } else {
-                    // Numeric only
+                    // Plural only
                     return (
                         <T id={id} {...tOptions}>
-                            <Numeric locales={locales} {...innerProps}>
+                            <Plural locales={locales} {...innerProps}>
                                 {entry}
-                            </Numeric>
+                            </Plural>
                         </T>
                     )
                 }

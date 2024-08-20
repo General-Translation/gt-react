@@ -1,9 +1,9 @@
 'use client';
 import { jsx as _jsx } from "react/jsx-runtime";
-import { isValidElement, useMemo } from "react";
+import { useMemo } from "react";
 import { useGTContext } from "../ClientProvider";
 import ClientValue from "../value/ClientValue";
-import ClientNumeric from "../numeric/ClientNumeric";
+import ClientPlural from "../plural/ClientPlural";
 /**
  * Custom hook to provide a translation function using a given context.
  *
@@ -28,32 +28,18 @@ export default function useGT(id) {
     // Return a translation function if available, otherwise return a no-op function
     return (id, options) => {
         const translation = translate(`${prefix}${id}`);
-        if (isValidElement(translation)) {
-            const { type } = translation;
-            const transformation = typeof type === 'function' ? ((type === null || type === void 0 ? void 0 : type.gtTransformation) || '') : '';
-            if (transformation.startsWith("marker")) {
-                const markerType = transformation.split('-')[1];
-                if (markerType === "numeric" && (!options || typeof options.n !== 'number')) {
-                    throw new Error(`No n value provided to dictionary entry with id ${id} marked as Numeric: ${JSON.stringify(translation)}`);
-                }
-                if (markerType === "value" && (!options || !options.values)) {
-                    throw new Error(`No values provided to dictionary entry with id ${id} marked as Value: ${JSON.stringify(translation)}`);
-                }
-            }
-        }
-        ;
-        // If a numeric or value is required
+        // If a plural or value is required
         if (options) {
             const { n, values, ranges, zero, one, two, few, many, other, singular, dual, plural } = options;
             if (typeof n === 'number') {
                 const innerProps = { n, ranges, zero, one, two, few, many, other, singular, dual, plural };
                 if (values) {
-                    // Numeric + Value
-                    return (_jsx(ClientValue, { values: values, children: _jsx(ClientNumeric, Object.assign({ id: id }, innerProps, { children: translation })) }));
+                    // Plural + Value
+                    return (_jsx(ClientValue, { values: values, children: _jsx(ClientPlural, Object.assign({ id: id }, innerProps, { children: translation })) }));
                 }
                 else {
-                    // Numeric only
-                    return (_jsx(ClientNumeric, Object.assign({ id: id }, innerProps, { children: translation })));
+                    // Plural only
+                    return (_jsx(ClientPlural, Object.assign({ id: id }, innerProps, { children: translation })));
                 }
             }
             else if (values) {

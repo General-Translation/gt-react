@@ -11,14 +11,14 @@ var __rest = (this && this.__rest) || function (s, e) {
 };
 import { jsx as _jsx } from "react/jsx-runtime";
 import Value from "../server/value/InnerValue";
-import Numeric from "../server/numeric/InnerNumeric";
+import Plural from "../server/plural/InnerPlural";
 export default function createTFunction({ I18NConfig, T, intl }) {
     return (id, options) => {
         const entry = I18NConfig.getDictionaryEntry(id);
         // Turn into an async function if the target is a string
         if (typeof entry === 'string')
             return intl(entry, Object.assign({ id }, options));
-        // If a numeric or value is required
+        // If a plural or value is required
         if (options) {
             const locales = [I18NConfig.getLocale(), I18NConfig.getDefaultLocale()];
             const { n, values, ranges, zero, one, two, few, many, other, singular, dual, plural } = options, tOptions = __rest(options, ["n", "values", "ranges", "zero", "one", "two", "few", "many", "other", "singular", "dual", "plural"]);
@@ -37,12 +37,12 @@ export default function createTFunction({ I18NConfig, T, intl }) {
                     plural: plural || (entry === null || entry === void 0 ? void 0 : entry.plural)
                 };
                 if (values) {
-                    // Numeric + Value
-                    return (_jsx(T, Object.assign({ id: id }, tOptions, { children: _jsx(Value, { values: values, locales: locales, children: _jsx(Numeric, Object.assign({ locales: locales }, innerProps, { children: entry })) }) })));
+                    // Plural + Value
+                    return (_jsx(T, Object.assign({ id: id }, tOptions, { children: _jsx(Value, { values: values, locales: locales, children: _jsx(Plural, Object.assign({ locales: locales }, innerProps, { children: entry })) }) })));
                 }
                 else {
-                    // Numeric only
-                    return (_jsx(T, Object.assign({ id: id }, tOptions, { children: _jsx(Numeric, Object.assign({ locales: locales }, innerProps, { children: entry })) })));
+                    // Plural only
+                    return (_jsx(T, Object.assign({ id: id }, tOptions, { children: _jsx(Plural, Object.assign({ locales: locales }, innerProps, { children: entry })) })));
                 }
             }
             else if (values) {

@@ -1,4 +1,4 @@
-export default function createNumericComponent({ T, getLocale, defaultLocale }: {
+export default function createPluralComponent({ T, getLocale, defaultLocale }: {
     T: any;
     getLocale: () => string;
     defaultLocale: string;
@@ -9,4 +9,4 @@ export default function createNumericComponent({ T, getLocale, defaultLocale }: 
     }): import("react/jsx-runtime").JSX.Element;
     gtTransformation: string;
 };
-//# sourceMappingURL=createNumericComponent.d.ts.map
+//# sourceMappingURL=createPluralComponent.d.ts.map

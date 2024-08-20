@@ -1,5 +1,5 @@
 import React, { ReactElement, ReactNode } from 'react'
-import getNumericBranch from '../primitives/getNumericBranch';
+import getPluralBranch from '../primitives/getPluralBranch';
 import getValueBranch from '../primitives/getValueBranch';
 import isValidReactNode from '../primitives/isValidReactNode';
 import Var from './variables/Var/Var';
@@ -42,11 +42,11 @@ const renderElement = ({ sourceElement, targetElement, ...metadata }: { sourceEl
             const transformation = generaltranslation.transformation;
             
             // handle number variable branching
-            if (transformation === "numeric") {
+            if (transformation === "plural") {
 
                 const { 'data-generaltranslation': generaltranslation, n, ...branches } = props; // 'data-generaltranslation' necessary here to fully destructure relevant ...branches
-                const sourceBranch = getNumericBranch(n, [metadata.locale, metadata.defaultLocale], branches) || props.children;
-                const targetBranch = getNumericBranch(n, [metadata.locale, metadata.defaultLocale], targetBranches) || targetChildren;
+                const sourceBranch = getPluralBranch(n, [metadata.locale, metadata.defaultLocale], branches) || props.children;
+                const targetBranch = getPluralBranch(n, [metadata.locale, metadata.defaultLocale], targetBranches) || targetChildren;
             
                 const children = renderChildren({source: sourceBranch, target: targetBranch, variables: { ...metadata.variables, n: n }, ...metadata});
                 

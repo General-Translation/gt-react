@@ -84,13 +84,13 @@ type GeneralTranslation = Variables & {
     /**
      *  Type of <T> translation component which renders content around numbers.
      *
-     * `children?` - (any) - The default content to render if no numeric conditions are met.
+     * `children?` - (any) - The default content to render if no plural conditions are met.
      *
      * `n` - (number) - The number to evaluate against defined ranges or conditions.
      *
      * `ranges?` - ({ min: number, max: number, children: any }[]) - An array of range objects for determining which branch to render based on the number `n`.
     **/
-    Numeric: ComponentType<{
+    Plural: ComponentType<{
         children?: any;
         n: number;
         zero?: ReactNode;

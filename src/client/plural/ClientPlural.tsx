@@ -1,14 +1,14 @@
 'use client'
 
 import React, { ReactNode, useMemo } from 'react';
-import getNumericBranch, { Range } from '../../primitives/getNumericBranch';
+import getPluralBranch, { Range } from '../../primitives/getPluralBranch';
 import RenderClientVariable from '../value/RenderClientVariable';
 import useLocale from '../hooks/useLocale';
 import useDefaultLocale from '../hooks/useDefaultLocale';
 import { useGTContext } from '../ClientProvider';
 
 /**
- * Numeric component that processes a given number and renders the appropriate branch or children.
+ * Plural component that processes a given number and renders the appropriate branch or children.
  * 
  * @param {ReactNode} children - Default children.
  * @param {number} n - Number to branch based on.
@@ -16,7 +16,7 @@ import { useGTContext } from '../ClientProvider';
  * @param {Record<string, any>} ...branches - Named branches, e.g. "singular", "plural" and their associated branches.
  * @returns {ReactNode}
  */
-export default function ClientNumeric({ children, id, n, ranges, ...branches }: {
+export default function ClientPlural({ children, id, n, ranges, ...branches }: {
     children?: any;
     id?: string;
     n: number;
@@ -36,7 +36,7 @@ export default function ClientNumeric({ children, id, n, ranges, ...branches }: 
     try {
         ({ translate } = useGTContext());
     } catch {
-        throw new Error(`<ClientNumeric>, with children:\n\n${children}\n\nid: ${id}\n\nNo context provided. Did you mean to import the server component instead?`);
+        throw new Error(`<ClientPlural>, with children:\n\n${children}\n\nid: ${id}\n\nNo context provided. Did you mean to import the server component instead?`);
     }
 
     const defaultTranslation = useMemo(() => { 
@@ -66,7 +66,7 @@ export default function ClientNumeric({ children, id, n, ranges, ...branches }: 
     const locales = [useLocale(), useDefaultLocale()]; // user's language
 
     const branch = useMemo(() => {
-        return ((typeof n === 'number' && completeBranches) ? getNumericBranch(n, locales, completeBranches) : null) || defaultTranslation;
+        return ((typeof n === 'number' && completeBranches) ? getPluralBranch(n, locales, completeBranches) : null) || defaultTranslation;
     }, [n, completeBranches, defaultTranslation, locales])
 
     const renderedChildren = useMemo(() => {

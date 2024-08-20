@@ -12,13 +12,13 @@ var __rest = (this && this.__rest) || function (s, e) {
 };
 import { jsx as _jsx } from "react/jsx-runtime";
 import { useMemo } from 'react';
-import getNumericBranch from '../../primitives/getNumericBranch';
+import getPluralBranch from '../../primitives/getPluralBranch';
 import RenderClientVariable from '../value/RenderClientVariable';
 import useLocale from '../hooks/useLocale';
 import useDefaultLocale from '../hooks/useDefaultLocale';
 import { useGTContext } from '../ClientProvider';
 /**
- * Numeric component that processes a given number and renders the appropriate branch or children.
+ * Plural component that processes a given number and renders the appropriate branch or children.
  *
  * @param {ReactNode} children - Default children.
  * @param {number} n - Number to branch based on.
@@ -26,14 +26,14 @@ import { useGTContext } from '../ClientProvider';
  * @param {Record<string, any>} ...branches - Named branches, e.g. "singular", "plural" and their associated branches.
  * @returns {ReactNode}
  */
-export default function ClientNumeric(_a) {
+export default function ClientPlural(_a) {
     var { children, id, n, ranges } = _a, branches = __rest(_a, ["children", "id", "n", "ranges"]);
     let translate;
     try {
         ({ translate } = useGTContext());
     }
     catch (_b) {
-        throw new Error(`<ClientNumeric>, with children:\n\n${children}\n\nid: ${id}\n\nNo context provided. Did you mean to import the server component instead?`);
+        throw new Error(`<ClientPlural>, with children:\n\n${children}\n\nid: ${id}\n\nNo context provided. Did you mean to import the server component instead?`);
     }
     const defaultTranslation = useMemo(() => {
         return translate(id) || children;
@@ -60,7 +60,7 @@ export default function ClientNumeric(_a) {
     }, [branches, ranges, id]);
     const locales = [useLocale(), useDefaultLocale()]; // user's language
     const branch = useMemo(() => {
-        return ((typeof n === 'number' && completeBranches) ? getNumericBranch(n, locales, completeBranches) : null) || defaultTranslation;
+        return ((typeof n === 'number' && completeBranches) ? getPluralBranch(n, locales, completeBranches) : null) || defaultTranslation;
     }, [n, completeBranches, defaultTranslation, locales]);
     const renderedChildren = useMemo(() => {
         return _jsx(RenderClientVariable, { variables: (typeof n === 'number') ? { n } : undefined, children: branch });
@@ -68,4 +68,4 @@ export default function ClientNumeric(_a) {
     return (_jsx("span", { children: renderedChildren }));
 }
 ;
-//# sourceMappingURL=ClientNumeric.js.map
+//# sourceMappingURL=ClientPlural.js.map

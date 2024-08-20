@@ -11,7 +11,7 @@ var __rest = (this && this.__rest) || function (s, e) {
 };
 import { jsx as _jsx } from "react/jsx-runtime";
 import React from 'react';
-import getNumericBranch from '../primitives/getNumericBranch';
+import getPluralBranch from '../primitives/getPluralBranch';
 import getValueBranch from '../primitives/getValueBranch';
 import isValidReactNode from '../primitives/isValidReactNode';
 import Var from './variables/Var/Var';
@@ -42,10 +42,10 @@ const renderElement = (_a) => {
         if ((generaltranslation === null || generaltranslation === void 0 ? void 0 : generaltranslation.transformation) && targetBranches) {
             const transformation = generaltranslation.transformation;
             // handle number variable branching
-            if (transformation === "numeric") {
+            if (transformation === "plural") {
                 const { 'data-generaltranslation': generaltranslation, n } = props, branches = __rest(props, ['data-generaltranslation', "n"]); // 'data-generaltranslation' necessary here to fully destructure relevant ...branches
-                const sourceBranch = getNumericBranch(n, [metadata.locale, metadata.defaultLocale], branches) || props.children;
-                const targetBranch = getNumericBranch(n, [metadata.locale, metadata.defaultLocale], targetBranches) || targetChildren;
+                const sourceBranch = getPluralBranch(n, [metadata.locale, metadata.defaultLocale], branches) || props.children;
+                const targetBranch = getPluralBranch(n, [metadata.locale, metadata.defaultLocale], targetBranches) || targetChildren;
                 const children = renderChildren(Object.assign({ source: sourceBranch, target: targetBranch, variables: Object.assign(Object.assign({}, metadata.variables), { n: n }) }, metadata));
                 return React.createElement('span', Object.assign(Object.assign({}, metadata.renderAttributes), { children: children }));
             }

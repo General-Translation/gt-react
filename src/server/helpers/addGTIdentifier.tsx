@@ -8,7 +8,7 @@ type GTProp = {
     [key: string]: any;
 }
 
-const acceptedNumericProps: Record<string, boolean> = {
+const acceptedPluralProps: Record<string, boolean> = {
     "singular": true, "dual": true, "plural": true,
     "zero": true, "one": true, "two": true, "few": true, "many": true, "other": true
 }
@@ -19,7 +19,7 @@ const acceptedNumericProps: Record<string, boolean> = {
  */
 const validateProps = (props: Record<string, any>): void => {
     if (props && props['data-generaltranslation'] && typeof props['data-generaltranslation'].id === 'number') {
-        throw new Error(`Nesting of <T>, <Numeric>, <Value> components is not permitted. This prevents components from being translated twice!
+        throw new Error(`Nesting of <T>, <Plural>, <Value> components is not permitted. This prevents components from being translated twice!
             Found nested component with id: ${props?.id}, content: ${props?.children}`);
     }
 }
@@ -80,7 +80,7 @@ export default function addGTIdentifier(children: Children) {
         // If branches are needed for a number or value variable
         const transformation = generaltranslation.transformation;
 
-        if (transformation === "numeric" || transformation === "value") {
+        if (transformation === "plural") {
 
             // Updates indices to keep a consistent identification system across branches
             let frozenIndex = indexObject.index;
@@ -103,14 +103,14 @@ export default function addGTIdentifier(children: Children) {
             let branches: any = {};
             
             // add identifier to number branches (e.g. singular, plural, ranges)
-            if (transformation === "numeric") {
+            if (transformation === "plural") {
                 const { n, children, locales, ...options } = props;
                 let { ranges, ...others } = options;
                 if (ranges) branches.ranges = options.ranges.map((range: any) => {
                     updateIndices();
                     return { min: range.min, max: range.max, children: addIdentifierRecursively(range.children) }
                 }); 
-                for (const option of Object.keys(others).filter(item => acceptedNumericProps[item] ? true : false)) {
+                for (const option of Object.keys(others).filter(item => acceptedPluralProps[item] ? true : false)) {
                     updateIndices();
                     branches[option] = addIdentifierRecursively(others[option]);
                 }
@@ -127,7 +127,7 @@ export default function addGTIdentifier(children: Children) {
         }
 
         // if no transformation is required
-        if (transformation !== "numeric" && transformation !== "value") {
+        if (transformation !== "plural") {
             if (props.children) {
                 newProps.children = addIdentifierRecursively(props.children);
             }

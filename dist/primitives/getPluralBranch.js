@@ -71,7 +71,7 @@ function getBranchFromRanges(n, ranges) {
  * @param {any} branches - The object containing possible branches and their corresponding ranges and options.
  * @returns {any} The determined branch.
  */
-export default function getNumericBranch(n, locales, branches) {
+export default function getPluralBranch(n, locales, branches) {
     let branchName = '';
     let branch = null;
     if (typeof n === 'number' && (branches === null || branches === void 0 ? void 0 : branches.ranges))
@@ -82,4 +82,4 @@ export default function getNumericBranch(n, locales, branches) {
         branch = branches[branchName];
     return branch;
 }
-//# sourceMappingURL=getNumericBranch.js.map
+//# sourceMappingURL=getPluralBranch.js.map

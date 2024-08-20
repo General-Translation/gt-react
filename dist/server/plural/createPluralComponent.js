@@ -10,15 +10,15 @@ var __rest = (this && this.__rest) || function (s, e) {
     return t;
 };
 import { jsx as _jsx } from "react/jsx-runtime";
-import Numeric from "./InnerNumeric";
-export default function createNumericComponent({ T, getLocale, defaultLocale }) {
-    const NumericT = (_a) => {
+import Plural from "./InnerPlural";
+export default function createPluralComponent({ T, getLocale, defaultLocale }) {
+    const PluralT = (_a) => {
         var { children, n, ranges, zero, one, two, few, many, other, singular, dual, plural } = _a, props = __rest(_a, ["children", "n", "ranges", "zero", "one", "two", "few", "many", "other", "singular", "dual", "plural"]);
         const innerProps = { n, ranges, zero, one, two, few, many, other, singular, dual, plural };
         const locales = [getLocale(), defaultLocale];
-        return _jsx(T, Object.assign({}, props, { children: _jsx(Numeric, Object.assign({ locales: locales }, innerProps, { children: children })) }));
+        return _jsx(T, Object.assign({}, props, { children: _jsx(Plural, Object.assign({ locales: locales }, innerProps, { children: children })) }));
     };
-    NumericT.gtTransformation = "translate-numeric";
-    return NumericT;
+    PluralT.gtTransformation = "translate-plural";
+    return PluralT;
 }
-//# sourceMappingURL=createNumericComponent.js.map
+//# sourceMappingURL=createPluralComponent.js.map

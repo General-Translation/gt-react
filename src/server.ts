@@ -9,7 +9,7 @@ import CreateI18NConfigProps from './types/CreateGTProps';
 import createTFunction from './dictionary/createTFunction';
 import createDictFunction from './dictionary/createDictFunction';
 import createValueComponent from './server/value/createValueComponent';
-import createNumericComponent from './server/numeric/createNumericComponent';
+import createPluralComponent from './server/plural/createPluralComponent';
 import GeneralTranslation from './types/GeneralTranslationInterface';
 import createVarComponent from './server/variables/Var/createVarComponent';
 import createNumComponent from './server/variables/Num/createNumComponent';
@@ -120,7 +120,7 @@ export function createGT({
     // ----- Variables ----- //
 
     const Value = createValueComponent({ T, getLocale, defaultLocale });
-    const Numeric = createNumericComponent({ T, getLocale, defaultLocale });
+    const Plural = createPluralComponent({ T, getLocale, defaultLocale });
     const Var = createVarComponent();
     const Num = createNumComponent(getLocale, defaultLocale);
     const DateTime = createDateTimeComponent(getLocale, defaultLocale);
@@ -134,7 +134,7 @@ export function createGT({
         T, intl,
         GTProvider,
         t, dict,
-        Value, Numeric,
+        Value, Plural,
         Var, Num, DateTime, Currency,
         getLocale, getDefaultLocale
     }
