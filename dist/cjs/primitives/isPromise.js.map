@@ -1,0 +1,1 @@
+{"version":3,"file":"isPromise.js","sourceRoot":"","sources":["../../../src/primitives/isPromise.ts"],"names":[],"mappings":";;AAKA,4BAEC;AAPD;;;;GAIG;AACH,SAAwB,SAAS,CAAC,KAAU;IACxC,OAAO,OAAO,CAAC,KAAK,IAAI,OAAO,KAAK,CAAC,IAAI,KAAK,UAAU,IAAI,OAAO,KAAK,CAAC,KAAK,KAAK,UAAU,CAAC,CAAC;AACnG,CAAC"}

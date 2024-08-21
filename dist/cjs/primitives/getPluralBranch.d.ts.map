@@ -1,0 +1,1 @@
+{"version":3,"file":"getPluralBranch.d.ts","sourceRoot":"","sources":["../../../src/primitives/getPluralBranch.ts"],"names":[],"mappings":"AAsCA,MAAM,MAAM,KAAK,GAAG;IAChB,GAAG,EAAE,MAAM,CAAC;IACZ,GAAG,EAAE,MAAM,CAAC;IACZ,QAAQ,EAAE,GAAG,CAAC;CACjB,CAAA;AAgBD;;;;;;GAMG;AACH,MAAM,CAAC,OAAO,UAAU,eAAe,CAAC,CAAC,EAAE,MAAM,EAAE,OAAO,EAAE,MAAM,EAAE,EAAE,QAAQ,EAAE,GAAG,OAOlF"}
