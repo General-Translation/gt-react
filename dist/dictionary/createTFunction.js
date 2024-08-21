@@ -12,9 +12,21 @@ var __rest = (this && this.__rest) || function (s, e) {
 import { jsx as _jsx } from "react/jsx-runtime";
 import Value from "../server/value/InnerValue";
 import Plural from "../server/plural/InnerPlural";
+import hasTransformation from "../primitives/hasTransformation";
+import isPromise from "../primitives/isPromise";
 export default function createTFunction({ I18NConfig, T, intl }) {
     return (id, options) => {
-        const entry = I18NConfig.getDictionaryEntry(id);
+        let entry = I18NConfig.getDictionaryEntry(id);
+        if (Array.isArray(entry)) {
+            if (typeof entry[1] === 'object') {
+                options = Object.assign(Object.assign({}, entry[1]), options);
+            }
+            entry = entry[0];
+        }
+        if (hasTransformation(entry) || isPromise(entry)) {
+            return entry;
+        }
+        ;
         // Turn into an async function if the target is a string
         if (typeof entry === 'string')
             return intl(entry, Object.assign({ id }, options));

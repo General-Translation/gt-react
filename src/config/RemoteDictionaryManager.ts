@@ -1,12 +1,4 @@
-/**
- * Generates a dictionary reference string from locale and dictionary name.
- * @param {string} locale - The locale of the dictionary.
- * @param {string} dictionaryName - The name of the dictionary.
- * @returns {string} The encoded dictionary reference.
- */
-const getDictionaryReference = (locale: string, dictionaryName: string): string => {
-    return `${encodeURIComponent(dictionaryName)}/${encodeURIComponent(locale)}`;
-}
+import getDictionaryReference from "../primitives/getDictionaryReference";
 
 /**
  * Configuration type for RemoteDictionaryManager.

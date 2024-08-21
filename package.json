@@ -102,6 +102,7 @@
   ],
   "dependencies": {
     "generaltranslation": "^2.0.43",
+    "server-only": "^0.0.1",
     "xxhash-wasm": "^1.0.2"
   }
 }

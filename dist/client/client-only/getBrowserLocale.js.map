@@ -1,1 +1,0 @@
-{"version":3,"file":"getBrowserLocale.js","sourceRoot":"","sources":["../../../src/client/client-only/getBrowserLocale.ts"],"names":[],"mappings":"AAAA;;;GAGG;AACH,MAAM,CAAC,OAAO,UAAU,gBAAgB,CAAC,aAAqB;IAC1D,2DAA2D;IAC3D,OAAO,SAAS,CAAC,QAAQ,KAAK,SAAiB,aAAjB,SAAS,uBAAT,SAAS,CAAU,YAAY,CAAA,IAAI,aAAa,CAAC;AACnF,CAAC"}

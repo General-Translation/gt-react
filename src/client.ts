@@ -7,9 +7,10 @@ import ClientVar from "./client/variables/ClientVar";
 import ClientNum from "./client/variables/ClientNum";
 import ClientDateTime from "./client/variables/ClientDateTime";
 import ClientCurrency from "./client/variables/ClientCurrency";
+import GTClientProvider from "./client/client-only/GTClientProvider";
 
 export {
-    useGT, 
+    useGT, GTClientProvider,
     useLocale, useDefaultLocale,
     ClientValue,
     ClientPlural,

@@ -7,15 +7,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-/**
- * Generates a dictionary reference string from locale and dictionary name.
- * @param {string} locale - The locale of the dictionary.
- * @param {string} dictionaryName - The name of the dictionary.
- * @returns {string} The encoded dictionary reference.
- */
-const getDictionaryReference = (locale, dictionaryName) => {
-    return `${encodeURIComponent(dictionaryName)}/${encodeURIComponent(locale)}`;
-};
+import getDictionaryReference from "../primitives/getDictionaryReference";
 /**
  * Manages remote dictionaries for translation purposes.
  */

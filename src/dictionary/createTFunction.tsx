@@ -2,6 +2,8 @@ import React, { isValidElement } from "react";
 import I18NConfiguration from "../config/I18NConfiguration";
 import Value from "../server/value/InnerValue";
 import Plural from "../server/plural/InnerPlural";
+import hasTransformation from "../primitives/hasTransformation";
+import isPromise from "../primitives/isPromise";
 
 export type tOptions = {
     n?: number;
@@ -12,7 +14,17 @@ export type tOptions = {
 export default function createTFunction({ I18NConfig, T, intl }: { I18NConfig: I18NConfiguration, T: any, intl: any }) {
     return (id: string, options?: tOptions): JSX.Element | Promise<string> => {
         
-        const entry = I18NConfig.getDictionaryEntry(id);
+        let entry = I18NConfig.getDictionaryEntry(id);
+        if (Array.isArray(entry)) {
+            if (typeof entry[1] === 'object') {
+                options = { ...entry[1], ...options }
+            }
+            entry = entry[0];
+        }
+
+        if (hasTransformation(entry) || isPromise(entry)) {
+            return entry;
+        };
 
         // Turn into an async function if the target is a string
         if (typeof entry === 'string') return intl(entry, { id, ...options });

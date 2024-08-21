@@ -1,4 +1,5 @@
 import determineLocale from "../config/determineLocale";
+import { localeCookieName } from "../middleware/cookieSettings";
 import { getNextCookies, getNextHeaders } from "./imports/imports";
 /**
  * Retrieves the 'accept-language' header from the headers list.
@@ -15,7 +16,7 @@ export function getNextLocale(defaultLocale = '', approvedLocales) {
         const cookies = getNextCookies();
         if (cookies) {
             const cookieStore = cookies();
-            const localeCookie = cookieStore.get('generaltranslation-locale');
+            const localeCookie = cookieStore.get(localeCookieName);
             if (localeCookie === null || localeCookie === void 0 ? void 0 : localeCookie.value)
                 return localeCookie.value;
         }

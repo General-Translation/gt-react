@@ -21,37 +21,10 @@ var __rest = (this && this.__rest) || function (s, e) {
 import { jsx as _jsx } from "react/jsx-runtime";
 // On the server
 import 'server-only';
-import React from 'react';
 import ClientProvider from '../../client/ClientProvider';
-/**
- * Checks if the provided value is a promise.
- * @param {*} value - The value to check.
- * @returns {boolean} - Returns true if the value is a promise, otherwise false.
- */
-function isPromise(value) {
-    return Boolean(value && typeof value.then === 'function' && typeof value.catch === 'function');
-}
-/**
- * Flattens a nested object by concatenating nested keys.
- * @param {Record<string, any>} obj - The object to flatten.
- * @param {string} [prefix=''] - The prefix for nested keys.
- * @returns {Record<string, React.ReactNode>} The flattened object.
- */
-function flattenObject(obj, prefix = '') {
-    const flattened = {};
-    for (const key in obj) {
-        if (obj.hasOwnProperty(key)) {
-            const newKey = prefix ? `${prefix}.${key}` : key;
-            if (typeof obj[key] === 'object' && obj[key] !== null && !Array.isArray(obj[key]) && !(React.isValidElement(obj[key]))) {
-                Object.assign(flattened, flattenObject(obj[key], newKey));
-            }
-            else {
-                flattened[newKey] = obj[key];
-            }
-        }
-    }
-    return flattened;
-}
+import flattenDictionary from '../../primitives/flattenDictionary';
+import hasTransformation from '../../primitives/hasTransformation';
+import isPromise from '../../primitives/isPromise';
 /*
 e.g.
 dictionary = {
@@ -65,16 +38,26 @@ export default function GTProvider(_a) {
         var { children, T, intl, I18NConfig, locale, defaultLocale, id = '', dictionary = id ? {} : I18NConfig.getDictionary() } = _a, props = __rest(_a, ["children", "T", "intl", "I18NConfig", "locale", "defaultLocale", "id", "dictionary"]);
         let providerID = id;
         if (providerID) {
-            dictionary = Object.assign(Object.assign({}, I18NConfig.getDictionaryEntry(providerID)), dictionary);
+            let entry = I18NConfig.getDictionaryEntry(providerID);
+            if (Array.isArray(entry)) {
+                if (typeof entry[1] === 'object') {
+                    props = Object.assign(Object.assign({}, entry[1]), props);
+                }
+                entry = entry[0];
+            }
+            dictionary = Object.assign(Object.assign({}, entry), dictionary);
         }
-        dictionary = flattenObject(dictionary);
+        dictionary = flattenDictionary(dictionary);
         const translationRequired = (children && I18NConfig.translationRequired(locale)) ? true : false;
         if (!translationRequired) {
             return (_jsx(ClientProvider, { locale: locale, defaultLocale: defaultLocale, dictionary: dictionary, children: children }));
         }
         let translatedDictionary = {};
         yield Promise.all(Object.keys(dictionary).map((id) => __awaiter(this, void 0, void 0, function* () {
-            if (isPromise(dictionary[id])) {
+            if (hasTransformation(dictionary[id])) {
+                return dictionary[id];
+            }
+            else if (isPromise(dictionary[id])) {
                 translatedDictionary[id] = yield dictionary[id];
             }
             else if (dictionary[id] && typeof dictionary[id] === 'string') {

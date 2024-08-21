@@ -7,5 +7,6 @@ import ClientVar from "./client/variables/ClientVar";
 import ClientNum from "./client/variables/ClientNum";
 import ClientDateTime from "./client/variables/ClientDateTime";
 import ClientCurrency from "./client/variables/ClientCurrency";
-export { useGT, useLocale, useDefaultLocale, ClientValue, ClientPlural, ClientVar as Var, ClientNum as Num, ClientDateTime as DateTime, ClientCurrency as Currency };
+import GTClientProvider from "./client/client-only/GTClientProvider";
+export { useGT, GTClientProvider, useLocale, useDefaultLocale, ClientValue, ClientPlural, ClientVar as Var, ClientNum as Num, ClientDateTime as DateTime, ClientCurrency as Currency };
 //# sourceMappingURL=client.js.map

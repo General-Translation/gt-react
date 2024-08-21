@@ -2,64 +2,104 @@
 
 'use client'
 
-const getDictionaryReference = (locale: string, dictionaryName: string): string => {
-    return `${encodeURIComponent(dictionaryName)}/${encodeURIComponent(locale)}`;
-}
-
 import { useEffect, useCallback, useState } from "react";
 import { GTContext } from "../ClientProvider"
-import getBrowserLocale from "./getBrowserLocale"
 import { isSameLanguage } from "generaltranslation";
 import defaultGTProps from "../../types/defaultGTProps";
+import useBrowserLocale from "../hooks/useBrowserLocale";
+import renderDictionary from "./helpers/renderDictionary";
+import flattenDictionary from "../../primitives/flattenDictionary";
+import getDictionaryReference from "../../primitives/getDictionaryReference";
 
 export default function GTClientProvider({
     children, 
     projectID,
-    dictionary = defaultGTProps.dictionary, dictionaryName = defaultGTProps.dictionaryName,
+    dictionary = defaultGTProps.dictionary, 
+    dictionaryName = defaultGTProps.dictionaryName,
     approvedLocales, defaultLocale = approvedLocales?.[0] ?? defaultGTProps.defaultLocale, 
-    locale = getBrowserLocale(defaultLocale), 
+    locale = '', 
     remoteSource = defaultGTProps.remoteSource,
-    cacheURL = defaultGTProps.cacheURL
-}: any) {
+    cacheURL = defaultGTProps.cacheURL,
+    translations
+}: {
+    children?: any;
+    projectID?: string;
+    dictionary?: Record<string, any>;
+    dictionaryName?: string;
+    approvedLocales?: string[];
+    defaultLocale?: string;
+    locale?: string;
+    remoteSource?: boolean;
+    cacheURL?: string;
+    translations?: Record<string, () => Promise<Record<string, any>>>;
+}) {
 
-    const [translations, setTranslations] = useState(dictionary);
+    console.log(children)
+
+    const browserLocale = useBrowserLocale(defaultLocale);
+    locale = locale || browserLocale;
+
+    const [translatedDictionary, setTranslatedDictionary] = useState(flattenDictionary(dictionary));
 
     if (!projectID && remoteSource && cacheURL === defaultGTProps.cacheURL) {
         throw new Error("gt-react Error: General Translation cloud services require a project ID! Find yours at www.generaltranslation.com/dashboard.")
     }
 
-    const [retrieved, setRetrieved] = useState(isSameLanguage(locale, defaultLocale));
+    const [translationComplete, setTranslationComplete] = useState(isSameLanguage(locale, defaultLocale));
+    useEffect(() => {
+        setTranslationComplete(isSameLanguage(locale, defaultLocale));
+    }, [locale, defaultLocale])
 
     useEffect(() => {
-        if (!retrieved) {
-            const fetchCachedTranslations = async () => {
-                try {
-                    const response = await fetch(`${cacheURL}/${projectID}/${getDictionaryReference(locale, dictionaryName)}`);
-                    const result = await response.json();
-                    if (Object.keys(result).length) {
-                        // reconcile result with existing dictionary
-                        const renderedTranslations = result;
-                        setTranslations(renderedTranslations)
+        if (!translationComplete && locale && !isSameLanguage(locale, defaultLocale)) {
+            async function completeDictionary() {
+                let completedDictionary = dictionary;
+                if (translations && translations[locale]) {
+                    try {
+                        const loadDictionary = translations[locale];
+                        const loadedDictionary = await loadDictionary();
+                        if (Object.keys(loadedDictionary).length) {
+                            completedDictionary = { ...completedDictionary, ...loadedDictionary }
+                        } else {
+                            throw new Error(``)
+                        }
+                    } catch (error) {
+                        console.error(`Error loading dictionary for locale ${locale}:`, error);
                     }
-                } catch (error) {
-                    console.error('Remote dictionary error:', error);
                 }
-                setRetrieved(true);
-            };
-            fetchCachedTranslations();
+                if (remoteSource) {
+                    try {
+                        const response = await fetch(`${cacheURL}/${projectID}/${getDictionaryReference(locale, dictionaryName)}`);
+                        const result = await response.json();
+                        if (Object.keys(result).length) {
+                            const renderedDictionary = renderDictionary({
+                                result, dictionary, locales: [locale, defaultLocale]
+                            });
+                            completedDictionary = { ...completedDictionary, ...renderedDictionary }
+                        } else {
+                            throw new Error(`No dictionary found in remote cache.`)
+                        }
+                    } catch (error) {
+                        console.error(error);
+                    }
+                }
+                setTranslatedDictionary(flattenDictionary(completedDictionary))
+                setTranslationComplete(true);
+            }
+            completeDictionary();
         }
-    }, [cacheURL, remoteSource, locale])
+    }, [cacheURL, remoteSource, locale, translations])
 
     const translate = useCallback((id: string) => {
-        return translations[id];
-    }, [translations]);
+        return translatedDictionary[id];
+    }, [translatedDictionary]);
 
     return (
         <GTContext.Provider value={{
             translate, locale, defaultLocale
         }}>
             {
-                retrieved
+                translationComplete
                 ? children : undefined
             }
         </GTContext.Provider>

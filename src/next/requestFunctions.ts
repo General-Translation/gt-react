@@ -1,4 +1,5 @@
 import determineLocale from "../config/determineLocale";
+import { localeCookieName } from "../middleware/cookieSettings";
 import { getNextCookies, getNextHeaders } from "./imports/imports";
 
 /**
@@ -15,7 +16,7 @@ export function getNextLocale(defaultLocale: string = '', approvedLocales?: stri
         const cookies = getNextCookies();
         if (cookies) {
             const cookieStore = cookies();
-            const localeCookie = cookieStore.get('generaltranslation-locale');
+            const localeCookie = cookieStore.get(localeCookieName);
             if (localeCookie?.value) return localeCookie.value;
         }
     } catch (error) {

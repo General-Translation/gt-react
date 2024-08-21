@@ -1,5 +1,6 @@
 import { isValidLanguageCode, isSameLanguage } from "generaltranslation";
 import { getNextHeaders, getNextResponse, getNextRequestCookies, getNextResponseCookies } from "../next/imports/imports";
+import { localeCookieName } from "./cookieSettings";
 /**
  * Extracts the locale from the given pathname.
  *
@@ -81,7 +82,7 @@ export default function createNextMiddleware({ defaultLocale = 'en', approvedLoc
                 }
             }
             if (pathnameHasLocale) {
-                res.cookies.set('generaltranslation-locale', userLocale);
+                res.cookies.set(localeCookieName, userLocale);
                 applyNewCookies(req, res);
                 return res;
             }
@@ -130,7 +131,7 @@ export default function createNextMiddleware({ defaultLocale = 'en', approvedLoc
                 userLocale = acceptedLocales[0];
             }
         }
-        res.cookies.set('generaltranslation-locale', userLocale);
+        res.cookies.set(localeCookieName, userLocale);
         if (localeRouting) {
             const { pathname } = req.nextUrl;
             // Redirect if there is no locale
