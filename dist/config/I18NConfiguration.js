@@ -264,7 +264,7 @@ export default class I18NConfiguration {
         return __awaiter(this, void 0, void 0, function* () {
             this._activeRequests++;
             try {
-                const bundlePromise = this.gt.bundleRequests(batch);
+                const bundlePromise = this.gt.bundleTranslation(batch);
                 batch.forEach((item) => {
                     if (this._remoteDictionaryManager && item.cache)
                         this._remoteDictionaryManager.setTranslationRequested(item.data.targetLanguage, item.data.metadata.dictionaryName);
