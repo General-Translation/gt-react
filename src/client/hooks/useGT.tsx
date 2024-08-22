@@ -36,33 +36,21 @@ export default function useGT(id?: string): Function {
 
         const translation = translate(`${prefix}${id}`);
 
+        console.log(translation)
+
         // If a plural or value is required
         if (options) {
             const { 
-                n, values, 
-                ranges, zero, one, two, few, many, other, singular, dual, plural 
+                n, values
             } = options;
             if (typeof n === 'number') {
-                const innerProps = { n, ranges, zero, one, two, few, many, other, singular, dual, plural };
-                if (values) {
-                    // Plural + Value
-                    return (
-                        <ClientValue values={values}>
-                            <ClientPlural id={id} {...innerProps}>
-                                {translation}
-                            </ClientPlural>
-                        </ClientValue>
-                    );
-                } else {
-                    // Plural only
-                    return (
-                        <ClientPlural id={id} {...innerProps}>
-                            {translation}
-                        </ClientPlural>
-                    )
-                }
+                const innerProps = { n, values };
+                return (
+                    <ClientPlural id={id} {...innerProps}>
+                        {translation}
+                    </ClientPlural>
+                )
             } else if (values) {
-                // Value only
                 return (
                     <ClientValue id={id} values={values}>
                         {translation}

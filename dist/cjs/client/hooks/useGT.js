@@ -34,22 +34,15 @@ function useGT(id) {
     // Return a translation function if available, otherwise return a no-op function
     return (id, options) => {
         const translation = translate(`${prefix}${id}`);
+        console.log(translation);
         // If a plural or value is required
         if (options) {
-            const { n, values, ranges, zero, one, two, few, many, other, singular, dual, plural } = options;
+            const { n, values } = options;
             if (typeof n === 'number') {
-                const innerProps = { n, ranges, zero, one, two, few, many, other, singular, dual, plural };
-                if (values) {
-                    // Plural + Value
-                    return ((0, jsx_runtime_1.jsx)(ClientValue_1.default, { values: values, children: (0, jsx_runtime_1.jsx)(ClientPlural_1.default, Object.assign({ id: id }, innerProps, { children: translation })) }));
-                }
-                else {
-                    // Plural only
-                    return ((0, jsx_runtime_1.jsx)(ClientPlural_1.default, Object.assign({ id: id }, innerProps, { children: translation })));
-                }
+                const innerProps = { n, values };
+                return ((0, jsx_runtime_1.jsx)(ClientPlural_1.default, Object.assign({ id: id }, innerProps, { children: translation })));
             }
             else if (values) {
-                // Value only
                 return ((0, jsx_runtime_1.jsx)(ClientValue_1.default, { id: id, values: values, children: translation }));
             }
         }
