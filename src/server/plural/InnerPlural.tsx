@@ -1,10 +1,13 @@
 import React, { ReactNode } from 'react';
 import renderPlural from '../value/renderVariable';
 import getPluralBranch, { Range } from '../../primitives/getPluralBranch';
+import createValues from '../../primitives/createValues';
 
 const Plural = ({ 
     locales, children, n, ranges,  
-    zero, one, two, few, many, other, singular, plural, dual, ...props
+    zero, one, two, few, many, other, singular, plural, dual, 
+    values,
+    ...props
 }: {
     locales: string[];
     children?: any;
@@ -19,6 +22,7 @@ const Plural = ({
     singular?: any;
     dual?: any;
     plural?: any;
+    values?: Record<string, any>;
     'data-generaltranslation'?: any;
 }): ReactNode => {
 
@@ -35,7 +39,7 @@ const Plural = ({
 
     const branch = ((typeof n === 'number' && branches) ? getPluralBranch(n, locales, branches) : null) || children;
 
-    const renderedChildren = renderPlural(branch, locales, (typeof n === 'number') ? { n } : undefined);
+    const renderedChildren = renderPlural(branch, locales, createValues(n, values));
 
     return (
         <span data-n={n} data-unrendered-branches={branches} data-generaltranslation={generaltranslation}>

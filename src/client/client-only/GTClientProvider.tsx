@@ -10,6 +10,7 @@ import useBrowserLocale from "../hooks/useBrowserLocale";
 import renderDictionary from "./helpers/renderDictionary";
 import flattenDictionary from "../../primitives/flattenDictionary";
 import getDictionaryReference from "../../primitives/getDictionaryReference";
+import getEntryMetadata from "../../primitives/getEntryMetadata";
 
 export default function GTClientProvider({
     children, 
@@ -33,8 +34,6 @@ export default function GTClientProvider({
     cacheURL?: string;
     translations?: Record<string, () => Promise<Record<string, any>>>;
 }) {
-
-    console.log(children)
 
     const browserLocale = useBrowserLocale(defaultLocale);
     locale = locale || browserLocale;
@@ -91,7 +90,7 @@ export default function GTClientProvider({
     }, [cacheURL, remoteSource, locale, translations])
 
     const translate = useCallback((id: string) => {
-        return translatedDictionary[id];
+        return getEntryMetadata(translatedDictionary[id]).entry;
     }, [translatedDictionary]);
 
     return (

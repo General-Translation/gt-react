@@ -9,7 +9,7 @@ import { Range } from '../../primitives/getPluralBranch';
  * @param {Record<string, any>} ...branches - Named branches, e.g. "singular", "plural" and their associated branches.
  * @returns {ReactNode}
  */
-export default function ClientPlural({ children, id, n, ranges, ...branches }: {
+export default function ClientPlural({ children, id, n, values, ranges, ...branches }: {
     children?: any;
     id?: string;
     n: number;
@@ -23,5 +23,6 @@ export default function ClientPlural({ children, id, n, ranges, ...branches }: {
     singular?: any;
     dual?: any;
     plural?: any;
+    values?: Record<string, any>;
 }): ReactNode;
 //# sourceMappingURL=ClientPlural.d.ts.map

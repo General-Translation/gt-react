@@ -13,20 +13,30 @@ import { jsx as _jsx } from "react/jsx-runtime";
 import Value from "../server/value/InnerValue";
 import Plural from "../server/plural/InnerPlural";
 import hasTransformation from "../primitives/hasTransformation";
-import isPromise from "../primitives/isPromise";
+import getEntryMetadata from "../primitives/getEntryMetadata";
 export default function createTFunction({ I18NConfig, T, intl }) {
     return (id, options) => {
-        let entry = I18NConfig.getDictionaryEntry(id);
-        if (Array.isArray(entry)) {
-            if (typeof entry[1] === 'object') {
-                options = Object.assign(Object.assign({}, entry[1]), options);
+        const { entry, metadata } = getEntryMetadata(I18NConfig.getDictionaryEntry(id));
+        options = Object.assign(Object.assign({}, options), metadata);
+        // Checks to see if options are valid
+        if (options.plural && !options.n) {
+            throw new Error(`Entry should be translated as <Plural> and requires a "n" option.`);
+        }
+        if (options.value && !options.values) {
+            throw new Error(`Entry should be translated as <Value> and requires a "values" option`);
+        }
+        // Checks to see if the dictionary entries are valid
+        if (hasTransformation(entry) && entry.type.gtTransformation.startsWith("translate")) {
+            if (entry.type.gtTransformation.includes("plural")) {
+                throw new Error(`Don't use <Plural> components in dictionaries. Instead supply an n option when you use t(), like t('my_id', { n: 3 }).`);
             }
-            entry = entry[0];
+            else if (entry.type.gtTransformation.includes("value")) {
+                throw new Error(`Don't use <Value> components in dictionaries. Instead supply a values option when you use t(), like t('my_id', { values: { name: "John" } }).`);
+            }
+            else {
+                throw new Error(`Don't use <T> components in dictionaries. Translations are automatic!`);
+            }
         }
-        if (hasTransformation(entry) || isPromise(entry)) {
-            return entry;
-        }
-        ;
         // Turn into an async function if the target is a string
         if (typeof entry === 'string')
             return intl(entry, Object.assign({ id }, options));

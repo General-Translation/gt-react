@@ -13,8 +13,8 @@ import { jsx as _jsx } from "react/jsx-runtime";
 import Plural from "./InnerPlural";
 export default function createPluralComponent({ T, getLocale, defaultLocale }) {
     const PluralT = (_a) => {
-        var { children, n, ranges, zero, one, two, few, many, other, singular, dual, plural } = _a, props = __rest(_a, ["children", "n", "ranges", "zero", "one", "two", "few", "many", "other", "singular", "dual", "plural"]);
-        const innerProps = { n, ranges, zero, one, two, few, many, other, singular, dual, plural };
+        var { children, n, ranges, zero, one, two, few, many, other, singular, dual, plural, values } = _a, props = __rest(_a, ["children", "n", "ranges", "zero", "one", "two", "few", "many", "other", "singular", "dual", "plural", "values"]);
+        const innerProps = { n, ranges, zero, one, two, few, many, other, singular, dual, plural, values };
         const locales = [getLocale(), defaultLocale];
         return _jsx(T, Object.assign({}, props, { children: _jsx(Plural, Object.assign({ locales: locales }, innerProps, { children: children })) }));
     };

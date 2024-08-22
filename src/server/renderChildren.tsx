@@ -9,7 +9,7 @@ import Currency from './variables/Currency/Currency';
 import defaultVariableNames from '../primitives/defaultVariableNames';
 
 type TargetElement = Record<string, any>;
-type TargetChild = TargetElement | string | number | boolean | object;
+type TargetChild = TargetElement | string | number | boolean;
 type Target = TargetChild | TargetChild[];
 
 type SourceChild = ReactNode | Record<string, any>;

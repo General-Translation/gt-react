@@ -3,6 +3,7 @@ import { jsx as _jsx } from "react/jsx-runtime";
 import { useMemo } from 'react';
 import RenderClientVariable from './RenderClientVariable';
 import { useGTContext } from '../ClientProvider';
+import createValues from '../../primitives/createValues';
 /**
  * Client-side value variable component that processes the given values and branches,
  * and renders the appropriate content based on the branch logic.
@@ -28,7 +29,7 @@ export default function ClientValue({ children, id, values }) {
         return children;
     }
     const renderedChildren = useMemo(() => {
-        return _jsx(RenderClientVariable, { variables: values ? values : undefined, children: defaultTranslation });
+        return _jsx(RenderClientVariable, { variables: createValues(undefined, values), children: defaultTranslation });
     }, [defaultTranslation, values]);
     return (_jsx("span", { children: renderedChildren }));
 }

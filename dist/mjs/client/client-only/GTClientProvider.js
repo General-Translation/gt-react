@@ -18,10 +18,10 @@ import useBrowserLocale from "../hooks/useBrowserLocale";
 import renderDictionary from "./helpers/renderDictionary";
 import flattenDictionary from "../../primitives/flattenDictionary";
 import getDictionaryReference from "../../primitives/getDictionaryReference";
+import getEntryMetadata from "../../primitives/getEntryMetadata";
 export default function GTClientProvider(_a) {
     var _b;
     var { children, projectID, dictionary = defaultGTProps.dictionary, dictionaryName = defaultGTProps.dictionaryName, approvedLocales, defaultLocale = (_b = approvedLocales === null || approvedLocales === void 0 ? void 0 : approvedLocales[0]) !== null && _b !== void 0 ? _b : defaultGTProps.defaultLocale, locale = '', remoteSource = defaultGTProps.remoteSource, cacheURL = defaultGTProps.cacheURL, translations } = _a;
-    console.log(children);
     const browserLocale = useBrowserLocale(defaultLocale);
     locale = locale || browserLocale;
     const [translatedDictionary, setTranslatedDictionary] = useState(flattenDictionary(dictionary));
@@ -78,7 +78,7 @@ export default function GTClientProvider(_a) {
         }
     }, [cacheURL, remoteSource, locale, translations]);
     const translate = useCallback((id) => {
-        return translatedDictionary[id];
+        return getEntryMetadata(translatedDictionary[id]).entry;
     }, [translatedDictionary]);
     return (_jsx(GTContext.Provider, { value: {
             translate, locale, defaultLocale

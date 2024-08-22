@@ -4,6 +4,7 @@ import React, { ReactNode, useContext, useMemo } from 'react';
 import getValueBranch from '../../primitives/getValueBranch';
 import RenderClientVariable from './RenderClientVariable';
 import { useGTContext } from '../ClientProvider';
+import createValues from '../../primitives/createValues';
 
 /**
  * Client-side value variable component that processes the given values and branches,
@@ -37,7 +38,7 @@ export default function ClientValue({ children, id, values }: {
     }
 
     const renderedChildren = useMemo(() => {
-        return <RenderClientVariable variables={values ? values : undefined}>{defaultTranslation}</RenderClientVariable>
+        return <RenderClientVariable variables={createValues(undefined, values)}>{defaultTranslation}</RenderClientVariable>
     }, [defaultTranslation, values])
 
     return (

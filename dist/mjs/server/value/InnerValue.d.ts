@@ -1,9 +1,9 @@
 import { ReactNode } from 'react';
 declare const Value: {
     ({ children, values, locales, ...props }: {
-        locales: string[];
+        locales?: string[];
         children?: any;
-        values: Record<string, any>;
+        values?: Record<string, any>;
         "data-generaltranslation"?: any;
     }): ReactNode;
     gtTransformation: string;

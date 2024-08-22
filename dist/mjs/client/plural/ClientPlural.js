@@ -17,6 +17,7 @@ import RenderClientVariable from '../value/RenderClientVariable';
 import useLocale from '../hooks/useLocale';
 import useDefaultLocale from '../hooks/useDefaultLocale';
 import { useGTContext } from '../ClientProvider';
+import createValues from '../../primitives/createValues';
 /**
  * Plural component that processes a given number and renders the appropriate branch or children.
  *
@@ -27,7 +28,7 @@ import { useGTContext } from '../ClientProvider';
  * @returns {ReactNode}
  */
 export default function ClientPlural(_a) {
-    var { children, id, n, ranges } = _a, branches = __rest(_a, ["children", "id", "n", "ranges"]);
+    var { children, id, n, values, ranges } = _a, branches = __rest(_a, ["children", "id", "n", "values", "ranges"]);
     let translate;
     try {
         ({ translate } = useGTContext());
@@ -63,7 +64,7 @@ export default function ClientPlural(_a) {
         return ((typeof n === 'number' && completeBranches) ? getPluralBranch(n, locales, completeBranches) : null) || defaultTranslation;
     }, [n, completeBranches, defaultTranslation, locales]);
     const renderedChildren = useMemo(() => {
-        return _jsx(RenderClientVariable, { variables: (typeof n === 'number') ? { n } : undefined, children: branch });
+        return _jsx(RenderClientVariable, { variables: createValues(n, values), children: branch });
     }, [n, branch]);
     return (_jsx("span", { children: renderedChildren }));
 }

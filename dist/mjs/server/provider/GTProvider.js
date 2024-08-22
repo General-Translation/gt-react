@@ -21,10 +21,10 @@ var __rest = (this && this.__rest) || function (s, e) {
 import { jsx as _jsx } from "react/jsx-runtime";
 // On the server
 import 'server-only';
+import { isValidElement } from 'react';
 import ClientProvider from '../../client/ClientProvider';
 import flattenDictionary from '../../primitives/flattenDictionary';
-import hasTransformation from '../../primitives/hasTransformation';
-import isPromise from '../../primitives/isPromise';
+import getEntryMetadata from '../../primitives/getEntryMetadata';
 /*
 e.g.
 dictionary = {
@@ -35,37 +35,19 @@ dictionary = {
 */
 export default function GTProvider(_a) {
     return __awaiter(this, void 0, void 0, function* () {
-        var { children, T, intl, I18NConfig, locale, defaultLocale, id = '', dictionary = id ? {} : I18NConfig.getDictionary() } = _a, props = __rest(_a, ["children", "T", "intl", "I18NConfig", "locale", "defaultLocale", "id", "dictionary"]);
+        var { children, executeT, I18NConfig, locale, defaultLocale, id = '', dictionary = id ? {} : I18NConfig.getDictionary() } = _a, props = __rest(_a, ["children", "executeT", "I18NConfig", "locale", "defaultLocale", "id", "dictionary"]);
         let providerID = id;
         if (providerID) {
-            let entry = I18NConfig.getDictionaryEntry(providerID);
-            if (Array.isArray(entry)) {
-                if (typeof entry[1] === 'object') {
-                    props = Object.assign(Object.assign({}, entry[1]), props);
-                }
-                entry = entry[0];
+            const { entry } = getEntryMetadata(I18NConfig.getDictionaryEntry(providerID));
+            if (entry && !isValidElement(entry) && typeof entry === 'object') {
+                dictionary = Object.assign(Object.assign({}, entry), dictionary);
             }
-            dictionary = Object.assign(Object.assign({}, entry), dictionary);
         }
         dictionary = flattenDictionary(dictionary);
-        const translationRequired = (children && I18NConfig.translationRequired(locale)) ? true : false;
-        if (!translationRequired) {
-            return (_jsx(ClientProvider, { locale: locale, defaultLocale: defaultLocale, dictionary: dictionary, children: children }));
-        }
+        const providerT = (id, options) => executeT(dictionary, id, options);
         let translatedDictionary = {};
         yield Promise.all(Object.keys(dictionary).map((id) => __awaiter(this, void 0, void 0, function* () {
-            if (hasTransformation(dictionary[id])) {
-                return dictionary[id];
-            }
-            else if (isPromise(dictionary[id])) {
-                translatedDictionary[id] = yield dictionary[id];
-            }
-            else if (dictionary[id] && typeof dictionary[id] === 'string') {
-                translatedDictionary[id] = yield intl(dictionary[id], Object.assign(Object.assign({ targetLanguage: locale }, props), { id: `${providerID ? `${providerID}.` : ''}${id}` }));
-            }
-            else {
-                translatedDictionary[id] = _jsx(T, Object.assign({ id: `${providerID ? `${providerID}.` : ''}${id}` }, props, { children: dictionary[id] }));
-            }
+            translatedDictionary[id] = yield providerT(id, props);
         })));
         return (_jsx(ClientProvider, { locale: locale, defaultLocale: defaultLocale, dictionary: translatedDictionary, children: children }));
     });

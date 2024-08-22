@@ -15,7 +15,7 @@ import createTComponent from './server/createTComponent';
 import I18NConfiguration from './config/I18NConfiguration';
 import createIntlFunction from './intl/createIntlFunction';
 import createGTProviderComponent from './server/provider/createGTProviderComponent';
-import createTFunction from './dictionary/createTFunction';
+import createExecuteTFunction from './dictionary/createExecuteTFunction';
 import createDictFunction from './dictionary/createDictFunction';
 import createValueComponent from './server/value/createValueComponent';
 import createPluralComponent from './server/plural/createPluralComponent';
@@ -92,12 +92,13 @@ export function createGT(_a = {
     const T = createTComponent(Object.assign({ I18NConfig }, metadata));
     // ----- intl() ------ //
     const intl = createIntlFunction(Object.assign({ I18NConfig }, metadata));
-    // ----- <GTProvider> ------ //
-    const GTProvider = createGTProviderComponent(Object.assign({ I18NConfig, T, intl }, metadata));
     // ----- Dictionary ------ //
-    const t = createTFunction({ I18NConfig, T, intl });
+    const executeT = createExecuteTFunction({ I18NConfig, T, intl });
+    const t = (id, options) => executeT(I18NConfig.getDictionary(), id, options);
     const getGT = createGetGTFunction(t);
     const dict = createDictFunction(I18NConfig);
+    // ----- <GTProvider> ------ //
+    const GTProvider = createGTProviderComponent(Object.assign({ executeT, I18NConfig }, metadata));
     // ----- Variables ----- //
     const Value = createValueComponent({ T, getLocale, defaultLocale });
     const Plural = createPluralComponent({ T, getLocale, defaultLocale });

@@ -1,4 +1,4 @@
-import { tOptions } from "./createTFunction";
+import { tOptions } from "./createExecuteTFunction";
 
 export default function createGetGTFunction(t: (id: string, options?: tOptions) => Promise<string> | JSX.Element) {
     return (id?: string) => {
