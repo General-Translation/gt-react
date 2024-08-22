@@ -6,6 +6,7 @@ import { getLanguageDirection } from 'generaltranslation';
 import I18NConfiguration from '../config/I18NConfiguration';
 import Resolver from './helpers/Resolver';
 import calculateID from '../primitives/calculateID';
+import getRenderAttributes from '../primitives/getRenderAttributes';
 
 type ServerTProps = {
     I18NConfig: I18NConfiguration
@@ -33,9 +34,7 @@ const ServerT = async ({
     const translationsPromise = I18NConfig.getTranslations(locale, props.dictionaryName);
 
     const defaultLocale = I18NConfig.getDefaultLocale();
-    let renderAttributes: any = {};
-    const dir = getLanguageDirection(locale);
-    if (dir === 'rtl') renderAttributes = { ...renderAttributes, dir }
+    const renderAttributes = getRenderAttributes({ locale, ...props });
    
     const taggedChildren = addGTIdentifier(children);
     const childrenAsObjects = writeChildrenAsObjects(taggedChildren);

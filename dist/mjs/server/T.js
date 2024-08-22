@@ -23,9 +23,9 @@ import { Suspense } from 'react';
 import addGTIdentifier from './helpers/addGTIdentifier';
 import writeChildrenAsObjects from './helpers/writeChildrenAsObjects';
 import renderChildren from './renderChildren';
-import { getLanguageDirection } from 'generaltranslation';
 import Resolver from './helpers/Resolver';
 import calculateID from '../primitives/calculateID';
+import getRenderAttributes from '../primitives/getRenderAttributes';
 const ServerT = (_a) => __awaiter(void 0, void 0, void 0, function* () {
     var _b;
     var { I18NConfig, children, locale } = _a, props = __rest(_a, ["I18NConfig", "children", "locale"]);
@@ -37,10 +37,7 @@ const ServerT = (_a) => __awaiter(void 0, void 0, void 0, function* () {
     // Fetch translations promise
     const translationsPromise = I18NConfig.getTranslations(locale, props.dictionaryName);
     const defaultLocale = I18NConfig.getDefaultLocale();
-    let renderAttributes = {};
-    const dir = getLanguageDirection(locale);
-    if (dir === 'rtl')
-        renderAttributes = Object.assign(Object.assign({}, renderAttributes), { dir });
+    const renderAttributes = getRenderAttributes(Object.assign({ locale }, props));
     const taggedChildren = addGTIdentifier(children);
     const childrenAsObjects = writeChildrenAsObjects(taggedChildren);
     const key = yield calculateID(childrenAsObjects);

@@ -58,7 +58,8 @@ export default function GTClientProvider(_a) {
                             const result = yield response.json();
                             if (Object.keys(result).length) {
                                 const renderedDictionary = renderDictionary({
-                                    result, dictionary, locales: [locale, defaultLocale]
+                                    result, dictionary,
+                                    locales: [locale, defaultLocale]
                                 });
                                 completedDictionary = Object.assign(Object.assign({}, completedDictionary), renderedDictionary);
                             }

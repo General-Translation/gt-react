@@ -72,7 +72,8 @@ export default function GTClientProvider({
                         const result = await response.json();
                         if (Object.keys(result).length) {
                             const renderedDictionary = renderDictionary({
-                                result, dictionary, locales: [locale, defaultLocale]
+                                result, dictionary, 
+                                locales: [locale, defaultLocale]
                             });
                             completedDictionary = { ...completedDictionary, ...renderedDictionary }
                         } else {

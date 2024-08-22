@@ -15,6 +15,7 @@ import React, { isValidElement } from "react";
 import getEntryMetadata from "../../../primitives/getEntryMetadata";
 import addGTIdentifier from "../../../server/helpers/addGTIdentifier";
 import isValidReactNode from "../../../primitives/isValidReactNode";
+import getRenderAttributes from "../../../primitives/getRenderAttributes";
 const renderClientElement = (_a) => {
     var _b;
     var { sourceElement, targetElement } = _a, metadata = __rest(_a, ["sourceElement", "targetElement"]);
@@ -68,13 +69,13 @@ function renderClientChildren(_a) {
         }
     }
 }
-const Value = (children) => children;
 export default function renderDictionary({ result, dictionary, locales }) {
+    const renderAttributes = getRenderAttributes(locales[0]);
     let translatedDictionary = {};
     for (const id of Object.keys(dictionary)) {
         if (result[id]) {
             let { entry, metadata } = getEntryMetadata(dictionary[id]);
-            metadata = Object.assign({ locales }, metadata);
+            metadata = Object.assign({ locales, renderAttributes }, metadata);
             translatedDictionary[id] = renderClientChildren({
                 source: addGTIdentifier(_jsx(_Fragment, { children: entry })), // fragment wrapper so that it is consistent with the server-side
                 target: result[id].t,
