@@ -1,0 +1,1 @@
+{"version":3,"file":"RenderClientVariable.d.ts","sourceRoot":"","sources":["../../../../src/client/value/RenderClientVariable.tsx"],"names":[],"mappings":"AAEA,OAAc,EAAE,SAAS,EAAmC,MAAM,OAAO,CAAA;AA0EzE,MAAM,CAAC,OAAO,UAAU,oBAAoB,CAAC,EAAE,QAAQ,EAAE,SAAS,EAAE,EAAE;IAAE,QAAQ,EAAE,GAAG,CAAC;IAAC,SAAS,CAAC,EAAE,MAAM,CAAC,MAAM,EAAE,GAAG,CAAC,CAAA;CAAE,GAAG,SAAS,CAanI"}
