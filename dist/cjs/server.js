@@ -18,11 +18,11 @@ exports.createGT = createGT;
 exports.createVariables = createVariables;
 require("server-only");
 const getDefaultFromEnv_1 = __importDefault(require("./config/local/getDefaultFromEnv"));
-const createTComponent_1 = __importDefault(require("./server/createTComponent"));
+const createTComponent_1 = __importDefault(require("./server/inline/createTComponent"));
 const I18NConfiguration_1 = __importDefault(require("./config/I18NConfiguration"));
-const createIntlFunction_1 = __importDefault(require("./intl/createIntlFunction"));
+const createIntlFunction_1 = __importDefault(require("./server/intl/createIntlFunction"));
 const createGTProviderComponent_1 = __importDefault(require("./server/provider/createGTProviderComponent"));
-const createExecuteTFunction_1 = __importDefault(require("./dictionary/createExecuteTFunction"));
+const createTFunction_1 = __importDefault(require("./dictionary/createTFunction"));
 const createDictFunction_1 = __importDefault(require("./dictionary/createDictFunction"));
 const createValueComponent_1 = __importDefault(require("./server/value/createValueComponent"));
 const createPluralComponent_1 = __importDefault(require("./server/plural/createPluralComponent"));
@@ -100,12 +100,11 @@ function createGT(_a = {
     // ----- intl() ------ //
     const intl = (0, createIntlFunction_1.default)(Object.assign({ I18NConfig }, metadata));
     // ----- Dictionary ------ //
-    const executeT = (0, createExecuteTFunction_1.default)({ I18NConfig, T, intl });
-    const t = (id, options) => executeT(I18NConfig.getDictionary(), id, options);
+    const t = (0, createTFunction_1.default)({ I18NConfig, T, intl });
     const getGT = (0, createGetGTFunction_1.default)(t);
     const dict = (0, createDictFunction_1.default)(I18NConfig);
     // ----- <GTProvider> ------ //
-    const GTProvider = (0, createGTProviderComponent_1.default)(Object.assign({ executeT, I18NConfig }, metadata));
+    const GTProvider = (0, createGTProviderComponent_1.default)(Object.assign({ I18NConfig }, metadata));
     // ----- Variables ----- //
     const Value = (0, createValueComponent_1.default)({ T, getLocale, defaultLocale });
     const Plural = (0, createPluralComponent_1.default)({ T, getLocale, defaultLocale });

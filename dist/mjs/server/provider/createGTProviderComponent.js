@@ -12,13 +12,13 @@ var __rest = (this && this.__rest) || function (s, e) {
 import { jsx as _jsx } from "react/jsx-runtime";
 import GTProvider from "./GTProvider";
 export default function createGTProviderComponent(_a) {
-    var { I18NConfig, executeT } = _a, metadata = __rest(_a, ["I18NConfig", "executeT"]);
+    var { I18NConfig } = _a, metadata = __rest(_a, ["I18NConfig"]);
     return (_a) => {
         var { children } = _a, props = __rest(_a, ["children"]);
         const locale = I18NConfig.getLocale();
         const defaultLocale = I18NConfig.getDefaultLocale();
         /* @ts-expect-error Server Component */
-        return _jsx(GTProvider, Object.assign({ locale: locale, defaultLocale: defaultLocale }, metadata, props, { I18NConfig: I18NConfig, executeT: executeT, children: children }));
+        return _jsx(GTProvider, Object.assign({ locale: locale, defaultLocale: defaultLocale }, metadata, props, { I18NConfig: I18NConfig, children: children }));
     };
 }
 //# sourceMappingURL=createGTProviderComponent.js.map

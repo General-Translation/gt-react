@@ -1,5 +1,28 @@
 "use strict";
 'use client';
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
 var __rest = (this && this.__rest) || function (s, e) {
     var t = {};
     for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
@@ -15,11 +38,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.renderClientChildren = renderClientChildren;
 exports.default = renderDictionary;
 const jsx_runtime_1 = require("react/jsx-runtime");
-const react_1 = __importDefault(require("react"));
+const react_1 = __importStar(require("react"));
 const getEntryMetadata_1 = __importDefault(require("../../../primitives/getEntryMetadata"));
-const addGTIdentifier_1 = __importDefault(require("../../../server/helpers/addGTIdentifier"));
+const addGTIdentifier_1 = __importDefault(require("../../../index/addGTIdentifier"));
 const isValidReactNode_1 = __importDefault(require("../../../primitives/isValidReactNode"));
 const getRenderAttributes_1 = __importDefault(require("../../../primitives/getRenderAttributes"));
 const defaultVariableNames_1 = __importDefault(require("../../../primitives/defaultVariableNames"));
@@ -27,6 +51,7 @@ const ClientNum_1 = __importDefault(require("../../variables/ClientNum"));
 const ClientDateTime_1 = __importDefault(require("../../variables/ClientDateTime"));
 const ClientCurrency_1 = __importDefault(require("../../variables/ClientCurrency"));
 const ClientVar_1 = __importDefault(require("../../variables/ClientVar"));
+const ClientResolver_1 = __importDefault(require("./ClientResolver"));
 const renderClientElement = (_a) => {
     var _b;
     var { sourceElement, targetElement } = _a, metadata = __rest(_a, ["sourceElement", "targetElement"]);
@@ -138,13 +163,28 @@ function renderDictionary({ result, dictionary, locales }) {
         if (result[id]) {
             let { entry, metadata } = (0, getEntryMetadata_1.default)(dictionary[id]);
             metadata = Object.assign({ locales, renderAttributes }, metadata);
+            let { entry: translation, metadata: fallbacks } = (0, getEntryMetadata_1.default)(result[id]);
+            if (typeof entry === 'string' && typeof translation === 'string') { // i.e., intl()
+                translatedDictionary[id] = translation;
+                continue;
+            }
+            entry = (0, jsx_runtime_1.jsx)(jsx_runtime_1.Fragment, { children: entry }); // fragment wrapper so that it is consistent with the server-side
+            if (isTranslationPromise(translation)) {
+                if (fallbacks) {
+                    translatedDictionary[id] = ((0, jsx_runtime_1.jsx)(react_1.Suspense, { fallback: fallbacks.loadingFallback, children: (0, jsx_runtime_1.jsx)(ClientResolver_1.default, { promise: translation, entry: entry, fallback: fallbacks.errorFallback }) }));
+                    continue;
+                }
+            }
             translatedDictionary[id] = renderClientChildren({
-                source: (0, addGTIdentifier_1.default)((0, jsx_runtime_1.jsx)(jsx_runtime_1.Fragment, { children: entry })), // fragment wrapper so that it is consistent with the server-side
-                target: result[id].t,
+                source: (0, addGTIdentifier_1.default)(entry),
+                target: translation.t,
                 metadata
             });
         }
     }
     return translatedDictionary;
+}
+function isTranslationPromise(obj) {
+    return !!obj && typeof obj.then === 'function' && typeof obj.catch === 'function';
 }
 //# sourceMappingURL=renderDictionary.js.map

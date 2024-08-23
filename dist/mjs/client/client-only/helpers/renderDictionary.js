@@ -11,9 +11,9 @@ var __rest = (this && this.__rest) || function (s, e) {
     return t;
 };
 import { jsx as _jsx, Fragment as _Fragment } from "react/jsx-runtime";
-import React from "react";
+import React, { Suspense } from "react";
 import getEntryMetadata from "../../../primitives/getEntryMetadata";
-import addGTIdentifier from "../../../server/helpers/addGTIdentifier";
+import addGTIdentifier from "../../../index/addGTIdentifier";
 import isValidReactNode from "../../../primitives/isValidReactNode";
 import getRenderAttributes from "../../../primitives/getRenderAttributes";
 import defaultVariableNames from "../../../primitives/defaultVariableNames";
@@ -21,6 +21,7 @@ import ClientNum from "../../variables/ClientNum";
 import ClientDateTime from "../../variables/ClientDateTime";
 import ClientCurrency from "../../variables/ClientCurrency";
 import ClientVar from "../../variables/ClientVar";
+import ClientResolver from "./ClientResolver";
 const renderClientElement = (_a) => {
     var _b;
     var { sourceElement, targetElement } = _a, metadata = __rest(_a, ["sourceElement", "targetElement"]);
@@ -30,7 +31,7 @@ const renderClientElement = (_a) => {
     }
     return React.cloneElement(sourceElement, Object.assign(Object.assign({}, metadata.renderAttributes), sourceElement === null || sourceElement === void 0 ? void 0 : sourceElement.props));
 };
-function renderClientChildren(_a) {
+export function renderClientChildren(_a) {
     var _b, _c, _d, _e, _f, _g, _h, _j, _k, _l;
     var { source, target } = _a, metadata = __rest(_a, ["source", "target"]);
     // Most straightforward case, return a valid React node
@@ -132,13 +133,28 @@ export default function renderDictionary({ result, dictionary, locales }) {
         if (result[id]) {
             let { entry, metadata } = getEntryMetadata(dictionary[id]);
             metadata = Object.assign({ locales, renderAttributes }, metadata);
+            let { entry: translation, metadata: fallbacks } = getEntryMetadata(result[id]);
+            if (typeof entry === 'string' && typeof translation === 'string') { // i.e., intl()
+                translatedDictionary[id] = translation;
+                continue;
+            }
+            entry = _jsx(_Fragment, { children: entry }); // fragment wrapper so that it is consistent with the server-side
+            if (isTranslationPromise(translation)) {
+                if (fallbacks) {
+                    translatedDictionary[id] = (_jsx(Suspense, { fallback: fallbacks.loadingFallback, children: _jsx(ClientResolver, { promise: translation, entry: entry, fallback: fallbacks.errorFallback }) }));
+                    continue;
+                }
+            }
             translatedDictionary[id] = renderClientChildren({
-                source: addGTIdentifier(_jsx(_Fragment, { children: entry })), // fragment wrapper so that it is consistent with the server-side
-                target: result[id].t,
+                source: addGTIdentifier(entry),
+                target: translation.t,
                 metadata
             });
         }
     }
     return translatedDictionary;
+}
+function isTranslationPromise(obj) {
+    return !!obj && typeof obj.then === 'function' && typeof obj.catch === 'function';
 }
 //# sourceMappingURL=renderDictionary.js.map

@@ -75,16 +75,6 @@ function SingleChild({children, variables}: {children: any, variables?: Record<s
 }
 
 export default function RenderClientVariable({ children, variables }: { children: any, variables?: Record<string, any> }): ReactNode {
-    
-    const [renderedChildren, setRenderedChildren] = useState(children);
-
-    useEffect(() => {
-        setRenderedChildren(React.Children.map(children, child => <SingleChild variables={variables}>{child}</SingleChild>))
-    }, [children, variables]);
-
-    return (
-        <>
-            {renderedChildren}
-        </>
-    )
+    const renderedChildren = React.Children.map(children, child => <SingleChild variables={variables}>{child}</SingleChild>);
+    return <>{renderedChildren}</>;
 }

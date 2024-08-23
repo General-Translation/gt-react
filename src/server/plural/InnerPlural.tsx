@@ -42,7 +42,7 @@ const Plural = ({
     const renderedChildren = renderPlural(branch, locales, createValues(n, values));
 
     return (
-        <span data-n={n} data-unrendered-branches={branches} data-generaltranslation={generaltranslation}>
+        <span data-unrendered-branches={branches} data-generaltranslation={generaltranslation}>
             {renderedChildren}
         </span>
     );

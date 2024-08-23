@@ -1,6 +1,6 @@
 'use client';
 import { jsx as _jsx, Fragment as _Fragment } from "react/jsx-runtime";
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import ClientVar from '../variables/ClientVar';
 import ClientNum from '../variables/ClientNum';
 import ClientDateTime from '../variables/ClientDateTime';
@@ -68,10 +68,7 @@ function SingleChild({ children, variables }) {
     return children;
 }
 export default function RenderClientVariable({ children, variables }) {
-    const [renderedChildren, setRenderedChildren] = useState(children);
-    useEffect(() => {
-        setRenderedChildren(React.Children.map(children, child => _jsx(SingleChild, { variables: variables, children: child })));
-    }, [children, variables]);
-    return (_jsx(_Fragment, { children: renderedChildren }));
+    const renderedChildren = React.Children.map(children, child => _jsx(SingleChild, { variables: variables, children: child }));
+    return _jsx(_Fragment, { children: renderedChildren });
 }
 //# sourceMappingURL=RenderClientVariable.js.map

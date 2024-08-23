@@ -1,6 +1,5 @@
 'use client';
 import { jsx as _jsx } from "react/jsx-runtime";
-import { useMemo } from 'react';
 /**
  * Var component to conditionally render either children or a default value.
  * It also attaches data attributes for variable name and type.
@@ -12,12 +11,8 @@ import { useMemo } from 'react';
  * @returns {ReactNode} The rendered output.
  */
 const ClientVar = ({ children, name, defaultValue }) => {
-    const renderedValue = useMemo(() => {
-        if ((typeof children !== 'undefined' && typeof defaultValue === 'undefined'))
-            return children;
-        return defaultValue;
-    }, [children, defaultValue]);
-    return (_jsx("span", { "data-gt-variable-name": name, "data-gt-variable-type": "variable", children: renderedValue }));
+    let final = typeof children !== 'undefined' ? children : defaultValue;
+    return (_jsx("span", { "data-gt-variable-name": name, "data-gt-variable-type": "variable", children: final }));
 };
 ClientVar.gtTransformation = "variable-variable";
 export default ClientVar;

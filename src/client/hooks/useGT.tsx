@@ -33,12 +33,17 @@ export default function useGT(id?: string): Function {
         values?: Record<string, any>
         [key: string]: any
     }) => {
+        const translation = translate(`${prefix}${id}`, options);
 
-        const translation = translate(`${prefix}${id}`);
+        if (!translation) console.warn(`t('${id}') finding no translation for dictionary item ${prefix}${id} !`)
 
-        console.log(translation)
+        return translation;
+        
+    }
+}
 
-        // If a plural or value is required
+/*
+// If a plural or value is required
         if (options) {
             const { 
                 n, values
@@ -59,8 +64,4 @@ export default function useGT(id?: string): Function {
             }
         }
 
-        if (!translation) console.warn(`t('${id}') finding no translation for dictionary item ${prefix}${id} !`)
-
-        return translation;
-    }
-}
+*/

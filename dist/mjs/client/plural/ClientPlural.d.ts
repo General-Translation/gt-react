@@ -9,9 +9,8 @@ import { Range } from '../../primitives/getPluralBranch';
  * @param {Record<string, any>} ...branches - Named branches, e.g. "singular", "plural" and their associated branches.
  * @returns {ReactNode}
  */
-export default function ClientPlural({ children, id, n, values, ranges, ...branches }: {
+export default function ClientPlural({ children, n, values, ranges, ...branches }: {
     children?: any;
-    id?: string;
     n: number;
     ranges?: Range[];
     zero?: any;

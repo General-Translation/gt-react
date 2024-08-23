@@ -5,14 +5,16 @@ export default function getEntryMetadata(entry: any): {
     entry: any,
     metadata?: Record<string, any>
 } {
+    let content;
     let metadata;
     if (entry) {
         if (Array.isArray(entry)) {
             if (typeof entry?.[1] === 'object') {
                 metadata = entry[1];
             }
-            entry = entry[0];
+            content = entry[0];
         }
     }
-    return { entry, metadata };
+    if (!content) content = entry;
+    return { entry: content, metadata };
 }

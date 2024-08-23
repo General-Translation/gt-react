@@ -13,41 +13,26 @@ const ClientDateTime = ({ children, name = "date", defaultValue, options = {} }:
 
     const locales = [useLocale(), useDefaultLocale()]
 
-    const [formattedValue, setFormattedValue] = useState('');
+    let final;
 
-    useEffect(() => {
-        let dateValue: Date | undefined;
-
-        // Determine the default value to use
-        defaultValue = (typeof children !== 'undefined' && typeof defaultValue === 'undefined') ? children : defaultValue;
-        if (!defaultValue) {
-            setFormattedValue('');
-            return;
-        }
-
-        // Convert defaultValue to a Date object based on its type
-        if (typeof defaultValue === 'number') {
-            dateValue = new Date(defaultValue * 1000); // Unix time in seconds
-        } else if (typeof defaultValue === 'string') {
-            dateValue = new Date(defaultValue);
-        } else if (defaultValue instanceof Date) {
-            dateValue = defaultValue;
-        }
-
-        // Return an empty string if dateValue is undefined
-    
-        if (typeof dateValue !== 'undefined') {
-            // Format the date using Intl.DateTimeFormat or toLocaleString
-            const dateString = new Intl.DateTimeFormat(locales, { calendar: "gregory", numberingSystem: "latn", ...options }).format(dateValue) || dateValue?.toLocaleString(locales, { calendar: "gregory", numberingSystem: "latn", ...options }) || '';
-            setFormattedValue(dateString.replace(/[\u200F\u202B\u202E]/g, ''));
-        }
-
-    }, [children, defaultValue, options, locales]);
+    let dateValue: Date | undefined;
+    defaultValue = (typeof children !== 'undefined' && typeof defaultValue === 'undefined') ? children : defaultValue;
+    if (!defaultValue) return '';
+    if (typeof defaultValue === 'number') {
+        dateValue = new Date(defaultValue * 1000); // Unix time in seconds
+    } else if (typeof defaultValue === 'string') {
+        dateValue = new Date(defaultValue);
+    } else if (defaultValue instanceof Date) {
+        dateValue = defaultValue;
+    }
+    if (typeof dateValue !== 'undefined') {
+        final = (new Intl.DateTimeFormat(locales, { calendar: "gregory", numberingSystem: "latn", ...options }).format(dateValue) || dateValue?.toLocaleString(locales, { calendar: "gregory", numberingSystem: "latn", ...options }) || '').replace(/[\u200F\u202B\u202E]/g, '');
+    }
 
     // Render the formatted date within a span element
     return (
         <span data-gt-variable-name={name} data-gt-variable-type={"date"} data-gt-variable-options={options}>
-            {formattedValue}
+            {final}
         </span>
     );
 };

@@ -1,4 +1,4 @@
-import determineLocale from "../config/determineLocale";
+import determineLocale from "../index/determineLocale";
 import { localeCookieName } from "../middleware/cookieSettings";
 import { getNextCookies, getNextHeaders } from "./imports/imports";
 

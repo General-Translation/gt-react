@@ -1,8 +1,8 @@
 import React from "react";
 import getEntryMetadata from "./getEntryMetadata";
 
-export default function getEntryTranslationType(entry: any): "t" | "plural" {
-    const { entry: entryContent, metadata } = getEntryMetadata(entry);
+export default function getEntryTranslationType(entry: any): "t" | "plural" | "intl" {
+    const { entry: content, metadata } = getEntryMetadata(entry);
     if (metadata) {
         if (
            metadata.singular
@@ -16,12 +16,8 @@ export default function getEntryTranslationType(entry: any): "t" | "plural" {
            || metadata.other
         ) return "plural";
     }
-    if (!React.isValidElement(entryContent) && typeof entryContent === 'object') {
-        const entryKeys = Object.keys(entryContent);
-        if (entryKeys.every(key => 
-            ["singular", "plural", "dual", "zero", "one", "two", "few", "many", "other"].includes(key)
-        )) return "plural";
-        return "t";
+    if (typeof content === 'string') {
+        return "intl"
     }
     return "t"
 }

@@ -1,12 +1,12 @@
 import 'server-only'
 
 import getDefaultFromEnv from "./config/local/getDefaultFromEnv";
-import createTComponent from './server/createTComponent';
+import createTComponent from './server/inline/createTComponent';
 import I18NConfiguration from './config/I18NConfiguration';
-import createIntlFunction from './intl/createIntlFunction';
+import createIntlFunction from './server/intl/createIntlFunction';
 import createGTProviderComponent from './server/provider/createGTProviderComponent';
 import CreateI18NConfigProps from './types/CreateGTProps';
-import createExecuteTFunction, { tOptions } from './dictionary/createExecuteTFunction';
+import createTFunction, { tOptions } from './dictionary/createTFunction';
 import createDictFunction from './dictionary/createDictFunction';
 import createValueComponent from './server/value/createValueComponent';
 import createPluralComponent from './server/plural/createPluralComponent';
@@ -110,18 +110,15 @@ export function createGT({
 
     // ----- Dictionary ------ //
 
-    const executeT = createExecuteTFunction({ I18NConfig, T, intl });
+    const t = createTFunction({ I18NConfig, T, intl });
 
-    const t = (id: string, options?: tOptions) => executeT(I18NConfig.getDictionary(), id, options);
-    
     const getGT = createGetGTFunction(t);
 
     const dict = createDictFunction(I18NConfig);
 
     // ----- <GTProvider> ------ //
 
-    const GTProvider = createGTProviderComponent({ executeT, I18NConfig, ...metadata });
-
+    const GTProvider = createGTProviderComponent({ I18NConfig, ...metadata });
 
     // ----- Variables ----- //
 

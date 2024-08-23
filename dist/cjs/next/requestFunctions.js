@@ -5,7 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getNextLocale = getNextLocale;
 exports.getNextDomain = getNextDomain;
-const determineLocale_1 = __importDefault(require("../config/determineLocale"));
+const determineLocale_1 = __importDefault(require("../index/determineLocale"));
 const cookieSettings_1 = require("../middleware/cookieSettings");
 const imports_1 = require("./imports/imports");
 /**

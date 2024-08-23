@@ -1,15 +1,9 @@
 "use strict";
 'use client';
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = useGT;
-const jsx_runtime_1 = require("react/jsx-runtime");
 const react_1 = require("react");
 const ClientProvider_1 = require("../ClientProvider");
-const ClientValue_1 = __importDefault(require("../value/ClientValue"));
-const ClientPlural_1 = __importDefault(require("../plural/ClientPlural"));
 /**
  * Custom hook to provide a translation function using a given context.
  *
@@ -33,22 +27,33 @@ function useGT(id) {
     }
     // Return a translation function if available, otherwise return a no-op function
     return (id, options) => {
-        const translation = translate(`${prefix}${id}`);
-        console.log(translation);
-        // If a plural or value is required
-        if (options) {
-            const { n, values } = options;
-            if (typeof n === 'number') {
-                const innerProps = { n, values };
-                return ((0, jsx_runtime_1.jsx)(ClientPlural_1.default, Object.assign({ id: id }, innerProps, { children: translation })));
-            }
-            else if (values) {
-                return ((0, jsx_runtime_1.jsx)(ClientValue_1.default, { id: id, values: values, children: translation }));
-            }
-        }
+        const translation = translate(`${prefix}${id}`, options);
         if (!translation)
             console.warn(`t('${id}') finding no translation for dictionary item ${prefix}${id} !`);
         return translation;
     };
 }
+/*
+// If a plural or value is required
+        if (options) {
+            const {
+                n, values
+            } = options;
+            if (typeof n === 'number') {
+                const innerProps = { n, values };
+                return (
+                    <ClientPlural id={id} {...innerProps}>
+                        {translation}
+                    </ClientPlural>
+                )
+            } else if (values) {
+                return (
+                    <ClientValue id={id} values={values}>
+                        {translation}
+                    </ClientValue>
+                )
+            }
+        }
+
+*/ 
 //# sourceMappingURL=useGT.js.map

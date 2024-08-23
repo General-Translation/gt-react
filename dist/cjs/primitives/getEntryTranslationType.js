@@ -4,10 +4,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = getEntryTranslationType;
-const react_1 = __importDefault(require("react"));
 const getEntryMetadata_1 = __importDefault(require("./getEntryMetadata"));
 function getEntryTranslationType(entry) {
-    const { entry: entryContent, metadata } = (0, getEntryMetadata_1.default)(entry);
+    const { entry: content, metadata } = (0, getEntryMetadata_1.default)(entry);
     if (metadata) {
         if (metadata.singular
             || metadata.plural
@@ -20,11 +19,8 @@ function getEntryTranslationType(entry) {
             || metadata.other)
             return "plural";
     }
-    if (!react_1.default.isValidElement(entryContent) && typeof entryContent === 'object') {
-        const entryKeys = Object.keys(entryContent);
-        if (entryKeys.every(key => ["singular", "plural", "dual", "zero", "one", "two", "few", "many", "other"].includes(key)))
-            return "plural";
-        return "t";
+    if (typeof content === 'string') {
+        return "intl";
     }
     return "t";
 }

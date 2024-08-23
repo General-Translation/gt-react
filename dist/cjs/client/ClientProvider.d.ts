@@ -9,7 +9,7 @@ type ClientProviderProps = {
     dictionary: Record<string, any>;
     [key: string]: any;
 };
-export default function ClientProvider({ children, locale, defaultLocale, dictionary }: ClientProviderProps): import("react/jsx-runtime").JSX.Element;
+export default function ClientProvider({ children, locale, defaultLocale, dictionary, translations, renderSettings, translationRequired }: ClientProviderProps): import("react/jsx-runtime").JSX.Element;
 /**
  * Custom hook to use the GTContext
  * @returns {GTContextType} The context value

@@ -2,15 +2,16 @@
 
 'use client'
 
-import { useEffect, useCallback, useState } from "react";
+import { useEffect, useCallback, useState, useMemo } from "react";
 import { GTContext } from "../ClientProvider"
-import { isSameLanguage } from "generaltranslation";
 import defaultGTProps from "../../types/defaultGTProps";
 import useBrowserLocale from "../hooks/useBrowserLocale";
-import renderDictionary from "./helpers/renderDictionary";
-import flattenDictionary from "../../primitives/flattenDictionary";
+import { tOptions } from "../../dictionary/createTFunction";
+import { isSameLanguage } from "generaltranslation";
+import getRenderAttributes from "../../primitives/getRenderAttributes";
+import renderDefaultLanguage from "../helpers/renderDefaultLanguage";
+import handleRender from "../helpers/handleRender";
 import getDictionaryReference from "../../primitives/getDictionaryReference";
-import getEntryMetadata from "../../primitives/getEntryMetadata";
 
 export default function GTClientProvider({
     children, 
@@ -35,72 +36,97 @@ export default function GTClientProvider({
     translations?: Record<string, () => Promise<Record<string, any>>>;
 }) {
 
-    const browserLocale = useBrowserLocale(defaultLocale);
-    locale = locale || browserLocale;
-
-    const [translatedDictionary, setTranslatedDictionary] = useState(flattenDictionary(dictionary));
-
     if (!projectID && remoteSource && cacheURL === defaultGTProps.cacheURL) {
         throw new Error("gt-react Error: General Translation cloud services require a project ID! Find yours at www.generaltranslation.com/dashboard.")
     }
 
-    const [translationComplete, setTranslationComplete] = useState(isSameLanguage(locale, defaultLocale));
+    const browserLocale = useBrowserLocale(defaultLocale);
+    locale = locale || browserLocale;
+    
+    const [loaded, setLoaded] = useState({
+        local: false,
+        remote: false
+    });
+    
+    const translationRequired = isSameLanguage(locale, defaultLocale) ? false : true;
+
+    const [localDictionary, setLocalDictionary] = useState<Record<string, any> | null>(null);
     useEffect(() => {
-        setTranslationComplete(isSameLanguage(locale, defaultLocale));
-    }, [locale, defaultLocale])
+        if (locale) {
+            if (translations && translations[locale] && translationRequired) {
+                translations[locale]().then(setLocalDictionary).then(() => setLoaded(prev => ({ ...prev, local: true })));
+            } 
+            else {
+                setLoaded(prev => ({ ...prev, local: true }))
+            }
+        }
+    }, [translations, locale])
+
+
+    const [remoteTranslations, setRemoteTranslations] = useState<Record<string, any> | null>(null);
 
     useEffect(() => {
-        if (!translationComplete && locale && !isSameLanguage(locale, defaultLocale)) {
-            async function completeDictionary() {
-                let completedDictionary = dictionary;
-                if (translations && translations[locale]) {
-                    try {
-                        const loadDictionary = translations[locale];
-                        const loadedDictionary = await loadDictionary();
-                        if (Object.keys(loadedDictionary).length) {
-                            completedDictionary = { ...completedDictionary, ...loadedDictionary }
-                        } else {
-                            throw new Error(``)
-                        }
-                    } catch (error) {
-                        console.error(`Error loading dictionary for locale ${locale}:`, error);
-                    }
-                }
-                if (remoteSource) {
+        if (locale) {
+            if (remoteSource && translationRequired) {
+                const fetchRemoteTranslations = async () => {
                     try {
                         const response = await fetch(`${cacheURL}/${projectID}/${getDictionaryReference(locale, dictionaryName)}`);
                         const result = await response.json();
+                        
                         if (Object.keys(result).length) {
-                            const renderedDictionary = renderDictionary({
-                                result, dictionary, 
-                                locales: [locale, defaultLocale]
-                            });
-                            completedDictionary = { ...completedDictionary, ...renderedDictionary }
+                            setRemoteTranslations(result);
                         } else {
                             throw new Error(`No dictionary found in remote cache.`)
                         }
                     } catch (error) {
                         console.error(error);
+                    } finally {
+                        setLoaded(prev => ({ ...prev, remote: true }));
                     }
                 }
-                setTranslatedDictionary(flattenDictionary(completedDictionary))
-                setTranslationComplete(true);
+                fetchRemoteTranslations();
+            } else {
+                setLoaded(prev => ({ ...prev, remote: true }));
             }
-            completeDictionary();
         }
-    }, [cacheURL, remoteSource, locale, translations])
+    }, [cacheURL, remoteSource, locale])
 
-    const translate = useCallback((id: string) => {
-        return getEntryMetadata(translatedDictionary[id]).entry;
-    }, [translatedDictionary]);
+    const renderAttributes = getRenderAttributes({ locale });
+
+    const translate = useCallback((id: string, options?: tOptions) => {
+        const { n, values } = options || {};
+        const variables = { ...(typeof n === 'number' && { n }), ...(values && { ...values }) };
+        if (translationRequired) {
+            if (localDictionary && localDictionary[id]) {
+                return renderDefaultLanguage({ 
+                    source: localDictionary[id], 
+                    variables, id, 
+                    renderAttributes, 
+                    ...options 
+                })
+            }
+            if (remoteTranslations && remoteTranslations) {
+                return handleRender({
+                    source: dictionary[id],
+                    target: remoteTranslations[id],
+                    locale, defaultLocale,
+                    renderAttributes,
+                    variables, id
+                })
+            }
+        } else {
+            return renderDefaultLanguage({ source: dictionary[id], variables, id, ...options })
+        }
+    }, [dictionary, translations, translationRequired]);
+
 
     return (
         <GTContext.Provider value={{
             translate, locale, defaultLocale
         }}>
             {
-                translationComplete
-                ? children : undefined
+                Object.values(loaded).every(item => item ? true : false) &&
+                children
             }
         </GTContext.Provider>
     )

@@ -1,3 +1,4 @@
 import I18NConfiguration from "../config/I18NConfiguration";
-export default function createDictFunction(I18NConfig: I18NConfiguration): (id: string) => any;
+import { tOptions } from "./createTFunction";
+export default function createDictFunction(I18NConfig: I18NConfiguration): (id: string, options?: tOptions) => any;
 //# sourceMappingURL=createDictFunction.d.ts.map

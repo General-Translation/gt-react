@@ -18,14 +18,11 @@ const ClientVar = ({ children, name, defaultValue }: {
     defaultValue?: any;
 }): ReactNode => {
 
-    const renderedValue = useMemo(() => {
-        if ((typeof children !== 'undefined' && typeof defaultValue === 'undefined')) return children;
-        return defaultValue;
-    }, [children, defaultValue])
+    let final = typeof children !== 'undefined' ? children : defaultValue;
     
     return (
         <span data-gt-variable-name={name} data-gt-variable-type={"variable"}>
-            {renderedValue}
+            {final}
         </span>
     );
 

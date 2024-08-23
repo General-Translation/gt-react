@@ -1,7 +1,6 @@
 import I18NConfiguration from "../../config/I18NConfiguration";
-export default function createGTProviderComponent({ I18NConfig, executeT, ...metadata }: {
+export default function createGTProviderComponent({ I18NConfig, ...metadata }: {
     I18NConfig: I18NConfiguration;
-    executeT: any;
     [key: string]: any;
 }): ({ children, ...props }: {
     children?: any;

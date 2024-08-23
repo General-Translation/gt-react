@@ -14,23 +14,16 @@ const ClientCurrency = ({ children, name = "cost", defaultValue, currency = "USD
 
     const locales = [useLocale(), useDefaultLocale()]
 
-    const [formattedValue, setFormattedValue] = useState('');
-
-    useEffect(() => {
-        // Determine the value to be formatted
-        let value = (typeof children !== 'undefined' && typeof defaultValue === 'undefined') ? children : defaultValue;
-        value = (typeof value === 'string') ? parseFloat(value) : value;
-        // Format the value using Intl.NumberFormat
-        if (typeof value === 'number') {
-            setFormattedValue(new Intl.NumberFormat(locales, { style: 'currency', currency, numberingSystem: 'latn', ...options }).format(value))
-        } else {
-            setFormattedValue(value);
-        }
-    }, [children, defaultValue, locales, currency, options]);
+    let value = (typeof children !== 'undefined' && typeof defaultValue === 'undefined') ? children : defaultValue;
+    value = (typeof value === 'string') ? parseFloat(value) : value;
+    // Format the value using Intl.NumberFormat
+    if (typeof value === 'number') {
+        value = new Intl.NumberFormat(locales, { style: 'currency', currency, numberingSystem: 'latn', ...options }).format(value)
+    }
 
     return (
         <span data-gt-variable-name={name} data-gt-variable-type={"currency"} data-gt-variable-options={{ style: 'currency', currency, ...options }}>
-            {formattedValue}
+            {value}
         </span>
     );
 

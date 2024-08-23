@@ -2,7 +2,6 @@
 'use client';
 Object.defineProperty(exports, "__esModule", { value: true });
 const jsx_runtime_1 = require("react/jsx-runtime");
-const react_1 = require("react");
 /**
  * Var component to conditionally render either children or a default value.
  * It also attaches data attributes for variable name and type.
@@ -14,12 +13,8 @@ const react_1 = require("react");
  * @returns {ReactNode} The rendered output.
  */
 const ClientVar = ({ children, name, defaultValue }) => {
-    const renderedValue = (0, react_1.useMemo)(() => {
-        if ((typeof children !== 'undefined' && typeof defaultValue === 'undefined'))
-            return children;
-        return defaultValue;
-    }, [children, defaultValue]);
-    return ((0, jsx_runtime_1.jsx)("span", { "data-gt-variable-name": name, "data-gt-variable-type": "variable", children: renderedValue }));
+    let final = typeof children !== 'undefined' ? children : defaultValue;
+    return ((0, jsx_runtime_1.jsx)("span", { "data-gt-variable-name": name, "data-gt-variable-type": "variable", children: final }));
 };
 ClientVar.gtTransformation = "variable-variable";
 exports.default = ClientVar;

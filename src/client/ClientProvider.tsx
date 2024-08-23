@@ -1,6 +1,13 @@
 'use client'
 
-import { createContext, useCallback, useContext } from "react"
+import { isSameLanguage } from "generaltranslation";
+import { createContext, useCallback, useContext, useEffect, useState } from "react"
+import getEntryMetadata from "../primitives/getEntryMetadata";
+import { tOptions } from "../dictionary/createTFunction";
+import renderClientChildren from "./helpers/renderClientChildren";
+import getRenderAttributes from "../primitives/getRenderAttributes";
+import handleRender from "./helpers/handleRender";
+import renderDefaultLanguage from "./helpers/renderDefaultLanguage";
 
 type GTContextType = {
     [key: string]: any
@@ -15,19 +22,31 @@ type ClientProviderProps = {
     [key: string]: any;
 }
 export default function ClientProvider({
-    children, locale, defaultLocale, dictionary
+    children, 
+    locale, defaultLocale, 
+    dictionary, translations, 
+    renderSettings, translationRequired
 }: ClientProviderProps) {
 
-    const translate = useCallback((id: string) => {
-        return dictionary[id];
-    }, [dictionary]);
+    const translate = useCallback((id: string, options?: tOptions) => {
+        const { n, values } = options || {};
+        const variables = { ...(typeof n === 'number' && { n }), ...(values && { ...values }) };
+        if (translationRequired) {
+            return handleRender({
+                source: dictionary[id],
+                target: translations[id],
+                locale, defaultLocale,
+                renderAttributes: getRenderAttributes({ locale }),
+                variables
+            })
+        }
+        return renderDefaultLanguage({ source: dictionary[id], variables, id, ...options })
+    }, [dictionary, translations]);
 
     return (
-        <GTContext.Provider
-            value={{
-                translate, locale, defaultLocale
-            }}
-        >
+        <GTContext.Provider value={{
+            translate, locale, defaultLocale
+        }}>
             {children}
         </GTContext.Provider>
     );
@@ -44,3 +63,16 @@ export function useGTContext(): GTContextType {
     }
     return context;
 }
+
+/*
+
+const renderAttributes = getRenderAttributes({ locale });
+        if (translationRequired) return handleRender({
+            source: dictionary[id],
+            target: translations[id], 
+            renderSettings, renderAttributes,
+            variables,
+            ...other
+        });
+
+*/

@@ -23,7 +23,7 @@ const Plural = (_a) => {
         .filter(([_, value]) => value !== undefined));
     const branch = ((typeof n === 'number' && branches) ? getPluralBranch(n, locales, branches) : null) || children;
     const renderedChildren = renderPlural(branch, locales, createValues(n, values));
-    return (_jsx("span", { "data-n": n, "data-unrendered-branches": branches, "data-generaltranslation": generaltranslation, children: renderedChildren }));
+    return (_jsx("span", { "data-unrendered-branches": branches, "data-generaltranslation": generaltranslation, children: renderedChildren }));
 };
 Plural.gtTransformation = "plural";
 export default Plural;
