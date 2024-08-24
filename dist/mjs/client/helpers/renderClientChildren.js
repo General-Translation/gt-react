@@ -45,10 +45,6 @@ const renderClientElement = (_a) => {
                 return React.createElement('span', Object.assign(Object.assign({}, metadata.renderAttributes), { children: children }));
             }
             else if (transformation === "variable") {
-                const variableName = props['data-gt-variable-name'];
-                if (!metadata.variables || typeof metadata.variables !== 'object' || !metadata.variables[variableName]) {
-                    throw new Error(`Variable with ID "${metadata.id}" requires ${variableName} value.\n\ne.g. t("${metadata.id}", { values: { ${variableName}: /* some value */ } })`);
-                }
                 return _jsx(RenderClientVariable, { variables: metadata.variables, children: sourceElement });
             }
         }
