@@ -44,7 +44,7 @@ function SingleChild({children, variables}: {children: any, variables?: Record<s
                 value = variables[name];
                 options = props?.options || {};
             }
-            else if (props && props?.['data-gt-variable-type']) {
+            if (props && props?.['data-gt-variable-type']) {
                 variableType = props['data-gt-variable-type']
                 name = props['data-gt-variable-name']
                 value = variables[name]

@@ -45,7 +45,7 @@ function SingleChild({ children, variables }) {
                 value = variables[name];
                 options = (props === null || props === void 0 ? void 0 : props.options) || {};
             }
-            else if (props && (props === null || props === void 0 ? void 0 : props['data-gt-variable-type'])) {
+            if (props && (props === null || props === void 0 ? void 0 : props['data-gt-variable-type'])) {
                 variableType = props['data-gt-variable-type'];
                 name = props['data-gt-variable-name'];
                 value = variables[name];
