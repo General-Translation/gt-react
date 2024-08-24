@@ -45,10 +45,6 @@ export default function renderDefaultLanguage({
                         )
                     }
                     else if (generaltranslation.transformation === "variable") {
-                        const variableName = props['data-gt-variable-name'];
-                        if (!variables || typeof variables !== 'object' || !variables[variableName]) {
-                            throw new Error(`Variable with ID "${metadata.id}" requires ${variableName} value.\n\ne.g. t("${metadata.id}", { values: { ${variableName}: /* some value */ } })`)
-                        }
                         return <RenderClientVariable variables={variables}>{child}</RenderClientVariable>
                     }
                 }

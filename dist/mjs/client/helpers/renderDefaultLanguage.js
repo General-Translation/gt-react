@@ -37,10 +37,6 @@ export default function renderDefaultLanguage(_a) {
                         return (_jsx(ClientValue, { values: Object.assign({}, variables), children: props.children }));
                     }
                     else if (generaltranslation.transformation === "variable") {
-                        const variableName = props['data-gt-variable-name'];
-                        if (!variables || typeof variables !== 'object' || !variables[variableName]) {
-                            throw new Error(`Variable with ID "${metadata.id}" requires ${variableName} value.\n\ne.g. t("${metadata.id}", { values: { ${variableName}: /* some value */ } })`);
-                        }
                         return _jsx(RenderClientVariable, { variables: variables, children: child });
                     }
                 }
