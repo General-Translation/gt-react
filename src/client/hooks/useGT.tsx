@@ -1,6 +1,6 @@
 'use client'
 
-import { useMemo } from "react";
+import React, { useMemo } from "react";
 import { useGTContext } from "../ClientProvider";
 import ClientValue from "../value/ClientValue";
 import ClientPlural from "../plural/ClientPlural";
@@ -33,35 +33,13 @@ export default function useGT(id?: string): Function {
         values?: Record<string, any>
         [key: string]: any
     }) => {
-        const translation = translate(`${prefix}${id}`, options);
+
+        const prefixedID = `${prefix}${id}`;
+
+        const translation = translate(prefixedID, options);
 
         if (!translation) console.warn(`t('${id}') finding no translation for dictionary item ${prefix}${id} !`)
 
-        return translation;
-        
+        return <React.Fragment key={prefixedID}>{translation}</React.Fragment>;
     }
 }
-
-/*
-// If a plural or value is required
-        if (options) {
-            const { 
-                n, values
-            } = options;
-            if (typeof n === 'number') {
-                const innerProps = { n, values };
-                return (
-                    <ClientPlural id={id} {...innerProps}>
-                        {translation}
-                    </ClientPlural>
-                )
-            } else if (values) {
-                return (
-                    <ClientValue id={id} values={values}>
-                        {translation}
-                    </ClientValue>
-                )
-            }
-        }
-
-*/

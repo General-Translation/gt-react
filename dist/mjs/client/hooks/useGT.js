@@ -1,5 +1,6 @@
 'use client';
-import { useMemo } from "react";
+import { jsx as _jsx } from "react/jsx-runtime";
+import React, { useMemo } from "react";
 import { useGTContext } from "../ClientProvider";
 /**
  * Custom hook to provide a translation function using a given context.
@@ -24,10 +25,11 @@ export default function useGT(id) {
     }
     // Return a translation function if available, otherwise return a no-op function
     return (id, options) => {
-        const translation = translate(`${prefix}${id}`, options);
+        const prefixedID = `${prefix}${id}`;
+        const translation = translate(prefixedID, options);
         if (!translation)
             console.warn(`t('${id}') finding no translation for dictionary item ${prefix}${id} !`);
-        return translation;
+        return _jsx(React.Fragment, { children: translation }, prefixedID);
     };
 }
 //# sourceMappingURL=useGT.js.map
