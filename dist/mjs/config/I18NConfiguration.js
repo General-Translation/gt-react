@@ -273,7 +273,7 @@ export default class I18NConfiguration {
                 batch.forEach((item, index) => {
                     const result = results[index];
                     if (!result || result.error)
-                        return resolveBatchError(item);
+                        return item.reject(result.error);
                     if (result && typeof result === 'object') {
                         item.resolve(result.translation);
                         if (result.translation && result.language && result.reference && this._remoteDictionaryManager) {
@@ -284,7 +284,7 @@ export default class I18NConfiguration {
             }
             catch (error) {
                 console.error(error);
-                batch.forEach(resolveBatchError);
+                batch.forEach(item => item.reject(error));
             }
             finally {
                 this._activeRequests--;
@@ -303,12 +303,4 @@ export default class I18NConfiguration {
         }, this.batchInterval);
     }
 }
-// Resolve errors in the batch request
-const resolveBatchError = (item) => {
-    if (item.type === "react")
-        return item.resolve(null);
-    if (item.type === "intl")
-        return item.resolve(item.data.content);
-    return item.resolve("");
-};
 //# sourceMappingURL=I18NConfiguration.js.map

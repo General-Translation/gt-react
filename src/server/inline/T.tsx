@@ -73,15 +73,6 @@ const ServerT = async ({
 
     // Render methods
 
-    if (renderMethod === "hang") {
-        // Wait until the site is translated to return
-        return (
-            <>
-                {await promise}
-            </>
-        )
-    }
-
     let loadingFallback = props.fallback;
     let errorFallback = children;
     
@@ -95,6 +86,22 @@ const ServerT = async ({
         // in case there's a previous translation on file
         loadingFallback = renderChildren({ source: taggedChildren, target: translations.remote[id].t, renderAttributes, locale, defaultLocale });
         errorFallback = loadingFallback;
+    }
+
+    if (renderMethod === "hang") {
+        // Wait until the site is translated to return
+        const resolveI18NPromise = async () => {
+            try {
+                return await promise;
+            } catch {
+                return await errorFallback;
+            }
+        }
+        return (
+            <>
+                {await resolveI18NPromise()}
+            </>
+        )
     }
 
     if (!["skeleton", "replace"].includes(renderMethod)) {

@@ -60,10 +60,6 @@ const ServerT = (_a) => __awaiter(void 0, void 0, void 0, function* () {
     const renderMethod = (props === null || props === void 0 ? void 0 : props.renderMethod) || renderSettings.method;
     let promise = I18NChildrenPromise.then(target => renderChildren({ source: taggedChildren, target, renderAttributes, locale, defaultLocale }));
     // Render methods
-    if (renderMethod === "hang") {
-        // Wait until the site is translated to return
-        return (_jsx(_Fragment, { children: yield promise }));
-    }
     let loadingFallback = props.fallback;
     let errorFallback = children;
     if (renderMethod === "skeleton") {
@@ -78,6 +74,18 @@ const ServerT = (_a) => __awaiter(void 0, void 0, void 0, function* () {
         // in case there's a previous translation on file
         loadingFallback = renderChildren({ source: taggedChildren, target: translations.remote[id].t, renderAttributes, locale, defaultLocale });
         errorFallback = loadingFallback;
+    }
+    if (renderMethod === "hang") {
+        // Wait until the site is translated to return
+        const resolveI18NPromise = () => __awaiter(void 0, void 0, void 0, function* () {
+            try {
+                return yield promise;
+            }
+            catch (_a) {
+                return yield errorFallback;
+            }
+        });
+        return (_jsx(_Fragment, { children: yield resolveI18NPromise() }));
     }
     if (!["skeleton", "replace"].includes(renderMethod)) {
         // If none of those, i.e. "subtle" 
