@@ -1,1 +1,0 @@
-{"version":3,"file":"getDictionaryReference.js","sourceRoot":"","sources":["../../../src/primitives/getDictionaryReference.ts"],"names":[],"mappings":"AAAA;;;;;GAKG;AACH,MAAM,CAAC,OAAO,UAAU,sBAAsB,CAAC,MAAc,EAAE,cAAsB;IACjF,OAAO,GAAG,kBAAkB,CAAC,cAAc,CAAC,IAAI,kBAAkB,CAAC,MAAM,CAAC,EAAE,CAAC;AACjF,CAAC"}

@@ -17,11 +17,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = ClientPlural;
 const jsx_runtime_1 = require("react/jsx-runtime");
-const getPluralBranch_1 = __importDefault(require("../../primitives/getPluralBranch"));
+const getPluralBranch_1 = __importDefault(require("../../primitives/variables/getPluralBranch"));
 const RenderClientVariable_1 = __importDefault(require("../value/RenderClientVariable"));
 const useLocale_1 = __importDefault(require("../hooks/useLocale"));
 const useDefaultLocale_1 = __importDefault(require("../hooks/useDefaultLocale"));
-const createValues_1 = __importDefault(require("../../primitives/createValues"));
+const createValues_1 = __importDefault(require("../../primitives/variables/createValues"));
 /**
  * Plural component that processes a given number and renders the appropriate branch or children.
  *

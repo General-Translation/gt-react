@@ -7,7 +7,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = ClientValue;
 const jsx_runtime_1 = require("react/jsx-runtime");
 const RenderClientVariable_1 = __importDefault(require("./RenderClientVariable"));
-const createValues_1 = __importDefault(require("../../primitives/createValues"));
+const createValues_1 = __importDefault(require("../../primitives/variables/createValues"));
 /**
  * Client-side value variable component that processes the given values and branches,
  * and renders the appropriate content based on the branch logic.

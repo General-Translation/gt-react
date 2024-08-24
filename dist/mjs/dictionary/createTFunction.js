@@ -12,8 +12,8 @@ var __rest = (this && this.__rest) || function (s, e) {
 import { jsx as _jsx, Fragment as _Fragment } from "react/jsx-runtime";
 import Value from "../server/value/InnerValue";
 import Plural from "../server/plural/InnerPlural";
-import getEntryMetadata from "../primitives/getEntryMetadata";
-import getEntryTranslationType from "../primitives/getEntryTranslationType";
+import getEntryMetadata from "../primitives/rendering/getEntryMetadata";
+import getEntryTranslationType from "../primitives/rendering/getEntryTranslationType";
 import getDictionaryEntry from "./getDictionaryEntry";
 import checkTFunctionOptions from "./checkTFunctionOptions";
 export default function createTFunction({ I18NConfig, T, intl }) {

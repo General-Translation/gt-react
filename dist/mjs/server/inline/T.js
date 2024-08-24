@@ -25,7 +25,7 @@ import writeChildrenAsObjects from '../../index/writeChildrenAsObjects';
 import renderChildren from './renderChildren';
 import Resolver from './Resolver';
 import calculateHash from '../../index/calculateHash';
-import getRenderAttributes from '../../primitives/getRenderAttributes';
+import getRenderAttributes from '../../primitives/rendering/getRenderAttributes';
 const ServerT = (_a) => __awaiter(void 0, void 0, void 0, function* () {
     var _b;
     var { I18NConfig, children, locale } = _a, props = __rest(_a, ["I18NConfig", "children", "locale"]);

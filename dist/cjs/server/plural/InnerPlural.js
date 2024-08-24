@@ -16,8 +16,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const jsx_runtime_1 = require("react/jsx-runtime");
 const renderVariable_1 = __importDefault(require("../value/renderVariable"));
-const getPluralBranch_1 = __importDefault(require("../../primitives/getPluralBranch"));
-const createValues_1 = __importDefault(require("../../primitives/createValues"));
+const getPluralBranch_1 = __importDefault(require("../../primitives/variables/getPluralBranch"));
+const createValues_1 = __importDefault(require("../../primitives/variables/createValues"));
 const Plural = (_a) => {
     var { locales, children, n, ranges, zero, one, two, few, many, other, singular, plural, dual, values } = _a, props = __rest(_a, ["locales", "children", "n", "ranges", "zero", "one", "two", "few", "many", "other", "singular", "plural", "dual", "values"]);
     if (typeof n !== 'number') {

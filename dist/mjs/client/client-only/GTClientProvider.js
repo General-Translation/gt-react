@@ -15,10 +15,10 @@ import { GTContext } from "../ClientProvider";
 import defaultGTProps from "../../types/defaultGTProps";
 import useBrowserLocale from "../hooks/useBrowserLocale";
 import { isSameLanguage } from "generaltranslation";
-import getRenderAttributes from "../../primitives/getRenderAttributes";
+import getRenderAttributes from "../../primitives/rendering/getRenderAttributes";
 import renderDefaultLanguage from "../helpers/renderDefaultLanguage";
 import handleRender from "../helpers/handleRender";
-import getDictionaryReference from "../../primitives/getDictionaryReference";
+import getDictionaryReference from "../../primitives/dictionary/getDictionaryReference";
 export default function GTClientProvider(_a) {
     var _b;
     var { children, projectID, dictionary = defaultGTProps.dictionary, dictionaryName = defaultGTProps.dictionaryName, approvedLocales, defaultLocale = (_b = approvedLocales === null || approvedLocales === void 0 ? void 0 : approvedLocales[0]) !== null && _b !== void 0 ? _b : defaultGTProps.defaultLocale, locale = '', remoteSource = defaultGTProps.remoteSource, cacheURL = defaultGTProps.cacheURL, translations } = _a;

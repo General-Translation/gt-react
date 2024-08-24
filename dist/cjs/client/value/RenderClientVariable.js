@@ -11,7 +11,7 @@ const ClientVar_1 = __importDefault(require("../variables/ClientVar"));
 const ClientNum_1 = __importDefault(require("../variables/ClientNum"));
 const ClientDateTime_1 = __importDefault(require("../variables/ClientDateTime"));
 const ClientCurrency_1 = __importDefault(require("../variables/ClientCurrency"));
-const defaultVariableNames_1 = __importDefault(require("../../primitives/defaultVariableNames"));
+const defaultVariableNames_1 = __importDefault(require("../../primitives/variables/defaultVariableNames"));
 const ClientProvider_1 = require("../ClientProvider");
 /**
  * Handles a single child element by cloning it with new properties if it is a valid React element,

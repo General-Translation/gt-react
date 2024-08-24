@@ -5,7 +5,7 @@ import renderChildren from './renderChildren';
 import I18NConfiguration from '../../config/I18NConfiguration';
 import Resolver from './Resolver';
 import calculateHash from '../../index/calculateHash';
-import getRenderAttributes from '../../primitives/getRenderAttributes';
+import getRenderAttributes from '../../primitives/rendering/getRenderAttributes';
 
 type ServerTProps = {
     I18NConfig: I18NConfiguration

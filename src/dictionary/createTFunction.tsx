@@ -2,8 +2,8 @@ import React, { isValidElement } from "react";
 import I18NConfiguration from "../config/I18NConfiguration";
 import Value from "../server/value/InnerValue";
 import Plural from "../server/plural/InnerPlural";
-import getEntryMetadata from "../primitives/getEntryMetadata";
-import getEntryTranslationType from "../primitives/getEntryTranslationType";
+import getEntryMetadata from "../primitives/rendering/getEntryMetadata";
+import getEntryTranslationType from "../primitives/rendering/getEntryTranslationType";
 import getDictionaryEntry from "./getDictionaryEntry";
 import checkTFunctionOptions from "./checkTFunctionOptions";
 

@@ -11,11 +11,11 @@ var __rest = (this && this.__rest) || function (s, e) {
     return t;
 };
 import { jsx as _jsx } from "react/jsx-runtime";
-import getPluralBranch from '../../primitives/getPluralBranch';
+import getPluralBranch from '../../primitives/variables/getPluralBranch';
 import RenderClientVariable from '../value/RenderClientVariable';
 import useLocale from '../hooks/useLocale';
 import useDefaultLocale from '../hooks/useDefaultLocale';
-import createValues from '../../primitives/createValues';
+import createValues from '../../primitives/variables/createValues';
 /**
  * Plural component that processes a given number and renders the appropriate branch or children.
  *

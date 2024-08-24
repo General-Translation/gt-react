@@ -2,7 +2,7 @@
 
 import React, { ReactNode } from 'react';
 import RenderClientVariable from './RenderClientVariable';
-import createValues from '../../primitives/createValues';
+import createValues from '../../primitives/variables/createValues';
 
 /**
  * Client-side value variable component that processes the given values and branches,

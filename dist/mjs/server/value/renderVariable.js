@@ -1,11 +1,11 @@
 import { jsx as _jsx } from "react/jsx-runtime";
 import React from 'react';
-import isValidReactNode from '../../primitives/isValidReactNode';
+import isValidReactNode from '../../primitives/rendering/isValidReactNode';
 import Var from '../variables/Var/Var';
 import Currency from '../variables/Currency/Currency';
 import Num from '../variables/Num/Num';
 import DateTime from '../variables/DateTime/DateTime';
-import defaultVariableNames from '../../primitives/defaultVariableNames';
+import defaultVariableNames from '../../primitives/variables/defaultVariableNames';
 /**
  * Handles a single child element by cloning it with new properties if it is a valid React element,
  * or wrapping it in a React Fragment if it is a valid React node object.

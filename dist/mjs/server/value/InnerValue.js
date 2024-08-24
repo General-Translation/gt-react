@@ -11,7 +11,7 @@ var __rest = (this && this.__rest) || function (s, e) {
 };
 import { jsx as _jsx } from "react/jsx-runtime";
 import renderVariable from './renderVariable';
-import createValues from '../../primitives/createValues';
+import createValues from '../../primitives/variables/createValues';
 const Value = (_a) => {
     var { children, values, locales } = _a, props = __rest(_a, ["children", "values", "locales"]);
     if (!values || !locales)

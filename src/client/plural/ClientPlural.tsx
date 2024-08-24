@@ -1,12 +1,12 @@
 'use client'
 
 import React, { ReactNode, useMemo } from 'react';
-import getPluralBranch, { Range } from '../../primitives/getPluralBranch';
+import getPluralBranch, { Range } from '../../primitives/variables/getPluralBranch';
 import RenderClientVariable from '../value/RenderClientVariable';
 import useLocale from '../hooks/useLocale';
 import useDefaultLocale from '../hooks/useDefaultLocale';
 import { useGTContext } from '../ClientProvider';
-import createValues from '../../primitives/createValues';
+import createValues from '../../primitives/variables/createValues';
 
 /**
  * Plural component that processes a given number and renders the appropriate branch or children.

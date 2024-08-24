@@ -16,7 +16,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = writeChildrenAsObjects;
 const react_1 = __importDefault(require("react"));
-const defaultVariableNames_1 = __importDefault(require("../primitives/defaultVariableNames"));
+const defaultVariableNames_1 = __importDefault(require("../primitives/variables/defaultVariableNames"));
 /**
  * Gets the tag name of a React element.
  * @param {ReactElement} child - The React element.

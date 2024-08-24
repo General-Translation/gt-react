@@ -5,8 +5,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = createDictFunction;
 const jsx_runtime_1 = require("react/jsx-runtime");
-const getEntryMetadata_1 = __importDefault(require("../primitives/getEntryMetadata"));
-const getEntryTranslationType_1 = __importDefault(require("../primitives/getEntryTranslationType"));
+const getEntryMetadata_1 = __importDefault(require("../primitives/rendering/getEntryMetadata"));
+const getEntryTranslationType_1 = __importDefault(require("../primitives/rendering/getEntryTranslationType"));
 const InnerPlural_1 = __importDefault(require("../server/plural/InnerPlural"));
 const InnerValue_1 = __importDefault(require("../server/value/InnerValue"));
 function createDictFunction(I18NConfig) {

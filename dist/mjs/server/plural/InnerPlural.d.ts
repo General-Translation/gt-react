@@ -1,5 +1,5 @@
 import { ReactNode } from 'react';
-import { Range } from '../../primitives/getPluralBranch';
+import { Range } from '../../primitives/variables/getPluralBranch';
 declare const Plural: {
     ({ locales, children, n, ranges, zero, one, two, few, many, other, singular, plural, dual, values, ...props }: {
         locales: string[];

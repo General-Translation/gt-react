@@ -1,7 +1,7 @@
 import React, { ReactNode } from 'react';
 import renderPlural from '../value/renderVariable';
-import getPluralBranch, { Range } from '../../primitives/getPluralBranch';
-import createValues from '../../primitives/createValues';
+import getPluralBranch, { Range } from '../../primitives/variables/getPluralBranch';
+import createValues from '../../primitives/variables/createValues';
 
 const Plural = ({ 
     locales, children, n, ranges,  

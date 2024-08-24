@@ -1,7 +1,7 @@
 'use client'
 
 import { Suspense } from "react";
-import isValidReactNode from "../../primitives/isValidReactNode";
+import isValidReactNode from "../../primitives/rendering/isValidReactNode";
 import RenderClientVariable from "../value/RenderClientVariable";
 import ClientResolver from "./ClientResolver";
 import renderClientChildren from "./renderClientChildren";

@@ -1,6 +1,6 @@
 import I18NConfiguration from "../config/I18NConfiguration";
-import getEntryMetadata from "../primitives/getEntryMetadata";
-import getEntryTranslationType from "../primitives/getEntryTranslationType";
+import getEntryMetadata from "../primitives/rendering/getEntryMetadata";
+import getEntryTranslationType from "../primitives/rendering/getEntryTranslationType";
 import Plural from "../server/plural/InnerPlural";
 import Value from "../server/value/InnerValue";
 import { tOptions } from "./createTFunction";

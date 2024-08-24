@@ -21,10 +21,10 @@ const ClientProvider_1 = require("../ClientProvider");
 const defaultGTProps_1 = __importDefault(require("../../types/defaultGTProps"));
 const useBrowserLocale_1 = __importDefault(require("../hooks/useBrowserLocale"));
 const generaltranslation_1 = require("generaltranslation");
-const getRenderAttributes_1 = __importDefault(require("../../primitives/getRenderAttributes"));
+const getRenderAttributes_1 = __importDefault(require("../../primitives/rendering/getRenderAttributes"));
 const renderDefaultLanguage_1 = __importDefault(require("../helpers/renderDefaultLanguage"));
 const handleRender_1 = __importDefault(require("../helpers/handleRender"));
-const getDictionaryReference_1 = __importDefault(require("../../primitives/getDictionaryReference"));
+const getDictionaryReference_1 = __importDefault(require("../../primitives/dictionary/getDictionaryReference"));
 function GTClientProvider(_a) {
     var _b;
     var { children, projectID, dictionary = defaultGTProps_1.default.dictionary, dictionaryName = defaultGTProps_1.default.dictionaryName, approvedLocales, defaultLocale = (_b = approvedLocales === null || approvedLocales === void 0 ? void 0 : approvedLocales[0]) !== null && _b !== void 0 ? _b : defaultGTProps_1.default.defaultLocale, locale = '', remoteSource = defaultGTProps_1.default.remoteSource, cacheURL = defaultGTProps_1.default.cacheURL, translations } = _a;

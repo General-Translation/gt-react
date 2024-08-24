@@ -1,9 +1,5 @@
 import { ReactNode } from 'react';
-type TargetElement = Record<string, any>;
-type TargetChild = TargetElement | string | number | boolean | object;
-type Target = TargetChild | TargetChild[];
-type SourceChild = ReactNode | Record<string, any>;
-type Source = SourceChild | SourceChild[];
+import { Target, Source } from '../../config/types/SourceTargetTypes';
 /**
  * Renders children elements based on the provided source and target.
  * Handles transformations and branching for number and value variables.
@@ -20,5 +16,4 @@ export default function renderChildren({ source, target, ...metadata }: {
     variables?: Record<string, Source>;
     [key: string]: any;
 }): ReactNode;
-export {};
 //# sourceMappingURL=renderChildren.d.ts.map

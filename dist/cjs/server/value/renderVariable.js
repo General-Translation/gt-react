@@ -6,12 +6,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = renderVariable;
 const jsx_runtime_1 = require("react/jsx-runtime");
 const react_1 = __importDefault(require("react"));
-const isValidReactNode_1 = __importDefault(require("../../primitives/isValidReactNode"));
+const isValidReactNode_1 = __importDefault(require("../../primitives/rendering/isValidReactNode"));
 const Var_1 = __importDefault(require("../variables/Var/Var"));
 const Currency_1 = __importDefault(require("../variables/Currency/Currency"));
 const Num_1 = __importDefault(require("../variables/Num/Num"));
 const DateTime_1 = __importDefault(require("../variables/DateTime/DateTime"));
-const defaultVariableNames_1 = __importDefault(require("../../primitives/defaultVariableNames"));
+const defaultVariableNames_1 = __importDefault(require("../../primitives/variables/defaultVariableNames"));
 /**
  * Handles a single child element by cloning it with new properties if it is a valid React element,
  * or wrapping it in a React Fragment if it is a valid React node object.

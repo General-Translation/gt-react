@@ -16,7 +16,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const jsx_runtime_1 = require("react/jsx-runtime");
 const renderVariable_1 = __importDefault(require("./renderVariable"));
-const createValues_1 = __importDefault(require("../../primitives/createValues"));
+const createValues_1 = __importDefault(require("../../primitives/variables/createValues"));
 const Value = (_a) => {
     var { children, values, locales } = _a, props = __rest(_a, ["children", "values", "locales"]);
     if (!values || !locales)

@@ -8,10 +8,10 @@ import defaultGTProps from "../../types/defaultGTProps";
 import useBrowserLocale from "../hooks/useBrowserLocale";
 import { tOptions } from "../../dictionary/createTFunction";
 import { isSameLanguage } from "generaltranslation";
-import getRenderAttributes from "../../primitives/getRenderAttributes";
+import getRenderAttributes from "../../primitives/rendering/getRenderAttributes";
 import renderDefaultLanguage from "../helpers/renderDefaultLanguage";
 import handleRender from "../helpers/handleRender";
-import getDictionaryReference from "../../primitives/getDictionaryReference";
+import getDictionaryReference from "../../primitives/dictionary/getDictionaryReference";
 
 export default function GTClientProvider({
     children, 

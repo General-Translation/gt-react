@@ -1,7 +1,7 @@
 'use client';
 import { jsx as _jsx } from "react/jsx-runtime";
 import RenderClientVariable from './RenderClientVariable';
-import createValues from '../../primitives/createValues';
+import createValues from '../../primitives/variables/createValues';
 /**
  * Client-side value variable component that processes the given values and branches,
  * and renders the appropriate content based on the branch logic.

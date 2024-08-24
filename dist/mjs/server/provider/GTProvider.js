@@ -24,11 +24,11 @@ import 'server-only';
 import { isValidElement } from 'react';
 import ClientProvider from '../../client/ClientProvider';
 import flattenDictionary from '../../index/flattenDictionary';
-import getEntryMetadata from '../../primitives/getEntryMetadata';
+import getEntryMetadata from '../../primitives/rendering/getEntryMetadata';
 import addGTIdentifier from '../../index/addGTIdentifier';
 import writeChildrenAsObjects from '../../index/writeChildrenAsObjects';
 import calculateHash from '../../index/calculateHash';
-import getEntryTranslationType from '../../primitives/getEntryTranslationType';
+import getEntryTranslationType from '../../primitives/rendering/getEntryTranslationType';
 import Plural from '../plural/InnerPlural';
 import cloneDictionary from '../../dictionary/cloneDictionary';
 /*

@@ -1,5 +1,5 @@
 import { ReactNode } from 'react';
-import { Range } from '../../primitives/getPluralBranch';
+import { Range } from '../../primitives/variables/getPluralBranch';
 /**
  * Plural component that processes a given number and renders the appropriate branch or children.
  *

@@ -6,7 +6,7 @@ import ClientVar from '../variables/ClientVar';
 import ClientNum from '../variables/ClientNum';
 import ClientDateTime from '../variables/ClientDateTime';
 import ClientCurrency from '../variables/ClientCurrency';
-import defaultVariableNames from '../../primitives/defaultVariableNames';
+import defaultVariableNames from '../../primitives/variables/defaultVariableNames';
 import { useGTContext } from '../ClientProvider';
 
 /**

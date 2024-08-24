@@ -1,6 +1,6 @@
 import React, { ReactNode, ReactElement } from 'react'
 
-type Child = ReactNode | Record<string, any>;
+type Child = ReactNode;
 type Children = Child[] | Child;
 type GTProp = {
     id: number,

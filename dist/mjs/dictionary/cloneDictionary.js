@@ -1,5 +1,5 @@
 import React from "react";
-import getEntryMetadata from "../primitives/getEntryMetadata";
+import getEntryMetadata from "../primitives/rendering/getEntryMetadata";
 export default function cloneDictionary(dictionary) {
     const clonedDictionary = {};
     for (const id of Object.keys(dictionary)) {

@@ -18,8 +18,8 @@ exports.default = createTFunction;
 const jsx_runtime_1 = require("react/jsx-runtime");
 const InnerValue_1 = __importDefault(require("../server/value/InnerValue"));
 const InnerPlural_1 = __importDefault(require("../server/plural/InnerPlural"));
-const getEntryMetadata_1 = __importDefault(require("../primitives/getEntryMetadata"));
-const getEntryTranslationType_1 = __importDefault(require("../primitives/getEntryTranslationType"));
+const getEntryMetadata_1 = __importDefault(require("../primitives/rendering/getEntryMetadata"));
+const getEntryTranslationType_1 = __importDefault(require("../primitives/rendering/getEntryTranslationType"));
 const getDictionaryEntry_1 = __importDefault(require("./getDictionaryEntry"));
 const checkTFunctionOptions_1 = __importDefault(require("./checkTFunctionOptions"));
 function createTFunction({ I18NConfig, T, intl }) {

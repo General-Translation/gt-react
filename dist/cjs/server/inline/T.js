@@ -30,7 +30,7 @@ const writeChildrenAsObjects_1 = __importDefault(require("../../index/writeChild
 const renderChildren_1 = __importDefault(require("./renderChildren"));
 const Resolver_1 = __importDefault(require("./Resolver"));
 const calculateHash_1 = __importDefault(require("../../index/calculateHash"));
-const getRenderAttributes_1 = __importDefault(require("../../primitives/getRenderAttributes"));
+const getRenderAttributes_1 = __importDefault(require("../../primitives/rendering/getRenderAttributes"));
 const ServerT = (_a) => __awaiter(void 0, void 0, void 0, function* () {
     var _b;
     var { I18NConfig, children, locale } = _a, props = __rest(_a, ["I18NConfig", "children", "locale"]);

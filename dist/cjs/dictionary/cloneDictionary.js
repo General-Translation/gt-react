@@ -5,7 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = cloneDictionary;
 const react_1 = __importDefault(require("react"));
-const getEntryMetadata_1 = __importDefault(require("../primitives/getEntryMetadata"));
+const getEntryMetadata_1 = __importDefault(require("../primitives/rendering/getEntryMetadata"));
 function cloneDictionary(dictionary) {
     const clonedDictionary = {};
     for (const id of Object.keys(dictionary)) {

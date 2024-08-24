@@ -1,18 +1,13 @@
-import React, { ReactElement, ReactNode } from 'react'
-import getPluralBranch from '../../primitives/getPluralBranch';
-import isValidReactNode from '../../primitives/isValidReactNode';
+import React, { isValidElement, ReactElement, ReactNode } from 'react'
+import getPluralBranch from '../../primitives/variables/getPluralBranch';
+import isValidReactNode from '../../primitives/rendering/isValidReactNode';
 import Var from '../variables/Var/Var';
 import DateTime from '../variables/DateTime/DateTime';
 import Num from '../variables/Num/Num';
 import Currency from '../variables/Currency/Currency';
-import defaultVariableNames from '../../primitives/defaultVariableNames';
-
-type TargetElement = Record<string, any>;
-type TargetChild = TargetElement | string | number | boolean | object;
-type Target = TargetChild | TargetChild[];
-
-type SourceChild = ReactNode | Record<string, any>;
-type Source = SourceChild | SourceChild[];
+import defaultVariableNames from '../../primitives/variables/defaultVariableNames';
+import { Target, TargetChild, TargetElement, TargetVariable, Source, SourceChild } from '../../config/types/SourceTargetTypes';
+import isTargetVariable from '../../primitives/variables/isTargetVariable';
 
 /**
  * Renders a React element based on the provided source and target elements.
@@ -25,13 +20,13 @@ type Source = SourceChild | SourceChild[];
  * @returns {ReactElement} The rendered React element.
  */
 const renderElement = ({ sourceElement, targetElement, ...metadata }: { sourceElement: ReactElement, targetElement: TargetElement, variables?: Record<string, Source>, renderAttributes?: Record<string, any>, [key: string]: any }): ReactElement => {
-    
+
     const { props } = sourceElement;
 
     if (props.children) {
 
         const { 'data-generaltranslation': generaltranslation } = props;
-        const targetProps: Record<string, any> | null = targetElement?.props;
+        const targetProps: Record<string, any> | null = targetElement?.props || null;
         const targetChildren = targetProps?.children;
         const targetBranches = targetProps?.['data-generaltranslation']?.branches;
 
@@ -90,8 +85,6 @@ export default function renderChildren({
 
     // Most straightforward case, return a valid React node
     if ((target === null || typeof target === 'undefined') && isValidReactNode(source)) return source;
-    
-    // Extremely important due to GTProvider and t() discrepancy on whether to use async intl()
     if (typeof target !== null && typeof target !== 'undefined' && isValidReactNode(target)) return target;
 
     // If target and source are both arrays of children
@@ -100,26 +93,26 @@ export default function renderChildren({
         // Filter for variables and valid source children
         let validSourceElements: Source[] = [];
         for (const sourceChild of source) {
-            if (sourceChild?.props?.['data-generaltranslation']?.transformation === "variable") {
-                
-                const variableName = sourceChild.props.name || defaultVariableNames[sourceChild?.props?.['data-generaltranslation']?.variableType];
-                const variableValue = sourceChild.props.defaultValue || sourceChild.props.children;
-                if (variableName && variableValue && typeof metadata?.variables?.[variableName] === 'undefined') {
-                    metadata.variables = { ...metadata.variables, [variableName]: variableValue }
+            if (isValidElement(sourceChild)) {
+                const { props } = sourceChild;
+                if (props?.['data-generaltranslation']?.transformation === "variable") {
+                    const variableName = sourceChild.props.name || defaultVariableNames[sourceChild?.props?.['data-generaltranslation']?.variableType];
+                    const variableValue = sourceChild.props.defaultValue || sourceChild.props.children;
+                    if (variableName && variableValue && typeof metadata?.variables?.[variableName] === 'undefined') {
+                        metadata.variables = { ...metadata.variables, [variableName]: variableValue }
+                    }
+                    const variableType = sourceChild?.props?.['data-generaltranslation']?.variableType || "variable";
+                    if (variableType === "number" || variableType === "currency" || variableType === "date") {
+                        const variableOptions = sourceChild?.props?.options;
+                        if (variableOptions) metadata.variableOptions = { ...metadata.variableOptions, [variableName]: { ...variableOptions } }
+                    }
+                    if (variableType === "currency") {
+                        const variableCurrency = sourceChild?.props?.currency;
+                        if (variableCurrency) metadata.variableOptions = { ...metadata.variableOptions, [variableName]: { currency: variableCurrency, ...metadata.variableOptions?.[variableName] } }
+                    }
+                } else {
+                    validSourceElements.push(sourceChild);
                 }
-
-                const variableType = sourceChild?.props?.['data-generaltranslation']?.variableType || "variable";
-                if (variableType === "number" || variableType === "currency" || variableType === "date") {
-                    const variableOptions = sourceChild?.props?.options;
-                    if (variableOptions) metadata.variableOptions = { ...metadata.variableOptions, [variableName]: { ...variableOptions } }
-                }
-                if (variableType === "currency") {
-                    const variableCurrency = sourceChild?.props?.currency;
-                    if (variableCurrency) metadata.variableOptions = { ...metadata.variableOptions, [variableName]: { currency: variableCurrency, ...metadata.variableOptions?.[variableName] } }
-                }
-            }
-            else if (React.isValidElement(sourceChild)) {
-                validSourceElements.push(sourceChild);
             }
         }
         
@@ -145,11 +138,9 @@ export default function renderChildren({
             }
 
             // If target is a variable
-            if (targetChild?.variable && typeof targetChild.key === 'string') {
-                
-                const key = targetChild.key;
+            if (isTargetVariable(targetChild)) {
                 let value;
-                
+                const key = targetChild.key;
                 if (metadata.variables && (typeof metadata.variables[key] !== null && typeof metadata.variables[key] !== 'undefined')) {
                     value = metadata.variables[key];
                 }
@@ -174,16 +165,52 @@ export default function renderChildren({
     }
     
     // Target is a single object, could be a component or a variable
-    if (typeof target === 'object') {
-        if (React.isValidElement(source)) {
-            return renderElement({ sourceElement: source, targetElement: target, ...metadata });
-        }
-        if ((target as any)?.variable && (target as any)?.keys && typeof source === 'object' && source !== null) {
-            for (const key of (target as any).keys) {
-                if (source.hasOwnProperty(key)) {
-                    return (source as any)[key];
+    if (typeof target === 'object' && !Array.isArray(target)) {
+
+        const sourceIsValidElement = isValidElement(source)
+
+        if (sourceIsValidElement) {
+            const { props } = source;
+            if (props?.['data-generaltranslation']?.transformation === "variable") {
+                const variableName = source.props.name || defaultVariableNames[source?.props?.['data-generaltranslation']?.variableType];
+                const variableValue = source.props.defaultValue || source.props.children;
+                if (variableName && variableValue && typeof metadata?.variables?.[variableName] === 'undefined') {
+                    metadata.variables = { ...metadata.variables, [variableName]: variableValue }
+                }
+                const variableType = source?.props?.['data-generaltranslation']?.variableType || "variable";
+                if (variableType === "number" || variableType === "currency" || variableType === "date") {
+                    const variableOptions = source?.props?.options;
+                    if (variableOptions) metadata.variableOptions = { ...metadata.variableOptions, [variableName]: { ...variableOptions } }
+                }
+                if (variableType === "currency") {
+                    const variableCurrency = source?.props?.currency;
+                    if (variableCurrency) metadata.variableOptions = { ...metadata.variableOptions, [variableName]: { currency: variableCurrency, ...metadata.variableOptions?.[variableName] } }
                 }
             }
+        }
+
+        // if target is a variable
+        if (isTargetVariable(target)) {
+            const key = target.key;
+            let value;
+            if (metadata.variables && (typeof metadata.variables[key] !== null && typeof metadata.variables[key] !== 'undefined')) {
+                value = metadata.variables[key];
+            }
+            if (target.variable === "number") {
+                return <Num locales={[metadata.locale, metadata.defaultLocale]} defaultValue={value} name={key} options={{...metadata?.variableOptions?.[key]}}/>
+            }
+            if (target.variable === "date") {
+                return <DateTime locales={[metadata.locale, metadata.defaultLocale]} defaultValue={value} name={key} options={{...metadata?.variableOptions?.[key]}}/>
+            }
+            if (target.variable === "currency") {
+                return <Currency locales={[metadata.locale, metadata.defaultLocale]} defaultValue={value} name={key} currency={metadata?.variableOptions?.[key]?.currency || undefined} options={{...metadata?.variableOptions?.[key]}}/>
+            }
+            return <Var defaultValue={isValidReactNode(value) ? value : undefined} name={key}/>
+        }
+
+        // if component
+        if (sourceIsValidElement) {
+            return renderElement({ sourceElement: source, targetElement: target, ...metadata });
         }
     }
 }

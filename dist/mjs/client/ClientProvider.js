@@ -1,7 +1,7 @@
 'use client';
 import { jsx as _jsx } from "react/jsx-runtime";
 import { createContext, useCallback, useContext } from "react";
-import getRenderAttributes from "../primitives/getRenderAttributes";
+import getRenderAttributes from "../primitives/rendering/getRenderAttributes";
 import handleRender from "./helpers/handleRender";
 import renderDefaultLanguage from "./helpers/renderDefaultLanguage";
 export const GTContext = createContext(undefined);

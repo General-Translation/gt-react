@@ -30,11 +30,11 @@ require("server-only");
 const react_1 = require("react");
 const ClientProvider_1 = __importDefault(require("../../client/ClientProvider"));
 const flattenDictionary_1 = __importDefault(require("../../index/flattenDictionary"));
-const getEntryMetadata_1 = __importDefault(require("../../primitives/getEntryMetadata"));
+const getEntryMetadata_1 = __importDefault(require("../../primitives/rendering/getEntryMetadata"));
 const addGTIdentifier_1 = __importDefault(require("../../index/addGTIdentifier"));
 const writeChildrenAsObjects_1 = __importDefault(require("../../index/writeChildrenAsObjects"));
 const calculateHash_1 = __importDefault(require("../../index/calculateHash"));
-const getEntryTranslationType_1 = __importDefault(require("../../primitives/getEntryTranslationType"));
+const getEntryTranslationType_1 = __importDefault(require("../../primitives/rendering/getEntryTranslationType"));
 const InnerPlural_1 = __importDefault(require("../plural/InnerPlural"));
 const cloneDictionary_1 = __importDefault(require("../../dictionary/cloneDictionary"));
 /*

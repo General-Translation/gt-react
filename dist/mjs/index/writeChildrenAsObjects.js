@@ -10,7 +10,7 @@ var __rest = (this && this.__rest) || function (s, e) {
     return t;
 };
 import React from 'react';
-import defaultVariableNames from '../primitives/defaultVariableNames';
+import defaultVariableNames from '../primitives/variables/defaultVariableNames';
 /**
  * Gets the tag name of a React element.
  * @param {ReactElement} child - The React element.

@@ -2,10 +2,10 @@
 
 import { isSameLanguage } from "generaltranslation";
 import { createContext, useCallback, useContext, useEffect, useState } from "react"
-import getEntryMetadata from "../primitives/getEntryMetadata";
+import getEntryMetadata from "../primitives/rendering/getEntryMetadata";
 import { tOptions } from "../dictionary/createTFunction";
 import renderClientChildren from "./helpers/renderClientChildren";
-import getRenderAttributes from "../primitives/getRenderAttributes";
+import getRenderAttributes from "../primitives/rendering/getRenderAttributes";
 import handleRender from "./helpers/handleRender";
 import renderDefaultLanguage from "./helpers/renderDefaultLanguage";
 

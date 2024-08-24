@@ -11,8 +11,8 @@ var __rest = (this && this.__rest) || function (s, e) {
 };
 import { jsx as _jsx } from "react/jsx-runtime";
 import renderPlural from '../value/renderVariable';
-import getPluralBranch from '../../primitives/getPluralBranch';
-import createValues from '../../primitives/createValues';
+import getPluralBranch from '../../primitives/variables/getPluralBranch';
+import createValues from '../../primitives/variables/createValues';
 const Plural = (_a) => {
     var { locales, children, n, ranges, zero, one, two, few, many, other, singular, plural, dual, values } = _a, props = __rest(_a, ["locales", "children", "n", "ranges", "zero", "one", "two", "few", "many", "other", "singular", "plural", "dual", "values"]);
     if (typeof n !== 'number') {
