@@ -88,18 +88,20 @@ const ServerT = async ({
         errorFallback = loadingFallback;
     }
 
+    const resolveI18NPromise = async () => {
+        try {
+            return await promise;
+        } catch {
+            return await errorFallback;
+        }
+    }
+
     if (renderMethod === "hang") {
         // Wait until the site is translated to return
-        const resolveI18NPromise = async () => {
-            try {
-                return await promise;
-            } catch {
-                return await errorFallback;
-            }
-        }
         return (
             <>
-                {await resolveI18NPromise()}
+                {/* @ts-expect-error Server Component */}
+                <Resolver fallback={errorFallback}>{promise}</Resolver>
             </>
         )
     }

@@ -75,17 +75,17 @@ const ServerT = (_a) => __awaiter(void 0, void 0, void 0, function* () {
         loadingFallback = renderChildren({ source: taggedChildren, target: translations.remote[id].t, renderAttributes, locale, defaultLocale });
         errorFallback = loadingFallback;
     }
+    const resolveI18NPromise = () => __awaiter(void 0, void 0, void 0, function* () {
+        try {
+            return yield promise;
+        }
+        catch (_a) {
+            return yield errorFallback;
+        }
+    });
     if (renderMethod === "hang") {
         // Wait until the site is translated to return
-        const resolveI18NPromise = () => __awaiter(void 0, void 0, void 0, function* () {
-            try {
-                return yield promise;
-            }
-            catch (_a) {
-                return yield errorFallback;
-            }
-        });
-        return (_jsx(_Fragment, { children: yield resolveI18NPromise() }));
+        return (_jsx(_Fragment, { children: _jsx(Resolver, { fallback: errorFallback, children: promise }) }));
     }
     if (!["skeleton", "replace"].includes(renderMethod)) {
         // If none of those, i.e. "subtle" 

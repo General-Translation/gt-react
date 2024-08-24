@@ -13,8 +13,7 @@ exports.default = Resolver;
 function Resolver(_a) {
     return __awaiter(this, arguments, void 0, function* ({ children, fallback }) {
         try {
-            const resolved = yield Promise.resolve(children);
-            return resolved;
+            return yield children;
         }
         catch (error) {
             console.error(error);
