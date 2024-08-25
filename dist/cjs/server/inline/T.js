@@ -30,7 +30,6 @@ const writeChildrenAsObjects_1 = __importDefault(require("../../index/writeChild
 const renderChildren_1 = __importDefault(require("./renderChildren"));
 const Resolver_1 = __importDefault(require("./Resolver"));
 const calculateHash_1 = __importDefault(require("../../index/calculateHash"));
-const getRenderAttributes_1 = __importDefault(require("../../primitives/rendering/getRenderAttributes"));
 const ServerT = (_a) => __awaiter(void 0, void 0, void 0, function* () {
     var _b;
     var { I18NConfig, children, locale } = _a, props = __rest(_a, ["I18NConfig", "children", "locale"]);
@@ -42,7 +41,6 @@ const ServerT = (_a) => __awaiter(void 0, void 0, void 0, function* () {
     // Fetch translations promise
     const translationsPromise = I18NConfig.getTranslations(locale, props.dictionaryName);
     const defaultLocale = I18NConfig.getDefaultLocale();
-    const renderAttributes = (0, getRenderAttributes_1.default)(Object.assign({ locale }, props));
     const taggedChildren = (0, addGTIdentifier_1.default)(children);
     const childrenAsObjects = (0, writeChildrenAsObjects_1.default)(taggedChildren);
     let key = props.context ? yield (0, calculateHash_1.default)([childrenAsObjects, props.context]) : yield (0, calculateHash_1.default)(childrenAsObjects);
@@ -52,7 +50,7 @@ const ServerT = (_a) => __awaiter(void 0, void 0, void 0, function* () {
     // Check if a translation for this site already exists and return it if it does
     const translationExists = translation ? true : false;
     if (translationExists) {
-        const I18NChildren = (0, renderChildren_1.default)({ source: taggedChildren, target: translation, renderAttributes, locale, defaultLocale });
+        const I18NChildren = (0, renderChildren_1.default)({ source: taggedChildren, target: translation, locale, defaultLocale });
         return ((0, jsx_runtime_1.jsx)(jsx_runtime_1.Fragment, { children: I18NChildren }));
     }
     // Check if a new translation for this site can be created
@@ -63,7 +61,7 @@ const ServerT = (_a) => __awaiter(void 0, void 0, void 0, function* () {
     const I18NChildrenPromise = I18NConfig.translateChildren({ children: childrenAsObjects, targetLanguage: locale, metadata: Object.assign(Object.assign({}, props), { hash: key }) });
     const renderSettings = I18NConfig.getRenderSettings();
     const renderMethod = (props === null || props === void 0 ? void 0 : props.renderMethod) || renderSettings.method;
-    let promise = I18NChildrenPromise.then(target => (0, renderChildren_1.default)({ source: taggedChildren, target, renderAttributes, locale, defaultLocale }));
+    let promise = I18NChildrenPromise.then(target => (0, renderChildren_1.default)({ source: taggedChildren, target, locale, defaultLocale }));
     // Render methods
     let loadingFallback = props.fallback;
     let errorFallback = children;
@@ -77,7 +75,7 @@ const ServerT = (_a) => __awaiter(void 0, void 0, void 0, function* () {
     }
     if (renderSettings.renderPrevious && translations.remote && translations.remote[id] && translations.remote[id].k) {
         // in case there's a previous translation on file
-        loadingFallback = (0, renderChildren_1.default)({ source: taggedChildren, target: translations.remote[id].t, renderAttributes, locale, defaultLocale });
+        loadingFallback = (0, renderChildren_1.default)({ source: taggedChildren, target: translations.remote[id].t, locale, defaultLocale });
         errorFallback = loadingFallback;
     }
     const resolveI18NPromise = () => __awaiter(void 0, void 0, void 0, function* () {

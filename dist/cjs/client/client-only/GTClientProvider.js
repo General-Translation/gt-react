@@ -44,7 +44,6 @@ const ClientProvider_1 = require("../ClientProvider");
 const defaultGTProps_1 = __importDefault(require("../../types/defaultGTProps"));
 const useBrowserLocale_1 = __importDefault(require("../hooks/useBrowserLocale"));
 const generaltranslation_1 = require("generaltranslation");
-const getRenderAttributes_1 = __importDefault(require("../../primitives/rendering/getRenderAttributes"));
 const renderDefaultLanguage_1 = __importDefault(require("../helpers/renderDefaultLanguage"));
 const getDictionaryReference_1 = __importDefault(require("../../primitives/dictionary/getDictionaryReference"));
 const renderClientChildren_1 = __importDefault(require("../helpers/renderClientChildren"));
@@ -126,21 +125,18 @@ function GTClientProvider(_a) {
             }
         }
     }, [cacheURL, remoteSource, locale]);
-    const renderAttributes = (0, getRenderAttributes_1.default)({ locale });
     const translate = (0, react_1.useCallback)((id, options) => {
         const { n, values } = options || {};
         const variables = Object.assign(Object.assign({}, (typeof n === 'number' && { n })), (values && Object.assign({}, values)));
         if (translationRequired) {
             if (localDictionary && localDictionary[id]) {
-                return (0, renderDefaultLanguage_1.default)(Object.assign({ source: localDictionary[id], variables, id,
-                    renderAttributes }, options));
+                return (0, renderDefaultLanguage_1.default)(Object.assign({ source: localDictionary[id], variables, id }, options));
             }
             if (remoteTranslations && remoteTranslations[id] && remoteTranslations[id].t) {
                 return (0, renderClientChildren_1.default)({
                     source: suppliedDictionary[id],
                     target: remoteTranslations[id].t,
                     locale, defaultLocale,
-                    renderAttributes: (0, getRenderAttributes_1.default)({ locale }),
                     id, variables
                 });
             }

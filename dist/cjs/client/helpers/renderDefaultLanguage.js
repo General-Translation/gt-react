@@ -53,7 +53,7 @@ function renderDefaultLanguage(_a) {
                 }
             }
             if (props.children) {
-                return react_1.default.cloneElement(child, Object.assign(Object.assign(Object.assign({}, props), metadata.renderAttributes), { children: handleChildren(props.children) }));
+                return react_1.default.cloneElement(child, Object.assign(Object.assign({}, props), { children: handleChildren(props.children) }));
             }
         }
         return child;

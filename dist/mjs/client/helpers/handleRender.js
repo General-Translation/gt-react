@@ -27,7 +27,7 @@ function isPromise(value) {
     return !!value && typeof value.then === 'function';
 }
 export default function handleRender(_a) {
-    var { source, target, renderAttributes } = _a, metadata = __rest(_a, ["source", "target", "renderAttributes"]);
+    var { source, target } = _a, metadata = __rest(_a, ["source", "target"]);
     let targetContent;
     let targetFallbacks;
     if (Array.isArray(target)) {
@@ -42,10 +42,10 @@ export default function handleRender(_a) {
     if (isPromise(targetContent)) {
         const translationPromise = (() => __awaiter(this, void 0, void 0, function* () {
             const resolved = yield targetContent;
-            return renderClientChildren(Object.assign({ source, target: resolved, renderAttributes }, metadata));
+            return renderClientChildren(Object.assign({ source, target: resolved }, metadata));
         }))();
         return (_jsx(Suspense, { fallback: targetFallbacks.loadingFallback, children: _jsx(ClientResolver, { promise: translationPromise, fallback: targetFallbacks.errorFallback }) }));
     }
-    return renderClientChildren(Object.assign({ source, target: targetContent, renderAttributes }, metadata));
+    return renderClientChildren(Object.assign({ source, target: targetContent }, metadata));
 }
 //# sourceMappingURL=handleRender.js.map

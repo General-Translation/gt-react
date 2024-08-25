@@ -1,5 +1,5 @@
 import { ReactNode } from 'react';
-import { Target, Source } from '../../config/types/SourceTargetTypes';
+import { Target, Source } from '../../types/SourceTargetTypes';
 /**
  * Renders children elements based on the provided source and target.
  * Handles transformations and branching for number and value variables.

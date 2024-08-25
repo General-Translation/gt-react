@@ -6,7 +6,7 @@ import DateTime from '../variables/DateTime/DateTime';
 import Num from '../variables/Num/Num';
 import Currency from '../variables/Currency/Currency';
 import defaultVariableNames from '../../primitives/variables/defaultVariableNames';
-import { Target, TargetChild, TargetElement, TargetVariable, Source, SourceChild } from '../../config/types/SourceTargetTypes';
+import { Target, TargetChild, TargetElement, TargetVariable, Source, SourceChild } from '../../types/SourceTargetTypes';
 import isTargetVariable from '../../primitives/variables/isTargetVariable';
 
 /**
@@ -19,7 +19,7 @@ import isTargetVariable from '../../primitives/variables/isTargetVariable';
  * 
  * @returns {ReactElement} The rendered React element.
  */
-const renderElement = ({ sourceElement, targetElement, ...metadata }: { sourceElement: ReactElement, targetElement: TargetElement, variables?: Record<string, Source>, renderAttributes?: Record<string, any>, [key: string]: any }): ReactElement => {
+const renderElement = ({ sourceElement, targetElement, ...metadata }: { sourceElement: ReactElement, targetElement: TargetElement, variables?: Record<string, Source>, [key: string]: any }): ReactElement => {
 
     const { props } = sourceElement;
 
@@ -45,7 +45,6 @@ const renderElement = ({ sourceElement, targetElement, ...metadata }: { sourceEl
                 const children = renderChildren({source: sourceBranch, target: targetBranch, variables: { ...metadata.variables, n: n }, ...metadata});
                 
                 return React.createElement('span', {
-                    ...metadata.renderAttributes,
                     children: children
                 });
 
@@ -56,12 +55,11 @@ const renderElement = ({ sourceElement, targetElement, ...metadata }: { sourceEl
         // otherwise, just clone the element
         return React.cloneElement(sourceElement, {
             ...props,
-            ...metadata.renderAttributes,
             children: renderChildren({ source: props.children, target: targetChildren, ...metadata} )
         });
     }
 
-    return React.cloneElement(sourceElement, { ...metadata.renderAttributes, ...sourceElement?.props });
+    return React.cloneElement(sourceElement, { ...(sourceElement?.props || {}) });
 }
 
 /**

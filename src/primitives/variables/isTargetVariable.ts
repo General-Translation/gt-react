@@ -1,4 +1,4 @@
-import { TargetVariable } from "../../config/types/SourceTargetTypes";
+import { TargetVariable } from "../../types/SourceTargetTypes";
 
 export default function isTargetVariable(target: unknown): target is TargetVariable {
     if (typeof (target as TargetVariable).key === 'string') {

@@ -5,7 +5,6 @@ import renderChildren from './renderChildren';
 import I18NConfiguration from '../../config/I18NConfiguration';
 import Resolver from './Resolver';
 import calculateHash from '../../index/calculateHash';
-import getRenderAttributes from '../../primitives/rendering/getRenderAttributes';
 
 type ServerTProps = {
     I18NConfig: I18NConfiguration
@@ -33,8 +32,7 @@ const ServerT = async ({
     const translationsPromise = I18NConfig.getTranslations(locale, props.dictionaryName);
 
     const defaultLocale = I18NConfig.getDefaultLocale();
-    const renderAttributes = getRenderAttributes({ locale, ...props });
-   
+
     const taggedChildren = addGTIdentifier(children);
     const childrenAsObjects = writeChildrenAsObjects(taggedChildren);
     
@@ -47,7 +45,7 @@ const ServerT = async ({
     // Check if a translation for this site already exists and return it if it does
     const translationExists: boolean = translation ? true : false;
     if (translationExists) {
-        const I18NChildren = renderChildren({ source: taggedChildren, target: translation, renderAttributes, locale, defaultLocale });
+        const I18NChildren = renderChildren({ source: taggedChildren, target: translation, locale, defaultLocale });
         return (
             <>
                 {I18NChildren}
@@ -69,7 +67,7 @@ const ServerT = async ({
     
     const renderSettings = I18NConfig.getRenderSettings();
     const renderMethod = props?.renderMethod || renderSettings.method;
-    let promise: Promise<any> = I18NChildrenPromise.then(target => renderChildren({ source: taggedChildren, target, renderAttributes, locale, defaultLocale }));
+    let promise: Promise<any> = I18NChildrenPromise.then(target => renderChildren({ source: taggedChildren, target, locale, defaultLocale }));
 
     // Render methods
 
@@ -84,7 +82,7 @@ const ServerT = async ({
 
     if (renderSettings.renderPrevious && translations.remote && translations.remote[id] && translations.remote[id].k) {
         // in case there's a previous translation on file
-        loadingFallback = renderChildren({ source: taggedChildren, target: translations.remote[id].t, renderAttributes, locale, defaultLocale });
+        loadingFallback = renderChildren({ source: taggedChildren, target: translations.remote[id].t, locale, defaultLocale });
         errorFallback = loadingFallback;
     }
 

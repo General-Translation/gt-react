@@ -1,11 +1,10 @@
 'use client';
 import { jsx as _jsx } from "react/jsx-runtime";
 import { createContext, useCallback, useContext } from "react";
-import getRenderAttributes from "../primitives/rendering/getRenderAttributes";
 import handleRender from "./helpers/handleRender";
 import renderDefaultLanguage from "./helpers/renderDefaultLanguage";
 export const GTContext = createContext(undefined);
-export default function ClientProvider({ children, locale, defaultLocale, dictionary, translations, renderSettings, translationRequired }) {
+export default function ClientProvider({ children, locale, defaultLocale, dictionary, translations, translationRequired }) {
     const translate = useCallback((id, options) => {
         const { n, values } = options || {};
         const variables = Object.assign(Object.assign({}, (typeof n === 'number' && { n })), (values && Object.assign({}, values)));
@@ -14,7 +13,6 @@ export default function ClientProvider({ children, locale, defaultLocale, dictio
                 source: dictionary[id],
                 target: translations[id],
                 locale, defaultLocale,
-                renderAttributes: getRenderAttributes({ locale }),
                 variables, id
             });
         }

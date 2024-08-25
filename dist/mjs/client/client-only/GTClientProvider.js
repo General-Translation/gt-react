@@ -15,7 +15,6 @@ import { GTContext } from "../ClientProvider";
 import defaultGTProps from "../../types/defaultGTProps";
 import useBrowserLocale from "../hooks/useBrowserLocale";
 import { isSameLanguage } from "generaltranslation";
-import getRenderAttributes from "../../primitives/rendering/getRenderAttributes";
 import renderDefaultLanguage from "../helpers/renderDefaultLanguage";
 import getDictionaryReference from "../../primitives/dictionary/getDictionaryReference";
 import renderClientChildren from "../helpers/renderClientChildren";
@@ -97,21 +96,18 @@ export default function GTClientProvider(_a) {
             }
         }
     }, [cacheURL, remoteSource, locale]);
-    const renderAttributes = getRenderAttributes({ locale });
     const translate = useCallback((id, options) => {
         const { n, values } = options || {};
         const variables = Object.assign(Object.assign({}, (typeof n === 'number' && { n })), (values && Object.assign({}, values)));
         if (translationRequired) {
             if (localDictionary && localDictionary[id]) {
-                return renderDefaultLanguage(Object.assign({ source: localDictionary[id], variables, id,
-                    renderAttributes }, options));
+                return renderDefaultLanguage(Object.assign({ source: localDictionary[id], variables, id }, options));
             }
             if (remoteTranslations && remoteTranslations[id] && remoteTranslations[id].t) {
                 return renderClientChildren({
                     source: suppliedDictionary[id],
                     target: remoteTranslations[id].t,
                     locale, defaultLocale,
-                    renderAttributes: getRenderAttributes({ locale }),
                     id, variables
                 });
             }

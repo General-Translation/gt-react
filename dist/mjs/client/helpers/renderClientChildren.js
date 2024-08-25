@@ -42,13 +42,15 @@ const renderClientElement = (_a) => {
                 const sourceBranch = getPluralBranch(n, [metadata.locale, metadata.defaultLocale], branches) || generaltranslation.defaultChildren;
                 const targetBranch = getPluralBranch(n, [metadata.locale, metadata.defaultLocale], targetBranches) || targetChildren;
                 const children = renderClientChildren(Object.assign({ source: sourceBranch, target: targetBranch, variables: Object.assign(Object.assign({}, metadata.variables), { n: n }) }, metadata));
-                return React.createElement('span', Object.assign(Object.assign({}, metadata.renderAttributes), { children: children }));
+                return React.createElement('span', {
+                    children: children
+                });
             }
         }
         // otherwise, just clone the element
-        return React.cloneElement(sourceElement, Object.assign(Object.assign(Object.assign({}, props), metadata.renderAttributes), { children: renderClientChildren(Object.assign({ source: props.children, target: targetChildren }, metadata)) }));
+        return React.cloneElement(sourceElement, Object.assign(Object.assign({}, props), { children: renderClientChildren(Object.assign({ source: props.children, target: targetChildren }, metadata)) }));
     }
-    return React.cloneElement(sourceElement, Object.assign(Object.assign({}, metadata.renderAttributes), sourceElement === null || sourceElement === void 0 ? void 0 : sourceElement.props));
+    return React.cloneElement(sourceElement, Object.assign({}, ((sourceElement === null || sourceElement === void 0 ? void 0 : sourceElement.props) || {})));
 };
 /**
  * Renders children elements based on the provided source and target.

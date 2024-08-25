@@ -7,7 +7,6 @@ import createIntlFunction from './server/intl/createIntlFunction';
 import createGTProviderComponent from './server/provider/createGTProviderComponent';
 import CreateI18NConfigProps from './types/CreateGTProps';
 import createTFunction, { tOptions } from './dictionary/createTFunction';
-import createDictFunction from './dictionary/createDictFunction';
 import createValueComponent from './server/value/createValueComponent';
 import createPluralComponent from './server/plural/createPluralComponent';
 import GeneralTranslation from './types/GeneralTranslationInterface';
@@ -17,7 +16,6 @@ import createDateTimeComponent from './server/variables/DateTime/createDateTimeC
 import createCurrencyComponent from './server/variables/Currency/createCurrencyComponent';
 import defaultGTProps from './types/defaultGTProps';
 import Variables from './types/Variables';
-import createGetGTFunction from './dictionary/createGetGTFunction';
 
 /**
  * Initializes the `gt-react` i18n library.
@@ -111,10 +109,11 @@ export function createGT({
     // ----- Dictionary ------ //
 
     const t = createTFunction({ I18NConfig, T, intl });
-
-    const getGT = createGetGTFunction(t);
-
-    const dict = createDictFunction(I18NConfig);
+  
+    const getGT = (id?: string) => {
+        let nestedDictionary = id ? I18NConfig.getDictionaryEntry(id) : I18NConfig.getDictionary();
+        return createTFunction({ I18NConfig, T, intl, dictionary: nestedDictionary });
+    };
 
     // ----- <GTProvider> ------ //
 
@@ -136,7 +135,7 @@ export function createGT({
     return {
         T, intl,
         GTProvider,
-        t, getGT, dict,
+        t, getGT,
         Value, Plural,
         Var, Num, DateTime, Currency,
         getLocale, getDefaultLocale

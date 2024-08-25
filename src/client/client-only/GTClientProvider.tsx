@@ -7,8 +7,7 @@ import { GTContext } from "../ClientProvider"
 import defaultGTProps from "../../types/defaultGTProps";
 import useBrowserLocale from "../hooks/useBrowserLocale";
 import { tOptions } from "../../dictionary/createTFunction";
-import { isSameLanguage } from "generaltranslation";
-import getRenderAttributes from "../../primitives/rendering/getRenderAttributes";
+import { getLanguageDirection, isSameLanguage } from "generaltranslation";
 import renderDefaultLanguage from "../helpers/renderDefaultLanguage";
 import getDictionaryReference from "../../primitives/dictionary/getDictionaryReference";
 import renderClientChildren from "../helpers/renderClientChildren";
@@ -122,8 +121,6 @@ export default function GTClientProvider({
         }
     }, [cacheURL, remoteSource, locale])
 
-    const renderAttributes = getRenderAttributes({ locale });
-
     const translate = useCallback((id: string, options?: tOptions) => {
         const { n, values } = options || {};
         const variables = { ...(typeof n === 'number' && { n }), ...(values && { ...values }) };
@@ -132,7 +129,6 @@ export default function GTClientProvider({
                 return renderDefaultLanguage({ 
                     source: localDictionary[id], 
                     variables, id, 
-                    renderAttributes, 
                     ...options 
                 })
             }
@@ -141,7 +137,6 @@ export default function GTClientProvider({
                     source: suppliedDictionary[id],
                     target: remoteTranslations[id].t,
                     locale, defaultLocale,
-                    renderAttributes: getRenderAttributes({ locale }),
                     id, variables
                 })
             }

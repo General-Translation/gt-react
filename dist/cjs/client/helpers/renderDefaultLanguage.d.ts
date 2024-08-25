@@ -1,5 +1,5 @@
 import { ReactNode } from "react";
-type SourceChild = ReactNode | Record<string, any>;
+type SourceChild = ReactNode;
 type Source = SourceChild | SourceChild[];
 export default function renderDefaultLanguage({ source, variables, ...metadata }: {
     source: Source;

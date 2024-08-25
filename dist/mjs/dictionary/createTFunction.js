@@ -16,10 +16,10 @@ import getEntryMetadata from "../primitives/rendering/getEntryMetadata";
 import getEntryTranslationType from "../primitives/rendering/getEntryTranslationType";
 import getDictionaryEntry from "./getDictionaryEntry";
 import checkTFunctionOptions from "./checkTFunctionOptions";
-export default function createTFunction({ I18NConfig, T, intl }) {
-    return (id, options) => {
+export default function createTFunction({ I18NConfig, T, intl, dictionary = I18NConfig.getDictionary() }) {
+    return function t(id, options) {
         checkTFunctionOptions(options);
-        const raw = getDictionaryEntry(id, I18NConfig.getDictionary());
+        const raw = getDictionaryEntry(id, dictionary);
         const { entry, metadata } = getEntryMetadata(raw);
         options = Object.assign(Object.assign({}, options), metadata);
         // Checks to see if options are valid

@@ -13,11 +13,12 @@ import ClientPlural from "../plural/ClientPlural";
  * @param {string} [id] - Optional prefix to prepend to the translation keys.
  * @returns {Function} A translation function that accepts a key string and returns the translated value.
  */
-export default function useGT(id?: string): Function {
+export default function useGT(id: string = ''): Function {
     // Create a prefix for translation keys if an id is provided
-    const prefix = useMemo(() => {
-        return id ? `${id}.` : ''
-    }, [id]);
+    const getID = (suffix: string) => {
+        if (id && suffix) return `${id}.${suffix}`;
+        return id ?? suffix;
+    }
 
     // Get the translation context
     let translate;
@@ -28,17 +29,17 @@ export default function useGT(id?: string): Function {
     }
 
     // Return a translation function if available, otherwise return a no-op function
-    return (id: string, options?: {
+    return (id: string = '', options?: {
         n?: number,
         values?: Record<string, any>
         [key: string]: any
     }) => {
 
-        const prefixedID = `${prefix}${id}`;
+        const prefixedID = getID(id);
 
         const translation = translate(prefixedID, options);
 
-        if (!translation) console.warn(`t('${id}') finding no translation for dictionary item ${prefix}${id} !`)
+        if (!translation) console.warn(`t('${id}') finding no translation for dictionary item ${prefixedID} !`)
 
         return <React.Fragment key={prefixedID}>{translation}</React.Fragment>;
     }

@@ -142,7 +142,7 @@ function GTProvider(_a) {
                 }
             })));
         }
-        return ((0, jsx_runtime_1.jsx)(ClientProvider_1.default, { locale: locale, defaultLocale: defaultLocale, dictionary: dictionary, translations: translations, translationRequired: translationRequired, renderSettings: renderSettings, children: children }));
+        return ((0, jsx_runtime_1.jsx)(ClientProvider_1.default, { locale: locale, defaultLocale: defaultLocale, dictionary: dictionary, translations: translations, translationRequired: translationRequired, children: children }));
     });
 }
 //# sourceMappingURL=GTProvider.js.map

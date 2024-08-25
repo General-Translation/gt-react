@@ -11,7 +11,7 @@ function isPromise(value: any): value is Promise<any> {
 }
 
 export default function handleRender({
-    source, target, renderAttributes, ...metadata
+    source, target, ...metadata
 }: any) {
 
     let targetContent; let targetFallbacks;
@@ -28,7 +28,7 @@ export default function handleRender({
         const translationPromise = (async () => {
             const resolved = await targetContent;
             return renderClientChildren({
-                source, target: resolved, renderAttributes, ...metadata
+                source, target: resolved, ...metadata
             })
         })();
         return (
@@ -39,7 +39,7 @@ export default function handleRender({
     }
 
     return renderClientChildren({
-        source, target: targetContent, renderAttributes, ...metadata
+        source, target: targetContent, ...metadata
     });
 
 }

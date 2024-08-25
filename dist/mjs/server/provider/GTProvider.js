@@ -136,7 +136,7 @@ export default function GTProvider(_a) {
                 }
             })));
         }
-        return (_jsx(ClientProvider, { locale: locale, defaultLocale: defaultLocale, dictionary: dictionary, translations: translations, translationRequired: translationRequired, renderSettings: renderSettings, children: children }));
+        return (_jsx(ClientProvider, { locale: locale, defaultLocale: defaultLocale, dictionary: dictionary, translations: translations, translationRequired: translationRequired, children: children }));
     });
 }
 //# sourceMappingURL=GTProvider.js.map

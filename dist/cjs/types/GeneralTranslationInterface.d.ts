@@ -73,12 +73,6 @@ type GeneralTranslation = Variables & {
     */
     getGT: (id?: string) => any;
     /**
-    * Server-side function which gets an entry from the default dictionary, in its original language.
-    *
-    * `id` - (string) - ID of the item in the dictionary.
-    */
-    dict: (id: string) => any;
-    /**
      *  Type of <T> translation component which renders content around variables.
      *
      * `children?` - (any) - The default content to render if no conditions are met.

@@ -6,7 +6,7 @@ import ClientPlural from "../plural/ClientPlural";
 import ClientValue from "../value/ClientValue";
 import RenderClientVariable from "../value/RenderClientVariable";
 
-type SourceChild = ReactNode | Record<string, any>;
+type SourceChild = ReactNode;
 type Source = SourceChild | SourceChild[];
 
 export default function renderDefaultLanguage({
@@ -58,7 +58,6 @@ export default function renderDefaultLanguage({
             if (props.children) {
                 return React.cloneElement(child, {
                     ...props,
-                    ...metadata.renderAttributes,
                     children: handleChildren(props.children)
                 });
             }

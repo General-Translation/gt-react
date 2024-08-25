@@ -9,11 +9,10 @@ exports.default = ClientProvider;
 exports.useGTContext = useGTContext;
 const jsx_runtime_1 = require("react/jsx-runtime");
 const react_1 = require("react");
-const getRenderAttributes_1 = __importDefault(require("../primitives/rendering/getRenderAttributes"));
 const handleRender_1 = __importDefault(require("./helpers/handleRender"));
 const renderDefaultLanguage_1 = __importDefault(require("./helpers/renderDefaultLanguage"));
 exports.GTContext = (0, react_1.createContext)(undefined);
-function ClientProvider({ children, locale, defaultLocale, dictionary, translations, renderSettings, translationRequired }) {
+function ClientProvider({ children, locale, defaultLocale, dictionary, translations, translationRequired }) {
     const translate = (0, react_1.useCallback)((id, options) => {
         const { n, values } = options || {};
         const variables = Object.assign(Object.assign({}, (typeof n === 'number' && { n })), (values && Object.assign({}, values)));
@@ -22,7 +21,6 @@ function ClientProvider({ children, locale, defaultLocale, dictionary, translati
                 source: dictionary[id],
                 target: translations[id],
                 locale, defaultLocale,
-                renderAttributes: (0, getRenderAttributes_1.default)({ locale }),
                 variables, id
             });
         }

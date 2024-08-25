@@ -23,7 +23,6 @@ const I18NConfiguration_1 = __importDefault(require("./config/I18NConfiguration"
 const createIntlFunction_1 = __importDefault(require("./server/intl/createIntlFunction"));
 const createGTProviderComponent_1 = __importDefault(require("./server/provider/createGTProviderComponent"));
 const createTFunction_1 = __importDefault(require("./dictionary/createTFunction"));
-const createDictFunction_1 = __importDefault(require("./dictionary/createDictFunction"));
 const createValueComponent_1 = __importDefault(require("./server/value/createValueComponent"));
 const createPluralComponent_1 = __importDefault(require("./server/plural/createPluralComponent"));
 const createVarComponent_1 = __importDefault(require("./server/variables/Var/createVarComponent"));
@@ -31,7 +30,6 @@ const createNumComponent_1 = __importDefault(require("./server/variables/Num/cre
 const createDateTimeComponent_1 = __importDefault(require("./server/variables/DateTime/createDateTimeComponent"));
 const createCurrencyComponent_1 = __importDefault(require("./server/variables/Currency/createCurrencyComponent"));
 const defaultGTProps_1 = __importDefault(require("./types/defaultGTProps"));
-const createGetGTFunction_1 = __importDefault(require("./dictionary/createGetGTFunction"));
 /**
  * Initializes the `gt-react` i18n library.
  *
@@ -101,8 +99,10 @@ function createGT(_a = {
     const intl = (0, createIntlFunction_1.default)(Object.assign({ I18NConfig }, metadata));
     // ----- Dictionary ------ //
     const t = (0, createTFunction_1.default)({ I18NConfig, T, intl });
-    const getGT = (0, createGetGTFunction_1.default)(t);
-    const dict = (0, createDictFunction_1.default)(I18NConfig);
+    const getGT = (id) => {
+        let nestedDictionary = id ? I18NConfig.getDictionaryEntry(id) : I18NConfig.getDictionary();
+        return (0, createTFunction_1.default)({ I18NConfig, T, intl, dictionary: nestedDictionary });
+    };
     // ----- <GTProvider> ------ //
     const GTProvider = (0, createGTProviderComponent_1.default)(Object.assign({ I18NConfig }, metadata));
     // ----- Variables ----- //
@@ -117,7 +117,7 @@ function createGT(_a = {
     return {
         T, intl,
         GTProvider,
-        t, getGT, dict,
+        t, getGT,
         Value, Plural,
         Var, Num, DateTime, Currency,
         getLocale, getDefaultLocale

@@ -10,7 +10,7 @@ import ClientDateTime from "../variables/ClientDateTime";
 import ClientCurrency from "../variables/ClientCurrency";
 import ClientVar from "../variables/ClientVar";
 import getPluralBranch from "../../primitives/variables/getPluralBranch";
-import { Target, TargetChild, TargetElement, TargetVariable, Source, SourceChild } from "../../config/types/SourceTargetTypes";
+import { Target, TargetChild, TargetElement, TargetVariable, Source, SourceChild } from "../../types/SourceTargetTypes";
 import isTargetVariable from "../../primitives/variables/isTargetVariable";
 
 const renderClientElement = ({ sourceElement, targetElement, ...metadata }: { 
@@ -50,7 +50,6 @@ const renderClientElement = ({ sourceElement, targetElement, ...metadata }: {
                 const children = renderClientChildren({source: sourceBranch, target: targetBranch, variables: { ...metadata.variables, n: n }, ...metadata});
             
                 return React.createElement('span', {
-                    ...metadata.renderAttributes,
                     children: children
                 });
             }
@@ -59,13 +58,12 @@ const renderClientElement = ({ sourceElement, targetElement, ...metadata }: {
         // otherwise, just clone the element
         return React.cloneElement(sourceElement, {
             ...props,
-            ...metadata.renderAttributes,
             children: renderClientChildren({ source: props.children, target: targetChildren, ...metadata} )
         });
 
     }
 
-    return React.cloneElement(sourceElement, { ...metadata.renderAttributes, ...sourceElement?.props });
+    return React.cloneElement(sourceElement, { ...(sourceElement?.props || {}) });
 }
 
 /**
