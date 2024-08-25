@@ -44,11 +44,11 @@ export default async function GTProvider({
     if (providerID) {
         const { entry } = getEntryMetadata(I18NConfig.getDictionaryEntry(providerID));
         if (entry && !isValidElement(entry) && typeof entry === 'object') {
-            dictionary = { ...entry, ...flattenDictionary(dictionary, providerID) }
+            dictionary = { ...entry, ...flattenDictionary(dictionary) }
         }
     }
     dictionary = flattenDictionary(dictionary, providerID);
-
+    
     let translations: Record<string, any> = {};
 
     const renderSettings = I18NConfig.getRenderSettings();
