@@ -25,10 +25,11 @@ import createValues from '../../primitives/variables/createValues';
  * @param {Record<string, any>} ...branches - Named branches, e.g. "singular", "plural" and their associated branches.
  * @returns {ReactNode}
  */
-export default function ClientPlural(_a) {
+const ClientPlural = (_a) => {
     var { children, n, values, ranges } = _a, branches = __rest(_a, ["children", "n", "values", "ranges"]);
     const locales = [useLocale(), useDefaultLocale()]; // user's language
     return (_jsx(RenderClientVariable, { variables: createValues(n, values), children: ((typeof n === 'number' && Object.assign(Object.assign({}, branches), { ranges })) ? getPluralBranch(n, locales, Object.assign(Object.assign({}, branches), { ranges })) : null) || children }));
-}
-;
+};
+ClientPlural.gtTransformation = "plural";
+export default ClientPlural;
 //# sourceMappingURL=ClientPlural.js.map

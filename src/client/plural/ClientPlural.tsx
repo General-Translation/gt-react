@@ -17,7 +17,7 @@ import createValues from '../../primitives/variables/createValues';
  * @param {Record<string, any>} ...branches - Named branches, e.g. "singular", "plural" and their associated branches.
  * @returns {ReactNode}
  */
-export default function ClientPlural({ children, n, values, ranges, ...branches }: {
+const ClientPlural = ({ children, n, values, ranges, ...branches }: {
     children?: any;
     n: number;
     ranges?: Range[];
@@ -31,7 +31,7 @@ export default function ClientPlural({ children, n, values, ranges, ...branches 
     dual?: any;
     plural?: any;
     values?: Record<string, any>;
-}): ReactNode {
+}): ReactNode => {
 
     const locales = [useLocale(), useDefaultLocale()]; // user's language
 
@@ -42,3 +42,7 @@ export default function ClientPlural({ children, n, values, ranges, ...branches 
     )
 
 };
+
+ClientPlural.gtTransformation = "plural";
+
+export default ClientPlural;

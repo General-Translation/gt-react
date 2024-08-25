@@ -23,7 +23,7 @@ const renderClientElement = ({ sourceElement, targetElement, ...metadata }: {
 
     if (props.children) {
 
-        const { 'data-generaltranslation': generaltranslation } = props;
+        let { 'data-generaltranslation': generaltranslation } = props;
         const targetProps: Record<string, any> | null = targetElement?.props || null;
         const targetChildren = targetProps?.children;
         const targetBranches = targetProps?.['data-generaltranslation']?.branches;

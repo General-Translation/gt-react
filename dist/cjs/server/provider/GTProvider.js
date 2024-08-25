@@ -52,7 +52,7 @@ function GTProvider(_a) {
         if (providerID) {
             const { entry } = (0, getEntryMetadata_1.default)(I18NConfig.getDictionaryEntry(providerID));
             if (entry && !(0, react_1.isValidElement)(entry) && typeof entry === 'object') {
-                dictionary = Object.assign(Object.assign({}, entry), (0, flattenDictionary_1.default)(dictionary, providerID));
+                dictionary = Object.assign(Object.assign({}, entry), (0, flattenDictionary_1.default)(dictionary));
             }
         }
         dictionary = (0, flattenDictionary_1.default)(dictionary, providerID);

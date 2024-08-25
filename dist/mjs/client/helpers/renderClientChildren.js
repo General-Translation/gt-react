@@ -25,7 +25,7 @@ const renderClientElement = (_a) => {
     var { sourceElement, targetElement } = _a, metadata = __rest(_a, ["sourceElement", "targetElement"]);
     const { props } = sourceElement;
     if (props.children) {
-        const { 'data-generaltranslation': generaltranslation } = props;
+        let { 'data-generaltranslation': generaltranslation } = props;
         const targetProps = (targetElement === null || targetElement === void 0 ? void 0 : targetElement.props) || null;
         const targetChildren = targetProps === null || targetProps === void 0 ? void 0 : targetProps.children;
         const targetBranches = (_b = targetProps === null || targetProps === void 0 ? void 0 : targetProps['data-generaltranslation']) === null || _b === void 0 ? void 0 : _b.branches;

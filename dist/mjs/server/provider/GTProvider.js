@@ -46,7 +46,7 @@ export default function GTProvider(_a) {
         if (providerID) {
             const { entry } = getEntryMetadata(I18NConfig.getDictionaryEntry(providerID));
             if (entry && !isValidElement(entry) && typeof entry === 'object') {
-                dictionary = Object.assign(Object.assign({}, entry), flattenDictionary(dictionary, providerID));
+                dictionary = Object.assign(Object.assign({}, entry), flattenDictionary(dictionary));
             }
         }
         dictionary = flattenDictionary(dictionary, providerID);

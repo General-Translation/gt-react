@@ -12,10 +12,10 @@ import createValues from '../../primitives/variables/createValues';
  * @param {Record<string, any>} values - Values to branch and translate around.
  * @returns {ReactNode}
  */
-export default function ClientValue({ children, values }: {
+const ClientValue = ({ children, values }: {
     children?: any;
     values: Record<string, any>;
-}): ReactNode {
+}): ReactNode => {
 
     return (
         <RenderClientVariable variables={createValues(undefined, values)}>
@@ -24,3 +24,7 @@ export default function ClientValue({ children, values }: {
     );
 
 };
+
+ClientValue.gtTransformation = "value";
+
+export default ClientValue;

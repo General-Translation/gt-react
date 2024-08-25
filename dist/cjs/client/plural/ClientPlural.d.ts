@@ -9,19 +9,23 @@ import { Range } from '../../primitives/variables/getPluralBranch';
  * @param {Record<string, any>} ...branches - Named branches, e.g. "singular", "plural" and their associated branches.
  * @returns {ReactNode}
  */
-export default function ClientPlural({ children, n, values, ranges, ...branches }: {
-    children?: any;
-    n: number;
-    ranges?: Range[];
-    zero?: any;
-    one?: any;
-    two?: any;
-    few?: any;
-    many?: any;
-    other?: any;
-    singular?: any;
-    dual?: any;
-    plural?: any;
-    values?: Record<string, any>;
-}): ReactNode;
+declare const ClientPlural: {
+    ({ children, n, values, ranges, ...branches }: {
+        children?: any;
+        n: number;
+        ranges?: Range[];
+        zero?: any;
+        one?: any;
+        two?: any;
+        few?: any;
+        many?: any;
+        other?: any;
+        singular?: any;
+        dual?: any;
+        plural?: any;
+        values?: Record<string, any>;
+    }): ReactNode;
+    gtTransformation: string;
+};
+export default ClientPlural;
 //# sourceMappingURL=ClientPlural.d.ts.map

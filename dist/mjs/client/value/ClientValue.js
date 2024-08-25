@@ -10,8 +10,9 @@ import createValues from '../../primitives/variables/createValues';
  * @param {Record<string, any>} values - Values to branch and translate around.
  * @returns {ReactNode}
  */
-export default function ClientValue({ children, values }) {
+const ClientValue = ({ children, values }) => {
     return (_jsx(RenderClientVariable, { variables: createValues(undefined, values), children: children }));
-}
-;
+};
+ClientValue.gtTransformation = "value";
+export default ClientValue;
 //# sourceMappingURL=ClientValue.js.map

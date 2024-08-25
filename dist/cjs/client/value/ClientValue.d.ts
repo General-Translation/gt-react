@@ -7,8 +7,12 @@ import { ReactNode } from 'react';
  * @param {Record<string, any>} values - Values to branch and translate around.
  * @returns {ReactNode}
  */
-export default function ClientValue({ children, values }: {
-    children?: any;
-    values: Record<string, any>;
-}): ReactNode;
+declare const ClientValue: {
+    ({ children, values }: {
+        children?: any;
+        values: Record<string, any>;
+    }): ReactNode;
+    gtTransformation: string;
+};
+export default ClientValue;
 //# sourceMappingURL=ClientValue.d.ts.map
