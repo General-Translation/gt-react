@@ -47,10 +47,7 @@ export default async function GTProvider({
             dictionary = { ...entry, ...flattenDictionary(dictionary, providerID) }
         }
     }
-
-    const prefix = providerID ? `${providerID}.` : '';
-
-    dictionary = flattenDictionary(dictionary);
+    dictionary = flattenDictionary(dictionary, providerID);
 
     let translations: Record<string, any> = {};
 
@@ -93,7 +90,7 @@ export default async function GTProvider({
         clonedDictionary[id] = [taggedEntry, metadata];
     }
 
-    const translationRequired: boolean = (I18NConfig.translationRequired(locale)) ? true : false;
+    const translationRequired: boolean = I18NConfig.translationRequired(locale);
     
     if (translationRequired) {
         const { local, remote } = await I18NConfig.getTranslations(locale, props.dictionaryName);
@@ -109,8 +106,8 @@ export default async function GTProvider({
             const entryAsObjects = writeChildrenAsObjects(entry);
             const key: string = metadata?.context ? await calculateHash([entryAsObjects, metadata.context]) : await calculateHash(entryAsObjects);
 
-            const translation = await I18NConfig.getTranslation(locale, key, id, props.dictionaryName ?? undefined, { local, remote }) 
-            
+            const translation = await I18NConfig.getTranslation(locale, key, id, props.dictionaryName ?? undefined, { remote, local }) 
+
             if (translation) {
                 return translations[id] = translation;
             }
@@ -121,14 +118,14 @@ export default async function GTProvider({
             
             // INTL
             if (translationType === "intl") {
-                const translationPromise = I18NConfig.intl({ content: entry, targetLanguage: locale, options: { ...metadata, hash: key, id: `${prefix}${id}` } });
+                const translationPromise = I18NConfig.intl({ content: entry, targetLanguage: locale, options: { ...metadata, hash: key, id } });
                 if (renderSettings.method !== "subtle") {
                     return translations[id] = await translationPromise;
                 }
                 return translations[id] = entry;
             } 
             else /*if (translationType === "t" || translationType === "plural")*/ { // i.e., it's JSX
-                const targetPromise = I18NConfig.translateChildren({ children: entryAsObjects, targetLanguage: locale, metadata: { ...metadata, hash: key, id: `${prefix}${id}` } });
+                const targetPromise = I18NConfig.translateChildren({ children: entryAsObjects, targetLanguage: locale, metadata: { ...metadata, hash: key, id } });
                 const renderMethod = renderSettings.method;
                 if (renderSettings.method === "hang") {
                     return translations[id] = await targetPromise;

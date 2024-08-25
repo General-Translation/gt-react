@@ -49,8 +49,7 @@ export default function GTProvider(_a) {
                 dictionary = Object.assign(Object.assign({}, entry), flattenDictionary(dictionary, providerID));
             }
         }
-        const prefix = providerID ? `${providerID}.` : '';
-        dictionary = flattenDictionary(dictionary);
+        dictionary = flattenDictionary(dictionary, providerID);
         let translations = {};
         const renderSettings = I18NConfig.getRenderSettings();
         const clonedDictionary = cloneDictionary(dictionary);
@@ -79,7 +78,7 @@ export default function GTProvider(_a) {
             ;
             clonedDictionary[id] = [taggedEntry, metadata];
         }
-        const translationRequired = (I18NConfig.translationRequired(locale)) ? true : false;
+        const translationRequired = I18NConfig.translationRequired(locale);
         if (translationRequired) {
             const { local, remote } = yield I18NConfig.getTranslations(locale, props.dictionaryName);
             yield Promise.all(Object.keys(clonedDictionary).map((id) => __awaiter(this, void 0, void 0, function* () {
@@ -91,7 +90,7 @@ export default function GTProvider(_a) {
                 const translationType = getEntryTranslationType(clonedDictionary[id]);
                 const entryAsObjects = writeChildrenAsObjects(entry);
                 const key = (metadata === null || metadata === void 0 ? void 0 : metadata.context) ? yield calculateHash([entryAsObjects, metadata.context]) : yield calculateHash(entryAsObjects);
-                const translation = yield I18NConfig.getTranslation(locale, key, id, (_a = props.dictionaryName) !== null && _a !== void 0 ? _a : undefined, { local, remote });
+                const translation = yield I18NConfig.getTranslation(locale, key, id, (_a = props.dictionaryName) !== null && _a !== void 0 ? _a : undefined, { remote, local });
                 if (translation) {
                     return translations[id] = translation;
                 }
@@ -100,14 +99,14 @@ export default function GTProvider(_a) {
                     return;
                 // INTL
                 if (translationType === "intl") {
-                    const translationPromise = I18NConfig.intl({ content: entry, targetLanguage: locale, options: Object.assign(Object.assign({}, metadata), { hash: key, id: `${prefix}${id}` }) });
+                    const translationPromise = I18NConfig.intl({ content: entry, targetLanguage: locale, options: Object.assign(Object.assign({}, metadata), { hash: key, id }) });
                     if (renderSettings.method !== "subtle") {
                         return translations[id] = yield translationPromise;
                     }
                     return translations[id] = entry;
                 }
                 else /*if (translationType === "t" || translationType === "plural")*/ { // i.e., it's JSX
-                    const targetPromise = I18NConfig.translateChildren({ children: entryAsObjects, targetLanguage: locale, metadata: Object.assign(Object.assign({}, metadata), { hash: key, id: `${prefix}${id}` }) });
+                    const targetPromise = I18NConfig.translateChildren({ children: entryAsObjects, targetLanguage: locale, metadata: Object.assign(Object.assign({}, metadata), { hash: key, id }) });
                     const renderMethod = renderSettings.method;
                     if (renderSettings.method === "hang") {
                         return translations[id] = yield targetPromise;
