@@ -2,7 +2,7 @@
 
 'use client'
 
-import { useEffect, useCallback, useState, useMemo } from "react";
+import React, { useEffect, useCallback, useState, useMemo } from "react";
 import { GTContext } from "../ClientProvider"
 import defaultGTProps from "../../types/defaultGTProps";
 import useBrowserLocale from "../hooks/useBrowserLocale";
@@ -12,6 +12,11 @@ import getRenderAttributes from "../../primitives/rendering/getRenderAttributes"
 import renderDefaultLanguage from "../helpers/renderDefaultLanguage";
 import handleRender from "../helpers/handleRender";
 import getDictionaryReference from "../../primitives/dictionary/getDictionaryReference";
+import renderClientChildren from "../helpers/renderClientChildren";
+import getEntryTranslationType from "../../primitives/rendering/getEntryTranslationType";
+import getEntryMetadata from "../../primitives/rendering/getEntryMetadata";
+import ClientPlural from "../plural/ClientPlural";
+import addGTIdentifier from "../../index/addGTIdentifier";
 
 export default function GTClientProvider({
     children, 
@@ -49,6 +54,33 @@ export default function GTClientProvider({
     });
     
     const translationRequired = isSameLanguage(locale, defaultLocale) ? false : true;
+
+    const suppliedDictionary = useMemo(() => {
+        if (!translationRequired) return dictionary;
+        let processedDictionary: any = {};
+        for (const id of Object.keys(dictionary)) {
+            let { entry, metadata } = getEntryMetadata(dictionary[id]);
+            const translationType = getEntryTranslationType(dictionary[id]);
+            if (translationType === "t") {
+                entry = <React.Fragment key={id}>{entry}</React.Fragment>;
+            } else if (translationType === "plural") {
+                entry = (
+                    <ClientPlural
+                        key={id} 
+                        n={1}
+                        {...metadata}
+                    >
+                        {entry}
+                    </ClientPlural>
+                );
+            }
+            const taggedEntry = addGTIdentifier(entry);
+            if (translationType === "t" || translationType === "plural") {
+                processedDictionary[id] = taggedEntry;
+            };
+        }
+        return processedDictionary;
+    }, [dictionary, translationRequired])
 
     const [localDictionary, setLocalDictionary] = useState<Record<string, any> | null>(null);
     useEffect(() => {
@@ -105,19 +137,19 @@ export default function GTClientProvider({
                     ...options 
                 })
             }
-            if (remoteTranslations && remoteTranslations) {
-                return handleRender({
-                    source: dictionary[id],
-                    target: remoteTranslations[id],
+            if (remoteTranslations && remoteTranslations[id] && remoteTranslations[id].t) {
+                return renderClientChildren({
+                    source: suppliedDictionary[id],
+                    target: remoteTranslations[id].t,
                     locale, defaultLocale,
-                    renderAttributes,
-                    variables, id
+                    renderAttributes: getRenderAttributes({ locale }),
+                    variables
                 })
             }
         } else {
-            return renderDefaultLanguage({ source: dictionary[id], variables, id, ...options })
+            return renderDefaultLanguage({ source: suppliedDictionary[id], variables, id, ...options })
         }
-    }, [dictionary, translations, translationRequired]);
+    }, [suppliedDictionary, translations, translationRequired, remoteTranslations]);
 
 
     return (

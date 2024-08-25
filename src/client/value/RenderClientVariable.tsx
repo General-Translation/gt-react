@@ -1,6 +1,6 @@
 'use client'
 
-import React, { ReactNode, useContext, useEffect, useState } from 'react'
+import React, { ReactNode } from 'react'
 
 import ClientVar from '../variables/ClientVar';
 import ClientNum from '../variables/ClientNum';
@@ -76,5 +76,5 @@ function SingleChild({children, variables}: {children: any, variables?: Record<s
 
 export default function RenderClientVariable({ children, variables }: { children: any, variables?: Record<string, any> }): ReactNode {
     const renderedChildren = React.Children.map(children, child => <SingleChild variables={variables}>{child}</SingleChild>);
-    return <>{renderedChildren}</>;
+    return <React.Fragment>{renderedChildren}</React.Fragment>;
 }

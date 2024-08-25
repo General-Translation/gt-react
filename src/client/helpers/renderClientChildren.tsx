@@ -10,7 +10,6 @@ import ClientDateTime from "../variables/ClientDateTime";
 import ClientCurrency from "../variables/ClientCurrency";
 import ClientVar from "../variables/ClientVar";
 import getPluralBranch from "../../primitives/variables/getPluralBranch";
-import RenderClientVariable from "../value/RenderClientVariable";
 import { Target, TargetChild, TargetElement, TargetVariable, Source, SourceChild } from "../../config/types/SourceTargetTypes";
 import isTargetVariable from "../../primitives/variables/isTargetVariable";
 
@@ -30,7 +29,7 @@ const renderClientElement = ({ sourceElement, targetElement, ...metadata }: {
         const targetBranches = targetProps?.['data-generaltranslation']?.branches;
 
         // If an alternative branch (from a transformation) is necessary
-        if (generaltranslation.transformation) {
+        if (generaltranslation && generaltranslation.transformation) {
 
             const transformation = generaltranslation.transformation;
             
@@ -151,15 +150,15 @@ export default function renderClientChildren({
                     value = metadata.variables[key];
                 }
                 if (targetChild.variable === "number") {
-                    return <ClientNum defaultValue={value} name={key} options={{...metadata?.variableOptions?.[key]}}/>
+                    return <ClientNum key={`num_${index}`} defaultValue={value} name={key} options={{...metadata?.variableOptions?.[key]}}/>
                 }
                 if (targetChild.variable === "date") {
-                    return <ClientDateTime defaultValue={value} name={key} options={{...metadata?.variableOptions?.[key]}}/>
+                    return <ClientDateTime key={`date_${index}`}  defaultValue={value} name={key} options={{...metadata?.variableOptions?.[key]}}/>
                 }
                 if (targetChild.variable === "currency") {
-                    return <ClientCurrency defaultValue={value} name={key} currency={metadata?.variableOptions?.[key]?.currency || undefined} options={{...metadata?.variableOptions?.[key]}}/>
+                    return <ClientCurrency key={`currency_${index}`}  defaultValue={value} name={key} currency={metadata?.variableOptions?.[key]?.currency || undefined} options={{...metadata?.variableOptions?.[key]}}/>
                 }
-                return <ClientVar defaultValue={isValidReactNode(value) ? value : undefined} name={key}/>
+                return <ClientVar key={`var_${index}`} defaultValue={isValidReactNode(value) ? value : undefined} name={key}/>
             }
             
             // If target is a normal ReactElement

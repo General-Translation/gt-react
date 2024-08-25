@@ -75,6 +75,6 @@ function SingleChild({ children, variables }) {
 }
 function RenderClientVariable({ children, variables }) {
     const renderedChildren = react_1.default.Children.map(children, child => (0, jsx_runtime_1.jsx)(SingleChild, { variables: variables, children: child }));
-    return (0, jsx_runtime_1.jsx)(jsx_runtime_1.Fragment, { children: renderedChildren });
+    return (0, jsx_runtime_1.jsx)(react_1.default.Fragment, { children: renderedChildren });
 }
 //# sourceMappingURL=RenderClientVariable.js.map

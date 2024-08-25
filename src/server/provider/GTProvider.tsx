@@ -60,7 +60,7 @@ export default async function GTProvider({
 
     for (const id of Object.keys(clonedDictionary)) {
         let { entry, metadata } = getEntryMetadata(clonedDictionary[id]);
-        metadata = { ...props, ...metadata };
+        metadata = (props || metadata) ? { ...props, ...(metadata || {}) } : undefined;
         const translationType = getEntryTranslationType(clonedDictionary[id]);
         if (translationType === "t") {
             entry = <>{entry}</>;
@@ -68,7 +68,7 @@ export default async function GTProvider({
             const { 
                 ranges, zero, one, two, few, many, other, singular, dual, plural,
                 ...tOptions 
-            } = metadata;
+            } = metadata || {};
             metadata = tOptions;
             const innerProps = {
                 ranges, zero, one, two, few, many, other, singular, dual, plural
@@ -90,11 +90,7 @@ export default async function GTProvider({
         if (translationType === "t" || translationType === "plural") {
             dictionary[id] = taggedEntry;
         };
-        if (metadata) {
-            clonedDictionary[id] = [taggedEntry, { ...metadata }];
-        } else {
-            clonedDictionary[id] = taggedEntry;
-        }
+        clonedDictionary[id] = [taggedEntry, metadata];
     }
 
     const translationRequired: boolean = (I18NConfig.translationRequired(locale)) ? true : false;

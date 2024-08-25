@@ -19,36 +19,42 @@ export default function renderDefaultLanguage({
 
     const handleSingleChild = (child: ReactNode) => {
         if (React.isValidElement(child)) {
-            const { props } = child;
+            const { type, props } = child;
             const { 'data-generaltranslation': generaltranslation } = props;
+            let transformation: string | null = null;
             if (generaltranslation) {
-                if (generaltranslation.transformation) {
-                    if (generaltranslation.transformation === "plural") {
-                        if (!variables || typeof variables.n !== 'number') {
-                            throw new Error(`ID "${metadata.id}" requires an "n" option.\n\ne.g. t("${metadata.id}", { n: 1 })`)
-                        }
-                        const defaultChildren = generaltranslation.defaultChildren;
-                        return (
-                            <ClientPlural n={variables.n} values={{...variables}} {...generaltranslation.branches}>
-                                {defaultChildren}
-                            </ClientPlural>
-                        )
+                transformation = generaltranslation?.transformation;
+            }
+            if (typeof type === 'function' && ((type as any)?.gtTransformation)) {
+                transformation = (type as any)?.gtTransformation;
+            }
+            if (transformation) {
+                if (transformation === "plural") {
+                    if (!variables || typeof variables.n !== 'number') {
+                        throw new Error(`ID "${metadata.id}" requires an "n" option.\n\ne.g. t("${metadata.id}", { n: 1 })`)
                     }
-                    else if (generaltranslation.transformation === "value") {
-                        if (!variables || typeof variables !== 'object') {
-                            throw new Error(`ID "${metadata.id}" requires values.\n\ne.g. t("${metadata.id}", { values: { ...values } })`)
-                        }
-                        return (
-                            <ClientValue values={{ ...variables }}>
-                                {props.children}
-                            </ClientValue>
-                        )
+                    const defaultChildren = generaltranslation.defaultChildren;
+                    return (
+                        <ClientPlural n={variables.n} values={{...variables}} {...generaltranslation.branches}>
+                            {defaultChildren}
+                        </ClientPlural>
+                    )
+                }
+                else if (transformation === "value") {
+                    if (!variables || typeof variables !== 'object') {
+                        throw new Error(`ID "${metadata.id}" requires values.\n\ne.g. t("${metadata.id}", { values: { ...values } })`)
                     }
-                    else if (generaltranslation.transformation === "variable") {
-                        return <RenderClientVariable variables={variables}>{child}</RenderClientVariable>
-                    }
+                    return (
+                        <ClientValue values={{ ...variables }}>
+                            {props.children}
+                        </ClientValue>
+                    )
+                }
+                else if (transformation.startsWith("variable")) {
+                    return <RenderClientVariable variables={variables}>{child}</RenderClientVariable>
                 }
             }
+
             if (props.children) {
                 return React.cloneElement(child, {
                     ...props,

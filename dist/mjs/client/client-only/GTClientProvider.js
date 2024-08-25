@@ -10,15 +10,19 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 import { jsx as _jsx } from "react/jsx-runtime";
-import { useEffect, useCallback, useState } from "react";
+import React, { useEffect, useCallback, useState, useMemo } from "react";
 import { GTContext } from "../ClientProvider";
 import defaultGTProps from "../../types/defaultGTProps";
 import useBrowserLocale from "../hooks/useBrowserLocale";
 import { isSameLanguage } from "generaltranslation";
 import getRenderAttributes from "../../primitives/rendering/getRenderAttributes";
 import renderDefaultLanguage from "../helpers/renderDefaultLanguage";
-import handleRender from "../helpers/handleRender";
 import getDictionaryReference from "../../primitives/dictionary/getDictionaryReference";
+import renderClientChildren from "../helpers/renderClientChildren";
+import getEntryTranslationType from "../../primitives/rendering/getEntryTranslationType";
+import getEntryMetadata from "../../primitives/rendering/getEntryMetadata";
+import ClientPlural from "../plural/ClientPlural";
+import addGTIdentifier from "../../index/addGTIdentifier";
 export default function GTClientProvider(_a) {
     var _b;
     var { children, projectID, dictionary = defaultGTProps.dictionary, dictionaryName = defaultGTProps.dictionaryName, approvedLocales, defaultLocale = (_b = approvedLocales === null || approvedLocales === void 0 ? void 0 : approvedLocales[0]) !== null && _b !== void 0 ? _b : defaultGTProps.defaultLocale, locale = '', remoteSource = defaultGTProps.remoteSource, cacheURL = defaultGTProps.cacheURL, translations } = _a;
@@ -32,6 +36,27 @@ export default function GTClientProvider(_a) {
         remote: false
     });
     const translationRequired = isSameLanguage(locale, defaultLocale) ? false : true;
+    const suppliedDictionary = useMemo(() => {
+        if (!translationRequired)
+            return dictionary;
+        let processedDictionary = {};
+        for (const id of Object.keys(dictionary)) {
+            let { entry, metadata } = getEntryMetadata(dictionary[id]);
+            const translationType = getEntryTranslationType(dictionary[id]);
+            if (translationType === "t") {
+                entry = _jsx(React.Fragment, { children: entry }, id);
+            }
+            else if (translationType === "plural") {
+                entry = (_jsx(ClientPlural, Object.assign({ n: 1 }, metadata, { children: entry }), id));
+            }
+            const taggedEntry = addGTIdentifier(entry);
+            if (translationType === "t" || translationType === "plural") {
+                processedDictionary[id] = taggedEntry;
+            }
+            ;
+        }
+        return processedDictionary;
+    }, [dictionary, translationRequired]);
     const [localDictionary, setLocalDictionary] = useState(null);
     useEffect(() => {
         if (locale) {
@@ -81,20 +106,20 @@ export default function GTClientProvider(_a) {
                 return renderDefaultLanguage(Object.assign({ source: localDictionary[id], variables, id,
                     renderAttributes }, options));
             }
-            if (remoteTranslations && remoteTranslations) {
-                return handleRender({
-                    source: dictionary[id],
-                    target: remoteTranslations[id],
+            if (remoteTranslations && remoteTranslations[id] && remoteTranslations[id].t) {
+                return renderClientChildren({
+                    source: suppliedDictionary[id],
+                    target: remoteTranslations[id].t,
                     locale, defaultLocale,
-                    renderAttributes,
-                    variables, id
+                    renderAttributes: getRenderAttributes({ locale }),
+                    variables
                 });
             }
         }
         else {
-            return renderDefaultLanguage(Object.assign({ source: dictionary[id], variables, id }, options));
+            return renderDefaultLanguage(Object.assign({ source: suppliedDictionary[id], variables, id }, options));
         }
-    }, [dictionary, translations, translationRequired]);
+    }, [suppliedDictionary, translations, translationRequired, remoteTranslations]);
     return (_jsx(GTContext.Provider, { value: {
             translate, locale, defaultLocale
         }, children: Object.values(loaded).every(item => item ? true : false) &&

@@ -30,7 +30,7 @@ const renderClientElement = (_a) => {
         const targetChildren = targetProps === null || targetProps === void 0 ? void 0 : targetProps.children;
         const targetBranches = (_b = targetProps === null || targetProps === void 0 ? void 0 : targetProps['data-generaltranslation']) === null || _b === void 0 ? void 0 : _b.branches;
         // If an alternative branch (from a transformation) is necessary
-        if (generaltranslation.transformation) {
+        if (generaltranslation && generaltranslation.transformation) {
             const transformation = generaltranslation.transformation;
             // handle number variable branching
             if (transformation === "plural") {
@@ -126,15 +126,15 @@ export default function renderClientChildren(_a) {
                     value = metadata.variables[key];
                 }
                 if (targetChild.variable === "number") {
-                    return _jsx(ClientNum, { defaultValue: value, name: key, options: Object.assign({}, (_a = metadata === null || metadata === void 0 ? void 0 : metadata.variableOptions) === null || _a === void 0 ? void 0 : _a[key]) });
+                    return _jsx(ClientNum, { defaultValue: value, name: key, options: Object.assign({}, (_a = metadata === null || metadata === void 0 ? void 0 : metadata.variableOptions) === null || _a === void 0 ? void 0 : _a[key]) }, `num_${index}`);
                 }
                 if (targetChild.variable === "date") {
-                    return _jsx(ClientDateTime, { defaultValue: value, name: key, options: Object.assign({}, (_b = metadata === null || metadata === void 0 ? void 0 : metadata.variableOptions) === null || _b === void 0 ? void 0 : _b[key]) });
+                    return _jsx(ClientDateTime, { defaultValue: value, name: key, options: Object.assign({}, (_b = metadata === null || metadata === void 0 ? void 0 : metadata.variableOptions) === null || _b === void 0 ? void 0 : _b[key]) }, `date_${index}`);
                 }
                 if (targetChild.variable === "currency") {
-                    return _jsx(ClientCurrency, { defaultValue: value, name: key, currency: ((_d = (_c = metadata === null || metadata === void 0 ? void 0 : metadata.variableOptions) === null || _c === void 0 ? void 0 : _c[key]) === null || _d === void 0 ? void 0 : _d.currency) || undefined, options: Object.assign({}, (_e = metadata === null || metadata === void 0 ? void 0 : metadata.variableOptions) === null || _e === void 0 ? void 0 : _e[key]) });
+                    return _jsx(ClientCurrency, { defaultValue: value, name: key, currency: ((_d = (_c = metadata === null || metadata === void 0 ? void 0 : metadata.variableOptions) === null || _c === void 0 ? void 0 : _c[key]) === null || _d === void 0 ? void 0 : _d.currency) || undefined, options: Object.assign({}, (_e = metadata === null || metadata === void 0 ? void 0 : metadata.variableOptions) === null || _e === void 0 ? void 0 : _e[key]) }, `currency_${index}`);
                 }
-                return _jsx(ClientVar, { defaultValue: isValidReactNode(value) ? value : undefined, name: key });
+                return _jsx(ClientVar, { defaultValue: isValidReactNode(value) ? value : undefined, name: key }, `var_${index}`);
             }
             // If target is a normal ReactElement
             const matchingSource = findMatchingSource(targetChild);

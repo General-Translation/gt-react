@@ -19,26 +19,31 @@ export default function renderDefaultLanguage(_a) {
     var { source, variables } = _a, metadata = __rest(_a, ["source", "variables"]);
     const handleSingleChild = (child) => {
         if (React.isValidElement(child)) {
-            const { props } = child;
+            const { type, props } = child;
             const { 'data-generaltranslation': generaltranslation } = props;
+            let transformation = null;
             if (generaltranslation) {
-                if (generaltranslation.transformation) {
-                    if (generaltranslation.transformation === "plural") {
-                        if (!variables || typeof variables.n !== 'number') {
-                            throw new Error(`ID "${metadata.id}" requires an "n" option.\n\ne.g. t("${metadata.id}", { n: 1 })`);
-                        }
-                        const defaultChildren = generaltranslation.defaultChildren;
-                        return (_jsx(ClientPlural, Object.assign({ n: variables.n, values: Object.assign({}, variables) }, generaltranslation.branches, { children: defaultChildren })));
+                transformation = generaltranslation === null || generaltranslation === void 0 ? void 0 : generaltranslation.transformation;
+            }
+            if (typeof type === 'function' && (type === null || type === void 0 ? void 0 : type.gtTransformation)) {
+                transformation = type === null || type === void 0 ? void 0 : type.gtTransformation;
+            }
+            if (transformation) {
+                if (transformation === "plural") {
+                    if (!variables || typeof variables.n !== 'number') {
+                        throw new Error(`ID "${metadata.id}" requires an "n" option.\n\ne.g. t("${metadata.id}", { n: 1 })`);
                     }
-                    else if (generaltranslation.transformation === "value") {
-                        if (!variables || typeof variables !== 'object') {
-                            throw new Error(`ID "${metadata.id}" requires values.\n\ne.g. t("${metadata.id}", { values: { ...values } })`);
-                        }
-                        return (_jsx(ClientValue, { values: Object.assign({}, variables), children: props.children }));
+                    const defaultChildren = generaltranslation.defaultChildren;
+                    return (_jsx(ClientPlural, Object.assign({ n: variables.n, values: Object.assign({}, variables) }, generaltranslation.branches, { children: defaultChildren })));
+                }
+                else if (transformation === "value") {
+                    if (!variables || typeof variables !== 'object') {
+                        throw new Error(`ID "${metadata.id}" requires values.\n\ne.g. t("${metadata.id}", { values: { ...values } })`);
                     }
-                    else if (generaltranslation.transformation === "variable") {
-                        return _jsx(RenderClientVariable, { variables: variables, children: child });
-                    }
+                    return (_jsx(ClientValue, { values: Object.assign({}, variables), children: props.children }));
+                }
+                else if (transformation.startsWith("variable")) {
+                    return _jsx(RenderClientVariable, { variables: variables, children: child });
                 }
             }
             if (props.children) {

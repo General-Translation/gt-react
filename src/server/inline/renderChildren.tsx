@@ -145,13 +145,13 @@ export default function renderChildren({
                     value = metadata.variables[key];
                 }
                 if (targetChild.variable === "number") {
-                    return <Num locales={[metadata.locale, metadata.defaultLocale]} key={`var_${index}`} defaultValue={value} name={key} options={{...metadata?.variableOptions?.[key]}}/>
+                    return <Num locales={[metadata.locale, metadata.defaultLocale]} key={`num_${index}`} defaultValue={value} name={key} options={{...metadata?.variableOptions?.[key]}}/>
                 }
                 if (targetChild.variable === "date") {
-                    return <DateTime locales={[metadata.locale, metadata.defaultLocale]} key={`var_${index}`} defaultValue={value} name={key} options={{...metadata?.variableOptions?.[key]}}/>
+                    return <DateTime locales={[metadata.locale, metadata.defaultLocale]} key={`date_${index}`} defaultValue={value} name={key} options={{...metadata?.variableOptions?.[key]}}/>
                 }
                 if (targetChild.variable === "currency") {
-                    return <Currency locales={[metadata.locale, metadata.defaultLocale]} key={`var_${index}`} defaultValue={value} name={key} currency={metadata?.variableOptions?.[key]?.currency || undefined} options={{...metadata?.variableOptions?.[key]}}/>
+                    return <Currency locales={[metadata.locale, metadata.defaultLocale]} key={`currency_${index}`} defaultValue={value} name={key} currency={metadata?.variableOptions?.[key]?.currency || undefined} options={{...metadata?.variableOptions?.[key]}}/>
                 }
                 return <Var key={`var_${index}`} defaultValue={isValidReactNode(value) ? value : undefined} name={key}/>
             }

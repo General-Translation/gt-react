@@ -62,13 +62,13 @@ function GTProvider(_a) {
         const clonedDictionary = (0, cloneDictionary_1.default)(dictionary);
         for (const id of Object.keys(clonedDictionary)) {
             let { entry, metadata } = (0, getEntryMetadata_1.default)(clonedDictionary[id]);
-            metadata = Object.assign(Object.assign({}, props), metadata);
+            metadata = (props || metadata) ? Object.assign(Object.assign({}, props), (metadata || {})) : undefined;
             const translationType = (0, getEntryTranslationType_1.default)(clonedDictionary[id]);
             if (translationType === "t") {
                 entry = (0, jsx_runtime_1.jsx)(jsx_runtime_1.Fragment, { children: entry });
             }
             else if (translationType === "plural") {
-                const { ranges, zero, one, two, few, many, other, singular, dual, plural } = metadata, tOptions = __rest(metadata, ["ranges", "zero", "one", "two", "few", "many", "other", "singular", "dual", "plural"]);
+                const _b = metadata || {}, { ranges, zero, one, two, few, many, other, singular, dual, plural } = _b, tOptions = __rest(_b, ["ranges", "zero", "one", "two", "few", "many", "other", "singular", "dual", "plural"]);
                 metadata = tOptions;
                 const innerProps = {
                     ranges, zero, one, two, few, many, other, singular, dual, plural
@@ -83,12 +83,7 @@ function GTProvider(_a) {
                 dictionary[id] = taggedEntry;
             }
             ;
-            if (metadata) {
-                clonedDictionary[id] = [taggedEntry, Object.assign({}, metadata)];
-            }
-            else {
-                clonedDictionary[id] = taggedEntry;
-            }
+            clonedDictionary[id] = [taggedEntry, metadata];
         }
         const translationRequired = (I18NConfig.translationRequired(locale)) ? true : false;
         if (translationRequired) {

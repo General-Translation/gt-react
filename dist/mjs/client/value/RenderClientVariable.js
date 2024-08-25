@@ -1,5 +1,5 @@
 'use client';
-import { jsx as _jsx, Fragment as _Fragment } from "react/jsx-runtime";
+import { jsx as _jsx } from "react/jsx-runtime";
 import React from 'react';
 import ClientVar from '../variables/ClientVar';
 import ClientNum from '../variables/ClientNum';
@@ -69,6 +69,6 @@ function SingleChild({ children, variables }) {
 }
 export default function RenderClientVariable({ children, variables }) {
     const renderedChildren = React.Children.map(children, child => _jsx(SingleChild, { variables: variables, children: child }));
-    return _jsx(_Fragment, { children: renderedChildren });
+    return _jsx(React.Fragment, { children: renderedChildren });
 }
 //# sourceMappingURL=RenderClientVariable.js.map
