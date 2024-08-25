@@ -112,7 +112,7 @@ export default function GTClientProvider(_a) {
                     target: remoteTranslations[id].t,
                     locale, defaultLocale,
                     renderAttributes: getRenderAttributes({ locale }),
-                    variables
+                    id, variables
                 });
             }
         }

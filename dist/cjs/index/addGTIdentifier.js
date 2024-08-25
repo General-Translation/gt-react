@@ -100,8 +100,10 @@ function addGTIdentifier(children) {
                         return { min: range.min, max: range.max, children: addIdentifierRecursively(range.children) };
                     });
                 for (const option of Object.keys(others).filter(item => acceptedPluralProps[item] ? true : false)) {
-                    updateIndices();
-                    branches[option] = addIdentifierRecursively(others[option]);
+                    if (others[option]) {
+                        updateIndices();
+                        branches[option] = addIdentifierRecursively(others[option]);
+                    }
                 }
                 newProps = Object.assign(Object.assign({}, newProps), branches);
             }

@@ -36,19 +36,19 @@ const renderClientElement = ({ sourceElement, targetElement, ...metadata }: {
             // handle number variable branching
             if (transformation === "plural") {
 
-                if (!metadata.variables || !metadata.variables.n) {
-                    throw new Error(`Plural with ${metadata.id} needs n value, e.g. t("${metadata.id}", { n: 1 })`);
+                if (!metadata.variables || typeof metadata.variables.n !== 'number') {
+                    throw new Error(`Plural with id ${metadata.id} needs n value, e.g. t("${metadata.id}", { n: 1 })`);
                 }
 
                 const n = metadata.variables.n;
 
-                const branches = generaltranslation.branches;
+                const branches = props['data-unrendered-branches'] || generaltranslation.branches;
                 
                 const sourceBranch = getPluralBranch(n, [metadata.locale, metadata.defaultLocale], branches) || generaltranslation.defaultChildren;
                 const targetBranch = getPluralBranch(n, [metadata.locale, metadata.defaultLocale], targetBranches) || targetChildren;
-            
+
                 const children = renderClientChildren({source: sourceBranch, target: targetBranch, variables: { ...metadata.variables, n: n }, ...metadata});
-                
+            
                 return React.createElement('span', {
                     ...metadata.renderAttributes,
                     children: children

@@ -23,7 +23,7 @@ function ClientProvider({ children, locale, defaultLocale, dictionary, translati
                 target: translations[id],
                 locale, defaultLocale,
                 renderAttributes: (0, getRenderAttributes_1.default)({ locale }),
-                variables
+                variables, id
             });
         }
         return (0, renderDefaultLanguage_1.default)(Object.assign({ source: dictionary[id], variables, id }, options));

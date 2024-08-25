@@ -40,11 +40,11 @@ const renderClientElement = (_a) => {
             const transformation = generaltranslation.transformation;
             // handle number variable branching
             if (transformation === "plural") {
-                if (!metadata.variables || !metadata.variables.n) {
-                    throw new Error(`Plural with ${metadata.id} needs n value, e.g. t("${metadata.id}", { n: 1 })`);
+                if (!metadata.variables || typeof metadata.variables.n !== 'number') {
+                    throw new Error(`Plural with id ${metadata.id} needs n value, e.g. t("${metadata.id}", { n: 1 })`);
                 }
                 const n = metadata.variables.n;
-                const branches = generaltranslation.branches;
+                const branches = props['data-unrendered-branches'] || generaltranslation.branches;
                 const sourceBranch = (0, getPluralBranch_1.default)(n, [metadata.locale, metadata.defaultLocale], branches) || generaltranslation.defaultChildren;
                 const targetBranch = (0, getPluralBranch_1.default)(n, [metadata.locale, metadata.defaultLocale], targetBranches) || targetChildren;
                 const children = renderClientChildren(Object.assign({ source: sourceBranch, target: targetBranch, variables: Object.assign(Object.assign({}, metadata.variables), { n: n }) }, metadata));

@@ -160,7 +160,6 @@ export default async function GTProvider({
             dictionary={dictionary}
             translations={translations}
             translationRequired={translationRequired}
-            renderSettings={renderSettings}
         >
             {children}
         </ClientProvider>

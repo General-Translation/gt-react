@@ -111,8 +111,10 @@ export default function addGTIdentifier(children: Children) {
                     return { min: range.min, max: range.max, children: addIdentifierRecursively(range.children) }
                 }); 
                 for (const option of Object.keys(others).filter(item => acceptedPluralProps[item] ? true : false)) {
-                    updateIndices();
-                    branches[option] = addIdentifierRecursively(others[option]);
+                    if (others[option]) {
+                        updateIndices();
+                        branches[option] = addIdentifierRecursively(others[option]);
+                    }
                 }
                 newProps = { ...newProps, ...branches };
             }
@@ -152,7 +154,7 @@ export default function addGTIdentifier(children: Children) {
      * @param children - The children elements to process
      * @returns - The children elements with added GT identifiers
      */
-    const addIdentifierRecursively = (children: any) => {
+    const addIdentifierRecursively = (children: ReactNode) => {
         if (Array.isArray(children)) {
             return children.map(child => handleSingleChild(child))
         }

@@ -15,7 +15,7 @@ export default function ClientProvider({ children, locale, defaultLocale, dictio
                 target: translations[id],
                 locale, defaultLocale,
                 renderAttributes: getRenderAttributes({ locale }),
-                variables
+                variables, id
             });
         }
         return renderDefaultLanguage(Object.assign({ source: dictionary[id], variables, id }, options));

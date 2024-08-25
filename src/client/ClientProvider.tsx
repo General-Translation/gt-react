@@ -25,7 +25,7 @@ export default function ClientProvider({
     children, 
     locale, defaultLocale, 
     dictionary, translations, 
-    renderSettings, translationRequired
+    translationRequired
 }: ClientProviderProps) {
 
     const translate = useCallback((id: string, options?: tOptions) => {
@@ -37,7 +37,7 @@ export default function ClientProvider({
                 target: translations[id],
                 locale, defaultLocale,
                 renderAttributes: getRenderAttributes({ locale }),
-                variables
+                variables, id
             })
         }
         return renderDefaultLanguage({ source: dictionary[id], variables, id, ...options })
