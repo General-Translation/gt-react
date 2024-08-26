@@ -122,13 +122,12 @@ export default function GTClientProvider({
     }, [cacheURL, remoteSource, locale])
 
     const translate = useCallback((id: string, options?: tOptions) => {
-        const { n, values } = options || {};
-        const variables = { ...(typeof n === 'number' && { n }), ...(values && { ...values }) };
         if (translationRequired) {
             if (localDictionary && localDictionary[id]) {
                 return renderDefaultLanguage({ 
                     source: localDictionary[id], 
-                    variables, id, 
+                    variables: options?.values || {}, 
+                    id, 
                     ...options 
                 })
             }
@@ -137,11 +136,11 @@ export default function GTClientProvider({
                     source: suppliedDictionary[id],
                     target: remoteTranslations[id].t,
                     locale, defaultLocale,
-                    id, variables
+                    id, variables: options?.values || {},
                 })
             }
         } else {
-            return renderDefaultLanguage({ source: suppliedDictionary[id], variables, id, ...options })
+            return renderDefaultLanguage({ source: suppliedDictionary[id], variables: options?.values || {}, id, ...options })
         }
     }, [suppliedDictionary, translations, translationRequired, remoteTranslations]);
 

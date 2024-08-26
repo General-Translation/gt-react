@@ -126,23 +126,21 @@ function GTClientProvider(_a) {
         }
     }, [cacheURL, remoteSource, locale]);
     const translate = (0, react_1.useCallback)((id, options) => {
-        const { n, values } = options || {};
-        const variables = Object.assign(Object.assign({}, (typeof n === 'number' && { n })), (values && Object.assign({}, values)));
         if (translationRequired) {
             if (localDictionary && localDictionary[id]) {
-                return (0, renderDefaultLanguage_1.default)(Object.assign({ source: localDictionary[id], variables, id }, options));
+                return (0, renderDefaultLanguage_1.default)(Object.assign({ source: localDictionary[id], variables: (options === null || options === void 0 ? void 0 : options.values) || {}, id }, options));
             }
             if (remoteTranslations && remoteTranslations[id] && remoteTranslations[id].t) {
                 return (0, renderClientChildren_1.default)({
                     source: suppliedDictionary[id],
                     target: remoteTranslations[id].t,
                     locale, defaultLocale,
-                    id, variables
+                    id, variables: (options === null || options === void 0 ? void 0 : options.values) || {},
                 });
             }
         }
         else {
-            return (0, renderDefaultLanguage_1.default)(Object.assign({ source: suppliedDictionary[id], variables, id }, options));
+            return (0, renderDefaultLanguage_1.default)(Object.assign({ source: suppliedDictionary[id], variables: (options === null || options === void 0 ? void 0 : options.values) || {}, id }, options));
         }
     }, [suppliedDictionary, translations, translationRequired, remoteTranslations]);
     return ((0, jsx_runtime_1.jsx)(ClientProvider_1.GTContext.Provider, { value: {

@@ -97,23 +97,21 @@ export default function GTClientProvider(_a) {
         }
     }, [cacheURL, remoteSource, locale]);
     const translate = useCallback((id, options) => {
-        const { n, values } = options || {};
-        const variables = Object.assign(Object.assign({}, (typeof n === 'number' && { n })), (values && Object.assign({}, values)));
         if (translationRequired) {
             if (localDictionary && localDictionary[id]) {
-                return renderDefaultLanguage(Object.assign({ source: localDictionary[id], variables, id }, options));
+                return renderDefaultLanguage(Object.assign({ source: localDictionary[id], variables: (options === null || options === void 0 ? void 0 : options.values) || {}, id }, options));
             }
             if (remoteTranslations && remoteTranslations[id] && remoteTranslations[id].t) {
                 return renderClientChildren({
                     source: suppliedDictionary[id],
                     target: remoteTranslations[id].t,
                     locale, defaultLocale,
-                    id, variables
+                    id, variables: (options === null || options === void 0 ? void 0 : options.values) || {},
                 });
             }
         }
         else {
-            return renderDefaultLanguage(Object.assign({ source: suppliedDictionary[id], variables, id }, options));
+            return renderDefaultLanguage(Object.assign({ source: suppliedDictionary[id], variables: (options === null || options === void 0 ? void 0 : options.values) || {}, id }, options));
         }
     }, [suppliedDictionary, translations, translationRequired, remoteTranslations]);
     return (_jsx(GTContext.Provider, { value: {

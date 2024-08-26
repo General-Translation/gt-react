@@ -1,0 +1,1 @@
+{"version":3,"file":"createOptions.d.ts","sourceRoot":"","sources":["../../../src/dictionary/createOptions.ts"],"names":[],"mappings":"AAAA,MAAM,CAAC,OAAO,UAAU,aAAa,CAAC,OAAO,CAAC,EAAE,MAAM,CAAC,MAAM,EAAE,GAAG,CAAC,EAAE,QAAQ,CAAC,EAAE,MAAM,CAAC,MAAM,EAAE,GAAG,CAAC;;aAElF;QACL,CAAC,GAAG,EAAE,MAAM,GAAG,GAAG,CAAC;QACnB,CAAC,CAAC,EAAE,MAAM,CAAA;KACb;EAOR"}

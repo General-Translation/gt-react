@@ -14,17 +14,15 @@ const renderDefaultLanguage_1 = __importDefault(require("./helpers/renderDefault
 exports.GTContext = (0, react_1.createContext)(undefined);
 function ClientProvider({ children, locale, defaultLocale, dictionary, translations, translationRequired }) {
     const translate = (0, react_1.useCallback)((id, options) => {
-        const { n, values } = options || {};
-        const variables = Object.assign(Object.assign({}, (typeof n === 'number' && { n })), (values && Object.assign({}, values)));
         if (translationRequired) {
             return (0, handleRender_1.default)({
                 source: dictionary[id],
                 target: translations[id],
                 locale, defaultLocale,
-                variables, id
+                variables: (options === null || options === void 0 ? void 0 : options.values) || {}, id
             });
         }
-        return (0, renderDefaultLanguage_1.default)(Object.assign({ source: dictionary[id], variables, id }, options));
+        return (0, renderDefaultLanguage_1.default)(Object.assign({ source: dictionary[id], variables: (options === null || options === void 0 ? void 0 : options.values) || {}, id }, options));
     }, [dictionary, translations]);
     return ((0, jsx_runtime_1.jsx)(exports.GTContext.Provider, { value: {
             translate, locale, defaultLocale

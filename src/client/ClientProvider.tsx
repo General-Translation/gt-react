@@ -25,17 +25,15 @@ export default function ClientProvider({
 }: ClientProviderProps) {
 
     const translate = useCallback((id: string, options?: tOptions) => {
-        const { n, values } = options || {};
-        const variables = { ...(typeof n === 'number' && { n }), ...(values && { ...values }) };
         if (translationRequired) {
             return handleRender({
                 source: dictionary[id],
                 target: translations[id],
                 locale, defaultLocale,
-                variables, id
+                variables: options?.values || {}, id
             })
         }
-        return renderDefaultLanguage({ source: dictionary[id], variables, id, ...options })
+        return renderDefaultLanguage({ source: dictionary[id], variables: options?.values || {}, id, ...options })
     }, [dictionary, translations]);
 
     return (

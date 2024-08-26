@@ -22,12 +22,13 @@ const getEntryMetadata_1 = __importDefault(require("../primitives/rendering/getE
 const getEntryTranslationType_1 = __importDefault(require("../primitives/rendering/getEntryTranslationType"));
 const getDictionaryEntry_1 = __importDefault(require("./getDictionaryEntry"));
 const checkTFunctionOptions_1 = __importDefault(require("./checkTFunctionOptions"));
+const createOptions_1 = __importDefault(require("./createOptions"));
 function createTFunction({ I18NConfig, T, intl, dictionary = I18NConfig.getDictionary() }) {
     return function t(id, options) {
         (0, checkTFunctionOptions_1.default)(options);
         const raw = (0, getDictionaryEntry_1.default)(id, dictionary);
         const { entry, metadata } = (0, getEntryMetadata_1.default)(raw);
-        options = Object.assign(Object.assign({}, options), metadata);
+        options = (0, createOptions_1.default)(options, metadata);
         // Checks to see if options are valid
         const translationType = (0, getEntryTranslationType_1.default)(raw);
         if (translationType === "plural") {

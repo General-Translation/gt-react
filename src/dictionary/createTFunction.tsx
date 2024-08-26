@@ -6,6 +6,7 @@ import getEntryMetadata from "../primitives/rendering/getEntryMetadata";
 import getEntryTranslationType from "../primitives/rendering/getEntryTranslationType";
 import getDictionaryEntry from "./getDictionaryEntry";
 import checkTFunctionOptions from "./checkTFunctionOptions";
+import createOptions from "./createOptions";
 
 export type tOptions = {
     n?: number;
@@ -21,8 +22,8 @@ export default function createTFunction({ I18NConfig, T, intl, dictionary = I18N
 
         const raw = getDictionaryEntry(id, dictionary);
         const { entry, metadata } = getEntryMetadata(raw);
-        options = { ...options, ...metadata };
-
+        options = createOptions(options, metadata);
+        
         // Checks to see if options are valid
         const translationType = getEntryTranslationType(raw)
 
