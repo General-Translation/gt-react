@@ -1,4 +1,4 @@
-export default function createOptions(options?: Record<string, any>, metadata?: Record<string, any>): {
+export default function createOptions(options?: Record<string, any>): {
     [key: string]: any;
     values?: {
         [key: string]: any;

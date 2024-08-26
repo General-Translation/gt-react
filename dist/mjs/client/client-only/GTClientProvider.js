@@ -22,9 +22,7 @@ import getEntryTranslationType from "../../primitives/rendering/getEntryTranslat
 import getEntryMetadata from "../../primitives/rendering/getEntryMetadata";
 import ClientPlural from "../plural/ClientPlural";
 import addGTIdentifier from "../../index/addGTIdentifier";
-export default function GTClientProvider(_a) {
-    var _b;
-    var { children, projectID, dictionary = defaultGTProps.dictionary, dictionaryName = defaultGTProps.dictionaryName, approvedLocales, defaultLocale = (_b = approvedLocales === null || approvedLocales === void 0 ? void 0 : approvedLocales[0]) !== null && _b !== void 0 ? _b : defaultGTProps.defaultLocale, locale = '', remoteSource = defaultGTProps.remoteSource, cacheURL = defaultGTProps.cacheURL, translations } = _a;
+export default function GTClientProvider({ children, projectID, dictionary = defaultGTProps.dictionary, dictionaryName = defaultGTProps.dictionaryName, approvedLocales, defaultLocale = (approvedLocales === null || approvedLocales === void 0 ? void 0 : approvedLocales[0]) || defaultGTProps.defaultLocale, locale = '', remoteSource = defaultGTProps.remoteSource, cacheURL = defaultGTProps.cacheURL, translations }) {
     if (!projectID && remoteSource && cacheURL === defaultGTProps.cacheURL) {
         throw new Error("gt-react Error: General Translation cloud services require a project ID! Find yours at www.generaltranslation.com/dashboard.");
     }
@@ -36,8 +34,6 @@ export default function GTClientProvider(_a) {
     });
     const translationRequired = isSameLanguage(locale, defaultLocale) ? false : true;
     const suppliedDictionary = useMemo(() => {
-        if (!translationRequired)
-            return dictionary;
         let processedDictionary = {};
         for (const id of Object.keys(dictionary)) {
             let { entry, metadata } = getEntryMetadata(dictionary[id]);
@@ -49,10 +45,7 @@ export default function GTClientProvider(_a) {
                 entry = (_jsx(ClientPlural, Object.assign({ n: 1 }, metadata, { children: entry }), id));
             }
             const taggedEntry = addGTIdentifier(entry);
-            if (translationType === "t" || translationType === "plural") {
-                processedDictionary[id] = taggedEntry;
-            }
-            ;
+            processedDictionary[id] = taggedEntry;
         }
         return processedDictionary;
     }, [dictionary, translationRequired]);

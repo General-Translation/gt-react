@@ -16,13 +16,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const jsx_runtime_1 = require("react/jsx-runtime");
 const renderVariable_1 = __importDefault(require("./renderVariable"));
-const createValues_1 = __importDefault(require("../../primitives/variables/createValues"));
 const Value = (_a) => {
     var { children, values, locales } = _a, props = __rest(_a, ["children", "values", "locales"]);
     if (!values || !locales)
         return children;
     let { 'data-generaltranslation': generaltranslation } = props;
-    const renderedChildren = (0, renderVariable_1.default)(children, locales, (0, createValues_1.default)(undefined, values));
+    const renderedChildren = (0, renderVariable_1.default)(children, locales, values);
     return ((0, jsx_runtime_1.jsx)("span", { "data-values": values, "data-generaltranslation": generaltranslation, children: renderedChildren }));
 };
 Value.gtTransformation = "value";

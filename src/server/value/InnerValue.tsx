@@ -13,8 +13,8 @@ const Value = ({ children, values, locales, ...props }: {
 
     let { 'data-generaltranslation': generaltranslation }: any = props;
 
-    const renderedChildren = renderVariable(children, locales, createValues(undefined, values));
-
+    const renderedChildren = renderVariable(children, locales, values);
+    
     return (
         <span data-values={values} data-generaltranslation={generaltranslation}>
             {renderedChildren}

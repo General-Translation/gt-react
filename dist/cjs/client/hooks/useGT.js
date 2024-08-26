@@ -8,6 +8,7 @@ exports.default = useGT;
 const jsx_runtime_1 = require("react/jsx-runtime");
 const react_1 = __importDefault(require("react"));
 const ClientProvider_1 = require("../ClientProvider");
+const createOptions_1 = __importDefault(require("../../dictionary/createOptions"));
 /**
  * Custom hook to provide a translation function using a given context.
  *
@@ -21,7 +22,7 @@ function useGT(id = '') {
     const getID = (suffix) => {
         if (id && suffix)
             return `${id}.${suffix}`;
-        return id !== null && id !== void 0 ? id : suffix;
+        return id ? id : suffix;
     };
     // Get the translation context
     let translate;
@@ -34,7 +35,7 @@ function useGT(id = '') {
     // Return a translation function if available, otherwise return a no-op function
     return (id = '', options) => {
         const prefixedID = getID(id);
-        const translation = translate(prefixedID, options);
+        const translation = translate(prefixedID, (0, createOptions_1.default)(options));
         if (!translation)
             console.warn(`t('${id}') finding no translation for dictionary item ${prefixedID} !`);
         return (0, jsx_runtime_1.jsx)(react_1.default.Fragment, { children: translation }, prefixedID);

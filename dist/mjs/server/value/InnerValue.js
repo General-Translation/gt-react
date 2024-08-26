@@ -11,13 +11,12 @@ var __rest = (this && this.__rest) || function (s, e) {
 };
 import { jsx as _jsx } from "react/jsx-runtime";
 import renderVariable from './renderVariable';
-import createValues from '../../primitives/variables/createValues';
 const Value = (_a) => {
     var { children, values, locales } = _a, props = __rest(_a, ["children", "values", "locales"]);
     if (!values || !locales)
         return children;
     let { 'data-generaltranslation': generaltranslation } = props;
-    const renderedChildren = renderVariable(children, locales, createValues(undefined, values));
+    const renderedChildren = renderVariable(children, locales, values);
     return (_jsx("span", { "data-values": values, "data-generaltranslation": generaltranslation, children: renderedChildren }));
 };
 Value.gtTransformation = "value";

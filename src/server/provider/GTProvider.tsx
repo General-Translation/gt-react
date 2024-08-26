@@ -106,7 +106,7 @@ export default async function GTProvider({
             const entryAsObjects = writeChildrenAsObjects(entry);
             const key: string = metadata?.context ? await calculateHash([entryAsObjects, metadata.context]) : await calculateHash(entryAsObjects);
 
-            const translation = await I18NConfig.getTranslation(locale, key, id, props.dictionaryName ?? undefined, { remote, local }) 
+            const translation = await I18NConfig.getTranslation(locale, key, id, props.dictionaryName || undefined, { remote, local }) 
 
             if (translation) {
                 return translations[id] = translation;

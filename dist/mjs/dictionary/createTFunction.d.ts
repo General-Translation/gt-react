@@ -1,7 +1,6 @@
 import I18NConfiguration from "../config/I18NConfiguration";
 export type tOptions = {
     n?: number;
-    values?: Record<string, any>;
     [key: string]: any;
 };
 export default function createTFunction({ I18NConfig, T, intl, dictionary }: {

@@ -51,9 +51,7 @@ const getEntryTranslationType_1 = __importDefault(require("../../primitives/rend
 const getEntryMetadata_1 = __importDefault(require("../../primitives/rendering/getEntryMetadata"));
 const ClientPlural_1 = __importDefault(require("../plural/ClientPlural"));
 const addGTIdentifier_1 = __importDefault(require("../../index/addGTIdentifier"));
-function GTClientProvider(_a) {
-    var _b;
-    var { children, projectID, dictionary = defaultGTProps_1.default.dictionary, dictionaryName = defaultGTProps_1.default.dictionaryName, approvedLocales, defaultLocale = (_b = approvedLocales === null || approvedLocales === void 0 ? void 0 : approvedLocales[0]) !== null && _b !== void 0 ? _b : defaultGTProps_1.default.defaultLocale, locale = '', remoteSource = defaultGTProps_1.default.remoteSource, cacheURL = defaultGTProps_1.default.cacheURL, translations } = _a;
+function GTClientProvider({ children, projectID, dictionary = defaultGTProps_1.default.dictionary, dictionaryName = defaultGTProps_1.default.dictionaryName, approvedLocales, defaultLocale = (approvedLocales === null || approvedLocales === void 0 ? void 0 : approvedLocales[0]) || defaultGTProps_1.default.defaultLocale, locale = '', remoteSource = defaultGTProps_1.default.remoteSource, cacheURL = defaultGTProps_1.default.cacheURL, translations }) {
     if (!projectID && remoteSource && cacheURL === defaultGTProps_1.default.cacheURL) {
         throw new Error("gt-react Error: General Translation cloud services require a project ID! Find yours at www.generaltranslation.com/dashboard.");
     }
@@ -65,8 +63,6 @@ function GTClientProvider(_a) {
     });
     const translationRequired = (0, generaltranslation_1.isSameLanguage)(locale, defaultLocale) ? false : true;
     const suppliedDictionary = (0, react_1.useMemo)(() => {
-        if (!translationRequired)
-            return dictionary;
         let processedDictionary = {};
         for (const id of Object.keys(dictionary)) {
             let { entry, metadata } = (0, getEntryMetadata_1.default)(dictionary[id]);
@@ -78,10 +74,7 @@ function GTClientProvider(_a) {
                 entry = ((0, jsx_runtime_1.jsx)(ClientPlural_1.default, Object.assign({ n: 1 }, metadata, { children: entry }), id));
             }
             const taggedEntry = (0, addGTIdentifier_1.default)(entry);
-            if (translationType === "t" || translationType === "plural") {
-                processedDictionary[id] = taggedEntry;
-            }
-            ;
+            processedDictionary[id] = taggedEntry;
         }
         return processedDictionary;
     }, [dictionary, translationRequired]);

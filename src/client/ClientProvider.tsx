@@ -33,6 +33,7 @@ export default function ClientProvider({
                 variables: options?.values || {}, id
             })
         }
+        
         return renderDefaultLanguage({ source: dictionary[id], variables: options?.values || {}, id, ...options })
     }, [dictionary, translations]);
 

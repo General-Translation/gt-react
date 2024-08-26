@@ -1,1 +1,1 @@
-{"version":3,"file":"useGT.d.ts","sourceRoot":"","sources":["../../../../src/client/hooks/useGT.tsx"],"names":[],"mappings":"AAOA;;;;;;;GAOG;AACH,MAAM,CAAC,OAAO,UAAU,KAAK,CAAC,EAAE,GAAE,MAAW,GAAG,QAAQ,CA8BvD"}
+{"version":3,"file":"useGT.d.ts","sourceRoot":"","sources":["../../../../src/client/hooks/useGT.tsx"],"names":[],"mappings":"AAQA;;;;;;;GAOG;AACH,MAAM,CAAC,OAAO,UAAU,KAAK,CAAC,EAAE,GAAE,MAAW,GAAG,QAAQ,CAyBvD"}

@@ -1,8 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = createOptions;
-function createOptions(options, metadata) {
-    let result = Object.assign({}, metadata);
+function createOptions(options) {
+    let result = {};
     if (options && typeof options === 'object' && Object.keys(options).length > 0) {
         result.values = Object.assign({}, options);
     }

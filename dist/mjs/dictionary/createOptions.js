@@ -1,5 +1,5 @@
-export default function createOptions(options, metadata) {
-    let result = Object.assign({}, metadata);
+export default function createOptions(options) {
+    let result = {};
     if (options && typeof options === 'object' && Object.keys(options).length > 0) {
         result.values = Object.assign({}, options);
     }

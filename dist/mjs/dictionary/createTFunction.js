@@ -22,41 +22,31 @@ export default function createTFunction({ I18NConfig, T, intl, dictionary = I18N
         checkTFunctionOptions(options);
         const raw = getDictionaryEntry(id, dictionary);
         const { entry, metadata } = getEntryMetadata(raw);
-        options = createOptions(options, metadata);
+        options = createOptions(options);
         // Checks to see if options are valid
         const translationType = getEntryTranslationType(raw);
-        if (translationType === "plural") {
-            console.log(options);
-            if (!options.values || typeof options.values.n !== 'number') {
-                throw new Error(`ID "${id}" requires an "n" option.\n\ne.g. t("${id}", { n: 1 })`);
-            }
-        }
         // Turn into an async function if the target is a string
         if (translationType === "intl")
-            return intl(entry, Object.assign({ id }, options));
+            return intl(entry, Object.assign({ id }, metadata));
         // If a plural or value is required
-        if (options) {
+        if (options.values) {
             const locales = [I18NConfig.getLocale(), I18NConfig.getDefaultLocale()];
-            const { n, values, ranges, zero, one, two, few, many, other, singular, dual, plural } = options, tOptions = __rest(options, ["n", "values", "ranges", "zero", "one", "two", "few", "many", "other", "singular", "dual", "plural"]);
-            if (typeof n === 'number') {
-                // Plural!
-                const innerProps = {
-                    n, values,
-                    ranges,
+            const _a = metadata || {}, { ranges, zero, one, two, few, many, other, singular, dual, plural } = _a, tOptions = __rest(_a, ["ranges", "zero", "one", "two", "few", "many", "other", "singular", "dual", "plural"]);
+            if (translationType === "plural") {
+                if (!options.values || typeof options.values.n !== 'number') {
+                    throw new Error(`ID "${id}" requires an "n" option.\n\ne.g. t("${id}", { n: 1 })`);
+                }
+                const innerProps = Object.assign({ ranges,
                     zero, one,
                     two, few,
                     many, other,
-                    singular, dual, plural,
-                };
-                return (_jsx(T, Object.assign({ id: id }, tOptions, { children: _jsx(Plural, Object.assign({ locales: locales }, innerProps, { children: entry })) })));
+                    singular, dual, plural }, options.values);
+                return (_jsx(T, Object.assign({ id: id }, tOptions, { children: _jsx(Plural, Object.assign({ n: options.values.n, locales: locales }, innerProps, { children: entry })) })));
             }
-            else if (values) {
-                // Values but not plural
-                return (_jsx(T, Object.assign({ id: id }, tOptions, { children: _jsx(Value, { values: values, locales: locales, children: entry }) })));
-            }
+            return (_jsx(T, Object.assign({ id: id }, tOptions, { children: _jsx(Value, { values: options.values, locales: locales, children: entry }) })));
         }
         // base case, just return T with an inner fragment (</>) for consistency
-        return (_jsx(T, Object.assign({ id: id }, options, { children: _jsx(_Fragment, { children: entry }) })));
+        return (_jsx(T, Object.assign({ id: id }, metadata, { children: _jsx(_Fragment, { children: entry }) })));
     };
 }
 //# sourceMappingURL=createTFunction.js.map

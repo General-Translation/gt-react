@@ -26,7 +26,6 @@ import renderChildren from './renderChildren';
 import Resolver from './Resolver';
 import calculateHash from '../../index/calculateHash';
 const ServerT = (_a) => __awaiter(void 0, void 0, void 0, function* () {
-    var _b;
     var { I18NConfig, children, locale } = _a, props = __rest(_a, ["I18NConfig", "children", "locale"]);
     // Handle case where translation is not required, for example if the user's browser is in the default locale
     const translationRequired = (children && I18NConfig.translationRequired(locale)) ? true : false;
@@ -41,7 +40,7 @@ const ServerT = (_a) => __awaiter(void 0, void 0, void 0, function* () {
     let key = props.context ? yield calculateHash([childrenAsObjects, props.context]) : yield calculateHash(childrenAsObjects);
     const id = props.id ? props.id : key;
     const translations = yield translationsPromise;
-    const translation = yield I18NConfig.getTranslation(locale, key, id, (_b = props.dictionaryName) !== null && _b !== void 0 ? _b : undefined, translations);
+    const translation = yield I18NConfig.getTranslation(locale, key, id, props.dictionaryName || undefined, translations);
     // Check if a translation for this site already exists and return it if it does
     const translationExists = translation ? true : false;
     if (translationExists) {

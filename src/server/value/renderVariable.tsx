@@ -17,7 +17,7 @@ const handleSingleChild = (child: any, locales: string[], variables?: Record<str
     if (React.isValidElement(child)) {
         const { props, type }: any = child;  
         // Check if a variable component
-        const transformation: string = typeof type === 'function' ? ((type as any)?.gtTransformation || '') : '';
+        const transformation = typeof type === 'function' ? ((type as any)?.gtTransformation || '') : '';
         if (variables && transformation?.startsWith("variable")) {
             const variableType = transformation.split('-')?.[1] || "variable";
             const name = props.name || defaultVariableNames[variableType];
@@ -35,7 +35,6 @@ const handleSingleChild = (child: any, locales: string[], variables?: Record<str
             return <Var defaultValue={value} name={name} />
         }
         let newProps = { ...props };
-        
         if (props?.children) {
             newProps.children = renderVariable(props.children, locales, variables);
         }

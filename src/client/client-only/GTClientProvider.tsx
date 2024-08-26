@@ -21,7 +21,7 @@ export default function GTClientProvider({
     projectID,
     dictionary = defaultGTProps.dictionary, 
     dictionaryName = defaultGTProps.dictionaryName,
-    approvedLocales, defaultLocale = approvedLocales?.[0] ?? defaultGTProps.defaultLocale, 
+    approvedLocales, defaultLocale = approvedLocales?.[0] || defaultGTProps.defaultLocale, 
     locale = '', 
     remoteSource = defaultGTProps.remoteSource,
     cacheURL = defaultGTProps.cacheURL,
@@ -54,7 +54,6 @@ export default function GTClientProvider({
     const translationRequired = isSameLanguage(locale, defaultLocale) ? false : true;
 
     const suppliedDictionary = useMemo(() => {
-        if (!translationRequired) return dictionary;
         let processedDictionary: any = {};
         for (const id of Object.keys(dictionary)) {
             let { entry, metadata } = getEntryMetadata(dictionary[id]);
@@ -73,9 +72,7 @@ export default function GTClientProvider({
                 );
             }
             const taggedEntry = addGTIdentifier(entry);
-            if (translationType === "t" || translationType === "plural") {
-                processedDictionary[id] = taggedEntry;
-            };
+            processedDictionary[id] = taggedEntry;
         }
         return processedDictionary;
     }, [dictionary, translationRequired])

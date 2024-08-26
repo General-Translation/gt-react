@@ -85,12 +85,11 @@ export default function GTProvider(_a) {
                 // COMPLICATED INNER TRANSLATION FUNCTION
                 // EQUIVALENT TO <T> OR intl() BEFORE RENDERING
                 // i.e. passes the translation dictionary
-                var _a;
                 let { entry, metadata } = getEntryMetadata(clonedDictionary[id]);
                 const translationType = getEntryTranslationType(clonedDictionary[id]);
                 const entryAsObjects = writeChildrenAsObjects(entry);
                 const key = (metadata === null || metadata === void 0 ? void 0 : metadata.context) ? yield calculateHash([entryAsObjects, metadata.context]) : yield calculateHash(entryAsObjects);
-                const translation = yield I18NConfig.getTranslation(locale, key, id, (_a = props.dictionaryName) !== null && _a !== void 0 ? _a : undefined, { remote, local });
+                const translation = yield I18NConfig.getTranslation(locale, key, id, props.dictionaryName || undefined, { remote, local });
                 if (translation) {
                     return translations[id] = translation;
                 }

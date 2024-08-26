@@ -1,6 +1,6 @@
 'use client'
 
-import React, { ReactNode, useEffect, useMemo, useState } from 'react';
+import React, { ReactNode } from 'react';
 import useLocale from '../hooks/useLocale';
 import useDefaultLocale from '../hooks/useDefaultLocale';
 
