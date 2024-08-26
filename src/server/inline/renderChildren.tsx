@@ -137,6 +137,7 @@ export default function renderChildren({
 
             // If target is a variable
             if (isTargetVariable(targetChild)) {
+                
                 let value;
                 const key = targetChild.key;
                 if (metadata.variables && (typeof metadata.variables[key] !== null && typeof metadata.variables[key] !== 'undefined')) {
@@ -151,7 +152,7 @@ export default function renderChildren({
                 if (targetChild.variable === "currency") {
                     return <Currency locales={[metadata.locale, metadata.defaultLocale]} key={`currency_${index}`} defaultValue={value} name={key} currency={metadata?.variableOptions?.[key]?.currency || undefined} options={{...metadata?.variableOptions?.[key]}}/>
                 }
-                return <Var key={`var_${index}`} defaultValue={isValidReactNode(value) ? value : undefined} name={key}/>
+                return <Var key={`var_${index}`} defaultValue={value} name={key}/>
             }
             
             // If target is a normal ReactElement

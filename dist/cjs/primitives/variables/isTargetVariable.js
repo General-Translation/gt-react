@@ -2,8 +2,8 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = isTargetVariable;
 function isTargetVariable(target) {
-    if (target && typeof target === 'object' && target.key === 'string') {
-        if (typeof target === 'object' && target && typeof target.variable === 'string') {
+    if (target && typeof target === 'object' && typeof target.key === 'string') {
+        if (typeof target.variable === 'string') {
             return ["variable", "number", "date", "currency"].includes(target.variable);
         }
     }

@@ -170,7 +170,7 @@ function renderChildren(_a) {
                 if (targetChild.variable === "currency") {
                     return (0, jsx_runtime_1.jsx)(Currency_1.default, { locales: [metadata.locale, metadata.defaultLocale], defaultValue: value, name: key, currency: ((_d = (_c = metadata === null || metadata === void 0 ? void 0 : metadata.variableOptions) === null || _c === void 0 ? void 0 : _c[key]) === null || _d === void 0 ? void 0 : _d.currency) || undefined, options: Object.assign({}, (_e = metadata === null || metadata === void 0 ? void 0 : metadata.variableOptions) === null || _e === void 0 ? void 0 : _e[key]) }, `currency_${index}`);
                 }
-                return (0, jsx_runtime_1.jsx)(Var_1.default, { defaultValue: (0, isValidReactNode_1.default)(value) ? value : undefined, name: key }, `var_${index}`);
+                return (0, jsx_runtime_1.jsx)(Var_1.default, { defaultValue: value, name: key }, `var_${index}`);
             }
             // If target is a normal ReactElement
             const matchingSource = findMatchingSource(targetChild);
