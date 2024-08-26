@@ -26,7 +26,8 @@ export default function createTFunction({ I18NConfig, T, intl, dictionary = I18N
         // Checks to see if options are valid
         const translationType = getEntryTranslationType(raw);
         if (translationType === "plural") {
-            if (!options.n) {
+            console.log(options);
+            if (!options.values || typeof options.values.n !== 'number') {
                 throw new Error(`ID "${id}" requires an "n" option.\n\ne.g. t("${id}", { n: 1 })`);
             }
         }

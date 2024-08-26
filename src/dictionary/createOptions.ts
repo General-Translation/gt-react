@@ -7,7 +7,7 @@ export default function createOptions(options?: Record<string, any>, metadata?: 
         [key: string]: any,
     } = { ...metadata };
     if (options && typeof options === 'object' && Object.keys(options).length > 0) {
-        result.variables = { ...options };
+        result.values = { ...options };
     }
     return result;
 }
