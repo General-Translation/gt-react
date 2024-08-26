@@ -53,7 +53,7 @@ export function createVariables({
     approvedLocales?: string[],
     defaultLocale?: string;
     getLocale?: () => string;
-}): Variables {
+} = {}): Variables {
     const finalGetLocale = getLocale || (() => { return getNextLocale(defaultLocale, approvedLocales) });
     return createBaseVariables({ approvedLocales, defaultLocale, getLocale: finalGetLocale });
 }

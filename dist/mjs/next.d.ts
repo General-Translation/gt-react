@@ -30,7 +30,7 @@ export declare function createGT({ approvedLocales, defaultLocale, getLocale, ge
  * @param {() => string} params.getLocale - Function to get the current locale.
  * @returns {Object} An object containing variable components.
  */
-export declare function createVariables({ approvedLocales, defaultLocale, getLocale }: {
+export declare function createVariables({ approvedLocales, defaultLocale, getLocale }?: {
     approvedLocales?: string[];
     defaultLocale?: string;
     getLocale?: () => string;

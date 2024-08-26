@@ -47,7 +47,7 @@ export function createGT(_a = {
  * @param {() => string} params.getLocale - Function to get the current locale.
  * @returns {Object} An object containing variable components.
  */
-export function createVariables({ approvedLocales, defaultLocale, getLocale }) {
+export function createVariables({ approvedLocales, defaultLocale, getLocale } = {}) {
     const finalGetLocale = getLocale || (() => { return getNextLocale(defaultLocale, approvedLocales); });
     return createBaseVariables({ approvedLocales, defaultLocale, getLocale: finalGetLocale });
 }

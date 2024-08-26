@@ -56,11 +56,10 @@ type GeneralTranslation = Variables & {
     *
     * `id` - (string) - ID of the item in the dictionary.
     *
-    * `options?` - ({ [key: string]: any }) - Other parameters which override the global `gt-react` configuration. See https://docs.generaltranslation.com for a full list.
+    * `options?` - ({ [key: string]: any }) - Variable values. See https://docs.generaltranslation.com for a full list.
     */
     t: (id: string, options?: {
         n?: number;
-        values?: Record<string, any>;
         [key: string]: any;
     }) => any;
     /**
@@ -70,7 +69,10 @@ type GeneralTranslation = Variables & {
     * `id` - (string) - ID to be prepended.
     *
     */
-    getGT: (id?: string) => any;
+    getGT: (id?: string) => (id: string, options?: {
+        n?: number;
+        [key: string]: any;
+    }) => any;
     /**
      *  Type of <T> translation component which renders content around variables.
      *

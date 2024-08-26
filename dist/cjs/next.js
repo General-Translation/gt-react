@@ -51,7 +51,7 @@ function createGT(_a = {
  * @param {() => string} params.getLocale - Function to get the current locale.
  * @returns {Object} An object containing variable components.
  */
-function createVariables({ approvedLocales, defaultLocale, getLocale }) {
+function createVariables({ approvedLocales, defaultLocale, getLocale } = {}) {
     const finalGetLocale = getLocale || (() => { return (0, requestFunctions_1.getNextLocale)(defaultLocale, approvedLocales); });
     return (0, server_1.createVariables)({ approvedLocales, defaultLocale, getLocale: finalGetLocale });
 }
