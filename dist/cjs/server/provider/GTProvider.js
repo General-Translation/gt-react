@@ -47,15 +47,18 @@ dictionary = {
 */
 function GTProvider(_a) {
     return __awaiter(this, void 0, void 0, function* () {
-        var { I18NConfig, locale, defaultLocale, children, id = '', dictionary = id ? {} : I18NConfig.getDictionary() } = _a, props = __rest(_a, ["I18NConfig", "locale", "defaultLocale", "children", "id", "dictionary"]);
+        var { I18NConfig, locale, defaultLocale, children, id = '' } = _a, props = __rest(_a, ["I18NConfig", "locale", "defaultLocale", "children", "id"]);
+        let dictionary = {};
         let providerID = id;
         if (providerID) {
             const { entry } = (0, getEntryMetadata_1.default)(I18NConfig.getDictionaryEntry(providerID));
             if (entry && !(0, react_1.isValidElement)(entry) && typeof entry === 'object') {
-                dictionary = Object.assign(Object.assign({}, entry), (0, flattenDictionary_1.default)(dictionary));
+                dictionary = (0, flattenDictionary_1.default)(entry);
             }
         }
-        dictionary = (0, flattenDictionary_1.default)(dictionary, providerID);
+        else {
+            dictionary = (0, flattenDictionary_1.default)(I18NConfig.getDictionary());
+        }
         let translations = {};
         const renderSettings = I18NConfig.getRenderSettings();
         const clonedDictionary = (0, cloneDictionary_1.default)(dictionary);

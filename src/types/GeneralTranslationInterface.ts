@@ -53,7 +53,6 @@ type GeneralTranslation = Variables & {
     GTProvider: ComponentType<{
         children?: any;
         id?: string;
-        dictionary?: Record<string, any>;
         [key: string]: any
     }>;
   

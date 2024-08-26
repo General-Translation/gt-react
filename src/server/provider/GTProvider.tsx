@@ -28,26 +28,26 @@ export default async function GTProvider({
     locale, defaultLocale,
     children,
     id='',
-    dictionary = id ? {} : I18NConfig.getDictionary(),
     ...props
 }: {
     I18NConfig: I18NConfiguration;
     children: any;
     locale: string;
     defaultLocale: string;
-    dictionary?: Record<string, any>;
     id?: string;
     [key: string]: any;
 }): Promise<any> {
 
+    let dictionary: Record<string, any> = {};
     let providerID: string = id;
     if (providerID) {
         const { entry } = getEntryMetadata(I18NConfig.getDictionaryEntry(providerID));
         if (entry && !isValidElement(entry) && typeof entry === 'object') {
-            dictionary = { ...entry, ...flattenDictionary(dictionary) }
+            dictionary = flattenDictionary(entry)
         }
+    } else {
+        dictionary = flattenDictionary(I18NConfig.getDictionary());
     }
-    dictionary = flattenDictionary(dictionary, providerID);
     
     let translations: Record<string, any> = {};
 
