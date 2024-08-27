@@ -118,7 +118,6 @@ function renderClientChildren(_a) {
             }
             // if target is a variable
             if ((0, isTargetVariable_1.default)(targetChild)) {
-                console.log(metadata.variables);
                 const key = targetChild.key;
                 let value;
                 if (metadata.variables && (typeof metadata.variables[key] !== null && typeof metadata.variables[key] !== 'undefined')) {
