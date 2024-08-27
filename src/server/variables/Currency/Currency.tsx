@@ -27,6 +27,7 @@ const Currency = ({ children, locales, name = "cost", defaultValue, currency = "
             data-gt-variable-name={name} 
             data-gt-variable-type={"currency"} 
             data-gt-variable-options={{ style: 'currency', currency, ...options }}
+            data-gt-unformatted-value={value}
         >
             {formattedValue}
         </span>

@@ -5,7 +5,9 @@ export default function getVariableProps(props) {
     const result = {
         variableType,
         variableName: props.name || props['data-gt-variable-name'] || defaultVariableNames[variableType],
-        variableValue: (typeof props.defaultValue !== 'undefined') ? props.defaultValue : (typeof props.children !== 'undefined') ? props.children : undefined,
+        variableValue: ((typeof props.defaultValue !== 'undefined') ? props.defaultValue :
+            (typeof props['data-gt-unformatted-value'] !== 'undefined') ? props['data-gt-unformatted-value'] :
+                (typeof props.children !== 'undefined') ? props.children : undefined),
         variableOptions: props.options || props['data-gt-variable-options'] || undefined
     };
     return result;

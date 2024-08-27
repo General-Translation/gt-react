@@ -18,7 +18,7 @@ const Num = (_a) => {
     value = (typeof value === 'string') ? parseFloat(value) : value;
     // Format the number according to the locale
     const formattedValue = (typeof value === 'number') ? new Intl.NumberFormat(locales, Object.assign({ numberingSystem: 'latn' }, options)).format(value) : defaultValue;
-    return (_jsx("span", { "data-generaltranslation": generaltranslation, "data-gt-variable-name": name, "data-gt-variable-type": "number", "data-gt-variable-options": options, children: formattedValue }));
+    return (_jsx("span", { "data-generaltranslation": generaltranslation, "data-gt-variable-name": name, "data-gt-variable-type": "number", "data-gt-variable-options": options, "data-gt-unformatted-value": value, children: formattedValue }));
 };
 Num.gtTransformation = "variable-number";
 export default Num;

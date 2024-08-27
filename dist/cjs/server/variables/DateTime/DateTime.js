@@ -38,7 +38,7 @@ const DateTime = (_a) => {
     const dateString = new Intl.DateTimeFormat(locales, Object.assign({ calendar: "gregory", numberingSystem: "latn" }, options)).format(dateValue) || (dateValue === null || dateValue === void 0 ? void 0 : dateValue.toLocaleString(locales, Object.assign({ calendar: "gregory", numberingSystem: "latn" }, options))) || '';
     const formattedValue = dateString.replace(/[\u200F\u202B\u202E]/g, '');
     // Render the formatted date within a span element
-    return ((0, jsx_runtime_1.jsx)("span", { "data-generaltranslation": generaltranslation, "data-gt-variable-name": name, "data-gt-variable-type": "date", "data-gt-variable-options": options, children: formattedValue }));
+    return ((0, jsx_runtime_1.jsx)("span", { "data-generaltranslation": generaltranslation, "data-gt-variable-name": name, "data-gt-variable-type": "date", "data-gt-variable-options": options, "data-gt-unformatted-value": dateValue, children: formattedValue }));
 };
 DateTime.gtTransformation = "variable-date";
 exports.default = DateTime;

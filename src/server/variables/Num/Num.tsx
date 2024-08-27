@@ -24,6 +24,7 @@ const Num = ({ children, locales, name = "n", defaultValue, options = {}, ...pro
             data-gt-variable-name={name} 
             data-gt-variable-type={"number"} 
             data-gt-variable-options={options}
+            data-gt-unformatted-value={value}
         >
             {formattedValue}
         </span>

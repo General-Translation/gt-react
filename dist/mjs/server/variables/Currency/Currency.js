@@ -20,7 +20,7 @@ const Currency = (_a) => {
     const formattedValue = (typeof value === 'number')
         ? new Intl.NumberFormat(locales, Object.assign({ style: 'currency', currency, numberingSystem: 'latn' }, options)).format(value)
         : value;
-    return (_jsx("span", { "data-generaltranslation": generaltranslation, "data-gt-variable-name": name, "data-gt-variable-type": "currency", "data-gt-variable-options": Object.assign({ style: 'currency', currency }, options), children: formattedValue }));
+    return (_jsx("span", { "data-generaltranslation": generaltranslation, "data-gt-variable-name": name, "data-gt-variable-type": "currency", "data-gt-variable-options": Object.assign({ style: 'currency', currency }, options), "data-gt-unformatted-value": value, children: formattedValue }));
 };
 Currency.gtTransformation = "variable-currency";
 export default Currency;

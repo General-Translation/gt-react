@@ -131,7 +131,6 @@ export default function renderClientChildren({
                 return <React.Fragment key={`string_${index}`}>{targetChild}</React.Fragment>;
             }
 
-
             // if target is a variable
             if (isTargetVariable(targetChild)) {
                 const key = targetChild.key;

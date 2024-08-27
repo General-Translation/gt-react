@@ -16,6 +16,7 @@ const Var = ({ children, name = "value", defaultValue, ...props }: {
             data-generaltranslation={generaltranslation} 
             data-gt-variable-name={name} 
             data-gt-variable-type={"variable"}
+            data-gt-unformatted-value={defaultValue}
         >
             {defaultValue}
         </span>

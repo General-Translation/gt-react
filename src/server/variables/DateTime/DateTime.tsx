@@ -49,6 +49,7 @@ const DateTime = ({ children, locales, name = "date", defaultValue, options = {}
             data-gt-variable-name={name} 
             data-gt-variable-type={"date"} 
             data-gt-variable-options={options}
+            data-gt-unformatted-value={dateValue}
         >
             {formattedValue}
         </span>
