@@ -18,6 +18,5 @@ const createValues_1 = __importDefault(require("../../primitives/variables/creat
 const ClientValue = ({ children, values }) => {
     return ((0, jsx_runtime_1.jsx)(RenderClientVariable_1.default, { variables: (0, createValues_1.default)(undefined, values), children: children }));
 };
-ClientValue.gtTransformation = "value";
 exports.default = ClientValue;
 //# sourceMappingURL=ClientValue.js.map

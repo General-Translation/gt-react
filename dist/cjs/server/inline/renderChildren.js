@@ -46,8 +46,8 @@ const Var_1 = __importDefault(require("../variables/Var/Var"));
 const DateTime_1 = __importDefault(require("../variables/DateTime/DateTime"));
 const Num_1 = __importDefault(require("../variables/Num/Num"));
 const Currency_1 = __importDefault(require("../variables/Currency/Currency"));
-const defaultVariableNames_1 = __importDefault(require("../../primitives/variables/defaultVariableNames"));
 const isTargetVariable_1 = __importDefault(require("../../primitives/variables/isTargetVariable"));
+const getVariableProps_1 = __importDefault(require("../../primitives/variables/getVariableProps"));
 /**
  * Renders a React element based on the provided source and target elements.
  * Handles transformation and variable branching if necessary.
@@ -97,7 +97,7 @@ const renderElement = (_a) => {
  * @returns {ReactNode} The rendered children elements.
  */
 function renderChildren(_a) {
-    var _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s, _t, _u, _v, _w, _x, _y, _z;
+    var _b, _c, _d, _e, _f, _g, _h, _j, _k;
     var { source, target } = _a, metadata = __rest(_a, ["source", "target"]);
     // Most straightforward case, return a valid React node
     if ((target === null || typeof target === 'undefined') && (0, isValidReactNode_1.default)(source))
@@ -112,22 +112,12 @@ function renderChildren(_a) {
             if ((0, react_1.isValidElement)(sourceChild)) {
                 const { props } = sourceChild;
                 if (((_b = props === null || props === void 0 ? void 0 : props['data-generaltranslation']) === null || _b === void 0 ? void 0 : _b.transformation) === "variable") {
-                    const variableName = sourceChild.props.name || defaultVariableNames_1.default[(_d = (_c = sourceChild === null || sourceChild === void 0 ? void 0 : sourceChild.props) === null || _c === void 0 ? void 0 : _c['data-generaltranslation']) === null || _d === void 0 ? void 0 : _d.variableType];
-                    const variableValue = sourceChild.props.defaultValue || sourceChild.props.children;
-                    if (variableName && variableValue && typeof ((_e = metadata === null || metadata === void 0 ? void 0 : metadata.variables) === null || _e === void 0 ? void 0 : _e[variableName]) === 'undefined') {
+                    const { variableName, variableValue, variableOptions } = (0, getVariableProps_1.default)(props);
+                    if (variableName && typeof variableValue !== 'undefined' && typeof ((_c = metadata === null || metadata === void 0 ? void 0 : metadata.variables) === null || _c === void 0 ? void 0 : _c[variableName]) === 'undefined') {
                         metadata.variables = Object.assign(Object.assign({}, metadata.variables), { [variableName]: variableValue });
                     }
-                    const variableType = ((_g = (_f = sourceChild === null || sourceChild === void 0 ? void 0 : sourceChild.props) === null || _f === void 0 ? void 0 : _f['data-generaltranslation']) === null || _g === void 0 ? void 0 : _g.variableType) || "variable";
-                    if (variableType === "number" || variableType === "currency" || variableType === "date") {
-                        const variableOptions = (_h = sourceChild === null || sourceChild === void 0 ? void 0 : sourceChild.props) === null || _h === void 0 ? void 0 : _h.options;
-                        if (variableOptions)
-                            metadata.variableOptions = Object.assign(Object.assign({}, metadata.variableOptions), { [variableName]: Object.assign({}, variableOptions) });
-                    }
-                    if (variableType === "currency") {
-                        const variableCurrency = (_j = sourceChild === null || sourceChild === void 0 ? void 0 : sourceChild.props) === null || _j === void 0 ? void 0 : _j.currency;
-                        if (variableCurrency)
-                            metadata.variableOptions = Object.assign(Object.assign({}, metadata.variableOptions), { [variableName]: Object.assign({ currency: variableCurrency }, (_k = metadata.variableOptions) === null || _k === void 0 ? void 0 : _k[variableName]) });
-                    }
+                    if (variableOptions)
+                        metadata.variableOptions = Object.assign(Object.assign({}, metadata.variableOptions), { [variableName]: Object.assign({}, variableOptions) });
                 }
                 else {
                     validSourceElements.push(sourceChild);
@@ -184,23 +174,13 @@ function renderChildren(_a) {
         const sourceIsValidElement = (0, react_1.isValidElement)(source);
         if (sourceIsValidElement) {
             const { props } = source;
-            if (((_l = props === null || props === void 0 ? void 0 : props['data-generaltranslation']) === null || _l === void 0 ? void 0 : _l.transformation) === "variable") {
-                const variableName = source.props.name || defaultVariableNames_1.default[(_o = (_m = source === null || source === void 0 ? void 0 : source.props) === null || _m === void 0 ? void 0 : _m['data-generaltranslation']) === null || _o === void 0 ? void 0 : _o.variableType];
-                const variableValue = source.props.defaultValue || source.props.children;
-                if (variableName && variableValue && typeof ((_p = metadata === null || metadata === void 0 ? void 0 : metadata.variables) === null || _p === void 0 ? void 0 : _p[variableName]) === 'undefined') {
+            if (((_d = props === null || props === void 0 ? void 0 : props['data-generaltranslation']) === null || _d === void 0 ? void 0 : _d.transformation) === "variable") {
+                const { variableName, variableValue, variableOptions } = (0, getVariableProps_1.default)(props);
+                if (variableName && typeof variableValue !== 'undefined' && typeof ((_e = metadata === null || metadata === void 0 ? void 0 : metadata.variables) === null || _e === void 0 ? void 0 : _e[variableName]) === 'undefined') {
                     metadata.variables = Object.assign(Object.assign({}, metadata.variables), { [variableName]: variableValue });
                 }
-                const variableType = ((_r = (_q = source === null || source === void 0 ? void 0 : source.props) === null || _q === void 0 ? void 0 : _q['data-generaltranslation']) === null || _r === void 0 ? void 0 : _r.variableType) || "variable";
-                if (variableType === "number" || variableType === "currency" || variableType === "date") {
-                    const variableOptions = (_s = source === null || source === void 0 ? void 0 : source.props) === null || _s === void 0 ? void 0 : _s.options;
-                    if (variableOptions)
-                        metadata.variableOptions = Object.assign(Object.assign({}, metadata.variableOptions), { [variableName]: Object.assign({}, variableOptions) });
-                }
-                if (variableType === "currency") {
-                    const variableCurrency = (_t = source === null || source === void 0 ? void 0 : source.props) === null || _t === void 0 ? void 0 : _t.currency;
-                    if (variableCurrency)
-                        metadata.variableOptions = Object.assign(Object.assign({}, metadata.variableOptions), { [variableName]: Object.assign({ currency: variableCurrency }, (_u = metadata.variableOptions) === null || _u === void 0 ? void 0 : _u[variableName]) });
-                }
+                if (variableOptions)
+                    metadata.variableOptions = Object.assign(Object.assign({}, metadata.variableOptions), { [variableName]: Object.assign({}, variableOptions) });
             }
         }
         // if target is a variable
@@ -211,13 +191,13 @@ function renderChildren(_a) {
                 value = metadata.variables[key];
             }
             if (target.variable === "number") {
-                return (0, jsx_runtime_1.jsx)(Num_1.default, { locales: [metadata.locale, metadata.defaultLocale], defaultValue: value, name: key, options: Object.assign({}, (_v = metadata === null || metadata === void 0 ? void 0 : metadata.variableOptions) === null || _v === void 0 ? void 0 : _v[key]) });
+                return (0, jsx_runtime_1.jsx)(Num_1.default, { locales: [metadata.locale, metadata.defaultLocale], defaultValue: value, name: key, options: Object.assign({}, (_f = metadata === null || metadata === void 0 ? void 0 : metadata.variableOptions) === null || _f === void 0 ? void 0 : _f[key]) });
             }
             if (target.variable === "date") {
-                return (0, jsx_runtime_1.jsx)(DateTime_1.default, { locales: [metadata.locale, metadata.defaultLocale], defaultValue: value, name: key, options: Object.assign({}, (_w = metadata === null || metadata === void 0 ? void 0 : metadata.variableOptions) === null || _w === void 0 ? void 0 : _w[key]) });
+                return (0, jsx_runtime_1.jsx)(DateTime_1.default, { locales: [metadata.locale, metadata.defaultLocale], defaultValue: value, name: key, options: Object.assign({}, (_g = metadata === null || metadata === void 0 ? void 0 : metadata.variableOptions) === null || _g === void 0 ? void 0 : _g[key]) });
             }
             if (target.variable === "currency") {
-                return (0, jsx_runtime_1.jsx)(Currency_1.default, { locales: [metadata.locale, metadata.defaultLocale], defaultValue: value, name: key, currency: ((_y = (_x = metadata === null || metadata === void 0 ? void 0 : metadata.variableOptions) === null || _x === void 0 ? void 0 : _x[key]) === null || _y === void 0 ? void 0 : _y.currency) || undefined, options: Object.assign({}, (_z = metadata === null || metadata === void 0 ? void 0 : metadata.variableOptions) === null || _z === void 0 ? void 0 : _z[key]) });
+                return (0, jsx_runtime_1.jsx)(Currency_1.default, { locales: [metadata.locale, metadata.defaultLocale], defaultValue: value, name: key, currency: ((_j = (_h = metadata === null || metadata === void 0 ? void 0 : metadata.variableOptions) === null || _h === void 0 ? void 0 : _h[key]) === null || _j === void 0 ? void 0 : _j.currency) || undefined, options: Object.assign({}, (_k = metadata === null || metadata === void 0 ? void 0 : metadata.variableOptions) === null || _k === void 0 ? void 0 : _k[key]) });
             }
             return (0, jsx_runtime_1.jsx)(Var_1.default, { defaultValue: (0, isValidReactNode_1.default)(value) ? value : undefined, name: key });
         }

@@ -25,6 +25,4 @@ const ClientValue = ({ children, values }: {
 
 };
 
-ClientValue.gtTransformation = "value";
-
 export default ClientValue;

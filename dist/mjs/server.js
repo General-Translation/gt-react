@@ -101,10 +101,6 @@ export function createGT(_a = {
     // ----- Variables ----- //
     const Value = createValueComponent({ T, getLocale, defaultLocale });
     const Plural = createPluralComponent({ T, getLocale, defaultLocale });
-    const Var = createVarComponent();
-    const Num = createNumComponent(getLocale, defaultLocale);
-    const DateTime = createDateTimeComponent(getLocale, defaultLocale);
-    const Currency = createCurrencyComponent(getLocale, defaultLocale);
     // ----- Helper Functions ------ //
     const getDefaultLocale = I18NConfig.getDefaultLocale;
     return {
@@ -112,7 +108,6 @@ export function createGT(_a = {
         GTProvider,
         t, getGT,
         Value, Plural,
-        Var, Num, DateTime, Currency,
         getLocale, getDefaultLocale
     };
 }

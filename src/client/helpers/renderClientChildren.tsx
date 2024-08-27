@@ -12,6 +12,7 @@ import ClientVar from "../variables/ClientVar";
 import getPluralBranch from "../../primitives/variables/getPluralBranch";
 import { Target, TargetChild, TargetElement, TargetVariable, Source, SourceChild } from "../../types/SourceTargetTypes";
 import isTargetVariable from "../../primitives/variables/isTargetVariable";
+import getVariableProps from "../../primitives/variables/getVariableProps";
 
 const renderClientElement = ({ sourceElement, targetElement, ...metadata }: { 
     sourceElement: ReactElement, 
@@ -98,20 +99,11 @@ export default function renderClientChildren({
             if (React.isValidElement(sourceChild)) {
                 const { props } = sourceChild;
                 if (props?.['data-generaltranslation']?.transformation === "variable") {
-                    const variableName = sourceChild.props.name || defaultVariableNames[sourceChild?.props?.['data-generaltranslation']?.variableType];
-                    const variableValue = sourceChild.props.defaultValue || sourceChild.props.children;
-                    if (variableName && variableValue && typeof metadata?.variables?.[variableName] === 'undefined') {
+                    const { variableName, variableValue, variableOptions } = getVariableProps(props);
+                    if (variableName && typeof variableValue !== 'undefined' && typeof metadata?.variables?.[variableName] === 'undefined') {
                         metadata.variables = { ...metadata.variables, [variableName]: variableValue }
                     }
-                    const variableType = sourceChild?.props?.['data-generaltranslation']?.variableType || "variable";
-                    if (variableType === "number" || variableType === "currency" || variableType === "date") {
-                        const variableOptions = sourceChild?.props?.options;
-                        if (variableOptions) metadata.variableOptions = { ...metadata.variableOptions, [variableName]: { ...variableOptions } }
-                    }
-                    if (variableType === "currency") {
-                        const variableCurrency = sourceChild?.props?.currency;
-                        if (variableCurrency) metadata.variableOptions = { ...metadata.variableOptions, [variableName]: { currency: variableCurrency, ...metadata.variableOptions?.[variableName] } }
-                    }
+                    if (variableOptions) metadata.variableOptions = { ...metadata.variableOptions, [variableName]: { ...variableOptions } }
                 } else {
                     validSourceElements.push(sourceChild);
                 }
@@ -175,20 +167,11 @@ export default function renderClientChildren({
         if (sourceIsValidElement) {
             const { props } = source;
             if (props?.['data-generaltranslation']?.transformation === "variable") {
-                const variableName = source.props.name || defaultVariableNames[source?.props?.['data-generaltranslation']?.variableType];
-                const variableValue = source.props.defaultValue || source.props.children;
-                if (variableName && variableValue && typeof metadata?.variables?.[variableName] === 'undefined') {
+                const { variableName, variableValue, variableOptions } = getVariableProps(props);
+                if (variableName && typeof variableValue !== 'undefined' && typeof metadata?.variables?.[variableName] === 'undefined') {
                     metadata.variables = { ...metadata.variables, [variableName]: variableValue }
                 }
-                const variableType = source?.props?.['data-generaltranslation']?.variableType || "variable";
-                if (variableType === "number" || variableType === "currency" || variableType === "date") {
-                    const variableOptions = source?.props?.options;
-                    if (variableOptions) metadata.variableOptions = { ...metadata.variableOptions, [variableName]: { ...variableOptions } }
-                }
-                if (variableType === "currency") {
-                    const variableCurrency = source?.props?.currency;
-                    if (variableCurrency) metadata.variableOptions = { ...metadata.variableOptions, [variableName]: { currency: variableCurrency, ...metadata.variableOptions?.[variableName] } }
-                }
+                if (variableOptions) metadata.variableOptions = { ...metadata.variableOptions, [variableName]: { ...variableOptions } }
             }
         }
 

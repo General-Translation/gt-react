@@ -23,6 +23,4 @@ const Value = ({ children, values, locales, ...props }: {
 
 };
 
-Value.gtTransformation = "value";
-
 export default Value;

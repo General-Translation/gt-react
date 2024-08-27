@@ -19,6 +19,5 @@ const Value = (_a) => {
     const renderedChildren = renderVariable(children, locales, values);
     return (_jsx("span", { "data-values": values, "data-generaltranslation": generaltranslation, children: renderedChildren }));
 };
-Value.gtTransformation = "value";
 export default Value;
 //# sourceMappingURL=InnerValue.js.map

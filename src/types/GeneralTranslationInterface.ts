@@ -1,7 +1,7 @@
 import React, { ComponentType, ReactNode } from 'react';
 import Variables from './Variables';
 
-type GeneralTranslation = Variables & {
+type GeneralTranslation = {
 
     /**
     * The `<T>` component. Translates its ReactNode children into the user's locale.
@@ -112,6 +112,18 @@ type GeneralTranslation = Variables & {
         other?: ReactNode;
         ranges?: { min: number, max: number, children: any }[];
     }>;
+
+    /**
+    * Server-side function which gets the user's current locale.
+    * Returns a BCP 47 language code representing the user's language, e.g. `en-US`.
+    **/
+    getLocale: () => string;
+  
+    /** 
+     * Server-side function which gets the application's default locale.
+     * Returns a BCP 47 language code representing a language, e.g. `en-US`.
+    **/
+    getDefaultLocale: () => string;
 
 }
 

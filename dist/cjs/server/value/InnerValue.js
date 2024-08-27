@@ -24,6 +24,5 @@ const Value = (_a) => {
     const renderedChildren = (0, renderVariable_1.default)(children, locales, values);
     return ((0, jsx_runtime_1.jsx)("span", { "data-values": values, "data-generaltranslation": generaltranslation, children: renderedChildren }));
 };
-Value.gtTransformation = "value";
 exports.default = Value;
 //# sourceMappingURL=InnerValue.js.map
