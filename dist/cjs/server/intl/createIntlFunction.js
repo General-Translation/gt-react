@@ -24,7 +24,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = createIntlFunction;
-const calculateHash_1 = __importDefault(require("../../index/calculateHash"));
+const calculateHash_1 = __importDefault(require("../../primitives/calculateHash"));
 // intl('Hello')
 function createIntlFunction(_a) {
     var { I18NConfig } = _a, defaultOptions = __rest(_a, ["I18NConfig"]);

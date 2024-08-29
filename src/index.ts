@@ -1,10 +1,11 @@
 import determineLocale from "./index/determineLocale";
-import calculateHash from "./index/calculateHash";
-import flattenDictionary from "./index/flattenDictionary";
-import addGTIdentifier from "./index/addGTIdentifier";
-import writeChildrenAsObjects from "./index/writeChildrenAsObjects";
+import calculateHash from "./primitives/calculateHash";
+import flattenDictionary from "./primitives/dictionary/flattenDictionary";
+import addGTIdentifier from "./primitives/translation/addGTIdentifier";
+import writeChildrenAsObjects from "./primitives/translation/writeChildrenAsObjects";
 export {
     determineLocale,
-    calculateHash, flattenDictionary, 
-    writeChildrenAsObjects, addGTIdentifier
+    addGTIdentifier, writeChildrenAsObjects,
+    flattenDictionary,
+    calculateHash
 } 

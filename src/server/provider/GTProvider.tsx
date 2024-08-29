@@ -5,11 +5,11 @@ import React, { isValidElement } from 'react';
 
 import ClientProvider from '../../client/ClientProvider';
 import I18NConfiguration from '../../config/I18NConfiguration';
-import flattenDictionary from '../../index/flattenDictionary';
+import flattenDictionary from '../../primitives/dictionary/flattenDictionary';
 import getEntryMetadata from '../../primitives/rendering/getEntryMetadata';
-import addGTIdentifier from '../../index/addGTIdentifier';
-import writeChildrenAsObjects from '../../index/writeChildrenAsObjects';
-import calculateHash from '../../index/calculateHash';
+import addGTIdentifier from '../../primitives/translation/addGTIdentifier';
+import writeChildrenAsObjects from '../../primitives/translation/writeChildrenAsObjects';
+import calculateHash from '../../primitives/calculateHash';
 import getEntryTranslationType from '../../primitives/rendering/getEntryTranslationType';
 import Plural from '../plural/InnerPlural';
 import cloneDictionary from '../../dictionary/cloneDictionary';

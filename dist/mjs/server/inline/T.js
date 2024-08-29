@@ -20,11 +20,11 @@ var __rest = (this && this.__rest) || function (s, e) {
 };
 import { Fragment as _Fragment, jsx as _jsx } from "react/jsx-runtime";
 import { Suspense } from 'react';
-import addGTIdentifier from '../../index/addGTIdentifier';
-import writeChildrenAsObjects from '../../index/writeChildrenAsObjects';
+import addGTIdentifier from '../../primitives/translation/addGTIdentifier';
+import writeChildrenAsObjects from '../../primitives/translation/writeChildrenAsObjects';
 import renderChildren from './renderChildren';
 import Resolver from './Resolver';
-import calculateHash from '../../index/calculateHash';
+import calculateHash from '../../primitives/calculateHash';
 const ServerT = (_a) => __awaiter(void 0, void 0, void 0, function* () {
     var { I18NConfig, children, locale } = _a, props = __rest(_a, ["I18NConfig", "children", "locale"]);
     // Handle case where translation is not required, for example if the user's browser is in the default locale

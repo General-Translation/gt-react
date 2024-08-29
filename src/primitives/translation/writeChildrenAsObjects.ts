@@ -1,5 +1,5 @@
 import React, { ReactNode, ReactElement } from 'react'
-import defaultVariableNames from '../primitives/variables/defaultVariableNames';
+import defaultVariableNames from '../variables/defaultVariableNames';
 
 type Child = ReactNode | Record<string, any>;
 type Children = Child | Child[];

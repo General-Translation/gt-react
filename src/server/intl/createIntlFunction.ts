@@ -1,5 +1,5 @@
 import I18NConfiguration from "../../config/I18NConfiguration"
-import calculateHash from "../../index/calculateHash";
+import calculateHash from "../../primitives/calculateHash";
 
 // intl('Hello')
 

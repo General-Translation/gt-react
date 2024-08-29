@@ -1,10 +1,10 @@
 import React, { ReactNode, Suspense } from 'react'
-import addGTIdentifier from '../../index/addGTIdentifier';
-import writeChildrenAsObjects from '../../index/writeChildrenAsObjects';
+import addGTIdentifier from '../../primitives/translation/addGTIdentifier';
+import writeChildrenAsObjects from '../../primitives/translation/writeChildrenAsObjects';
 import renderChildren from './renderChildren';
 import I18NConfiguration from '../../config/I18NConfiguration';
 import Resolver from './Resolver';
-import calculateHash from '../../index/calculateHash';
+import calculateHash from '../../primitives/calculateHash';
 
 type ServerTProps = {
     I18NConfig: I18NConfiguration

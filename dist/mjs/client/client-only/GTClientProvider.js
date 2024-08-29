@@ -21,7 +21,7 @@ import renderClientChildren from "../helpers/renderClientChildren";
 import getEntryTranslationType from "../../primitives/rendering/getEntryTranslationType";
 import getEntryMetadata from "../../primitives/rendering/getEntryMetadata";
 import ClientPlural from "../plural/ClientPlural";
-import addGTIdentifier from "../../index/addGTIdentifier";
+import addGTIdentifier from "../../primitives/translation/addGTIdentifier";
 export default function GTClientProvider({ children, projectID, dictionary = defaultGTProps.dictionary, dictionaryName = defaultGTProps.dictionaryName, approvedLocales, defaultLocale = (approvedLocales === null || approvedLocales === void 0 ? void 0 : approvedLocales[0]) || defaultGTProps.defaultLocale, locale = '', remoteSource = defaultGTProps.remoteSource, cacheURL = defaultGTProps.cacheURL, translations }) {
     if (!projectID && remoteSource && cacheURL === defaultGTProps.cacheURL) {
         throw new Error("gt-react Error: General Translation cloud services require a project ID! Find yours at www.generaltranslation.com/dashboard.");

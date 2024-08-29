@@ -25,11 +25,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const jsx_runtime_1 = require("react/jsx-runtime");
 const react_1 = require("react");
-const addGTIdentifier_1 = __importDefault(require("../../index/addGTIdentifier"));
-const writeChildrenAsObjects_1 = __importDefault(require("../../index/writeChildrenAsObjects"));
+const addGTIdentifier_1 = __importDefault(require("../../primitives/translation/addGTIdentifier"));
+const writeChildrenAsObjects_1 = __importDefault(require("../../primitives/translation/writeChildrenAsObjects"));
 const renderChildren_1 = __importDefault(require("./renderChildren"));
 const Resolver_1 = __importDefault(require("./Resolver"));
-const calculateHash_1 = __importDefault(require("../../index/calculateHash"));
+const calculateHash_1 = __importDefault(require("../../primitives/calculateHash"));
 const ServerT = (_a) => __awaiter(void 0, void 0, void 0, function* () {
     var { I18NConfig, children, locale } = _a, props = __rest(_a, ["I18NConfig", "children", "locale"]);
     // Handle case where translation is not required, for example if the user's browser is in the default locale

@@ -18,7 +18,7 @@ var __rest = (this && this.__rest) || function (s, e) {
         }
     return t;
 };
-import calculateHash from "../../index/calculateHash";
+import calculateHash from "../../primitives/calculateHash";
 // intl('Hello')
 export default function createIntlFunction(_a) {
     var { I18NConfig } = _a, defaultOptions = __rest(_a, ["I18NConfig"]);
