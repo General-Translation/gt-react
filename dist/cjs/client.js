@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Currency = exports.DateTime = exports.Num = exports.Var = exports.useDefaultLocale = exports.useLocale = exports.GTClientProvider = exports.useGT = void 0;
+exports.useBrowserLocale = exports.Currency = exports.DateTime = exports.Num = exports.Var = exports.useDefaultLocale = exports.useLocale = exports.GTClientProvider = exports.useGT = void 0;
 const useDefaultLocale_1 = __importDefault(require("./client/hooks/useDefaultLocale"));
 exports.useDefaultLocale = useDefaultLocale_1.default;
 const useLocale_1 = __importDefault(require("./client/hooks/useLocale"));
@@ -20,4 +20,6 @@ const ClientCurrency_1 = __importDefault(require("./client/variables/ClientCurre
 exports.Currency = ClientCurrency_1.default;
 const GTClientProvider_1 = __importDefault(require("./client/client-only/GTClientProvider"));
 exports.GTClientProvider = GTClientProvider_1.default;
+const useBrowserLocale_1 = __importDefault(require("./client/hooks/useBrowserLocale"));
+exports.useBrowserLocale = useBrowserLocale_1.default;
 //# sourceMappingURL=client.js.map

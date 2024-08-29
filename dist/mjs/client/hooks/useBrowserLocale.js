@@ -1,3 +1,4 @@
+'use client';
 import { useState, useEffect } from 'react';
 import { localeCookieName } from '../../middleware/cookieSettings';
 /**
@@ -26,7 +27,7 @@ function getCookieValue(name) {
  * @param {string} defaultLocale - The default locale to use if browser locale is not available.
  * @returns {string} The default language of the browser.
  */
-export default function useBrowserLocale(defaultLocale) {
+export default function useBrowserLocale(defaultLocale = 'en-US') {
     const [locale, setLocale] = useState('');
     useEffect(() => {
         const localeFromCookie = getCookieValue(localeCookieName);

@@ -6,6 +6,7 @@ import ClientNum from "./client/variables/ClientNum";
 import ClientDateTime from "./client/variables/ClientDateTime";
 import ClientCurrency from "./client/variables/ClientCurrency";
 import GTClientProvider from "./client/client-only/GTClientProvider";
+import useBrowserLocale from "./client/hooks/useBrowserLocale";
 
 export {
     useGT, GTClientProvider,
@@ -13,5 +14,6 @@ export {
     ClientVar as Var,
     ClientNum as Num,
     ClientDateTime as DateTime,
-    ClientCurrency as Currency
+    ClientCurrency as Currency,
+    useBrowserLocale
 }

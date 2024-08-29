@@ -1,4 +1,5 @@
 "use strict";
+'use client';
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = useBrowserLocale;
 const react_1 = require("react");
@@ -29,7 +30,7 @@ function getCookieValue(name) {
  * @param {string} defaultLocale - The default locale to use if browser locale is not available.
  * @returns {string} The default language of the browser.
  */
-function useBrowserLocale(defaultLocale) {
+function useBrowserLocale(defaultLocale = 'en-US') {
     const [locale, setLocale] = (0, react_1.useState)('');
     (0, react_1.useEffect)(() => {
         const localeFromCookie = getCookieValue(cookieSettings_1.localeCookieName);
