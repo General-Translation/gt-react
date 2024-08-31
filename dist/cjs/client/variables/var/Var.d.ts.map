@@ -1,1 +1,0 @@
-{"version":3,"file":"Var.d.ts","sourceRoot":"","sources":["../../../../../src/client/variables/var/Var.tsx"],"names":[],"mappings":"AAEA,OAAc,EAAE,SAAS,EAAE,MAAM,OAAO,CAAC;AAGzC,QAAA,MAAM,GAAG;uCAAsC;QAC3C,QAAQ,CAAC,EAAE,GAAG,CAAC;QACf,IAAI,CAAC,EAAE,MAAM,CAAC;QACd,YAAY,CAAC,EAAE,GAAG,CAAC;KACtB,GAAG,SAAS;;CAEZ,CAAC;AAIF,eAAe,GAAG,CAAC"}

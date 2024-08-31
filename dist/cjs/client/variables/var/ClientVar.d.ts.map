@@ -1,1 +1,0 @@
-{"version":3,"file":"ClientVar.d.ts","sourceRoot":"","sources":["../../../../../src/client/variables/var/ClientVar.tsx"],"names":[],"mappings":"AAEA,OAAc,EAAE,SAAS,EAAE,MAAM,OAAO,CAAC;AAEzC;;;;;;;;;GASG;AACH,QAAA,MAAM,SAAS;uCAAsC;QACjD,QAAQ,CAAC,EAAE,GAAG,CAAC;QACf,IAAI,CAAC,EAAE,MAAM,CAAC;QACd,YAAY,CAAC,EAAE,GAAG,CAAC;KACtB,GAAG,SAAS;;CAUZ,CAAC;AAIF,eAAe,SAAS,CAAC"}

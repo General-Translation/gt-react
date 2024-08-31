@@ -1,0 +1,1 @@
+{"version":3,"file":"createNextMiddleware.d.ts","sourceRoot":"","sources":["../../src/middleware/createNextMiddleware.ts"],"names":[],"mappings":"AAoDA;;;GAGG;AACH,MAAM,CAAC,OAAO,UAAU,oBAAoB,CAAC,EACzC,aAAoB,EAAE,eAAe,EAAE,aAAoB,EAC9D,GAAE;IAAE,aAAa,EAAE,MAAM,CAAC;IAAC,eAAe,CAAC,EAAE,MAAM,EAAE,CAAC;IAAC,aAAa,EAAE,OAAO,CAAA;CAChC,SAE7B,GAAG,SAoHnB"}
