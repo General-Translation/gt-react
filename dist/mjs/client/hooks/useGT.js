@@ -2,7 +2,6 @@
 import { jsx as _jsx } from "react/jsx-runtime";
 import React from "react";
 import { useGTContext } from "../ClientProvider";
-import createOptions from "../../dictionary/createOptions";
 /**
  * Custom hook to provide a translation function using a given context.
  *
@@ -27,9 +26,9 @@ export default function useGT(id = '') {
         throw new Error(`t('${id}'): No context provided. useGT() can only be used inside a GTProvider.`);
     }
     // Return a translation function if available, otherwise return a no-op function
-    return (id = '', options) => {
+    return (id = '', options = {}) => {
         const prefixedID = getID(id);
-        const translation = translate(prefixedID, createOptions(options));
+        const translation = translate(prefixedID, options);
         if (!translation)
             console.warn(`t('${id}') finding no translation for dictionary item ${prefixedID} !`);
         return _jsx(React.Fragment, { children: translation }, prefixedID);

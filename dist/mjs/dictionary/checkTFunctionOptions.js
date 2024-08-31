@@ -1,10 +1,10 @@
 // should check initial t function options (without added metadata from dictionary)
 export default function checkTFunctionOptions(options) {
-    if (!options)
+    if (!options || !Object.keys(options).length)
         return true;
     if (["singular", "plural", "dual", "one", "two", "zero", "few", "many", "other"].some(key => {
         if (options.hasOwnProperty(key)) {
-            console.warn(`gt-react: It's bad practice to include "${key}" in your t() function. Try including it in your dictionary metadata instead. See https://docs.generaltranslation.com/dictionaries/plurals.`);
+            console.warn(`gt-react: It's bad practice to include "${key}" in your t() function, because the dictionary won't register it as a plural if there are no alternate forms. Try including "${key}" in your dictionary metadata instead. See https://docs.generaltranslation.com/essentials#plurals.`);
             return true;
         }
         return false;

@@ -16,34 +16,32 @@ import getEntryMetadata from "../primitives/rendering/getEntryMetadata";
 import getEntryTranslationType from "../primitives/rendering/getEntryTranslationType";
 import getDictionaryEntry from "./getDictionaryEntry";
 import checkTFunctionOptions from "./checkTFunctionOptions";
-import createOptions from "./createOptions";
 export default function createTFunction({ I18NConfig, T, intl, dictionary = I18NConfig.getDictionary() }) {
-    return function t(id, options) {
+    return function t(id, options = {}) {
         checkTFunctionOptions(options);
         const raw = getDictionaryEntry(id, dictionary);
-        const { entry, metadata } = getEntryMetadata(raw);
-        options = createOptions(options);
+        let { entry, metadata } = getEntryMetadata(raw);
         // Checks to see if options are valid
         const translationType = getEntryTranslationType(raw);
         // Turn into an async function if the target is a string
         if (translationType === "intl")
             return intl(entry, Object.assign({ id }, metadata));
         // If a plural or value is required
-        if (options.values) {
+        if (Object.keys(options).length) {
             const locales = [I18NConfig.getLocale(), I18NConfig.getDefaultLocale()];
             const _a = metadata || {}, { ranges, zero, one, two, few, many, other, singular, dual, plural } = _a, tOptions = __rest(_a, ["ranges", "zero", "one", "two", "few", "many", "other", "singular", "dual", "plural"]);
             if (translationType === "plural") {
-                if (!options.values || typeof options.values.n !== 'number') {
+                if (!options || typeof options.n !== 'number') {
                     throw new Error(`ID "${id}" requires an "n" option.\n\ne.g. t("${id}", { n: 1 })`);
                 }
                 const innerProps = Object.assign({ ranges,
                     zero, one,
                     two, few,
                     many, other,
-                    singular, dual, plural }, options.values);
-                return (_jsx(T, Object.assign({ id: id }, tOptions, { children: _jsx(Plural, Object.assign({ n: options.values.n, locales: locales }, innerProps, { children: entry })) })));
+                    singular, dual, plural }, options);
+                return (_jsx(T, Object.assign({ id: id }, tOptions, { children: _jsx(Plural, Object.assign({ n: options.n, locales: locales }, innerProps, { children: entry })) })));
             }
-            return (_jsx(T, Object.assign({ id: id }, tOptions, { children: _jsx(Value, { values: options.values, locales: locales, children: entry }) })));
+            return (_jsx(T, Object.assign({ id: id }, tOptions, { children: _jsx(Value, { values: options, locales: locales, children: entry }) })));
         }
         // base case, just return T with an inner fragment (</>) for consistency
         return (_jsx(T, Object.assign({ id: id }, metadata, { children: _jsx(_Fragment, { children: entry }) })));

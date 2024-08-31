@@ -2,9 +2,6 @@
 
 import React, { useMemo } from "react";
 import { useGTContext } from "../ClientProvider";
-import ClientValue from "../value/ClientValue";
-import ClientPlural from "../plural/ClientPlural";
-import createOptions from "../../dictionary/createOptions";
 
 /**
  * Custom hook to provide a translation function using a given context.
@@ -30,12 +27,12 @@ export default function useGT(id: string = ''): Function {
     }
 
     // Return a translation function if available, otherwise return a no-op function
-    return (id: string = '', options?: {
+    return (id: string = '', options: {
         n?: number,
         [key: string]: any
-    }) => {
+    } = {}) => {
         const prefixedID = getID(id);
-        const translation = translate(prefixedID, createOptions(options));
+        const translation = translate(prefixedID, options);
         if (!translation) console.warn(`t('${id}') finding no translation for dictionary item ${prefixedID} !`)
         return <React.Fragment key={prefixedID}>{translation}</React.Fragment>;
     }

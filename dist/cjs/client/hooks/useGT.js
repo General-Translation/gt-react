@@ -8,7 +8,6 @@ exports.default = useGT;
 const jsx_runtime_1 = require("react/jsx-runtime");
 const react_1 = __importDefault(require("react"));
 const ClientProvider_1 = require("../ClientProvider");
-const createOptions_1 = __importDefault(require("../../dictionary/createOptions"));
 /**
  * Custom hook to provide a translation function using a given context.
  *
@@ -33,9 +32,9 @@ function useGT(id = '') {
         throw new Error(`t('${id}'): No context provided. useGT() can only be used inside a GTProvider.`);
     }
     // Return a translation function if available, otherwise return a no-op function
-    return (id = '', options) => {
+    return (id = '', options = {}) => {
         const prefixedID = getID(id);
-        const translation = translate(prefixedID, (0, createOptions_1.default)(options));
+        const translation = translate(prefixedID, options);
         if (!translation)
             console.warn(`t('${id}') finding no translation for dictionary item ${prefixedID} !`);
         return (0, jsx_runtime_1.jsx)(react_1.default.Fragment, { children: translation }, prefixedID);

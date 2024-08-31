@@ -2,8 +2,8 @@
   "name": "gt-react",
   "version": "3.1.69",
   "description": "",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "main": "dist/cjs/index.js",
+  "types": "dist/cjs/index.d.ts",
   "peerDependencies": {
     "react": "^16.8.0 || ^17.0.0 || ^18.0.0",
     "react-dom": "^16.8.0 || ^17.0.0 || ^18.0.0"
@@ -35,48 +35,48 @@
   },
   "exports": {
     ".": {
-      "import": "./dist/mjs/index.js",
+      "import": "./dist/cjs/index.js",
       "require": "./dist/cjs/index.js",
-      "types": "./dist/mjs/index.d.ts"
+      "types": "./dist/cjs/index.d.ts"
     },
-    "./client.js": "./dist/mjs/client.js",
+    "./client.js": "./dist/cjs/client.js",
     "./client": {
-      "import": "./dist/mjs/client.js",
+      "import": "./dist/cjs/client.js",
       "require": "./dist/cjs/client.js",
-      "types": "./dist/mjs/client.d.ts"
+      "types": "./dist/cjs/client.d.ts"
     },
-    "./next.js": "./dist/mjs/next.js",
+    "./next.js": "./dist/cjs/next.js",
     "./next": {
-      "import": "./dist/mjs/next.js",
+      "import": "./dist/cjs/next.js",
       "require": "./dist/cjs/next.js",
-      "types": "./dist/mjs/next.d.ts"
+      "types": "./dist/cjs/next.d.ts"
     },
-    "./server.js": "./dist/mjs/server.js",
+    "./server.js": "./dist/cjs/server.js",
     "./server": {
-      "import": "./dist/mjs/server.js",
+      "import": "./dist/cjs/server.js",
       "require": "./dist/cjs/server.js",
-      "types": "./dist/mjs/server.d.ts"
+      "types": "./dist/cjs/server.d.ts"
     },
-    "./middleware.js": "./dist/mjs/middleware.js",
+    "./middleware.js": "./dist/cjs/middleware.js",
     "./middleware": {
-      "import": "./dist/mjs/middleware.js",
+      "import": "./dist/cjs/middleware.js",
       "require": "./dist/cjs/middleware.js",
-      "types": "./dist/mjs/middleware.d.ts"
+      "types": "./dist/cjs/middleware.d.ts"
     }
   },
   "typesVersions": {
     "*": {
       "client": [
-        "./dist/mjs/client.d.ts"
+        "./dist/cjs/client.d.ts"
       ],
       "next": [
-        "./dist/mjs/next.d.ts"
+        "./dist/cjs/next.d.ts"
       ],
       "server": [
-        "./dist/mjs/server.d.ts"
+        "./dist/cjs/server.d.ts"
       ],
       "middleware": [
-        "./dist/mjs/middleware.d.ts"
+        "./dist/cjs/middleware.d.ts"
       ]
     }
   },
@@ -84,19 +84,19 @@
     "baseUrl": ".",
     "paths": {
       "gt-react/client": [
-        "/dist/mjs/client",
+        "/dist/cjs/client",
         "/dist/cjs/client"
       ],
       "gt-react/next": [
-        "/dist/mjs/next",
+        "/dist/cjs/next",
         "/dist/cjs/next"
       ],
       "gt-react/server": [
-        "/dist/mjs/server",
+        "/dist/cjs/server",
         "/dist/cjs/server"
       ],
       "gt-react/middleware": [
-        "/dist/mjs/middleware",
+        "/dist/cjs/middleware",
         "/dist/cjs/middleware"
       ]
     }
