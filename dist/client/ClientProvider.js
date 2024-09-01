@@ -32,11 +32,11 @@ function ClientProvider(_a) {
                 target: translations[id],
                 locale: locale,
                 defaultLocale: defaultLocale,
-                variables: (options === null || options === void 0 ? void 0 : options.values) || {},
+                variables: options || {},
                 id: id
             });
         }
-        return (0, renderDefaultLanguage_1.default)(__assign({ source: dictionary[id], variables: (options === null || options === void 0 ? void 0 : options.values) || {}, id: id }, options));
+        return (0, renderDefaultLanguage_1.default)(__assign({ source: dictionary[id], variables: options || {}, id: id }, options));
     }, [dictionary, translations]);
     return ((0, jsx_runtime_1.jsx)(exports.GTContext.Provider, { value: {
             translate: translate,

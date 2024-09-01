@@ -174,7 +174,7 @@ function GTClientProvider(_a) {
     var translate = (0, react_1.useCallback)(function (id, options) {
         if (translationRequired) {
             if (localDictionary && localDictionary[id]) {
-                return (0, renderDefaultLanguage_1.default)(__assign({ source: localDictionary[id], variables: (options === null || options === void 0 ? void 0 : options.values) || {}, id: id }, options));
+                return (0, renderDefaultLanguage_1.default)(__assign({ source: localDictionary[id], variables: options || {}, id: id }, options));
             }
             if (remoteTranslations && remoteTranslations[id] && remoteTranslations[id].t) {
                 return (0, renderClientChildren_1.default)({
@@ -183,12 +183,12 @@ function GTClientProvider(_a) {
                     locale: locale,
                     defaultLocale: defaultLocale,
                     id: id,
-                    variables: (options === null || options === void 0 ? void 0 : options.values) || {},
+                    variables: options || {},
                 });
             }
         }
         else {
-            return (0, renderDefaultLanguage_1.default)(__assign({ source: suppliedDictionary[id], variables: (options === null || options === void 0 ? void 0 : options.values) || {}, id: id }, options));
+            return (0, renderDefaultLanguage_1.default)(__assign({ source: suppliedDictionary[id], variables: options || {}, id: id }, options));
         }
     }, [suppliedDictionary, translations, translationRequired, remoteTranslations]);
     return ((0, jsx_runtime_1.jsx)(ClientProvider_1.GTContext.Provider, { value: {

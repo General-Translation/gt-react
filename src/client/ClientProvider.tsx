@@ -30,11 +30,10 @@ export default function ClientProvider({
                 source: dictionary[id],
                 target: translations[id],
                 locale, defaultLocale,
-                variables: options?.values || {}, id
+                variables: options || {}, id
             })
         }
-        
-        return renderDefaultLanguage({ source: dictionary[id], variables: options?.values || {}, id, ...options })
+        return renderDefaultLanguage({ source: dictionary[id], variables: options || {}, id, ...options })
     }, [dictionary, translations]);
 
     return (

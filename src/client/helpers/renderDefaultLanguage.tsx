@@ -1,7 +1,7 @@
 
 'use client'
 
-import React, { ReactNode } from "react";
+import React, { isValidElement, ReactNode } from "react";
 import ClientPlural from "../plural/ClientPlural";
 import ClientValue from "../value/ClientValue";
 import RenderClientVariable from "../value/RenderClientVariable";
@@ -67,7 +67,7 @@ export default function renderDefaultLanguage({
 
     const handleChildren = (children: any): any => {
         if (Array.isArray(children)) {
-            return React.Children.map(children, handleSingleChild)
+            return React.Children.map(children, handleSingleChild);
         }
         return handleSingleChild(children);
     }

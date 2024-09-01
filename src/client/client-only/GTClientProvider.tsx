@@ -123,7 +123,7 @@ export default function GTClientProvider({
             if (localDictionary && localDictionary[id]) {
                 return renderDefaultLanguage({ 
                     source: localDictionary[id], 
-                    variables: options?.values || {}, 
+                    variables: options || {}, 
                     id, 
                     ...options 
                 })
@@ -133,14 +133,13 @@ export default function GTClientProvider({
                     source: suppliedDictionary[id],
                     target: remoteTranslations[id].t,
                     locale, defaultLocale,
-                    id, variables: options?.values || {},
+                    id, variables: options || {},
                 })
             }
         } else {
-            return renderDefaultLanguage({ source: suppliedDictionary[id], variables: options?.values || {}, id, ...options })
+            return renderDefaultLanguage({ source: suppliedDictionary[id], variables: options || {}, id, ...options })
         }
     }, [suppliedDictionary, translations, translationRequired, remoteTranslations]);
-
 
     return (
         <GTContext.Provider value={{
