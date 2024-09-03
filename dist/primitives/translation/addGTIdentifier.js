@@ -42,7 +42,7 @@ var validateChild = function (child) {
     if (((type === null || type === void 0 ? void 0 : type.$$typeof) === Symbol.for('react.lazy'))) {
         (_a = type === null || type === void 0 ? void 0 : type._payload) === null || _a === void 0 ? void 0 : _a.then(function (result) {
             if (result.gtTransformation) {
-                throw new Error("Mark your dictionary with 'use client' to use client-side components like <".concat(result.name, ">. Or import useVariables()."));
+                throw new Error("You can't use client-side gt-react variables like <".concat(result.name, "> in a server-side dictionary. Import createVariables() instead.\n\nIf you really, really want to use client-side gt-react components, mark your dictionary with 'use client'."));
             }
         });
     }

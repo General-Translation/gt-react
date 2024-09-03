@@ -23,7 +23,7 @@ const validateChild = (child: any): void => {
     if (((type as any)?.$$typeof === Symbol.for('react.lazy'))) {
         (type as any)?._payload?.then((result: any) => {
             if (result.gtTransformation) {
-                throw new Error(`Mark your dictionary with 'use client' to use client-side components like <${result.name}>. Or import useVariables().`)
+                throw new Error(`You can't use client-side gt-react variables like <${result.name}> in a server-side dictionary. Import createVariables() instead.\n\nIf you really, really want to use client-side gt-react components, mark your dictionary with 'use client'.`)
             }
         })
     }
