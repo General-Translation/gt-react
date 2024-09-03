@@ -35,7 +35,17 @@ var acceptedPluralProps = {
  * Helper function to validate the properties of the component to prevent nested translations
  * @param props - The properties of the current React element
  */
-var validateProps = function (props) {
+var validateChild = function (child) {
+    var _a;
+    var type = child.type, props = child.props;
+    // check that 
+    if (((type === null || type === void 0 ? void 0 : type.$$typeof) === Symbol.for('react.lazy'))) {
+        (_a = type === null || type === void 0 ? void 0 : type._payload) === null || _a === void 0 ? void 0 : _a.then(function (result) {
+            if (result.gtTransformation) {
+                throw new Error("Mark your dictionary with 'use client' to use client-side components like <".concat(result.name, ">. Or import useVariables()."));
+            }
+        });
+    }
     if (props && props['data-generaltranslation'] && typeof props['data-generaltranslation'].id === 'number') {
         throw new Error("Nesting of <T>, <Plural>, <Value> components is not permitted. This prevents components from being translated twice!\n            Found nested component with id: ".concat(props === null || props === void 0 ? void 0 : props.id, ", content: ").concat(props === null || props === void 0 ? void 0 : props.children));
     }
@@ -73,10 +83,10 @@ function addGTIdentifier(children) {
      * @returns - The new ReactElement with added GT identifiers
      */
     var handleValidReactElement = function (child) {
+        // Validate the props to ensure there are no nested translations
+        validateChild(child);
         // Destructure the props from the child element
         var props = child.props;
-        // Validate the props to ensure there are no nested translations
-        validateProps(props);
         // Create new props for the element, including the GT identifier and a key
         var generaltranslation = createGTProp(child);
         var newProps = __assign(__assign({}, props), { 'data-generaltranslation': generaltranslation, key: generaltranslation.id });

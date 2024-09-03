@@ -37,6 +37,9 @@ function renderDefaultLanguage(_a) {
     var handleSingleChild = function (child) {
         if (react_1.default.isValidElement(child)) {
             var type = child.type, props = child.props;
+            /*if ((type as any).$$typeof === Symbol.for('react.lazy')) {
+                throw new Error('')
+            }*/
             var generaltranslation = props["data-generaltranslation"];
             var transformation = null;
             if (generaltranslation) {
@@ -59,9 +62,9 @@ function renderDefaultLanguage(_a) {
                     }
                     return ((0, jsx_runtime_1.jsx)(ClientValue_1.default, { values: __assign({}, variables), children: props.children }));
                 }
-                else if (transformation.startsWith("variable")) {
-                    return (0, jsx_runtime_1.jsx)(RenderClientVariable_1.default, { variables: variables, children: child });
-                }
+            }
+            if ((transformation && transformation.startsWith("variable")) || (props === null || props === void 0 ? void 0 : props['data-gt-variable-type'])) {
+                return (0, jsx_runtime_1.jsx)(RenderClientVariable_1.default, { variables: variables, children: child });
             }
             if (props.children) {
                 return react_1.default.cloneElement(child, __assign(__assign({}, props), { children: handleChildren(props.children) }));

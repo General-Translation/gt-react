@@ -19,7 +19,7 @@ const ClientDateTime = ({ children, name = "date", defaultValue, options = {} }:
     defaultValue = (typeof children !== 'undefined' && typeof defaultValue === 'undefined') ? children : defaultValue;
     if (!defaultValue) return '';
     if (typeof defaultValue === 'number') {
-        dateValue = new Date(defaultValue * 1000); // Unix time in seconds
+        dateValue = new Date(defaultValue);
     } else if (typeof defaultValue === 'string') {
         dateValue = new Date(defaultValue);
     } else if (defaultValue instanceof Date) {

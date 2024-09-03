@@ -81,7 +81,7 @@ var renderClientElement = function (_a) {
  */
 function renderClientChildren(_a) {
     var _b, _c, _d, _e;
-    var _f, _g, _h, _j, _k, _l, _m, _o, _p;
+    var _f, _g, _h, _j, _k, _l, _m, _o, _p, _q;
     var source = _a.source, target = _a.target, metadata = __rest(_a, ["source", "target"]);
     // Most straightforward case, return a valid React node
     if ((target === null || typeof target === 'undefined') && (0, isValidReactNode_1.default)(source))
@@ -97,7 +97,7 @@ function renderClientChildren(_a) {
             if (react_1.default.isValidElement(sourceChild)) {
                 var props = sourceChild.props;
                 if (((_f = props === null || props === void 0 ? void 0 : props['data-generaltranslation']) === null || _f === void 0 ? void 0 : _f.transformation) === "variable") {
-                    var _q = (0, getVariableProps_1.default)(props), variableName = _q.variableName, variableValue = _q.variableValue, variableOptions = _q.variableOptions;
+                    var _r = (0, getVariableProps_1.default)(props), variableName = _r.variableName, variableValue = _r.variableValue, variableOptions = _r.variableOptions;
                     if (variableName && typeof variableValue !== 'undefined' && typeof ((_g = metadata === null || metadata === void 0 ? void 0 : metadata.variables) === null || _g === void 0 ? void 0 : _g[variableName]) === 'undefined') {
                         metadata.variables = __assign(__assign({}, metadata.variables), (_b = {}, _b[variableName] = variableValue, _b));
                     }
@@ -160,7 +160,7 @@ function renderClientChildren(_a) {
         if (sourceIsValidElement) {
             var props = source.props;
             if (((_h = props === null || props === void 0 ? void 0 : props['data-generaltranslation']) === null || _h === void 0 ? void 0 : _h.transformation) === "variable") {
-                var _r = (0, getVariableProps_1.default)(props), variableName = _r.variableName, variableValue = _r.variableValue, variableOptions = _r.variableOptions;
+                var _s = (0, getVariableProps_1.default)(props), variableName = _s.variableName, variableValue = _s.variableValue, variableOptions = _s.variableOptions;
                 if (variableName && typeof variableValue !== 'undefined' && typeof ((_j = metadata === null || metadata === void 0 ? void 0 : metadata.variables) === null || _j === void 0 ? void 0 : _j[variableName]) === 'undefined') {
                     metadata.variables = __assign(__assign({}, metadata.variables), (_d = {}, _d[variableName] = variableValue, _d));
                 }
@@ -189,6 +189,10 @@ function renderClientChildren(_a) {
         // if component
         if (sourceIsValidElement) {
             return renderClientElement(__assign({ sourceElement: source, targetElement: target }, metadata));
+        }
+        // if you happen to be using a ssr dictionary (not advised)
+        if (typeof source === 'string' || Array.isArray(source)) {
+            return renderClientChildren(__assign({ target: (_q = target === null || target === void 0 ? void 0 : target.props) === null || _q === void 0 ? void 0 : _q.children, source: source }, metadata));
         }
     }
 }

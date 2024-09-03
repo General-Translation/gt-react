@@ -1,16 +1,15 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = getEntryMetadata;
+var react_1 = require("react");
 // Extracts metadata if it has been included in the dictionary
 function getEntryMetadata(entry) {
     var content;
     var metadata;
     if (entry) {
-        if (Array.isArray(entry)) {
-            if (typeof (entry === null || entry === void 0 ? void 0 : entry[1]) === 'object') {
-                metadata = entry[1];
-            }
+        if (Array.isArray(entry) && entry.length === 2 && !(0, react_1.isValidElement)(entry[1]) && typeof entry[1] === 'object') {
             content = entry[0];
+            metadata = entry[1];
         }
     }
     if (!content)

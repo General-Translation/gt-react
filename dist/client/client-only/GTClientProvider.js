@@ -102,23 +102,6 @@ function GTClientProvider(_a) {
         remote: false
     }), loaded = _h[0], setLoaded = _h[1];
     var translationRequired = (0, generaltranslation_1.isSameLanguage)(locale, defaultLocale) ? false : true;
-    var suppliedDictionary = (0, react_1.useMemo)(function () {
-        var processedDictionary = {};
-        for (var _i = 0, _a = Object.keys(dictionary); _i < _a.length; _i++) {
-            var id = _a[_i];
-            var _b = (0, getEntryMetadata_1.default)(dictionary[id]), entry = _b.entry, metadata = _b.metadata;
-            var translationType = (0, getEntryTranslationType_1.default)(dictionary[id]);
-            if (translationType === "t") {
-                entry = (0, jsx_runtime_1.jsx)(react_1.default.Fragment, { children: entry }, id);
-            }
-            else if (translationType === "plural") {
-                entry = ((0, jsx_runtime_1.jsx)(ClientPlural_1.default, __assign({ n: 1 }, metadata, { children: entry }), id));
-            }
-            var taggedEntry = (0, addGTIdentifier_1.default)(entry);
-            processedDictionary[id] = taggedEntry;
-        }
-        return processedDictionary;
-    }, [dictionary, translationRequired]);
     var _j = (0, react_1.useState)(null), localDictionary = _j[0], setLocalDictionary = _j[1];
     (0, react_1.useEffect)(function () {
         if (locale) {
@@ -172,13 +155,23 @@ function GTClientProvider(_a) {
         }
     }, [cacheURL, remoteSource, locale]);
     var translate = (0, react_1.useCallback)(function (id, options) {
+        if (translationRequired && localDictionary && localDictionary[id]) {
+            return (0, renderDefaultLanguage_1.default)(__assign({ source: localDictionary[id], variables: options || {}, id: id }, options));
+        }
+        var _a = (0, getEntryMetadata_1.default)(dictionary[id]), entry = _a.entry, metadata = _a.metadata;
+        var translationType = (0, getEntryTranslationType_1.default)(dictionary[id]);
+        if (translationType === "t") {
+            entry = (0, jsx_runtime_1.jsx)(react_1.default.Fragment, { children: entry }, id);
+        }
+        else if (translationType === "plural") {
+            entry = ((0, jsx_runtime_1.jsx)(ClientPlural_1.default, __assign({ n: 1 }, metadata, { children: entry }), id));
+        }
+        var taggedEntry = (0, addGTIdentifier_1.default)(entry);
+        // if entry is "intl", none of the above should have affected it
         if (translationRequired) {
-            if (localDictionary && localDictionary[id]) {
-                return (0, renderDefaultLanguage_1.default)(__assign({ source: localDictionary[id], variables: options || {}, id: id }, options));
-            }
             if (remoteTranslations && remoteTranslations[id] && remoteTranslations[id].t) {
                 return (0, renderClientChildren_1.default)({
-                    source: suppliedDictionary[id],
+                    source: taggedEntry,
                     target: remoteTranslations[id].t,
                     locale: locale,
                     defaultLocale: defaultLocale,
@@ -188,9 +181,9 @@ function GTClientProvider(_a) {
             }
         }
         else {
-            return (0, renderDefaultLanguage_1.default)(__assign({ source: suppliedDictionary[id], variables: options || {}, id: id }, options));
+            return (0, renderDefaultLanguage_1.default)(__assign({ source: taggedEntry, variables: options || {}, id: id }, options));
         }
-    }, [suppliedDictionary, translations, translationRequired, remoteTranslations]);
+    }, [dictionary, translations, translationRequired, remoteTranslations]);
     return ((0, jsx_runtime_1.jsx)(ClientProvider_1.GTContext.Provider, { value: {
             translate: translate,
             locale: locale,

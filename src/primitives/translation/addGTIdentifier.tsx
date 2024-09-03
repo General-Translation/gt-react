@@ -17,7 +17,16 @@ const acceptedPluralProps: Record<string, boolean> = {
  * Helper function to validate the properties of the component to prevent nested translations
  * @param props - The properties of the current React element
  */
-const validateProps = (props: Record<string, any>): void => {
+const validateChild = (child: any): void => {
+    const { type, props } = child;
+    // check that 
+    if (((type as any)?.$$typeof === Symbol.for('react.lazy'))) {
+        (type as any)?._payload?.then((result: any) => {
+            if (result.gtTransformation) {
+                throw new Error(`Mark your dictionary with 'use client' to use client-side components like <${result.name}>. Or import useVariables().`)
+            }
+        })
+    }
     if (props && props['data-generaltranslation'] && typeof props['data-generaltranslation'].id === 'number') {
         throw new Error(`Nesting of <T>, <Plural>, <Value> components is not permitted. This prevents components from being translated twice!
             Found nested component with id: ${props?.id}, content: ${props?.children}`);
@@ -61,12 +70,12 @@ export default function addGTIdentifier(children: Children) {
      * @returns - The new ReactElement with added GT identifiers
      */
     const handleValidReactElement = (child: ReactElement): ReactElement => {
+    
+        // Validate the props to ensure there are no nested translations
+        validateChild(child);
 
         // Destructure the props from the child element
         const { props } = child;
-    
-        // Validate the props to ensure there are no nested translations
-        validateProps(props);
     
         // Create new props for the element, including the GT identifier and a key
         let generaltranslation = createGTProp(child);  

@@ -20,6 +20,9 @@ export default function renderDefaultLanguage({
     const handleSingleChild = (child: ReactNode) => {
         if (React.isValidElement(child)) {
             const { type, props } = child;
+            /*if ((type as any).$$typeof === Symbol.for('react.lazy')) {
+                throw new Error('')
+            }*/
             const { 'data-generaltranslation': generaltranslation } = props;
             let transformation: string | null = null;
             if (generaltranslation) {
@@ -50,10 +53,11 @@ export default function renderDefaultLanguage({
                         </ClientValue>
                     )
                 }
-                else if (transformation.startsWith("variable")) {
-                    
-                    return <RenderClientVariable variables={variables}>{child}</RenderClientVariable>
-                }
+            }
+            if ((
+                transformation && transformation.startsWith("variable")
+            ) || props?.['data-gt-variable-type']) {
+                return <RenderClientVariable variables={variables}>{child}</RenderClientVariable>
             }
 
             if (props.children) {

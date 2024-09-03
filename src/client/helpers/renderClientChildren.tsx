@@ -10,7 +10,7 @@ import ClientDateTime from "../variables/ClientDateTime";
 import ClientCurrency from "../variables/ClientCurrency";
 import ClientVar from "../variables/ClientVar";
 import getPluralBranch from "../../primitives/variables/getPluralBranch";
-import { Target, TargetChild, TargetElement, TargetVariable, Source, SourceChild } from "../../types/SourceTargetTypes";
+import { Target, TargetElement, Source, SourceChild } from "../../types/SourceTargetTypes";
 import isTargetVariable from "../../primitives/variables/isTargetVariable";
 import getVariableProps from "../../primitives/variables/getVariableProps";
 
@@ -196,6 +196,15 @@ export default function renderClientChildren({
         // if component
         if (sourceIsValidElement) {
             return renderClientElement({ sourceElement: source, targetElement: target, ...metadata });
+        }
+
+        // if you happen to be using a ssr dictionary (not advised)
+        if (typeof source === 'string' || Array.isArray(source)) {
+            return renderClientChildren({
+                target: target?.props?.children, 
+                source,
+                ...metadata
+            })
         }
     }
 }

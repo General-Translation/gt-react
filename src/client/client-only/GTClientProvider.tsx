@@ -53,30 +53,6 @@ export default function GTClientProvider({
     
     const translationRequired = isSameLanguage(locale, defaultLocale) ? false : true;
 
-    const suppliedDictionary = useMemo(() => {
-        let processedDictionary: any = {};
-        for (const id of Object.keys(dictionary)) {
-            let { entry, metadata } = getEntryMetadata(dictionary[id]);
-            const translationType = getEntryTranslationType(dictionary[id]);
-            if (translationType === "t") {
-                entry = <React.Fragment key={id}>{entry}</React.Fragment>;
-            } else if (translationType === "plural") {
-                entry = (
-                    <ClientPlural
-                        key={id} 
-                        n={1}
-                        {...metadata}
-                    >
-                        {entry}
-                    </ClientPlural>
-                );
-            }
-            const taggedEntry = addGTIdentifier(entry);
-            processedDictionary[id] = taggedEntry;
-        }
-        return processedDictionary;
-    }, [dictionary, translationRequired])
-
     const [localDictionary, setLocalDictionary] = useState<Record<string, any> | null>(null);
     useEffect(() => {
         if (locale) {
@@ -119,27 +95,46 @@ export default function GTClientProvider({
     }, [cacheURL, remoteSource, locale])
 
     const translate = useCallback((id: string, options?: tOptions) => {
+        if (translationRequired && localDictionary && localDictionary[id]) {
+            return renderDefaultLanguage({ 
+                source: localDictionary[id], 
+                variables: options || {}, 
+                id, 
+                ...options 
+            })
+        }
+        let { entry, metadata } = getEntryMetadata(dictionary[id]);
+        const translationType = getEntryTranslationType(dictionary[id]);
+        if (translationType === "t") {
+            entry = <React.Fragment key={id}>{entry}</React.Fragment>;
+        } else if (translationType === "plural") {
+            entry = (
+                    <ClientPlural
+                        key={id} 
+                        n={1}
+                        {...metadata}
+                    >
+                        {entry}
+                    </ClientPlural>
+            );
+        }
+
+        const taggedEntry = addGTIdentifier(entry);
+        // if entry is "intl", none of the above should have affected it
+        
         if (translationRequired) {
-            if (localDictionary && localDictionary[id]) {
-                return renderDefaultLanguage({ 
-                    source: localDictionary[id], 
-                    variables: options || {}, 
-                    id, 
-                    ...options 
-                })
-            }
             if (remoteTranslations && remoteTranslations[id] && remoteTranslations[id].t) {
                 return renderClientChildren({
-                    source: suppliedDictionary[id],
+                    source: taggedEntry,
                     target: remoteTranslations[id].t,
                     locale, defaultLocale,
                     id, variables: options || {},
                 })
             }
         } else {
-            return renderDefaultLanguage({ source: suppliedDictionary[id], variables: options || {}, id, ...options })
+            return renderDefaultLanguage({ source: taggedEntry, variables: options || {}, id, ...options })
         }
-    }, [suppliedDictionary, translations, translationRequired, remoteTranslations]);
+    }, [dictionary, translations, translationRequired, remoteTranslations]);
 
     return (
         <GTContext.Provider value={{
