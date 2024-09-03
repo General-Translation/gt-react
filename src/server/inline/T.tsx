@@ -40,6 +40,9 @@ const ServerT = async ({
     const id = props.id ? props.id : key;
     
     const translations = await translationsPromise;
+
+    console.log(id, '=>', JSON.stringify(childrenAsObjects))
+    console.log(id, key, translations?.remote?.[id].k)
     
     const translation = await I18NConfig.getTranslation(locale, key, id, props.dictionaryName || undefined, translations)
     

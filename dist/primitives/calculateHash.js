@@ -110,6 +110,6 @@ function sanitizeChildrenAsObjects(childrenAsObjects) {
     var sanitizeChildren = function (children) {
         return (Array.isArray(children)) ? children.map(sanitizeChild) : sanitizeChild(children);
     };
-    return sanitizeChildren(childrenAsObjects);
+    return sanitizeChildren(structuredClone(childrenAsObjects));
 }
 //# sourceMappingURL=calculateHash.js.map

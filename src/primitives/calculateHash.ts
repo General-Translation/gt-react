@@ -43,5 +43,5 @@ function sanitizeChildrenAsObjects(childrenAsObjects: any) {
     const sanitizeChildren = (children: any): any => {
         return (Array.isArray(children)) ? children.map(sanitizeChild) : sanitizeChild(children)
     }
-    return sanitizeChildren(childrenAsObjects);
+    return sanitizeChildren(structuredClone(childrenAsObjects));
 }

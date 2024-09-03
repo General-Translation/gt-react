@@ -70,9 +70,10 @@ var Resolver_1 = __importDefault(require("./Resolver"));
 var calculateHash_1 = __importDefault(require("../../primitives/calculateHash"));
 var ServerT = function (_a) { return __awaiter(void 0, void 0, void 0, function () {
     var translationRequired, translationsPromise, defaultLocale, taggedChildren, childrenAsObjects, key, _b, id, translations, translation, translationExists, I18NChildren, I18NChildrenPromise, renderSettings, renderMethod, promise, loadingFallback, errorFallback, resolveI18NPromise;
+    var _c;
     var I18NConfig = _a.I18NConfig, children = _a.children, locale = _a.locale, props = __rest(_a, ["I18NConfig", "children", "locale"]);
-    return __generator(this, function (_c) {
-        switch (_c.label) {
+    return __generator(this, function (_d) {
+        switch (_d.label) {
             case 0:
                 translationRequired = (children && I18NConfig.translationRequired(locale)) ? true : false;
                 if (!translationRequired) {
@@ -85,23 +86,25 @@ var ServerT = function (_a) { return __awaiter(void 0, void 0, void 0, function 
                 if (!props.context) return [3 /*break*/, 2];
                 return [4 /*yield*/, (0, calculateHash_1.default)([childrenAsObjects, props.context])];
             case 1:
-                _b = _c.sent();
+                _b = _d.sent();
                 return [3 /*break*/, 4];
             case 2: return [4 /*yield*/, (0, calculateHash_1.default)(childrenAsObjects)];
             case 3:
-                _b = _c.sent();
-                _c.label = 4;
+                _b = _d.sent();
+                _d.label = 4;
             case 4:
                 key = _b;
                 id = props.id ? props.id : key;
                 return [4 /*yield*/, translationsPromise];
             case 5:
-                translations = _c.sent();
+                translations = _d.sent();
+                console.log(id, '=>', JSON.stringify(childrenAsObjects));
+                console.log(id, key, (_c = translations === null || translations === void 0 ? void 0 : translations.remote) === null || _c === void 0 ? void 0 : _c[id].k);
                 return [4 /*yield*/, I18NConfig.getTranslation(locale, key, id, props.dictionaryName || undefined, translations)
                     // Check if a translation for this site already exists and return it if it does
                 ];
             case 6:
-                translation = _c.sent();
+                translation = _d.sent();
                 translationExists = translation ? true : false;
                 if (translationExists) {
                     I18NChildren = (0, renderChildren_1.default)({ source: taggedChildren, target: translation, locale: locale, defaultLocale: defaultLocale });
