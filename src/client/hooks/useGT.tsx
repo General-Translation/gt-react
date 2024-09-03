@@ -34,6 +34,6 @@ export default function useGT(id: string = ''): Function {
         const prefixedID = getID(id);
         const translation = translate(prefixedID, options);
         if (!translation) console.warn(`t('${id}') finding no translation for dictionary item ${prefixedID} !`)
-        return <React.Fragment key={prefixedID}>{translation}</React.Fragment>;
+        return translation;
     }
 }

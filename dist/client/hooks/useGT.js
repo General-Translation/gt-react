@@ -1,12 +1,7 @@
 "use strict";
 'use client';
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = useGT;
-var jsx_runtime_1 = require("react/jsx-runtime");
-var react_1 = __importDefault(require("react"));
 var ClientProvider_1 = require("../ClientProvider");
 /**
  * Custom hook to provide a translation function using a given context.
@@ -40,7 +35,7 @@ function useGT(id) {
         var translation = translate(prefixedID, options);
         if (!translation)
             console.warn("t('".concat(id, "') finding no translation for dictionary item ").concat(prefixedID, " !"));
-        return (0, jsx_runtime_1.jsx)(react_1.default.Fragment, { children: translation }, prefixedID);
+        return translation;
     };
 }
 //# sourceMappingURL=useGT.js.map

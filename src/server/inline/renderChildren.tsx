@@ -5,8 +5,7 @@ import Var from '../variables/Var/Var';
 import DateTime from '../variables/DateTime/DateTime';
 import Num from '../variables/Num/Num';
 import Currency from '../variables/Currency/Currency';
-import defaultVariableNames from '../../primitives/variables/defaultVariableNames';
-import { Target, TargetChild, TargetElement, TargetVariable, Source, SourceChild } from '../../types/SourceTargetTypes';
+import { Target, TargetElement, Source, SourceChild } from '../../types/SourceTargetTypes';
 import isTargetVariable from '../../primitives/variables/isTargetVariable';
 import getVariableProps from '../../primitives/variables/getVariableProps';
 

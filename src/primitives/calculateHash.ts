@@ -23,21 +23,19 @@ export default async function calculateHash(childrenAsObjects: any): Promise<str
 
 function sanitizeChildrenAsObjects(childrenAsObjects: any) {
     const sanitizeChild = (child: any): any => {
-        if (typeof child === 'object' && child.type) {
+        if (typeof child === 'object' && child.props) {
             if (child?.props?.children) {
+                const { type, ...rest } = child;
                 return {
-                    ...child,
+                    ...rest,
                     props: {
                         ...child.props,
                         children: sanitizeChildren(child.props.children)
-                    },
-                    type: '', // sanitize the type, which may be different in compiled code
+                    }
                 }
             } else {
-                return {
-                    ...child,
-                    type: '', // sanitize the type, which may be different in compiled code
-                }
+                const { type, ...rest } = child;
+                return rest;
             }
         }
         return child;

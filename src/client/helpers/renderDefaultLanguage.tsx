@@ -51,6 +51,7 @@ export default function renderDefaultLanguage({
                     )
                 }
                 else if (transformation.startsWith("variable")) {
+                    
                     return <RenderClientVariable variables={variables}>{child}</RenderClientVariable>
                 }
             }
