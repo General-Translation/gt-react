@@ -1,3 +1,4 @@
+import { formatDateTime } from 'generaltranslation';
 import React from 'react';
 
 const DateTime = ({ children, locales, name = "date", defaultValue, options = {}, ...props }: {
@@ -39,7 +40,7 @@ const DateTime = ({ children, locales, name = "date", defaultValue, options = {}
     }
 
     // Format the date according to the locale and options
-    const dateString = new Intl.DateTimeFormat(locales, { calendar: "gregory", numberingSystem: "latn", ...options }).format(dateValue) || dateValue?.toLocaleString(locales, { calendar: "gregory", numberingSystem: "latn", ...options }) || '';
+    const dateString = dateValue ? formatDateTime({ value: dateValue, languages: locales, options }) : '';
     const formattedValue = dateString.replace(/[\u200F\u202B\u202E]/g, '')
 
     // Render the formatted date within a span element

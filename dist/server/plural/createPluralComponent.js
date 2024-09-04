@@ -28,8 +28,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = createPluralComponent;
 var jsx_runtime_1 = require("react/jsx-runtime");
 var InnerPlural_1 = __importDefault(require("./InnerPlural"));
-function createPluralComponent(_a) {
-    var T = _a.T, getLocale = _a.getLocale, defaultLocale = _a.defaultLocale;
+function createPluralComponent(T, getLocale, defaultLocale) {
     var PluralT = function (_a) {
         var children = _a.children, n = _a.n, ranges = _a.ranges, zero = _a.zero, one = _a.one, two = _a.two, few = _a.few, many = _a.many, other = _a.other, singular = _a.singular, dual = _a.dual, plural = _a.plural, values = _a.values, props = __rest(_a, ["children", "n", "ranges", "zero", "one", "two", "few", "many", "other", "singular", "dual", "plural", "values"]);
         var innerProps = { n: n, ranges: ranges, zero: zero, one: one, two: two, few: few, many: many, other: other, singular: singular, dual: dual, plural: plural, values: values };

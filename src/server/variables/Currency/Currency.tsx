@@ -1,4 +1,5 @@
 import React, { ReactNode } from 'react';
+import { formatCurrency } from 'generaltranslation';
 
 const Currency = ({ children, locales, name = "cost", defaultValue, currency = "USD", options = {}, ...props }: {
     children?: any;
@@ -18,7 +19,7 @@ const Currency = ({ children, locales, name = "cost", defaultValue, currency = "
 
     // Format the number as currency according to the locale
     const formattedValue = (typeof value === 'number') 
-        ? new Intl.NumberFormat(locales, { style: 'currency', currency, numberingSystem: 'latn', ...options }).format(value) 
+        ? formatCurrency({ value, currency, languages: locales, options })
         : value;
 
     return (

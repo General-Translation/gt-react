@@ -121,7 +121,7 @@ export default function GTClientProvider({
             })
         }
         let { entry, metadata } = getEntryMetadata(dictionary[id]);
-        const translationType = getEntryTranslationType(dictionary[id]);
+        const { type: translationType } = getEntryTranslationType(dictionary[id]);
         if (translationType === "t") {
             entry = <React.Fragment key={id}>{entry}</React.Fragment>;
         } else if (translationType === "plural") {
@@ -137,7 +137,7 @@ export default function GTClientProvider({
         }
 
         const taggedEntry = addGTIdentifier(entry);
-        // if entry is "intl", none of the above should have affected it
+        // if entry is "string", none of the above should have affected it
         
         if (translationRequired) {
             if (remoteTranslations && remoteTranslations[id] && remoteTranslations[id].t) {

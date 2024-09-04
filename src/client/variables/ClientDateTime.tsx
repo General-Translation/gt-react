@@ -3,6 +3,7 @@
 import React, { ReactNode, useEffect, useMemo, useState } from 'react';
 import useLocale from '../hooks/useLocale';
 import useDefaultLocale from '../hooks/useDefaultLocale';
+import { formatDateTime } from 'generaltranslation';
 
 const ClientDateTime = ({ children, name = "date", defaultValue, options = {} }: {
     children?: any;
@@ -26,7 +27,7 @@ const ClientDateTime = ({ children, name = "date", defaultValue, options = {} }:
         dateValue = defaultValue;
     }
     if (typeof dateValue !== 'undefined') {
-        final = (new Intl.DateTimeFormat(locales, { calendar: "gregory", numberingSystem: "latn", ...options }).format(dateValue) || dateValue?.toLocaleString(locales, { calendar: "gregory", numberingSystem: "latn", ...options }) || '').replace(/[\u200F\u202B\u202E]/g, '');
+        final = (formatDateTime({ value: dateValue, languages: locales, options })).replace(/[\u200F\u202B\u202E]/g, '');
     }
 
     // Render the formatted date within a span element

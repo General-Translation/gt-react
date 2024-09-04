@@ -29,7 +29,7 @@ type GeneralTranslation = {
     * 
     * `options.id?` - (string) - Specifies an ID in the target dictionary for the created translation. Used to prevent storing unnecessary translations by overwriting previous translations with the same ID. Defaults to `content`. (string)
     */
-    intl: (content: string, options?: { 
+    translate: (content: string, options?: { 
         targetLanguage?: string;
         id?: string;
         [key: string]: any 

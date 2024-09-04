@@ -16,7 +16,8 @@ type CreateGTProps = {
     renderTimeout?: number | null;
     // Dictionaries
     dictionaryName?: string;
-    dictionary?: Record<string, any>
+    dictionary?: Record<string, any>;
+    store?: boolean;
     translations?: Record<string, () => Promise<Record<string, any>>>;
     // Batching config
     maxConcurrentRequests?: number;

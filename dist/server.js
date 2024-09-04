@@ -31,7 +31,7 @@ require("server-only");
 var getDefaultFromEnv_1 = __importDefault(require("./config/local/getDefaultFromEnv"));
 var createTComponent_1 = __importDefault(require("./server/inline/createTComponent"));
 var I18NConfiguration_1 = __importDefault(require("./config/I18NConfiguration"));
-var createIntlFunction_1 = __importDefault(require("./server/intl/createIntlFunction"));
+var createTranslateFunction_1 = __importDefault(require("./server/translate/createTranslateFunction"));
 var createGTProviderComponent_1 = __importDefault(require("./server/provider/createGTProviderComponent"));
 var createTFunction_1 = __importDefault(require("./dictionary/createTFunction"));
 var createValueComponent_1 = __importDefault(require("./server/value/createValueComponent"));
@@ -80,6 +80,7 @@ function createGT(_a) {
         renderTimeout: defaultGTProps_1.default.renderTimeout,
         dictionaryName: defaultGTProps_1.default.dictionaryName,
         dictionary: defaultGTProps_1.default.dictionary,
+        store: defaultGTProps_1.default.store,
         maxConcurrentRequests: defaultGTProps_1.default.maxConcurrentRequests,
         batchInterval: defaultGTProps_1.default.batchInterval,
         getMetadata: defaultGTProps_1.default.getMetadata
@@ -100,37 +101,36 @@ function createGT(_a) {
     // Dictionaries
     _o = _a.dictionaryName, 
     // Dictionaries
-    dictionaryName = _o === void 0 ? defaultGTProps_1.default.dictionaryName : _o, _p = _a.dictionary, dictionary = _p === void 0 ? defaultGTProps_1.default.dictionary : _p, translations = _a.translations, 
+    dictionaryName = _o === void 0 ? defaultGTProps_1.default.dictionaryName : _o, _p = _a.dictionary, dictionary = _p === void 0 ? defaultGTProps_1.default.dictionary : _p, _q = _a.store, store = _q === void 0 ? defaultGTProps_1.default.store : _q, translations = _a.translations, 
     // Batching config
-    _q = _a.maxConcurrentRequests, 
+    _r = _a.maxConcurrentRequests, 
     // Batching config
-    maxConcurrentRequests = _q === void 0 ? defaultGTProps_1.default.maxConcurrentRequests : _q, _r = _a.batchInterval, batchInterval = _r === void 0 ? defaultGTProps_1.default.batchInterval : _r, 
+    maxConcurrentRequests = _r === void 0 ? defaultGTProps_1.default.maxConcurrentRequests : _r, _s = _a.batchInterval, batchInterval = _s === void 0 ? defaultGTProps_1.default.batchInterval : _s, 
     // Other metadata
-    _s = _a.getMetadata, 
+    _t = _a.getMetadata, 
     // Other metadata
-    getMetadata = _s === void 0 ? defaultGTProps_1.default.getMetadata : _s, metadata = __rest(_a, ["apiKey", "projectID", "cacheURL", "baseURL", "remoteSource", "automaticTranslation", "approvedLocales", "defaultLocale", "getLocale", "renderPrevious", "renderMethod", "renderTimeout", "dictionaryName", "dictionary", "translations", "maxConcurrentRequests", "batchInterval", "getMetadata"]);
+    getMetadata = _t === void 0 ? defaultGTProps_1.default.getMetadata : _t, metadata = __rest(_a, ["apiKey", "projectID", "cacheURL", "baseURL", "remoteSource", "automaticTranslation", "approvedLocales", "defaultLocale", "getLocale", "renderPrevious", "renderMethod", "renderTimeout", "dictionaryName", "dictionary", "store", "translations", "maxConcurrentRequests", "batchInterval", "getMetadata"]);
     var I18NConfig = new I18NConfiguration_1.default(__assign({ apiKey: apiKey, projectID: projectID, cacheURL: cacheURL, baseURL: baseURL, remoteSource: remoteSource, automaticTranslation: automaticTranslation, getLocale: getLocale, defaultLocale: defaultLocale, approvedLocales: approvedLocales, renderPrevious: renderPrevious, renderMethod: renderMethod, renderTimeout: renderTimeout, dictionary: dictionary, dictionaryName: (0, getDefaultFromEnv_1.default)('GT_DICTIONARY_NAME') || dictionaryName, // override from .env
         translations: translations, maxConcurrentRequests: maxConcurrentRequests, batchInterval: batchInterval, getMetadata: getMetadata }, metadata));
     // ----- <T> ------ //
-    var T = (0, createTComponent_1.default)(__assign({ I18NConfig: I18NConfig }, metadata));
-    // ----- intl() ------ //
-    var intl = (0, createIntlFunction_1.default)(__assign({ I18NConfig: I18NConfig }, metadata));
+    var T = (0, createTComponent_1.default)(I18NConfig);
+    // ----- translate() ------ //
+    var translate = (0, createTranslateFunction_1.default)(I18NConfig);
     // ----- Dictionary ------ //
-    var t = (0, createTFunction_1.default)({ I18NConfig: I18NConfig, T: T, intl: intl });
+    var t = (0, createTFunction_1.default)(I18NConfig, T, translate);
     var getGT = function (id) {
-        var nestedDictionary = id ? I18NConfig.getDictionaryEntry(id) : I18NConfig.getDictionary();
-        return (0, createTFunction_1.default)({ I18NConfig: I18NConfig, T: T, intl: intl, dictionary: nestedDictionary });
+        return id ? (0, createTFunction_1.default)(I18NConfig, T, translate, I18NConfig.getDictionaryEntry(id)) : t;
     };
     // ----- <GTProvider> ------ //
-    var GTProvider = (0, createGTProviderComponent_1.default)(__assign({ I18NConfig: I18NConfig }, metadata));
+    var GTProvider = (0, createGTProviderComponent_1.default)(I18NConfig);
     // ----- Variables ----- //
-    var Value = (0, createValueComponent_1.default)({ T: T, getLocale: getLocale, defaultLocale: defaultLocale });
-    var Plural = (0, createPluralComponent_1.default)({ T: T, getLocale: getLocale, defaultLocale: defaultLocale });
+    var Value = (0, createValueComponent_1.default)(T, getLocale, defaultLocale);
+    var Plural = (0, createPluralComponent_1.default)(T, getLocale, defaultLocale);
     // ----- Helper Functions ------ //
     var getDefaultLocale = I18NConfig.getDefaultLocale;
     return {
         T: T,
-        intl: intl,
+        translate: translate,
         GTProvider: GTProvider,
         t: t,
         getGT: getGT,

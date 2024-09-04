@@ -175,7 +175,7 @@ function GTClientProvider(_a) {
             return (0, renderDefaultLanguage_1.default)(__assign({ source: localDictionary[id], variables: options || {}, id: id }, options));
         }
         var _a = (0, getEntryMetadata_1.default)(dictionary[id]), entry = _a.entry, metadata = _a.metadata;
-        var translationType = (0, getEntryTranslationType_1.default)(dictionary[id]);
+        var translationType = (0, getEntryTranslationType_1.default)(dictionary[id]).type;
         if (translationType === "t") {
             entry = (0, jsx_runtime_1.jsx)(react_1.default.Fragment, { children: entry }, id);
         }
@@ -183,7 +183,7 @@ function GTClientProvider(_a) {
             entry = ((0, jsx_runtime_1.jsx)(ClientPlural_1.default, __assign({ n: 1 }, metadata, { children: entry }), id));
         }
         var taggedEntry = (0, addGTIdentifier_1.default)(entry);
-        // if entry is "intl", none of the above should have affected it
+        // if entry is "string", none of the above should have affected it
         if (translationRequired) {
             if (remoteTranslations && remoteTranslations[id] && remoteTranslations[id].t) {
                 return (0, renderClientChildren_1.default)({

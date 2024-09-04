@@ -3,10 +3,10 @@ import 'server-only'
 import getDefaultFromEnv from "./config/local/getDefaultFromEnv";
 import createTComponent from './server/inline/createTComponent';
 import I18NConfiguration from './config/I18NConfiguration';
-import createIntlFunction from './server/intl/createIntlFunction';
+import createTranslateFunction from './server/translate/createTranslateFunction';
 import createGTProviderComponent from './server/provider/createGTProviderComponent';
 import CreateI18NConfigProps from './types/CreateGTProps';
-import createTFunction, { tOptions } from './dictionary/createTFunction';
+import createTFunction from './dictionary/createTFunction';
 import createValueComponent from './server/value/createValueComponent';
 import createPluralComponent from './server/plural/createPluralComponent';
 import GeneralTranslation from './types/GeneralTranslationInterface';
@@ -60,6 +60,7 @@ export function createGT({
     // Dictionaries
     dictionaryName = defaultGTProps.dictionaryName,
     dictionary = defaultGTProps.dictionary,
+    store = defaultGTProps.store,
     translations,
     // Batching config
     maxConcurrentRequests = defaultGTProps.maxConcurrentRequests,
@@ -81,6 +82,7 @@ export function createGT({
     renderTimeout: defaultGTProps.renderTimeout,
     dictionaryName: defaultGTProps.dictionaryName,
     dictionary: defaultGTProps.dictionary,
+    store: defaultGTProps.store,
     maxConcurrentRequests: defaultGTProps.maxConcurrentRequests,
     batchInterval: defaultGTProps.batchInterval,
     getMetadata: defaultGTProps.getMetadata
@@ -100,36 +102,35 @@ export function createGT({
 
     // ----- <T> ------ //
 
-    const T = createTComponent({ I18NConfig, ...metadata });
+    const T = createTComponent(I18NConfig);
 
-    // ----- intl() ------ //
+    // ----- translate() ------ //
 
-    const intl = createIntlFunction({ I18NConfig, ...metadata });
+    const translate = createTranslateFunction(I18NConfig);
 
     // ----- Dictionary ------ //
 
-    const t = createTFunction({ I18NConfig, T, intl });
+    const t = createTFunction(I18NConfig, T, translate);
   
     const getGT = (id?: string) => {
-        let nestedDictionary = id ? I18NConfig.getDictionaryEntry(id) : I18NConfig.getDictionary();
-        return createTFunction({ I18NConfig, T, intl, dictionary: nestedDictionary });
+        return id ? createTFunction(I18NConfig, T, translate, I18NConfig.getDictionaryEntry(id)): t;
     };
 
     // ----- <GTProvider> ------ //
 
-    const GTProvider = createGTProviderComponent({ I18NConfig, ...metadata });
+    const GTProvider = createGTProviderComponent(I18NConfig);
 
     // ----- Variables ----- //
 
-    const Value = createValueComponent({ T, getLocale, defaultLocale });
-    const Plural = createPluralComponent({ T, getLocale, defaultLocale });
+    const Value = createValueComponent(T, getLocale, defaultLocale);
+    const Plural = createPluralComponent(T, getLocale, defaultLocale);
 
     // ----- Helper Functions ------ //
 
     const getDefaultLocale = I18NConfig.getDefaultLocale;
     
     return {
-        T, intl,
+        T, translate,
         GTProvider,
         t, getGT,
         Value, Plural,

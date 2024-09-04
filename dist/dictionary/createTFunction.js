@@ -33,33 +33,35 @@ var getEntryMetadata_1 = __importDefault(require("../primitives/rendering/getEnt
 var getEntryTranslationType_1 = __importDefault(require("../primitives/rendering/getEntryTranslationType"));
 var getDictionaryEntry_1 = __importDefault(require("./getDictionaryEntry"));
 var checkTFunctionOptions_1 = __importDefault(require("./checkTFunctionOptions"));
-function createTFunction(_a) {
-    var I18NConfig = _a.I18NConfig, T = _a.T, intl = _a.intl, _b = _a.dictionary, dictionary = _b === void 0 ? I18NConfig.getDictionary() : _b;
+function createTFunction(I18NConfig, T, translate, dictionary) {
+    var _a;
+    if (dictionary === void 0) { dictionary = I18NConfig.getDictionary(); }
+    var shouldStore = (_a = I18NConfig.shouldStore()) !== null && _a !== void 0 ? _a : true;
     return function t(id, options) {
         if (options === void 0) { options = {}; }
         (0, checkTFunctionOptions_1.default)(options);
         var raw = (0, getDictionaryEntry_1.default)(id, dictionary);
         var _a = (0, getEntryMetadata_1.default)(raw), entry = _a.entry, metadata = _a.metadata;
         // Checks to see if options are valid
-        var translationType = (0, getEntryTranslationType_1.default)(raw);
+        var _b = (0, getEntryTranslationType_1.default)(raw), translationType = _b.type, isFunction = _b.isFunction;
         // Turn into an async function if the target is a string
-        if (translationType === "intl")
-            return intl(entry, __assign({ id: id }, metadata));
+        if (translationType === "string")
+            return translate(entry, __assign({ id: id, store: shouldStore }, metadata));
         // If a plural or value is required
         if (Object.keys(options).length) {
             var locales = [I18NConfig.getLocale(), I18NConfig.getDefaultLocale()];
-            var _b = metadata || {}, ranges = _b.ranges, zero = _b.zero, one = _b.one, two = _b.two, few = _b.few, many = _b.many, other = _b.other, singular = _b.singular, dual = _b.dual, plural = _b.plural, tOptions = __rest(_b, ["ranges", "zero", "one", "two", "few", "many", "other", "singular", "dual", "plural"]);
+            var _c = metadata || {}, ranges = _c.ranges, zero = _c.zero, one = _c.one, two = _c.two, few = _c.few, many = _c.many, other = _c.other, singular = _c.singular, dual = _c.dual, plural = _c.plural, tOptions = __rest(_c, ["ranges", "zero", "one", "two", "few", "many", "other", "singular", "dual", "plural"]);
             if (translationType === "plural") {
                 if (!options || typeof options.n !== 'number') {
                     throw new Error("ID \"".concat(id, "\" requires an \"n\" option.\n\ne.g. t(\"").concat(id, "\", { n: 1 })"));
                 }
                 var innerProps = __assign({ ranges: ranges, zero: zero, one: one, two: two, few: few, many: many, other: other, singular: singular, dual: dual, plural: plural }, options);
-                return ((0, jsx_runtime_1.jsx)(T, __assign({ id: id }, tOptions, { children: (0, jsx_runtime_1.jsx)(InnerPlural_1.default, __assign({ n: options.n, locales: locales }, innerProps, { children: entry })) })));
+                return ((0, jsx_runtime_1.jsx)(T, __assign({ id: id, store: shouldStore }, tOptions, { children: (0, jsx_runtime_1.jsx)(InnerPlural_1.default, __assign({ n: options.n, locales: locales }, innerProps, { children: entry })) })));
             }
-            return ((0, jsx_runtime_1.jsx)(T, __assign({ id: id }, tOptions, { children: (0, jsx_runtime_1.jsx)(InnerValue_1.default, { values: options, locales: locales, children: entry }) })));
+            return ((0, jsx_runtime_1.jsx)(T, __assign({ id: id, store: shouldStore }, tOptions, { children: (0, jsx_runtime_1.jsx)(InnerValue_1.default, { values: options, locales: locales, children: entry }) })));
         }
         // base case, just return T with an inner fragment (</>) for consistency
-        return ((0, jsx_runtime_1.jsx)(T, __assign({ id: id }, metadata, { children: (0, jsx_runtime_1.jsx)(jsx_runtime_1.Fragment, { children: entry }) })));
+        return ((0, jsx_runtime_1.jsx)(T, __assign({ id: id, store: shouldStore }, metadata, { children: (0, jsx_runtime_1.jsx)(jsx_runtime_1.Fragment, { children: entry }) })));
     };
 }
 //# sourceMappingURL=createTFunction.js.map

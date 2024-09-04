@@ -28,8 +28,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = createValueComponent;
 var jsx_runtime_1 = require("react/jsx-runtime");
 var InnerValue_1 = __importDefault(require("./InnerValue"));
-function createValueComponent(_a) {
-    var T = _a.T, getLocale = _a.getLocale, defaultLocale = _a.defaultLocale;
+function createValueComponent(T, getLocale, defaultLocale) {
     var ValueT = function (_a) {
         var children = _a.children, values = _a.values, props = __rest(_a, ["children", "values"]);
         var locales = [getLocale(), defaultLocale];

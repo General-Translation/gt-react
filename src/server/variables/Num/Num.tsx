@@ -1,3 +1,4 @@
+import { formatNum } from 'generaltranslation';
 import React, { ReactNode } from 'react';
 
 const Num = ({ children, locales, name = "n", defaultValue, options = {}, ...props }: {
@@ -16,7 +17,7 @@ const Num = ({ children, locales, name = "n", defaultValue, options = {}, ...pro
     value = (typeof value === 'string') ? parseFloat(value) : value;
 
     // Format the number according to the locale
-    const formattedValue = (typeof value === 'number') ? new Intl.NumberFormat(locales, { numberingSystem: 'latn', ...options }).format(value) : defaultValue;
+    const formattedValue = (typeof value === 'number') ? formatNum({ value, languages: locales, options }) : defaultValue;
 
     return (
         <span 

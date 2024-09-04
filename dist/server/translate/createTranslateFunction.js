@@ -46,17 +46,6 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-var __rest = (this && this.__rest) || function (s, e) {
-    var t = {};
-    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
-        t[p] = s[p];
-    if (s != null && typeof Object.getOwnPropertySymbols === "function")
-        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
-            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))
-                t[p[i]] = s[p[i]];
-        }
-    return t;
-};
 var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
     if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
         if (ar || !(i in from)) {
@@ -70,12 +59,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.default = createIntlFunction;
+exports.default = createTranslateFunction;
 var calculateHash_1 = __importDefault(require("../../primitives/calculateHash"));
-// intl('Hello')
-function createIntlFunction(_a) {
+// translate('Hello')
+function createTranslateFunction(I18NConfig) {
     var _this = this;
-    var I18NConfig = _a.I18NConfig, defaultOptions = __rest(_a, ["I18NConfig"]);
     return function (content_1) {
         var args_1 = [];
         for (var _i = 1; _i < arguments.length; _i++) {
@@ -83,7 +71,7 @@ function createIntlFunction(_a) {
         }
         return __awaiter(_this, __spreadArray([content_1], args_1, true), void 0, function (content, options) {
             var key, _a, translation, translationPromise, renderSettings;
-            if (options === void 0) { options = __assign({}, defaultOptions); }
+            if (options === void 0) { options = {}; }
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0:
@@ -107,7 +95,7 @@ function createIntlFunction(_a) {
                         if (translation)
                             return [2 /*return*/, translation];
                         if (!I18NConfig.automaticTranslationEnabled()) return [3 /*break*/, 7];
-                        translationPromise = I18NConfig.intl({ content: content, targetLanguage: options.targetLanguage, options: __assign(__assign({}, options), { hash: key }) });
+                        translationPromise = I18NConfig.translate({ content: content, targetLanguage: options.targetLanguage, options: __assign(__assign({}, options), { hash: key }) });
                         renderSettings = I18NConfig.getRenderSettings();
                         if (!(renderSettings.method !== "subtle")) return [3 /*break*/, 7];
                         return [4 /*yield*/, translationPromise];
@@ -118,4 +106,4 @@ function createIntlFunction(_a) {
         });
     };
 }
-//# sourceMappingURL=createIntlFunction.js.map
+//# sourceMappingURL=createTranslateFunction.js.map

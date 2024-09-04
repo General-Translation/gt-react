@@ -1,8 +1,4 @@
-export default function createValueComponent({ T, getLocale, defaultLocale }: {
-    T?: any;
-    getLocale: () => string;
-    defaultLocale: string;
-}): {
+export default function createValueComponent(T: any, getLocale: () => string, defaultLocale: string): {
     ({ children, values, ...props }: {
         children?: any;
         values: Record<string, any>;

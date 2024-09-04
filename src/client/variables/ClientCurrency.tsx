@@ -3,6 +3,7 @@
 import React, { ReactNode, useEffect, useMemo, useState } from 'react';
 import useLocale from '../hooks/useLocale';
 import useDefaultLocale from '../hooks/useDefaultLocale';
+import { formatCurrency } from 'generaltranslation';
 
 const ClientCurrency = ({ children, name = "cost", defaultValue, currency = "USD", options = {} }: {
     children?: any;
@@ -18,7 +19,7 @@ const ClientCurrency = ({ children, name = "cost", defaultValue, currency = "USD
     value = (typeof value === 'string') ? parseFloat(value) : value;
     // Format the value using Intl.NumberFormat
     if (typeof value === 'number') {
-        value = new Intl.NumberFormat(locales, { style: 'currency', currency, numberingSystem: 'latn', ...options }).format(value)
+        value = formatCurrency({ value, languages: locales, currency, options });
     }
 
     return (

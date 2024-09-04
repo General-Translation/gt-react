@@ -14,6 +14,7 @@ type I18NConfigurationParams = {
     renderTimeout: number | null;
     dictionary: Record<string, any>;
     dictionaryName: string;
+    storeByDefault?: boolean;
     translations?: Record<string, () => Promise<Record<string, any>>>;
     maxConcurrentRequests: number;
     batchInterval: number;
@@ -32,6 +33,7 @@ export default class I18NConfiguration {
     renderTimeout: number | null;
     dictionaryName: string;
     dictionary: Record<string, any>;
+    storeByDefault?: boolean;
     translations?: Record<string, () => Promise<Record<string, any>>>;
     private _localDictionaryManager;
     private _remoteDictionaryManager;
@@ -43,7 +45,7 @@ export default class I18NConfiguration {
     private _queue;
     private _activeRequests;
     private _translationCache;
-    constructor({ apiKey, projectID, baseURL, cacheURL, remoteSource, automaticTranslation, getLocale, defaultLocale, approvedLocales, renderPrevious, renderMethod, renderTimeout, dictionary, dictionaryName, translations, maxConcurrentRequests, batchInterval, getMetadata, ...metadata }: I18NConfigurationParams);
+    constructor({ apiKey, projectID, baseURL, cacheURL, remoteSource, automaticTranslation, getLocale, defaultLocale, approvedLocales, renderPrevious, renderMethod, renderTimeout, dictionary, dictionaryName, storeByDefault, translations, maxConcurrentRequests, batchInterval, getMetadata, ...metadata }: I18NConfigurationParams);
     /**
      * Gets the application's default locale
      * @returns {string} A BCP-47 language tag
@@ -59,6 +61,11 @@ export default class I18NConfiguration {
      * @returns The entire dictionary, or an empty object if none found
     */
     getDictionary(): Record<string, any>;
+    /**
+     * Gets the name of the current dictionary
+     * @returns {string} A BCP-47 language tag
+    */
+    getDictionaryName(): string;
     /**
      * Get an entry from the dictionary
      * @returns An entry from the dictionary determined by id
@@ -88,6 +95,12 @@ export default class I18NConfiguration {
      */
     translationRequired(locale: string): boolean;
     /**
+     * Returns a boolean determining whether or not a translation should be stored
+     * Undefined if not set
+     * @returns {string} A BCP-47 language tag
+    */
+    shouldStore(): boolean | undefined;
+    /**
      * Get the translation dictionaries for this user's locale, if they exist
      * @param locale - The language set by the user
      * @param dictionaryName - User-defined dictionary name, for distinguishing between multiple translation dictionaries for a single language.
@@ -114,7 +127,7 @@ export default class I18NConfiguration {
      * @param params - Parameters for translation
      * @returns Translated string
      */
-    intl(params: any): Promise<string>;
+    translate(params: any): Promise<string>;
     /**
      * Translate the children components
      * @param params - Parameters for translation

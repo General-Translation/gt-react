@@ -11,8 +11,10 @@ export type tOptions = {
     [key: string]: any
 }
 
-export default function createTFunction({ I18NConfig, T, intl, dictionary = I18NConfig.getDictionary() }: { I18NConfig: I18NConfiguration, T: any, intl: any, dictionary?: Record<string, any> }) {
+export default function createTFunction(I18NConfig: I18NConfiguration, T: any, translate: any, dictionary = I18NConfig.getDictionary()) {
     
+    const shouldStore = I18NConfig.shouldStore() ?? true;
+
     return function t(id: string, options: tOptions = {}): JSX.Element | Promise<string> {
         
         checkTFunctionOptions(options);
@@ -21,9 +23,10 @@ export default function createTFunction({ I18NConfig, T, intl, dictionary = I18N
         let { entry, metadata } = getEntryMetadata(raw);
 
         // Checks to see if options are valid
-        const translationType = getEntryTranslationType(raw)
+        const { type: translationType, isFunction } = getEntryTranslationType(raw);
+        
         // Turn into an async function if the target is a string
-        if (translationType === "intl") return intl(entry, { id, ...metadata });
+        if (translationType === "string") return translate(entry, { id, store: shouldStore, ...metadata });
     
         // If a plural or value is required
         if (Object.keys(options).length) {
@@ -44,7 +47,7 @@ export default function createTFunction({ I18NConfig, T, intl, dictionary = I18N
                     ...options
                 };
                 return (
-                    <T id={id} {...tOptions}>
+                    <T id={id} store={shouldStore} {...tOptions}>
                         <Plural n={options.n} locales={locales} {...innerProps}>
                             {entry}
                         </Plural>
@@ -52,7 +55,7 @@ export default function createTFunction({ I18NConfig, T, intl, dictionary = I18N
                 );
             }
             return (
-                <T id={id} {...tOptions}>
+                <T id={id} store={shouldStore} {...tOptions}>
                     <Value values={options} locales={locales}>
                         {entry}
                     </Value>
@@ -62,7 +65,7 @@ export default function createTFunction({ I18NConfig, T, intl, dictionary = I18N
 
         // base case, just return T with an inner fragment (</>) for consistency
         return (
-            <T id={id} {...metadata}>
+            <T id={id} store={shouldStore} {...metadata}>
                 <>{entry}</>
             </T>
         )

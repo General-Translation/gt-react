@@ -99,11 +99,13 @@ var I18NConfiguration = /** @class */ (function () {
         // Render method
         renderPrevious = _a.renderPrevious, renderMethod = _a.renderMethod, renderTimeout = _a.renderTimeout, 
         // Dictionaries
-        dictionary = _a.dictionary, dictionaryName = _a.dictionaryName, translations = _a.translations, 
+        dictionary = _a.dictionary, dictionaryName = _a.dictionaryName, storeByDefault = _a.storeByDefault, 
+        // Translations
+        translations = _a.translations, 
         // Batching config
         maxConcurrentRequests = _a.maxConcurrentRequests, batchInterval = _a.batchInterval, 
         // Other metadata
-        getMetadata = _a.getMetadata, metadata = __rest(_a, ["apiKey", "projectID", "baseURL", "cacheURL", "remoteSource", "automaticTranslation", "getLocale", "defaultLocale", "approvedLocales", "renderPrevious", "renderMethod", "renderTimeout", "dictionary", "dictionaryName", "translations", "maxConcurrentRequests", "batchInterval", "getMetadata"]);
+        getMetadata = _a.getMetadata, metadata = __rest(_a, ["apiKey", "projectID", "baseURL", "cacheURL", "remoteSource", "automaticTranslation", "getLocale", "defaultLocale", "approvedLocales", "renderPrevious", "renderMethod", "renderTimeout", "dictionary", "dictionaryName", "storeByDefault", "translations", "maxConcurrentRequests", "batchInterval", "getMetadata"]);
         // Cloud integration
         this.projectID = projectID;
         this.remoteSource = (cacheURL && remoteSource) ? true : false;
@@ -123,6 +125,8 @@ var I18NConfiguration = /** @class */ (function () {
         // Dictionaries
         this.dictionary = dictionary;
         this.dictionaryName = dictionaryName;
+        this.storeByDefault = storeByDefault;
+        // Local translations
         this.translations = translations;
         // GT
         this.gt = new generaltranslation_1.default({ projectID: projectID, apiKey: apiKey, defaultLanguage: defaultLocale, baseURL: baseURL });
@@ -172,6 +176,13 @@ var I18NConfiguration = /** @class */ (function () {
         return this.dictionary;
     };
     /**
+     * Gets the name of the current dictionary
+     * @returns {string} A BCP-47 language tag
+    */
+    I18NConfiguration.prototype.getDictionaryName = function () {
+        return this.dictionaryName;
+    };
+    /**
      * Get an entry from the dictionary
      * @returns An entry from the dictionary determined by id
     */
@@ -212,6 +223,14 @@ var I18NConfiguration = /** @class */ (function () {
         if ((0, generaltranslation_1.isSameLanguage)(locale, this.defaultLocale))
             return false;
         return true;
+    };
+    /**
+     * Returns a boolean determining whether or not a translation should be stored
+     * Undefined if not set
+     * @returns {string} A BCP-47 language tag
+    */
+    I18NConfiguration.prototype.shouldStore = function () {
+        return this.storeByDefault;
     };
     /**
      * Get the translation dictionaries for this user's locale, if they exist
@@ -286,7 +305,7 @@ var I18NConfiguration = /** @class */ (function () {
      * @param params - Parameters for translation
      * @returns Translated string
      */
-    I18NConfiguration.prototype.intl = function (params) {
+    I18NConfiguration.prototype.translate = function (params) {
         return __awaiter(this, void 0, void 0, function () {
             var cacheKey, content, targetLanguage, options, dictionaryName, translationPromise;
             var _this = this;
@@ -300,7 +319,7 @@ var I18NConfiguration = /** @class */ (function () {
                 dictionaryName = ((_a = params.options) === null || _a === void 0 ? void 0 : _a.dictionaryName) || this.dictionaryName;
                 translationPromise = new Promise(function (resolve, reject) {
                     _this._queue.push({
-                        type: "intl",
+                        type: "string",
                         data: {
                             content: content,
                             targetLanguage: targetLanguage,
@@ -367,7 +386,7 @@ var I18NConfiguration = /** @class */ (function () {
                         _a.label = 1;
                     case 1:
                         _a.trys.push([1, 3, 4, 5]);
-                        bundlePromise = this.gt.bundleTranslation(batch);
+                        bundlePromise = this.gt.translateBundle(batch);
                         batch.forEach(function (item) {
                             if (_this._remoteDictionaryManager && item.cache)
                                 _this._remoteDictionaryManager.setTranslationRequested(item.data.targetLanguage, item.data.metadata.dictionaryName);

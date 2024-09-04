@@ -1,8 +1,4 @@
-export default function createPluralComponent({ T, getLocale, defaultLocale }: {
-    T: any;
-    getLocale: () => string;
-    defaultLocale: string;
-}): {
+export default function createPluralComponent(T: any, getLocale: () => string, defaultLocale: string): {
     ({ children, n, ranges, zero, one, two, few, many, other, singular, dual, plural, values, ...props }: {
         children?: any;
         [key: string]: any;

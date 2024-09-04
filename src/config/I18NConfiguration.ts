@@ -19,6 +19,7 @@ type I18NConfigurationParams = {
     renderTimeout: number | null,
     dictionary: Record<string, any>, 
     dictionaryName: string;
+    storeByDefault?: boolean;
     translations?: Record<string, () => Promise<Record<string, any>>>;
     maxConcurrentRequests: number;
     batchInterval: number;
@@ -42,6 +43,7 @@ export default class I18NConfiguration {
     // Dictionaries
     dictionaryName: string;
     dictionary: Record<string, any>;
+    storeByDefault?: boolean;
     translations?: Record<string, () => Promise<Record<string, any>>>;
     private _localDictionaryManager: LocalDictionaryManager | undefined;
     private _remoteDictionaryManager: RemoteDictionaryManager | undefined;
@@ -70,7 +72,10 @@ export default class I18NConfiguration {
         // Render method
         renderPrevious, renderMethod, renderTimeout,
         // Dictionaries
-        dictionary, dictionaryName, translations,
+        dictionary, dictionaryName,
+        storeByDefault,
+        // Translations
+        translations,
         // Batching config
         maxConcurrentRequests, batchInterval,
         // Other metadata
@@ -96,6 +101,8 @@ export default class I18NConfiguration {
         // Dictionaries
         this.dictionary = dictionary;
         this.dictionaryName = dictionaryName;
+        this.storeByDefault = storeByDefault;
+        // Local translations
         this.translations = translations;
         // GT
         this.gt = new GT({ projectID, apiKey, defaultLanguage: defaultLocale, baseURL });
@@ -154,6 +161,14 @@ export default class I18NConfiguration {
     }
 
     /**
+     * Gets the name of the current dictionary
+     * @returns {string} A BCP-47 language tag
+    */
+    getDictionaryName(): string {
+        return this.dictionaryName;
+    }
+
+    /**
      * Get an entry from the dictionary
      * @returns An entry from the dictionary determined by id
     */
@@ -194,6 +209,15 @@ export default class I18NConfiguration {
         if (this.approvedLocales && !this.approvedLocales.some(approvedLocale => isSameLanguage(locale, approvedLocale))) return false;
         if (isSameLanguage(locale, this.defaultLocale)) return false;
         return true;
+    }
+
+    /**
+     * Returns a boolean determining whether or not a translation should be stored
+     * Undefined if not set
+     * @returns {string} A BCP-47 language tag
+    */
+    shouldStore(): boolean | undefined {
+        return this.storeByDefault
     }
 
     /**
@@ -243,7 +267,7 @@ export default class I18NConfiguration {
      * @param params - Parameters for translation
      * @returns Translated string
      */
-    async intl(params: any): Promise<string> {
+    async translate(params: any): Promise<string> {
         const cacheKey = JSON.stringify(params);
         if (this._translationCache.has(cacheKey)) {
             return this._translationCache.get(cacheKey);
@@ -252,7 +276,7 @@ export default class I18NConfiguration {
         const dictionaryName: string = params.options?.dictionaryName || this.dictionaryName;
         const translationPromise = new Promise<string>((resolve, reject) => {
             this._queue.push({
-                type: "intl",
+                type: "string",
                 data: {
                     content,
                     targetLanguage,
@@ -304,7 +328,7 @@ export default class I18NConfiguration {
     private async _sendBatchRequest(batch: Array<any>): Promise<void> {
         this._activeRequests++;
         try {
-            const bundlePromise = this.gt.bundleTranslation(batch);
+            const bundlePromise = this.gt.translateBundle(batch);
             batch.forEach((item) => {
                 if (this._remoteDictionaryManager && item.cache) this._remoteDictionaryManager.setTranslationRequested(item.data.targetLanguage, item.data.metadata.dictionaryName);
             })

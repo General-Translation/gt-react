@@ -28,13 +28,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = createTComponent;
 var jsx_runtime_1 = require("react/jsx-runtime");
 var T_1 = __importDefault(require("./T"));
-function createTComponent(_a) {
-    var I18NConfig = _a.I18NConfig, metadata = __rest(_a, ["I18NConfig"]);
+function createTComponent(I18NConfig) {
     var TComponent = function (_a) {
         var children = _a.children, props = __rest(_a, ["children"]);
         var locale = I18NConfig.getLocale();
         /* @ts-expect-error Server Component */
-        return (0, jsx_runtime_1.jsx)(T_1.default, __assign({ I18NConfig: I18NConfig, locale: locale }, metadata, props, { children: children }));
+        return (0, jsx_runtime_1.jsx)(T_1.default, __assign({ I18NConfig: I18NConfig, locale: locale }, I18NConfig.getDefaultProps("t"), props, { children: children }));
     };
     TComponent.gtTransformation = "translate";
     return TComponent;

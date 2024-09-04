@@ -18,8 +18,7 @@ import cloneDictionary from '../../dictionary/cloneDictionary';
 e.g.
 dictionary = {
     "greeting": "Hello, world",
-    "greeting.component": <div>Hello, world</div>,
-    "greeting.text.withparams": intl("Hello, world", { context: "Be informal." })
+    "greeting.component": <div>Hello, world</div>
 }
 */
 
@@ -27,6 +26,7 @@ export default async function GTProvider({
     I18NConfig,
     locale, defaultLocale,
     children,
+    shouldStore,
     id='',
     ...props
 }: {
@@ -34,6 +34,7 @@ export default async function GTProvider({
     children: any;
     locale: string;
     defaultLocale: string;
+    shouldStore: boolean;
     id?: string;
     [key: string]: any;
 }): Promise<any> {
@@ -48,7 +49,7 @@ export default async function GTProvider({
     } else {
         dictionary = flattenDictionary(I18NConfig.getDictionary());
     }
-    
+
     let translations: Record<string, any> = {};
 
     const renderSettings = I18NConfig.getRenderSettings();
@@ -58,7 +59,7 @@ export default async function GTProvider({
     for (const id of Object.keys(clonedDictionary)) {
         let { entry, metadata } = getEntryMetadata(clonedDictionary[id]);
         metadata = (props || metadata) ? { ...props, ...(metadata || {}) } : undefined;
-        const translationType = getEntryTranslationType(clonedDictionary[id]);
+        const { type: translationType } = getEntryTranslationType(clonedDictionary[id]);
         if (translationType === "t") {
             entry = <>{entry}</>;
         } else if (translationType === "plural") {
@@ -96,12 +97,12 @@ export default async function GTProvider({
         const { local, remote } = await I18NConfig.getTranslations(locale, props.dictionaryName);
         await Promise.all(Object.keys(clonedDictionary).map(async id => {
             // COMPLICATED INNER TRANSLATION FUNCTION
-            // EQUIVALENT TO <T> OR intl() BEFORE RENDERING
+            // EQUIVALENT TO <T> OR translate() BEFORE RENDERING
             // i.e. passes the translation dictionary
 
             let { entry, metadata } = getEntryMetadata(clonedDictionary[id]);
 
-            const translationType = getEntryTranslationType(clonedDictionary[id]);
+            const { type: translationType } = getEntryTranslationType(clonedDictionary[id]);
             
             const entryAsObjects = writeChildrenAsObjects(entry);
             const key: string = metadata?.context ? await calculateHash([entryAsObjects, metadata.context]) : await calculateHash(entryAsObjects);
@@ -116,16 +117,16 @@ export default async function GTProvider({
 
             if (!I18NConfig.automaticTranslationEnabled()) return;
             
-            // INTL
-            if (translationType === "intl") {
-                const translationPromise = I18NConfig.intl({ content: entry, targetLanguage: locale, options: { ...metadata, hash: key, id } });
+            // STRINGS
+            if (translationType === "string") {
+                const translationPromise = I18NConfig.translate({ content: entry, targetLanguage: locale, options: { ...metadata, store: shouldStore, hash: key, id } });
                 if (renderSettings.method !== "subtle") {
                     return translations[id] = await translationPromise;
                 }
                 return translations[id] = entry;
             } 
             else /*if (translationType === "t" || translationType === "plural")*/ { // i.e., it's JSX
-                const targetPromise = I18NConfig.translateChildren({ children: entryAsObjects, targetLanguage: locale, metadata: { ...metadata, hash: key, id } });
+                const targetPromise = I18NConfig.translateChildren({ children: entryAsObjects, targetLanguage: locale, metadata: { ...metadata, store: shouldStore, hash: key, id } });
                 const renderMethod = renderSettings.method;
                 if (renderSettings.method === "hang") {
                     return translations[id] = await targetPromise;

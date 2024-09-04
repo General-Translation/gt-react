@@ -18,6 +18,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var jsx_runtime_1 = require("react/jsx-runtime");
 var useLocale_1 = __importDefault(require("../hooks/useLocale"));
 var useDefaultLocale_1 = __importDefault(require("../hooks/useDefaultLocale"));
+var generaltranslation_1 = require("generaltranslation");
 var ClientCurrency = function (_a) {
     var _b = _a === void 0 ? { name: "cost" } : _a, children = _b.children, _c = _b.name, name = _c === void 0 ? "cost" : _c, defaultValue = _b.defaultValue, _d = _b.currency, currency = _d === void 0 ? "USD" : _d, _e = _b.options, options = _e === void 0 ? {} : _e;
     var locales = [(0, useLocale_1.default)(), (0, useDefaultLocale_1.default)()];
@@ -25,7 +26,7 @@ var ClientCurrency = function (_a) {
     value = (typeof value === 'string') ? parseFloat(value) : value;
     // Format the value using Intl.NumberFormat
     if (typeof value === 'number') {
-        value = new Intl.NumberFormat(locales, __assign({ style: 'currency', currency: currency, numberingSystem: 'latn' }, options)).format(value);
+        value = (0, generaltranslation_1.formatCurrency)({ value: value, languages: locales, currency: currency, options: options });
     }
     return ((0, jsx_runtime_1.jsx)("span", { "data-gt-variable-name": name, "data-gt-variable-type": "currency", "data-gt-variable-options": __assign({ style: 'currency', currency: currency }, options), children: value }));
 };

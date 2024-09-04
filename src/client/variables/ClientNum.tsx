@@ -3,6 +3,7 @@
 import React, { ReactNode } from 'react';
 import useLocale from '../hooks/useLocale';
 import useDefaultLocale from '../hooks/useDefaultLocale';
+import { formatNum } from 'generaltranslation';
 
 const ClientNum = ({ children, name = "n", defaultValue, options = {} }: {
     children?: any;
@@ -17,7 +18,7 @@ const ClientNum = ({ children, name = "n", defaultValue, options = {} }: {
     value = (typeof value === 'string') ? parseFloat(value) : value;
     if (typeof value === 'number') {
         // Using Intl.NumberFormat for consistent number formatting
-        value = new Intl.NumberFormat(locales, { numberingSystem: 'latn', ...options }).format(value);
+        value = formatNum({ value, languages: locales, options });
     }
 
     return (

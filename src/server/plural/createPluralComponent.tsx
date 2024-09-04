@@ -1,7 +1,7 @@
 import React from "react";
 import Plural from "./InnerPlural"
 
-export default function createPluralComponent({ T, getLocale, defaultLocale }: { T: any, getLocale: () => string, defaultLocale: string }) {
+export default function createPluralComponent(T: any, getLocale: () => string, defaultLocale: string) {
     const PluralT = ({ 
         children, 
         n, ranges, zero, one, two, few, many, other, singular, dual, plural, values,
