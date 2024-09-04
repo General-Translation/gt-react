@@ -75,11 +75,8 @@ export default function GTClientProvider({
                     try {
                         const response = await fetch(`${cacheURL}/${projectID}/${getDictionaryReference(locale, dictionaryName)}`);
                         const result = await response.json();
-                        
                         if (Object.keys(result).length) {
                             setRemoteTranslations(result);
-                        } else {
-                            throw new Error(`No dictionary found in remote cache.`)
                         }
                     } catch (error) {
                         console.error(error);

@@ -37,9 +37,6 @@ function renderDefaultLanguage(_a) {
     var handleSingleChild = function (child) {
         if (react_1.default.isValidElement(child)) {
             var type = child.type, props = child.props;
-            /*if ((type as any).$$typeof === Symbol.for('react.lazy')) {
-                throw new Error('')
-            }*/
             var generaltranslation = props["data-generaltranslation"];
             var transformation = null;
             if (generaltranslation) {

@@ -132,9 +132,6 @@ function GTClientProvider(_a) {
                                 if (Object.keys(result).length) {
                                     setRemoteTranslations(result);
                                 }
-                                else {
-                                    throw new Error("No dictionary found in remote cache.");
-                                }
                                 return [3 /*break*/, 5];
                             case 3:
                                 error_1 = _a.sent();

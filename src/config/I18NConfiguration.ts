@@ -77,17 +77,14 @@ export default class I18NConfiguration {
         getMetadata,
         ...metadata
     }: I18NConfigurationParams) {
-        // Validate required parameters
-        if (!apiKey && (automaticTranslation && baseURL === defaultGTProps.baseURL)) {
-            throw new Error("gt-react Error: Automatic translation requires an API key! Get an API key at www.generaltranslation.com.");
-        }
-        if (!projectID && ((automaticTranslation && baseURL === defaultGTProps.baseURL) || (remoteSource && cacheURL === defaultGTProps.cacheURL))) {
-            throw new Error("gt-react Error: General Translation cloud services require a project ID! Find yours at www.generaltranslation.com/dashboard.");
-        }
         // Cloud integration
         this.projectID = projectID;
-        this.remoteSource = remoteSource;
-        this.automaticTranslation = automaticTranslation;
+        this.remoteSource = (cacheURL && remoteSource) ? true : false;
+        this.automaticTranslation = (baseURL && automaticTranslation && apiKey) ? true : false;
+        // Validate required parameters
+        if (!projectID && ((this.automaticTranslation && baseURL === defaultGTProps.baseURL) || (this.remoteSource && cacheURL === defaultGTProps.cacheURL))) {
+            throw new Error("gt-react Error: General Translation cloud services require a project ID! Find yours at www.generaltranslation.com/dashboard.");
+        }
         // Locales
         this.getLocale = getLocale;
         this.defaultLocale = defaultLocale;

@@ -104,17 +104,14 @@ var I18NConfiguration = /** @class */ (function () {
         maxConcurrentRequests = _a.maxConcurrentRequests, batchInterval = _a.batchInterval, 
         // Other metadata
         getMetadata = _a.getMetadata, metadata = __rest(_a, ["apiKey", "projectID", "baseURL", "cacheURL", "remoteSource", "automaticTranslation", "getLocale", "defaultLocale", "approvedLocales", "renderPrevious", "renderMethod", "renderTimeout", "dictionary", "dictionaryName", "translations", "maxConcurrentRequests", "batchInterval", "getMetadata"]);
-        // Validate required parameters
-        if (!apiKey && (automaticTranslation && baseURL === defaultGTProps_1.default.baseURL)) {
-            throw new Error("gt-react Error: Automatic translation requires an API key! Get an API key at www.generaltranslation.com.");
-        }
-        if (!projectID && ((automaticTranslation && baseURL === defaultGTProps_1.default.baseURL) || (remoteSource && cacheURL === defaultGTProps_1.default.cacheURL))) {
-            throw new Error("gt-react Error: General Translation cloud services require a project ID! Find yours at www.generaltranslation.com/dashboard.");
-        }
         // Cloud integration
         this.projectID = projectID;
-        this.remoteSource = remoteSource;
-        this.automaticTranslation = automaticTranslation;
+        this.remoteSource = (cacheURL && remoteSource) ? true : false;
+        this.automaticTranslation = (baseURL && automaticTranslation && apiKey) ? true : false;
+        // Validate required parameters
+        if (!projectID && ((this.automaticTranslation && baseURL === defaultGTProps_1.default.baseURL) || (this.remoteSource && cacheURL === defaultGTProps_1.default.cacheURL))) {
+            throw new Error("gt-react Error: General Translation cloud services require a project ID! Find yours at www.generaltranslation.com/dashboard.");
+        }
         // Locales
         this.getLocale = getLocale;
         this.defaultLocale = defaultLocale;
