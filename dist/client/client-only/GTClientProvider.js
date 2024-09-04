@@ -89,6 +89,25 @@ var getEntryTranslationType_1 = __importDefault(require("../../primitives/render
 var getEntryMetadata_1 = __importDefault(require("../../primitives/rendering/getEntryMetadata"));
 var ClientPlural_1 = __importDefault(require("../plural/ClientPlural"));
 var addGTIdentifier_1 = __importDefault(require("../../primitives/translation/addGTIdentifier"));
+/**
+ * GTClientProvider component for providing translations to entirely client-side React apps.
+ *
+ * @param {Object} props - The properties object.
+ * @param {React.ReactNode} [props.children] - The child components to be rendered within the provider.
+ * @param {string} [props.projectID] - The project ID for remote translation services.
+ * @param {Record<string, any>} [props.dictionary=defaultGTProps.dictionary] - The local dictionary for translations.
+ * @param {string} [props.dictionaryName=defaultGTProps.dictionaryName] - The name of the dictionary.
+ * @param {string[]} [props.approvedLocales] - The list of approved locales.
+ * @param {string} [props.defaultLocale=approvedLocales?.[0] || defaultGTProps.defaultLocale] - The default locale.
+ * @param {string} [props.locale=''] - The current locale.
+ * @param {boolean} [props.remoteSource=defaultGTProps.remoteSource] - Flag indicating if remote source is used.
+ * @param {string} [props.cacheURL=defaultGTProps.cacheURL] - The URL for caching translations.
+ * @param {Record<string, () => Promise<Record<string, any>>>} [props.translations] - A local translations object.
+ *
+ * @throws Will throw an error if projectID is not provided when remoteSource is true and cacheURL is the default.
+ *
+ * @returns {JSX.Element} The GTClientProvider component.
+*/
 function GTClientProvider(_a) {
     var _this = this;
     var children = _a.children, projectID = _a.projectID, _b = _a.dictionary, dictionary = _b === void 0 ? defaultGTProps_1.default.dictionary : _b, _c = _a.dictionaryName, dictionaryName = _c === void 0 ? defaultGTProps_1.default.dictionaryName : _c, approvedLocales = _a.approvedLocales, _d = _a.defaultLocale, defaultLocale = _d === void 0 ? (approvedLocales === null || approvedLocales === void 0 ? void 0 : approvedLocales[0]) || defaultGTProps_1.default.defaultLocale : _d, _e = _a.locale, locale = _e === void 0 ? '' : _e, _f = _a.remoteSource, remoteSource = _f === void 0 ? defaultGTProps_1.default.remoteSource : _f, _g = _a.cacheURL, cacheURL = _g === void 0 ? defaultGTProps_1.default.cacheURL : _g, translations = _a.translations;
