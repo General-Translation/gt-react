@@ -6,7 +6,7 @@ import React from "react";
  * @param {string} [prefix=''] - The prefix for nested keys.
  * @returns {Record<string, React.ReactNode>} The flattened dictionary object.
  */
-export default function flattenDictionary(dictionary: Record<string, any>, prefix: string = ''): Record<string, React.ReactNode> {
+export default function flattenDictionary(dictionary: Record<string, any>, prefix: string = ''): Record<string, any> {
     const flattened: Record<string, any> = {};
 
     for (const key in dictionary) {
