@@ -1,6 +1,6 @@
 {
   "name": "gt-react",
-  "version": "3.1.87",
+  "version": "3.1.88",
   "description": "",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
