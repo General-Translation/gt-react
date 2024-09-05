@@ -6,7 +6,7 @@ export default function createTComponent(I18NConfig: I18NConfiguration) {
     const TComponent = ({ children, ...props }: { children?: any, [key: string]: any }) => {
         const locale = I18NConfig.getLocale();
         /* @ts-expect-error Server Component */
-        return <T I18NConfig={I18NConfig} locale={locale} {...I18NConfig.getDefaultProps("t")} {...props}>{children}</T>
+        return <T I18NConfig={I18NConfig} locale={locale} {...props}>{children}</T>
     }
     TComponent.gtTransformation = "translate";
     return TComponent;

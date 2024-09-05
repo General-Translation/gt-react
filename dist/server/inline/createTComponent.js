@@ -33,7 +33,7 @@ function createTComponent(I18NConfig) {
         var children = _a.children, props = __rest(_a, ["children"]);
         var locale = I18NConfig.getLocale();
         /* @ts-expect-error Server Component */
-        return (0, jsx_runtime_1.jsx)(T_1.default, __assign({ I18NConfig: I18NConfig, locale: locale }, I18NConfig.getDefaultProps("t"), props, { children: children }));
+        return (0, jsx_runtime_1.jsx)(T_1.default, __assign({ I18NConfig: I18NConfig, locale: locale }, props, { children: children }));
     };
     TComponent.gtTransformation = "translate";
     return TComponent;
