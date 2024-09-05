@@ -396,8 +396,8 @@ var I18NConfiguration = /** @class */ (function () {
                         results_1 = _a.sent();
                         batch.forEach(function (item, index) {
                             var result = results_1[index];
-                            if (!result || result.error)
-                                return item.reject(result.error);
+                            if (!result)
+                                return item.reject('Translation failed.');
                             if (result && typeof result === 'object') {
                                 item.resolve(result.translation);
                                 if (result.translation && result.language && result.reference && _this._remoteDictionaryManager) {

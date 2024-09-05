@@ -335,7 +335,7 @@ export default class I18NConfiguration {
             const results = await bundlePromise;
             batch.forEach((item, index) => {
                 const result = results[index];
-                if (!result || result.error) return item.reject(result.error);
+                if (!result) return item.reject('Translation failed.');
                 if (result && typeof result === 'object') {
                     item.resolve(result.translation);
                     if (result.translation && result.language && result.reference && this._remoteDictionaryManager) {
