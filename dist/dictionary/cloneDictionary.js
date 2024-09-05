@@ -26,7 +26,10 @@ function cloneDictionary(dictionary) {
     for (var _i = 0, _a = Object.keys(dictionary); _i < _a.length; _i++) {
         var id = _a[_i];
         var _b = (0, getEntryMetadata_1.default)(dictionary[id]), entry = _b.entry, metadata = _b.metadata;
-        var clonedEntry = react_1.default.isValidElement(entry) ? react_1.default.cloneElement(entry) : structuredClone(entry);
+        var clonedEntry = entry;
+        if (typeof entry !== 'function') {
+            clonedEntry = react_1.default.isValidElement(entry) ? react_1.default.cloneElement(entry) : structuredClone(entry);
+        }
         if (metadata) {
             var clonedMetadata = cloneMetadata(metadata);
             clonedDictionary[id] = [clonedEntry, clonedMetadata];

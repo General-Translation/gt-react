@@ -84,11 +84,11 @@ dictionary = {
 */
 function GTProvider(_a) {
     return __awaiter(this, void 0, void 0, function () {
-        var dictionary, providerID, entry, translations, renderSettings, clonedDictionary, _i, _b, id_1, _c, entry, metadata, translationType, _d, ranges, zero, one, two, few, many, other, singular, dual, plural, tOptions, innerProps, taggedEntry, translationRequired, _e, local_1, remote_1;
+        var dictionary, providerID, entry, translations, renderSettings, clonedDictionary, _i, _b, id_1, _c, entry, metadata, _d, translationType, isFunction, _e, ranges, zero, one, two, few, many, other, singular, dual, plural, tOptions, innerProps, taggedEntry, translationRequired, _f, local_1, remote_1;
         var _this = this;
-        var I18NConfig = _a.I18NConfig, locale = _a.locale, defaultLocale = _a.defaultLocale, children = _a.children, shouldStore = _a.shouldStore, _f = _a.id, id = _f === void 0 ? '' : _f, props = __rest(_a, ["I18NConfig", "locale", "defaultLocale", "children", "shouldStore", "id"]);
-        return __generator(this, function (_g) {
-            switch (_g.label) {
+        var I18NConfig = _a.I18NConfig, locale = _a.locale, defaultLocale = _a.defaultLocale, children = _a.children, shouldStore = _a.shouldStore, _g = _a.id, id = _g === void 0 ? '' : _g, props = __rest(_a, ["I18NConfig", "locale", "defaultLocale", "children", "shouldStore", "id"]);
+        return __generator(this, function (_h) {
+            switch (_h.label) {
                 case 0:
                     dictionary = {};
                     providerID = id;
@@ -108,12 +108,15 @@ function GTProvider(_a) {
                         id_1 = _b[_i];
                         _c = (0, getEntryMetadata_1.default)(clonedDictionary[id_1]), entry = _c.entry, metadata = _c.metadata;
                         metadata = (props || metadata) ? __assign(__assign({}, props), (metadata || {})) : undefined;
-                        translationType = (0, getEntryTranslationType_1.default)(clonedDictionary[id_1]).type;
+                        _d = (0, getEntryTranslationType_1.default)(clonedDictionary[id_1]), translationType = _d.type, isFunction = _d.isFunction;
+                        if (isFunction) {
+                            entry = entry({});
+                        }
                         if (translationType === "t") {
                             entry = (0, jsx_runtime_1.jsx)(jsx_runtime_1.Fragment, { children: entry });
                         }
                         else if (translationType === "plural") {
-                            _d = metadata || {}, ranges = _d.ranges, zero = _d.zero, one = _d.one, two = _d.two, few = _d.few, many = _d.many, other = _d.other, singular = _d.singular, dual = _d.dual, plural = _d.plural, tOptions = __rest(_d, ["ranges", "zero", "one", "two", "few", "many", "other", "singular", "dual", "plural"]);
+                            _e = metadata || {}, ranges = _e.ranges, zero = _e.zero, one = _e.one, two = _e.two, few = _e.few, many = _e.many, other = _e.other, singular = _e.singular, dual = _e.dual, plural = _e.plural, tOptions = __rest(_e, ["ranges", "zero", "one", "two", "few", "many", "other", "singular", "dual", "plural"]);
                             metadata = tOptions;
                             innerProps = {
                                 ranges: ranges,
@@ -130,20 +133,17 @@ function GTProvider(_a) {
                             entry = ((0, jsx_runtime_1.jsx)(InnerPlural_1.default, __assign({ locales: [locale, defaultLocale], n: 1 }, innerProps, { children: entry })));
                         }
                         taggedEntry = (0, addGTIdentifier_1.default)(entry);
+                        clonedDictionary[id_1] = [taggedEntry, metadata];
                         // change the dictionary here
                         // elsewhere we are changing the cloned dictionary
                         // we are just adding the gt identifier, nothing more
-                        if (translationType === "t" || translationType === "plural") {
-                            dictionary[id_1] = taggedEntry;
-                        }
-                        ;
-                        clonedDictionary[id_1] = [taggedEntry, metadata];
+                        dictionary[id_1] = isFunction ? { function: true, defaultChildren: taggedEntry } : taggedEntry;
                     }
                     translationRequired = I18NConfig.translationRequired(locale);
                     if (!translationRequired) return [3 /*break*/, 3];
                     return [4 /*yield*/, I18NConfig.getTranslations(locale, props.dictionaryName)];
                 case 1:
-                    _e = _g.sent(), local_1 = _e.local, remote_1 = _e.remote;
+                    _f = _h.sent(), local_1 = _f.local, remote_1 = _f.remote;
                     return [4 /*yield*/, Promise.all(Object.keys(clonedDictionary).map(function (id) { return __awaiter(_this, void 0, void 0, function () {
                             var _a, entry, metadata, translationType, entryAsObjects, key, _b, translation, translationPromise, _c, _d, targetPromise, renderMethod, _e, _f, loadingFallbackTarget, errorFallbackTarget;
                             return __generator(this, function (_g) {
@@ -214,8 +214,8 @@ function GTProvider(_a) {
                             });
                         }); }))];
                 case 2:
-                    _g.sent();
-                    _g.label = 3;
+                    _h.sent();
+                    _h.label = 3;
                 case 3: return [2 /*return*/, ((0, jsx_runtime_1.jsx)(ClientProvider_1.default, { locale: locale, defaultLocale: defaultLocale, dictionary: dictionary, translations: translations, translationRequired: translationRequired, children: children }))];
             }
         });

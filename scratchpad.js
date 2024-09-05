@@ -1,11 +1,13 @@
 /*
 
+FUTURE PROMPT
+
 I want to add TypeScript IDE autocomplete to my internationalization library. How it works is a user defines a dictionary. 
 Keys in the dictionary are strings while items are one of:
 - Nested dictionaries (to any degree of nesting)
 - Strings, like "Hello, world"
 - Arbitrary JSX, like <p>Hello, world</p>
-- Tuples where the first item is a string/JSX and the second item is a Record<string, any> containing metadata
+- Arrays of length 2 where the first item is a string/JSX and the second item is a Record<string, any> containing metadata
 
 For example:
 

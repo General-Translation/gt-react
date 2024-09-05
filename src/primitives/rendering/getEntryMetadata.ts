@@ -26,10 +26,15 @@ export default function getEntryMetadata(entry: any): {
     let content;
     let metadata;
     if (entry) {
-        if (Array.isArray(entry) && entry.length === 2 && !isValidElement(entry[1]) && typeof entry[1] === 'object' && !isVariableObject(entry[1])) {
-            content = entry[0];
-            metadata = entry[1];
+        if (Array.isArray(entry)) {
+            if (entry.length === 1) {
+                content = entry[0];
+            } else if (entry.length === 2 && !isValidElement(entry[1]) && typeof entry[1] === 'object' && !isVariableObject(entry[1])) {
+                content = entry[0];
+                metadata = entry[1];
+            }
         }
+        
     }
     if (!content) content = entry;
     return { entry: content, metadata };

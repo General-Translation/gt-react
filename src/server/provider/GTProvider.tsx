@@ -57,9 +57,15 @@ export default async function GTProvider({
     const clonedDictionary = cloneDictionary(dictionary);
 
     for (const id of Object.keys(clonedDictionary)) {
+        
         let { entry, metadata } = getEntryMetadata(clonedDictionary[id]);
         metadata = (props || metadata) ? { ...props, ...(metadata || {}) } : undefined;
-        const { type: translationType } = getEntryTranslationType(clonedDictionary[id]);
+        const { type: translationType, isFunction } = getEntryTranslationType(clonedDictionary[id]);
+        
+        if (isFunction) {
+            entry = entry({});
+        }
+        
         if (translationType === "t") {
             entry = <>{entry}</>;
         } else if (translationType === "plural") {
@@ -81,14 +87,14 @@ export default async function GTProvider({
                 </Plural>
             );
         }
+        
         const taggedEntry = addGTIdentifier(entry);
+        clonedDictionary[id] = [taggedEntry, metadata];
+
         // change the dictionary here
         // elsewhere we are changing the cloned dictionary
         // we are just adding the gt identifier, nothing more
-        if (translationType === "t" || translationType === "plural") {
-            dictionary[id] = taggedEntry;
-        };
-        clonedDictionary[id] = [taggedEntry, metadata];
+        dictionary[id] = isFunction ? { function: true, defaultChildren: taggedEntry } : taggedEntry;
     }
 
     const translationRequired: boolean = I18NConfig.translationRequired(locale);
@@ -102,6 +108,7 @@ export default async function GTProvider({
 
             let { entry, metadata } = getEntryMetadata(clonedDictionary[id]);
 
+            // no need for isFunction here as cloned dictionary functions have already been executed
             const { type: translationType } = getEntryTranslationType(clonedDictionary[id]);
             
             const entryAsObjects = writeChildrenAsObjects(entry);

@@ -22,7 +22,10 @@ export default function cloneDictionary(dictionary: Record<string, any>) {
     const clonedDictionary: Record<string, any> = {};
     for (const id of Object.keys(dictionary)) {
         const { entry, metadata } = getEntryMetadata(dictionary[id]);
-        let clonedEntry = React.isValidElement(entry) ? React.cloneElement(entry) : structuredClone(entry);
+        let clonedEntry = entry;
+        if (typeof entry !== 'function') {
+            clonedEntry = React.isValidElement(entry) ? React.cloneElement(entry) : structuredClone(entry);
+        }
         if (metadata) {
             let clonedMetadata = cloneMetadata(metadata);
             clonedDictionary[id] = [clonedEntry, clonedMetadata];

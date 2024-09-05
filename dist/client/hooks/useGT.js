@@ -28,11 +28,11 @@ function useGT(id) {
         throw new Error("t('".concat(id, "'): No context provided. useGT() can only be used inside a GTProvider."));
     }
     // Return a translation function if available, otherwise return a no-op function
-    return function (id, options) {
+    return function (id, options, f) {
         if (id === void 0) { id = ''; }
         if (options === void 0) { options = {}; }
         var prefixedID = getID(id);
-        var translation = translate(prefixedID, options);
+        var translation = translate(prefixedID, options, f);
         if (!translation)
             console.warn("t('".concat(id, "') finding no translation for dictionary item ").concat(prefixedID, " !"));
         return translation;

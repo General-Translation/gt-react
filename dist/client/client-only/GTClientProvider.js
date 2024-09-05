@@ -170,12 +170,19 @@ function GTClientProvider(_a) {
             }
         }
     }, [cacheURL, remoteSource, locale]);
-    var translate = (0, react_1.useCallback)(function (id, options) {
+    var translate = (0, react_1.useCallback)(function (id, options, f) {
+        if (options === void 0) { options = {}; }
         if (translationRequired && localDictionary && localDictionary[id]) {
-            return (0, renderDefaultLanguage_1.default)(__assign({ source: localDictionary[id], variables: options || {}, id: id }, options));
+            return (0, renderDefaultLanguage_1.default)(__assign({ source: localDictionary[id], variables: options, id: id }, options));
         }
         var _a = (0, getEntryMetadata_1.default)(dictionary[id]), entry = _a.entry, metadata = _a.metadata;
-        var translationType = (0, getEntryTranslationType_1.default)(dictionary[id]).type;
+        var _b = (0, getEntryTranslationType_1.default)(dictionary[id]), translationType = _b.type, isFunction = _b.isFunction;
+        if (typeof f === 'function') {
+            entry = f(options);
+        }
+        else if (isFunction) {
+            entry = entry(options);
+        }
         if (translationType === "t") {
             entry = (0, jsx_runtime_1.jsx)(react_1.default.Fragment, { children: entry }, id);
         }

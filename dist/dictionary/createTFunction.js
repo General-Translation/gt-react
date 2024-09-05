@@ -32,21 +32,29 @@ var InnerPlural_1 = __importDefault(require("../server/plural/InnerPlural"));
 var getEntryMetadata_1 = __importDefault(require("../primitives/rendering/getEntryMetadata"));
 var getEntryTranslationType_1 = __importDefault(require("../primitives/rendering/getEntryTranslationType"));
 var getDictionaryEntry_1 = __importDefault(require("./getDictionaryEntry"));
-var checkTFunctionOptions_1 = __importDefault(require("./checkTFunctionOptions"));
 function createTFunction(I18NConfig, T, translate, dictionary) {
     var _a;
     if (dictionary === void 0) { dictionary = I18NConfig.getDictionary(); }
     var shouldStore = (_a = I18NConfig.shouldStore()) !== null && _a !== void 0 ? _a : true;
-    return function t(id, options) {
+    return function t(id, options, f) {
         if (options === void 0) { options = {}; }
-        (0, checkTFunctionOptions_1.default)(options);
         var raw = (0, getDictionaryEntry_1.default)(id, dictionary);
         var _a = (0, getEntryMetadata_1.default)(raw), entry = _a.entry, metadata = _a.metadata;
+        if (Object.keys(entry).length === 0 && entry.constructor === Object) {
+            throw new Error("Dictionary contains an empty object. This usually happens when you try to use a client-side function as an entry in a server-side dictionary. Check your dictionary entry with id \"".concat(id, "\"."));
+        }
         // Checks to see if options are valid
         var _b = (0, getEntryTranslationType_1.default)(raw), translationType = _b.type, isFunction = _b.isFunction;
         // Turn into an async function if the target is a string
         if (translationType === "string")
             return translate(entry, __assign({ id: id, store: shouldStore }, metadata));
+        // execute function with options
+        if (typeof f === 'function') {
+            entry = f(options);
+        }
+        else if (isFunction) {
+            entry = entry(options);
+        }
         // If a plural or value is required
         if (Object.keys(options).length) {
             var locales = [I18NConfig.getLocale(), I18NConfig.getDefaultLocale()];

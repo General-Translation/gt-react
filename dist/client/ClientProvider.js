@@ -22,21 +22,32 @@ var jsx_runtime_1 = require("react/jsx-runtime");
 var react_1 = require("react");
 var handleRender_1 = __importDefault(require("./helpers/handleRender"));
 var renderDefaultLanguage_1 = __importDefault(require("./helpers/renderDefaultLanguage"));
+var addGTIdentifier_1 = __importDefault(require("../primitives/translation/addGTIdentifier"));
 exports.GTContext = (0, react_1.createContext)(undefined);
 function ClientProvider(_a) {
     var children = _a.children, locale = _a.locale, defaultLocale = _a.defaultLocale, dictionary = _a.dictionary, translations = _a.translations, translationRequired = _a.translationRequired;
-    var translate = (0, react_1.useCallback)(function (id, options) {
+    var translate = (0, react_1.useCallback)(function (id, options, f) {
+        if (options === void 0) { options = {}; }
+        var entry = dictionary[id];
+        if (typeof entry === 'object' && entry.function) {
+            if (typeof f === 'function') {
+                entry = (0, addGTIdentifier_1.default)(f(options));
+            }
+            else {
+                entry = entry.defaultChildren;
+            }
+        }
         if (translationRequired) {
             return (0, handleRender_1.default)({
-                source: dictionary[id],
+                source: entry,
                 target: translations[id],
                 locale: locale,
                 defaultLocale: defaultLocale,
-                variables: options || {},
+                variables: options,
                 id: id
             });
         }
-        return (0, renderDefaultLanguage_1.default)(__assign({ source: dictionary[id], variables: options || {}, id: id }, options));
+        return (0, renderDefaultLanguage_1.default)(__assign({ source: entry, variables: options || {}, id: id }, options));
     }, [dictionary, translations]);
     return ((0, jsx_runtime_1.jsx)(exports.GTContext.Provider, { value: {
             translate: translate,

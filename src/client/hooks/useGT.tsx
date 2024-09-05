@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useMemo } from "react";
+import React, { ReactNode } from "react";
 import { useGTContext } from "../ClientProvider";
 
 /**
@@ -11,7 +11,13 @@ import { useGTContext } from "../ClientProvider";
  * @param {string} [id] - Optional prefix to prepend to the translation keys.
  * @returns {Function} A translation function that accepts a key string and returns the translated value.
  */
-export default function useGT(id: string = ''): Function {
+export default function useGT(id: string = ''): 
+    (
+        id: string, 
+        options?: Record<string, any>,
+        f?: Function
+    ) => ReactNode 
+{
     // Create a prefix for translation keys if an id is provided
     const getID = (suffix: string) => {
         if (id && suffix) return `${id}.${suffix}`;
@@ -30,9 +36,9 @@ export default function useGT(id: string = ''): Function {
     return (id: string = '', options: {
         n?: number,
         [key: string]: any
-    } = {}) => {
+    } = {}, f?: Function) => {
         const prefixedID = getID(id);
-        const translation = translate(prefixedID, options);
+        const translation = translate(prefixedID, options, f);
         if (!translation) console.warn(`t('${id}') finding no translation for dictionary item ${prefixedID} !`)
         return translation;
     }

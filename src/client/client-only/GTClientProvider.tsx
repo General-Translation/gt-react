@@ -111,28 +111,33 @@ export default function GTClientProvider({
         }
     }, [cacheURL, remoteSource, locale])
 
-    const translate = useCallback((id: string, options?: tOptions) => {
+    const translate = useCallback((id: string, options: tOptions = {}, f?: Function) => {
         if (translationRequired && localDictionary && localDictionary[id]) {
             return renderDefaultLanguage({ 
                 source: localDictionary[id], 
-                variables: options || {}, 
+                variables: options, 
                 id, 
                 ...options 
             })
         }
         let { entry, metadata } = getEntryMetadata(dictionary[id]);
-        const { type: translationType } = getEntryTranslationType(dictionary[id]);
+        const { type: translationType, isFunction } = getEntryTranslationType(dictionary[id]);
+        if (typeof f === 'function') {
+            entry = f(options);
+        } else if (isFunction) {
+            entry = entry(options);
+        }
         if (translationType === "t") {
             entry = <React.Fragment key={id}>{entry}</React.Fragment>;
         } else if (translationType === "plural") {
             entry = (
-                    <ClientPlural
-                        key={id} 
-                        n={1}
-                        {...metadata}
-                    >
-                        {entry}
-                    </ClientPlural>
+                <ClientPlural
+                    key={id} 
+                    n={1}
+                    {...metadata}
+                >
+                    {entry}
+                </ClientPlural>
             );
         }
 

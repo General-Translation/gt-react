@@ -4,6 +4,7 @@ import { createContext, useCallback, useContext, useEffect, useState } from "rea
 import { tOptions } from "../dictionary/createTFunction";
 import handleRender from "./helpers/handleRender";
 import renderDefaultLanguage from "./helpers/renderDefaultLanguage";
+import addGTIdentifier from "../primitives/translation/addGTIdentifier";
 
 type GTContextType = {
     [key: string]: any
@@ -24,16 +25,24 @@ export default function ClientProvider({
     translationRequired
 }: ClientProviderProps) {
 
-    const translate = useCallback((id: string, options?: tOptions) => {
+    const translate = useCallback((id: string, options: tOptions = {}, f?: Function) => {
+        let entry = dictionary[id];
+        if (typeof entry === 'object' && entry.function) {
+            if (typeof f === 'function') {
+                entry = addGTIdentifier(f(options));
+            } else {
+                entry = entry.defaultChildren;
+            }
+        }
         if (translationRequired) {
             return handleRender({
-                source: dictionary[id],
+                source: entry,
                 target: translations[id],
                 locale, defaultLocale,
-                variables: options || {}, id
+                variables: options, id
             })
         }
-        return renderDefaultLanguage({ source: dictionary[id], variables: options || {}, id, ...options })
+        return renderDefaultLanguage({ source: entry, variables: options || {}, id, ...options })
     }, [dictionary, translations]);
 
     return (
