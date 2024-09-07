@@ -82,7 +82,7 @@ export default function createNextMiddleware({
 
             let pathnameHasLocale: boolean = false;
         
-            if (locale) {
+            if (locale && isValidLanguageCode(locale)) {
                 if (approvedLocales) {
                     for (const approvedLocale of approvedLocales) {
                         if (isSameLanguage(approvedLocale, locale)) {
@@ -92,10 +92,8 @@ export default function createNextMiddleware({
                         }
                     }
                 } else {
-                    if (isValidLanguageCode(locale)) {
-                        userLocale = locale;
-                        pathnameHasLocale = true;
-                    }
+                    userLocale = locale;
+                    pathnameHasLocale = true;
                 }
             }
 
@@ -140,11 +138,11 @@ export default function createNextMiddleware({
         
         if (acceptedLocales && acceptedLocales.length > 0) {
             if (approvedLocales) {
-                for (const locale of acceptedLocales) {
+                outerLoop: for (const locale of acceptedLocales) {
                     for (const approvedLocale of approvedLocales) {
                         if (isSameLanguage(locale, approvedLocale)) {
                             userLocale = approvedLocale;
-                            break;
+                            break outerLoop;
                         }
                     }
                 }

@@ -68,7 +68,7 @@ function createNextMiddleware(_a) {
             var pathname = req.nextUrl.pathname;
             var locale = extractLocale(pathname);
             var pathnameHasLocale = false;
-            if (locale) {
+            if (locale && (0, generaltranslation_1.isValidLanguageCode)(locale)) {
                 if (approvedLocales) {
                     for (var _i = 0, approvedLocales_1 = approvedLocales; _i < approvedLocales_1.length; _i++) {
                         var approvedLocale = approvedLocales_1[_i];
@@ -80,10 +80,8 @@ function createNextMiddleware(_a) {
                     }
                 }
                 else {
-                    if ((0, generaltranslation_1.isValidLanguageCode)(locale)) {
-                        userLocale = locale;
-                        pathnameHasLocale = true;
-                    }
+                    userLocale = locale;
+                    pathnameHasLocale = true;
                 }
             }
             if (pathnameHasLocale) {
@@ -124,13 +122,13 @@ function createNextMiddleware(_a) {
         var acceptedLocales = (_b = headerList.get('accept-language')) === null || _b === void 0 ? void 0 : _b.split(',').map(function (item) { var _a; return (_a = item.split(';')) === null || _a === void 0 ? void 0 : _a[0].trim(); });
         if (acceptedLocales && acceptedLocales.length > 0) {
             if (approvedLocales) {
-                for (var _d = 0, acceptedLocales_1 = acceptedLocales; _d < acceptedLocales_1.length; _d++) {
+                outerLoop: for (var _d = 0, acceptedLocales_1 = acceptedLocales; _d < acceptedLocales_1.length; _d++) {
                     var locale = acceptedLocales_1[_d];
                     for (var _e = 0, approvedLocales_3 = approvedLocales; _e < approvedLocales_3.length; _e++) {
                         var approvedLocale = approvedLocales_3[_e];
                         if ((0, generaltranslation_1.isSameLanguage)(locale, approvedLocale)) {
                             userLocale = approvedLocale;
-                            break;
+                            break outerLoop;
                         }
                     }
                 }
