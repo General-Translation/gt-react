@@ -134,7 +134,7 @@ export default function createNextMiddleware({
 
         }
         
-        const acceptedLocales = headerList.get('accept-language')?.split(',').map(item => item.split(';')?.[0].trim());
+        const acceptedLocales = headerList.get('accept-language')?.split(',').map(item => item.split(';')?.[0].trim())?.filter(code => isValidLanguageCode(code));
         
         if (acceptedLocales && acceptedLocales.length > 0) {
             if (approvedLocales) {

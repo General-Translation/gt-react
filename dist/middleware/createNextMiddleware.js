@@ -53,7 +53,7 @@ function applyNewCookies(req, res) {
 function createNextMiddleware(_a) {
     var _b = _a === void 0 ? { defaultLocale: 'en', localeRouting: true } : _a, _c = _b.defaultLocale, defaultLocale = _c === void 0 ? 'en' : _c, approvedLocales = _b.approvedLocales, _d = _b.localeRouting, localeRouting = _d === void 0 ? true : _d;
     return function (req) {
-        var _a, _b;
+        var _a, _b, _c;
         var NextResponse = (0, imports_1.getNextResponse)();
         if (!NextResponse)
             return;
@@ -96,8 +96,8 @@ function createNextMiddleware(_a) {
                 if (refererLocale) {
                     var refererLocaleIsValid = false;
                     if (approvedLocales) {
-                        for (var _c = 0, approvedLocales_2 = approvedLocales; _c < approvedLocales_2.length; _c++) {
-                            var approvedLocale = approvedLocales_2[_c];
+                        for (var _d = 0, approvedLocales_2 = approvedLocales; _d < approvedLocales_2.length; _d++) {
+                            var approvedLocale = approvedLocales_2[_d];
                             if ((0, generaltranslation_1.isSameLanguage)(approvedLocale, refererLocale)) {
                                 userLocale = approvedLocale;
                                 refererLocaleIsValid = true;
@@ -119,13 +119,13 @@ function createNextMiddleware(_a) {
                 }
             }
         }
-        var acceptedLocales = (_b = headerList.get('accept-language')) === null || _b === void 0 ? void 0 : _b.split(',').map(function (item) { var _a; return (_a = item.split(';')) === null || _a === void 0 ? void 0 : _a[0].trim(); });
+        var acceptedLocales = (_c = (_b = headerList.get('accept-language')) === null || _b === void 0 ? void 0 : _b.split(',').map(function (item) { var _a; return (_a = item.split(';')) === null || _a === void 0 ? void 0 : _a[0].trim(); })) === null || _c === void 0 ? void 0 : _c.filter(function (code) { return (0, generaltranslation_1.isValidLanguageCode)(code); });
         if (acceptedLocales && acceptedLocales.length > 0) {
             if (approvedLocales) {
-                outerLoop: for (var _d = 0, acceptedLocales_1 = acceptedLocales; _d < acceptedLocales_1.length; _d++) {
-                    var locale = acceptedLocales_1[_d];
-                    for (var _e = 0, approvedLocales_3 = approvedLocales; _e < approvedLocales_3.length; _e++) {
-                        var approvedLocale = approvedLocales_3[_e];
+                outerLoop: for (var _e = 0, acceptedLocales_1 = acceptedLocales; _e < acceptedLocales_1.length; _e++) {
+                    var locale = acceptedLocales_1[_e];
+                    for (var _f = 0, approvedLocales_3 = approvedLocales; _f < approvedLocales_3.length; _f++) {
+                        var approvedLocale = approvedLocales_3[_f];
                         if ((0, generaltranslation_1.isSameLanguage)(locale, approvedLocale)) {
                             userLocale = approvedLocale;
                             break outerLoop;
