@@ -82,8 +82,7 @@ export default function addGTIdentifier(children: Children) {
        
         let newProps = {
             ...props,
-            'data-generaltranslation': generaltranslation,
-            key: generaltranslation.id
+            'data-generaltranslation': generaltranslation
         };
 
         // If branches are needed for a number or value variable

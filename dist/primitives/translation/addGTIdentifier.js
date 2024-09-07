@@ -89,7 +89,7 @@ function addGTIdentifier(children) {
         var props = child.props;
         // Create new props for the element, including the GT identifier and a key
         var generaltranslation = createGTProp(child);
-        var newProps = __assign(__assign({}, props), { 'data-generaltranslation': generaltranslation, key: generaltranslation.id });
+        var newProps = __assign(__assign({}, props), { 'data-generaltranslation': generaltranslation });
         // If branches are needed for a number or value variable
         var transformation = generaltranslation.transformation;
         if (transformation === "plural") {

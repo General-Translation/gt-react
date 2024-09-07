@@ -89,6 +89,7 @@ var getEntryTranslationType_1 = __importDefault(require("../../primitives/render
 var getEntryMetadata_1 = __importDefault(require("../../primitives/rendering/getEntryMetadata"));
 var ClientPlural_1 = __importDefault(require("../plural/ClientPlural"));
 var addGTIdentifier_1 = __importDefault(require("../../primitives/translation/addGTIdentifier"));
+var flattenDictionary_1 = __importDefault(require("../../primitives/dictionary/flattenDictionary"));
 /**
  * GTClientProvider component for providing translations to entirely client-side React apps.
  *
@@ -111,6 +112,7 @@ var addGTIdentifier_1 = __importDefault(require("../../primitives/translation/ad
 function GTClientProvider(_a) {
     var _this = this;
     var children = _a.children, projectID = _a.projectID, _b = _a.dictionary, dictionary = _b === void 0 ? defaultGTProps_1.default.dictionary : _b, _c = _a.dictionaryName, dictionaryName = _c === void 0 ? defaultGTProps_1.default.dictionaryName : _c, approvedLocales = _a.approvedLocales, _d = _a.defaultLocale, defaultLocale = _d === void 0 ? (approvedLocales === null || approvedLocales === void 0 ? void 0 : approvedLocales[0]) || defaultGTProps_1.default.defaultLocale : _d, _e = _a.locale, locale = _e === void 0 ? '' : _e, _f = _a.remoteSource, remoteSource = _f === void 0 ? defaultGTProps_1.default.remoteSource : _f, _g = _a.cacheURL, cacheURL = _g === void 0 ? defaultGTProps_1.default.cacheURL : _g, translations = _a.translations;
+    var suppliedDictionary = (0, react_1.useMemo)(function () { return (0, flattenDictionary_1.default)(dictionary); }, [dictionary]);
     if (!projectID && remoteSource && cacheURL === defaultGTProps_1.default.cacheURL) {
         throw new Error("gt-react Error: General Translation cloud services require a project ID! Find yours at www.generaltranslation.com/dashboard.");
     }
@@ -175,8 +177,8 @@ function GTClientProvider(_a) {
         if (translationRequired && localDictionary && localDictionary[id]) {
             return (0, renderDefaultLanguage_1.default)(__assign({ source: localDictionary[id], variables: options, id: id }, options));
         }
-        var _a = (0, getEntryMetadata_1.default)(dictionary[id]), entry = _a.entry, metadata = _a.metadata;
-        var _b = (0, getEntryTranslationType_1.default)(dictionary[id]), translationType = _b.type, isFunction = _b.isFunction;
+        var _a = (0, getEntryMetadata_1.default)(suppliedDictionary[id]), entry = _a.entry, metadata = _a.metadata;
+        var _b = (0, getEntryTranslationType_1.default)(suppliedDictionary[id]), translationType = _b.type, isFunction = _b.isFunction;
         if (typeof f === 'function') {
             entry = f(options);
         }
@@ -206,7 +208,7 @@ function GTClientProvider(_a) {
         else {
             return (0, renderDefaultLanguage_1.default)(__assign({ source: taggedEntry, variables: options || {}, id: id }, options));
         }
-    }, [dictionary, translations, translationRequired, remoteTranslations]);
+    }, [suppliedDictionary, translations, translationRequired, remoteTranslations]);
     return ((0, jsx_runtime_1.jsx)(ClientProvider_1.GTContext.Provider, { value: {
             translate: translate,
             locale: locale,

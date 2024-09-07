@@ -15,6 +15,7 @@ import getEntryTranslationType from "../../primitives/rendering/getEntryTranslat
 import getEntryMetadata from "../../primitives/rendering/getEntryMetadata";
 import ClientPlural from "../plural/ClientPlural";
 import addGTIdentifier from "../../primitives/translation/addGTIdentifier";
+import flattenDictionary from "../../primitives/dictionary/flattenDictionary";
 
 /**
  * GTClientProvider component for providing translations to entirely client-side React apps.
@@ -58,6 +59,8 @@ export default function GTClientProvider({
     translations?: Record<string, () => Promise<Record<string, any>>>;
     
 }): JSX.Element {
+
+    const suppliedDictionary = useMemo(() => flattenDictionary(dictionary), [dictionary])
 
     if (!projectID && remoteSource && cacheURL === defaultGTProps.cacheURL) {
         throw new Error("gt-react Error: General Translation cloud services require a project ID! Find yours at www.generaltranslation.com/dashboard.")
@@ -120,8 +123,8 @@ export default function GTClientProvider({
                 ...options 
             })
         }
-        let { entry, metadata } = getEntryMetadata(dictionary[id]);
-        const { type: translationType, isFunction } = getEntryTranslationType(dictionary[id]);
+        let { entry, metadata } = getEntryMetadata(suppliedDictionary[id]);
+        const { type: translationType, isFunction } = getEntryTranslationType(suppliedDictionary[id]);
         if (typeof f === 'function') {
             entry = f(options);
         } else if (isFunction) {
@@ -156,7 +159,7 @@ export default function GTClientProvider({
         } else {
             return renderDefaultLanguage({ source: taggedEntry, variables: options || {}, id, ...options })
         }
-    }, [dictionary, translations, translationRequired, remoteTranslations]);
+    }, [suppliedDictionary, translations, translationRequired, remoteTranslations]);
 
     return (
         <GTContext.Provider value={{
