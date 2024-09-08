@@ -35,9 +35,9 @@ function createGTProviderComponent(I18NConfig) {
         var locale = I18NConfig.getLocale();
         var dictionaryName = I18NConfig.getDictionaryName();
         var defaultLocale = I18NConfig.getDefaultLocale();
-        var shouldStore = (_b = I18NConfig.shouldStore()) !== null && _b !== void 0 ? _b : true;
+        var shouldSave = (_b = I18NConfig.shouldSave()) !== null && _b !== void 0 ? _b : true;
         /* @ts-expect-error Server Component */
-        return (0, jsx_runtime_1.jsx)(GTProvider_1.default, __assign({ locale: locale, dictionaryName: dictionaryName, defaultLocale: defaultLocale, shouldStore: shouldStore }, props, { I18NConfig: I18NConfig, children: children }));
+        return (0, jsx_runtime_1.jsx)(GTProvider_1.default, __assign({ locale: locale, dictionaryName: dictionaryName, defaultLocale: defaultLocale, shouldSave: shouldSave }, props, { I18NConfig: I18NConfig, children: children }));
     };
 }
 //# sourceMappingURL=createGTProviderComponent.js.map

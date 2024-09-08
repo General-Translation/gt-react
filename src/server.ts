@@ -60,7 +60,6 @@ export function createGT({
     // Dictionaries
     dictionaryName = defaultGTProps.dictionaryName,
     dictionary = defaultGTProps.dictionary,
-    store = defaultGTProps.store,
     translations,
     // Batching config
     maxConcurrentRequests = defaultGTProps.maxConcurrentRequests,
@@ -82,7 +81,6 @@ export function createGT({
     renderTimeout: defaultGTProps.renderTimeout,
     dictionaryName: defaultGTProps.dictionaryName,
     dictionary: defaultGTProps.dictionary,
-    store: defaultGTProps.store,
     maxConcurrentRequests: defaultGTProps.maxConcurrentRequests,
     batchInterval: defaultGTProps.batchInterval,
     getMetadata: defaultGTProps.getMetadata

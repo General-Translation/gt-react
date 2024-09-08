@@ -80,7 +80,6 @@ function createGT(_a) {
         renderTimeout: defaultGTProps_1.default.renderTimeout,
         dictionaryName: defaultGTProps_1.default.dictionaryName,
         dictionary: defaultGTProps_1.default.dictionary,
-        store: defaultGTProps_1.default.store,
         maxConcurrentRequests: defaultGTProps_1.default.maxConcurrentRequests,
         batchInterval: defaultGTProps_1.default.batchInterval,
         getMetadata: defaultGTProps_1.default.getMetadata
@@ -101,15 +100,15 @@ function createGT(_a) {
     // Dictionaries
     _o = _a.dictionaryName, 
     // Dictionaries
-    dictionaryName = _o === void 0 ? defaultGTProps_1.default.dictionaryName : _o, _p = _a.dictionary, dictionary = _p === void 0 ? defaultGTProps_1.default.dictionary : _p, _q = _a.store, store = _q === void 0 ? defaultGTProps_1.default.store : _q, translations = _a.translations, 
+    dictionaryName = _o === void 0 ? defaultGTProps_1.default.dictionaryName : _o, _p = _a.dictionary, dictionary = _p === void 0 ? defaultGTProps_1.default.dictionary : _p, translations = _a.translations, 
     // Batching config
-    _r = _a.maxConcurrentRequests, 
+    _q = _a.maxConcurrentRequests, 
     // Batching config
-    maxConcurrentRequests = _r === void 0 ? defaultGTProps_1.default.maxConcurrentRequests : _r, _s = _a.batchInterval, batchInterval = _s === void 0 ? defaultGTProps_1.default.batchInterval : _s, 
+    maxConcurrentRequests = _q === void 0 ? defaultGTProps_1.default.maxConcurrentRequests : _q, _r = _a.batchInterval, batchInterval = _r === void 0 ? defaultGTProps_1.default.batchInterval : _r, 
     // Other metadata
-    _t = _a.getMetadata, 
+    _s = _a.getMetadata, 
     // Other metadata
-    getMetadata = _t === void 0 ? defaultGTProps_1.default.getMetadata : _t, metadata = __rest(_a, ["apiKey", "projectID", "cacheURL", "baseURL", "remoteSource", "automaticTranslation", "approvedLocales", "defaultLocale", "getLocale", "renderPrevious", "renderMethod", "renderTimeout", "dictionaryName", "dictionary", "store", "translations", "maxConcurrentRequests", "batchInterval", "getMetadata"]);
+    getMetadata = _s === void 0 ? defaultGTProps_1.default.getMetadata : _s, metadata = __rest(_a, ["apiKey", "projectID", "cacheURL", "baseURL", "remoteSource", "automaticTranslation", "approvedLocales", "defaultLocale", "getLocale", "renderPrevious", "renderMethod", "renderTimeout", "dictionaryName", "dictionary", "translations", "maxConcurrentRequests", "batchInterval", "getMetadata"]);
     var I18NConfig = new I18NConfiguration_1.default(__assign({ apiKey: apiKey, projectID: projectID, cacheURL: cacheURL, baseURL: baseURL, remoteSource: remoteSource, automaticTranslation: automaticTranslation, getLocale: getLocale, defaultLocale: defaultLocale, approvedLocales: approvedLocales, renderPrevious: renderPrevious, renderMethod: renderMethod, renderTimeout: renderTimeout, dictionary: dictionary, dictionaryName: (0, getDefaultFromEnv_1.default)('GT_DICTIONARY_NAME') || dictionaryName, // override from .env
         translations: translations, maxConcurrentRequests: maxConcurrentRequests, batchInterval: batchInterval, getMetadata: getMetadata }, metadata));
     // ----- <T> ------ //

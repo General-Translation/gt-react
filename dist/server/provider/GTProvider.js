@@ -86,7 +86,7 @@ function GTProvider(_a) {
     return __awaiter(this, void 0, void 0, function () {
         var dictionary, providerID, entry, translations, renderSettings, clonedDictionary, _i, _b, id_1, _c, entry, metadata, _d, translationType, isFunction, _e, ranges, zero, one, two, few, many, other, singular, dual, plural, tOptions, innerProps, taggedEntry, translationRequired, _f, local_1, remote_1;
         var _this = this;
-        var I18NConfig = _a.I18NConfig, locale = _a.locale, defaultLocale = _a.defaultLocale, children = _a.children, shouldStore = _a.shouldStore, _g = _a.id, id = _g === void 0 ? '' : _g, props = __rest(_a, ["I18NConfig", "locale", "defaultLocale", "children", "shouldStore", "id"]);
+        var I18NConfig = _a.I18NConfig, locale = _a.locale, defaultLocale = _a.defaultLocale, children = _a.children, shouldSave = _a.shouldSave, _g = _a.id, id = _g === void 0 ? '' : _g, props = __rest(_a, ["I18NConfig", "locale", "defaultLocale", "children", "shouldSave", "id"]);
         return __generator(this, function (_h) {
             switch (_h.label) {
                 case 0:
@@ -173,7 +173,7 @@ function GTProvider(_a) {
                                         if (!I18NConfig.automaticTranslationEnabled())
                                             return [2 /*return*/];
                                         if (!(translationType === "string")) return [3 /*break*/, 8];
-                                        translationPromise = I18NConfig.translate({ content: entry, targetLanguage: locale, options: __assign(__assign({}, metadata), { store: shouldStore, hash: key, id: id }) });
+                                        translationPromise = I18NConfig.translate({ content: entry, targetLanguage: locale, options: __assign(__assign({}, metadata), { save: shouldSave, hash: key, id: id }) });
                                         if (!(renderSettings.method !== "subtle")) return [3 /*break*/, 7];
                                         _c = translations;
                                         _d = id;
@@ -181,7 +181,7 @@ function GTProvider(_a) {
                                     case 6: return [2 /*return*/, _c[_d] = _g.sent()];
                                     case 7: return [2 /*return*/, translations[id] = entry];
                                     case 8:
-                                        targetPromise = I18NConfig.translateChildren({ children: entryAsObjects, targetLanguage: locale, metadata: __assign(__assign({}, metadata), { store: shouldStore, hash: key, id: id }) });
+                                        targetPromise = I18NConfig.translateChildren({ children: entryAsObjects, targetLanguage: locale, metadata: __assign(__assign({}, metadata), { save: shouldSave, hash: key, id: id }) });
                                         renderMethod = renderSettings.method;
                                         if (!(renderSettings.method === "hang")) return [3 /*break*/, 10];
                                         _e = translations;

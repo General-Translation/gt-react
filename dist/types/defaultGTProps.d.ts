@@ -12,7 +12,6 @@ declare const defaultGTProps: {
     renderTimeout: number;
     dictionaryName: string;
     dictionary: {};
-    store: boolean;
     maxConcurrentRequests: number;
     batchInterval: number;
     getMetadata: () => {};

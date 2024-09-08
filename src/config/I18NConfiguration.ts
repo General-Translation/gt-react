@@ -19,7 +19,7 @@ type I18NConfigurationParams = {
     renderTimeout: number | null,
     dictionary: Record<string, any>, 
     dictionaryName: string;
-    storeByDefault?: boolean;
+    saveByDefault?: boolean;
     translations?: Record<string, () => Promise<Record<string, any>>>;
     maxConcurrentRequests: number;
     batchInterval: number;
@@ -43,7 +43,7 @@ export default class I18NConfiguration {
     // Dictionaries
     dictionaryName: string;
     dictionary: Record<string, any>;
-    storeByDefault?: boolean;
+    saveByDefault?: boolean;
     translations?: Record<string, () => Promise<Record<string, any>>>;
     private _localDictionaryManager: LocalDictionaryManager | undefined;
     private _remoteDictionaryManager: RemoteDictionaryManager | undefined;
@@ -73,7 +73,7 @@ export default class I18NConfiguration {
         renderPrevious, renderMethod, renderTimeout,
         // Dictionaries
         dictionary, dictionaryName,
-        storeByDefault,
+        saveByDefault,
         // Translations
         translations,
         // Batching config
@@ -101,10 +101,11 @@ export default class I18NConfiguration {
         // Dictionaries
         this.dictionary = dictionary;
         this.dictionaryName = dictionaryName;
-        this.storeByDefault = storeByDefault;
+        this.saveByDefault = saveByDefault;
         // Local translations
         this.translations = translations;
         // GT
+        
         this.gt = new GT({ projectID, apiKey, defaultLanguage: defaultLocale, baseURL });
         // Other metadata
         this.getMetadata = getMetadata;
@@ -212,12 +213,12 @@ export default class I18NConfiguration {
     }
 
     /**
-     * Returns a boolean determining whether or not a translation should be stored
+     * Returns a boolean determining whether or not a translation should be saved remotely
      * Undefined if not set
      * @returns {string} A BCP-47 language tag
     */
-    shouldStore(): boolean | undefined {
-        return this.storeByDefault
+    shouldSave(): boolean | undefined {
+        return this.saveByDefault
     }
 
     /**
@@ -283,7 +284,7 @@ export default class I18NConfiguration {
                     projectID: this.projectID,
                     metadata: { ...this.metadata, ...this.getMetadata(), ...options }
                 },
-                cache: (this._remoteDictionaryManager) ? this._remoteDictionaryManager.getTranslationRequested(targetLanguage, dictionaryName) : false,
+                revalidate: (this._remoteDictionaryManager) ? this._remoteDictionaryManager.getTranslationRequested(targetLanguage, dictionaryName) : false,
                 resolve,
                 reject
             });
@@ -312,7 +313,7 @@ export default class I18NConfiguration {
                     targetLanguage,
                     metadata: { ...this.metadata, ...this.getMetadata(), ...metadata }
                 },
-                cache: (this._remoteDictionaryManager) ? this._remoteDictionaryManager.getTranslationRequested(targetLanguage, dictionaryName) : false,
+                revalidate: (this._remoteDictionaryManager) ? this._remoteDictionaryManager.getTranslationRequested(targetLanguage, dictionaryName) : false,
                 resolve,
                 reject
             });

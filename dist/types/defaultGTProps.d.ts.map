@@ -1,1 +1,1 @@
-{"version":3,"file":"defaultGTProps.d.ts","sourceRoot":"","sources":["../../src/types/defaultGTProps.ts"],"names":[],"mappings":"AAEA,QAAA,MAAM,cAAc;;;;;;;;;;;;;;;;;;CAuBnB,CAAA;AAED,eAAe,cAAc,CAAC"}
+{"version":3,"file":"defaultGTProps.d.ts","sourceRoot":"","sources":["../../src/types/defaultGTProps.ts"],"names":[],"mappings":"AAEA,QAAA,MAAM,cAAc;;;;;;;;;;;;;;;;;CAsBnB,CAAA;AAED,eAAe,cAAc,CAAC"}

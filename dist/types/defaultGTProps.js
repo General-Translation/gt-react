@@ -21,7 +21,6 @@ var defaultGTProps = {
     // Dictionaries
     dictionaryName: "default",
     dictionary: {},
-    store: false,
     // Batching config
     maxConcurrentRequests: 2,
     batchInterval: 1000,

@@ -99,13 +99,13 @@ var I18NConfiguration = /** @class */ (function () {
         // Render method
         renderPrevious = _a.renderPrevious, renderMethod = _a.renderMethod, renderTimeout = _a.renderTimeout, 
         // Dictionaries
-        dictionary = _a.dictionary, dictionaryName = _a.dictionaryName, storeByDefault = _a.storeByDefault, 
+        dictionary = _a.dictionary, dictionaryName = _a.dictionaryName, saveByDefault = _a.saveByDefault, 
         // Translations
         translations = _a.translations, 
         // Batching config
         maxConcurrentRequests = _a.maxConcurrentRequests, batchInterval = _a.batchInterval, 
         // Other metadata
-        getMetadata = _a.getMetadata, metadata = __rest(_a, ["apiKey", "projectID", "baseURL", "cacheURL", "remoteSource", "automaticTranslation", "getLocale", "defaultLocale", "approvedLocales", "renderPrevious", "renderMethod", "renderTimeout", "dictionary", "dictionaryName", "storeByDefault", "translations", "maxConcurrentRequests", "batchInterval", "getMetadata"]);
+        getMetadata = _a.getMetadata, metadata = __rest(_a, ["apiKey", "projectID", "baseURL", "cacheURL", "remoteSource", "automaticTranslation", "getLocale", "defaultLocale", "approvedLocales", "renderPrevious", "renderMethod", "renderTimeout", "dictionary", "dictionaryName", "saveByDefault", "translations", "maxConcurrentRequests", "batchInterval", "getMetadata"]);
         // Cloud integration
         this.projectID = projectID;
         this.remoteSource = (cacheURL && remoteSource) ? true : false;
@@ -125,7 +125,7 @@ var I18NConfiguration = /** @class */ (function () {
         // Dictionaries
         this.dictionary = dictionary;
         this.dictionaryName = dictionaryName;
-        this.storeByDefault = storeByDefault;
+        this.saveByDefault = saveByDefault;
         // Local translations
         this.translations = translations;
         // GT
@@ -225,12 +225,12 @@ var I18NConfiguration = /** @class */ (function () {
         return true;
     };
     /**
-     * Returns a boolean determining whether or not a translation should be stored
+     * Returns a boolean determining whether or not a translation should be saved remotely
      * Undefined if not set
      * @returns {string} A BCP-47 language tag
     */
-    I18NConfiguration.prototype.shouldStore = function () {
-        return this.storeByDefault;
+    I18NConfiguration.prototype.shouldSave = function () {
+        return this.saveByDefault;
     };
     /**
      * Get the translation dictionaries for this user's locale, if they exist
@@ -326,7 +326,7 @@ var I18NConfiguration = /** @class */ (function () {
                             projectID: _this.projectID,
                             metadata: __assign(__assign(__assign({}, _this.metadata), _this.getMetadata()), options)
                         },
-                        cache: (_this._remoteDictionaryManager) ? _this._remoteDictionaryManager.getTranslationRequested(targetLanguage, dictionaryName) : false,
+                        revalidate: (_this._remoteDictionaryManager) ? _this._remoteDictionaryManager.getTranslationRequested(targetLanguage, dictionaryName) : false,
                         resolve: resolve,
                         reject: reject
                     });
@@ -361,7 +361,7 @@ var I18NConfiguration = /** @class */ (function () {
                             targetLanguage: targetLanguage,
                             metadata: __assign(__assign(__assign({}, _this.metadata), _this.getMetadata()), metadata)
                         },
-                        cache: (_this._remoteDictionaryManager) ? _this._remoteDictionaryManager.getTranslationRequested(targetLanguage, dictionaryName) : false,
+                        revalidate: (_this._remoteDictionaryManager) ? _this._remoteDictionaryManager.getTranslationRequested(targetLanguage, dictionaryName) : false,
                         resolve: resolve,
                         reject: reject
                     });

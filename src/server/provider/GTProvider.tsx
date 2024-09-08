@@ -26,7 +26,7 @@ export default async function GTProvider({
     I18NConfig,
     locale, defaultLocale,
     children,
-    shouldStore,
+    shouldSave,
     id='',
     ...props
 }: {
@@ -34,7 +34,7 @@ export default async function GTProvider({
     children: any;
     locale: string;
     defaultLocale: string;
-    shouldStore: boolean;
+    shouldSave: boolean;
     id?: string;
     [key: string]: any;
 }): Promise<any> {
@@ -126,14 +126,14 @@ export default async function GTProvider({
             
             // STRINGS
             if (translationType === "string") {
-                const translationPromise = I18NConfig.translate({ content: entry, targetLanguage: locale, options: { ...metadata, store: shouldStore, hash: key, id } });
+                const translationPromise = I18NConfig.translate({ content: entry, targetLanguage: locale, options: { ...metadata, save: shouldSave, hash: key, id } });
                 if (renderSettings.method !== "subtle") {
                     return translations[id] = await translationPromise;
                 }
                 return translations[id] = entry;
             } 
             else /*if (translationType === "t" || translationType === "plural")*/ { // i.e., it's JSX
-                const targetPromise = I18NConfig.translateChildren({ children: entryAsObjects, targetLanguage: locale, metadata: { ...metadata, store: shouldStore, hash: key, id } });
+                const targetPromise = I18NConfig.translateChildren({ children: entryAsObjects, targetLanguage: locale, metadata: { ...metadata, save: shouldSave, hash: key, id } });
                 const renderMethod = renderSettings.method;
                 if (renderSettings.method === "hang") {
                     return translations[id] = await targetPromise;
