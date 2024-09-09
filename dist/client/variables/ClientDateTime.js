@@ -32,6 +32,6 @@ var ClientDateTime = function (_a) {
     return ((0, jsx_runtime_1.jsx)("span", { "data-gt-variable-name": name, "data-gt-variable-type": "date", "data-gt-variable-options": options, children: final }));
 };
 // Static property for transformation type
-ClientDateTime.gtTransformation = "variable-date";
+ClientDateTime.gtTransformation = "variable-datetime";
 exports.default = ClientDateTime;
 //# sourceMappingURL=ClientDateTime.js.map

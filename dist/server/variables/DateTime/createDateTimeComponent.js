@@ -34,7 +34,7 @@ function createDateTimeComponent(getLocale, defaultLocale) {
         var locales = [getLocale(), defaultLocale];
         return (0, jsx_runtime_1.jsx)(DateTime_1.default, __assign({ locales: locales }, props, { children: children }));
     };
-    DateTimeComponent.gtTransformation = "variable-date";
+    DateTimeComponent.gtTransformation = "variable-datetime";
     return DateTimeComponent;
 }
 //# sourceMappingURL=createDateTimeComponent.js.map

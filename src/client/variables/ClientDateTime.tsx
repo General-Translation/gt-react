@@ -39,6 +39,6 @@ const ClientDateTime = ({ children, name = "date", defaultValue, options = {} }:
 };
 
 // Static property for transformation type
-ClientDateTime.gtTransformation = "variable-date";
+ClientDateTime.gtTransformation = "variable-datetime";
 
 export default ClientDateTime;

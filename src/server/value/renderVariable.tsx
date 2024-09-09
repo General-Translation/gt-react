@@ -26,7 +26,7 @@ const handleSingleChild = (child: any, locales: string[], variables?: Record<str
             if (variableType === "number") {
                 return <Num locales={locales} defaultValue={value} name={name} options={options}/>
             }
-            if (variableType === "date") {
+            if (variableType === "datetime") {
                 return <DateTime locales={locales} defaultValue={value} name={name} options={options}/>
             }
             if (variableType === "currency") {

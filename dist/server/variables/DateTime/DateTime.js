@@ -41,6 +41,6 @@ var DateTime = function (_a) {
     // Render the formatted date within a span element
     return ((0, jsx_runtime_1.jsx)("span", { "data-generaltranslation": generaltranslation, "data-gt-variable-name": name, "data-gt-variable-type": "date", "data-gt-variable-options": options, "data-gt-unformatted-value": dateValue, children: formattedValue }));
 };
-DateTime.gtTransformation = "variable-date";
+DateTime.gtTransformation = "variable-datetime";
 exports.default = DateTime;
 //# sourceMappingURL=DateTime.js.map

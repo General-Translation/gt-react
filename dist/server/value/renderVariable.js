@@ -44,7 +44,7 @@ var handleSingleChild = function (child, locales, variables) {
             if (variableType === "number") {
                 return (0, jsx_runtime_1.jsx)(Num_1.default, { locales: locales, defaultValue: value, name: name_1, options: options });
             }
-            if (variableType === "date") {
+            if (variableType === "datetime") {
                 return (0, jsx_runtime_1.jsx)(DateTime_1.default, { locales: locales, defaultValue: value, name: name_1, options: options });
             }
             if (variableType === "currency") {

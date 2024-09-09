@@ -54,7 +54,7 @@ function SingleChild({children, variables}: {children: any, variables?: Record<s
                 if (variableType === "number") {
                     return <ClientNum defaultValue={value} name={name} options={options}/>
                 }
-                if (variableType === "date") {
+                if (variableType === "datetime") {
                     return <ClientDateTime defaultValue={value} name={name} options={options}/>
                 }
                 if (variableType === "currency") {

@@ -67,7 +67,7 @@ function SingleChild(_a) {
                 if (variableType === "number") {
                     return (0, jsx_runtime_1.jsx)(ClientNum_1.default, { defaultValue: value, name: name_1, options: options });
                 }
-                if (variableType === "date") {
+                if (variableType === "datetime") {
                     return (0, jsx_runtime_1.jsx)(ClientDateTime_1.default, { defaultValue: value, name: name_1, options: options });
                 }
                 if (variableType === "currency") {

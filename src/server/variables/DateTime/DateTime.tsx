@@ -57,6 +57,6 @@ const DateTime = ({ children, locales, name = "date", defaultValue, options = {}
     );
 };
 
-DateTime.gtTransformation = "variable-date"
+DateTime.gtTransformation = "variable-datetime"
 
 export default DateTime;

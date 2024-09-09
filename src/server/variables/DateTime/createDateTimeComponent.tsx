@@ -6,6 +6,6 @@ export default function createDateTimeComponent(getLocale: () => string, default
         const locales = [getLocale(), defaultLocale];
         return <DateTime locales={locales} {...props}>{children}</DateTime>
     }
-    DateTimeComponent.gtTransformation = "variable-date"
+    DateTimeComponent.gtTransformation = "variable-datetime"
     return DateTimeComponent;
 }
