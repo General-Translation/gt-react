@@ -1,6 +1,5 @@
 import React, { ReactNode } from 'react';
 import renderVariable from './renderVariable';
-import createValues from '../../primitives/variables/createValues';
 
 const Value = ({ children, values, locales, ...props }: {
     locales?: string[];

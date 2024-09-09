@@ -1,7 +1,7 @@
 'use client'
 
 import React, { ReactNode, useMemo } from 'react';
-import getPluralBranch, { Range } from '../../primitives/variables/getPluralBranch';
+import getPluralBranch from '../../primitives/variables/getPluralBranch';
 import RenderClientVariable from '../value/RenderClientVariable';
 import useLocale from '../hooks/useLocale';
 import useDefaultLocale from '../hooks/useDefaultLocale';
@@ -13,14 +13,12 @@ import createValues from '../../primitives/variables/createValues';
  * 
  * @param {ReactNode} children - Default children.
  * @param {number} n - Number to branch based on.
- * @param {Range[]} ranges - Array of range objects used for branch selection.
  * @param {Record<string, any>} ...branches - Named branches, e.g. "singular", "plural" and their associated branches.
  * @returns {ReactNode}
  */
-const ClientPlural = ({ children, n, values, ranges, ...branches }: {
+const ClientPlural = ({ children, n, values, ...branches }: {
     children?: any;
     n: number;
-    ranges?: Range[];
     zero?: any;
     one?: any;
     two?: any;
@@ -37,7 +35,7 @@ const ClientPlural = ({ children, n, values, ranges, ...branches }: {
 
     return (
         <RenderClientVariable variables={createValues(n, values)}>
-            {((typeof n === 'number' && { ...branches, ranges }) ? getPluralBranch(n, locales, { ...branches, ranges }) : null) || children}
+            {((typeof n === 'number' && { ...branches }) ? getPluralBranch(n, locales, branches) : null) || children}
         </RenderClientVariable>
     )
 

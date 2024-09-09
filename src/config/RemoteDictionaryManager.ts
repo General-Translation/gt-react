@@ -1,4 +1,4 @@
-import getDictionaryReference from "../primitives/dictionary/getDictionaryReference";
+import getDictionaryReference from "../dictionary/getDictionaryReference";
 
 /**
  * Configuration type for RemoteDictionaryManager.

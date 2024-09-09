@@ -32,36 +32,40 @@
   },
   "exports": {
     ".": {
-      "import": "./dist/index.js",
-      "require": "./dist/index.js"
+      "node": "./dist/server-index.js",
+      "browser": "./dist/client-index.js",
+      "types": "./dist/server-index.d.ts",
+      "default": "./dist/server-index.js"
     },
-    "./client.js": "./dist/client.js",
+    "./internal": {
+      "types": "./dist/internal.d.ts",
+      "default": "./dist/internal.js"
+    },
     "./client": {
-      "import": "./dist/client.js",
-      "require": "./dist/client.js",
-      "types": "./dist/client.d.ts"
+      "types": "./dist/client.d.ts",
+      "default": "./dist/client.js"
     },
-    "./next.js": "./dist/next.js",
     "./next": {
-      "import": "./dist/next.js",
-      "require": "./dist/next.js",
-      "types": "./dist/next.d.ts"
+      "node": "./dist/next.server.js",
+      "browser": "./dist/client-index.js",
+      "types": "./dist/next.server.d.ts",
+      "default": "./dist/next.server.js"
     },
-    "./server.js": "./dist/server.js",
     "./server": {
-      "import": "./dist/server.js",
-      "require": "./dist/server.js",
-      "types": "./dist/server.d.ts"
+      "browser": null,
+      "types": "./dist/server-index.d.ts",
+      "default": "./dist/server.js"
     },
-    "./middleware.js": "./dist/middleware.js",
     "./middleware": {
-      "import": "./dist/middleware.js",
-      "require": "./dist/middleware.js",
-      "types": "./dist/middleware.d.ts"
+      "types": "./dist/middleware.d.ts",
+      "default": "./dist/middleware.js"
     }
   },
   "typesVersions": {
     "*": {
+      "internal": [
+        "./dist/internal.d.ts"
+      ],
       "client": [
         "./dist/client.d.ts"
       ],
@@ -106,7 +110,6 @@
   ],
   "dependencies": {
     "generaltranslation": "latest",
-    "server-only": "^0.0.1",
     "xxhash-wasm": "^1.0.2"
   }
 }

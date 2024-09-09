@@ -4,7 +4,6 @@
 import React, { ReactElement, ReactNode } from "react";
 
 import isValidReactNode from "../../primitives/rendering/isValidReactNode";
-import defaultVariableNames from "../../primitives/variables/defaultVariableNames";
 import ClientNum from "../variables/ClientNum";
 import ClientDateTime from "../variables/ClientDateTime";
 import ClientCurrency from "../variables/ClientCurrency";

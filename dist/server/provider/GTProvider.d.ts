@@ -1,4 +1,3 @@
-import 'server-only';
 import I18NConfiguration from '../../config/I18NConfiguration';
 export default function GTProvider({ I18NConfig, locale, defaultLocale, children, id, ...props }: {
     I18NConfig: I18NConfiguration;

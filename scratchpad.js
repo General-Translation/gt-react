@@ -1,5 +1,18 @@
 /*
 
+import { initGT } from 'gt-react/next'
+import dictionary from './dictionary';
+
+export const { getGT } = initGT({
+    defaultLocale: 'en',
+    dictionary
+});
+
+and getGT, getLocale, getDefaultLocale, GTProvider should work ON BOTH CLIENT AND SERVER
+
+*/
+/*
+
 FUTURE PROMPT
 
 I want to add TypeScript IDE autocomplete to my internationalization library. How it works is a user defines a dictionary. 

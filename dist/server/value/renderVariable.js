@@ -18,10 +18,10 @@ exports.default = renderVariable;
 var jsx_runtime_1 = require("react/jsx-runtime");
 var react_1 = __importDefault(require("react"));
 var isValidReactNode_1 = __importDefault(require("../../primitives/rendering/isValidReactNode"));
-var Var_1 = __importDefault(require("../variables/Var/Var"));
-var Currency_1 = __importDefault(require("../variables/Currency/Currency"));
-var Num_1 = __importDefault(require("../variables/Num/Num"));
-var DateTime_1 = __importDefault(require("../variables/DateTime/DateTime"));
+var Var_1 = __importDefault(require("../variables/Var"));
+var Currency_1 = __importDefault(require("../variables/Currency"));
+var Num_1 = __importDefault(require("../variables/Num"));
+var DateTime_1 = __importDefault(require("../variables/DateTime"));
 var defaultVariableNames_1 = __importDefault(require("../../primitives/variables/defaultVariableNames"));
 /**
  * Handles a single child element by cloning it with new properties if it is a valid React element,

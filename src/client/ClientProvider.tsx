@@ -4,7 +4,10 @@ import { createContext, useCallback, useContext, useEffect, useState } from "rea
 import { tOptions } from "../dictionary/createTFunction";
 import handleRender from "./helpers/handleRender";
 import renderDefaultLanguage from "./helpers/renderDefaultLanguage";
-import addGTIdentifier from "../primitives/translation/addGTIdentifier";
+import addGTIdentifier from "../internal/addGTIdentifier";
+import getEntryMetadata from "../dictionary/getEntryMetadata";
+import { splitStringToContent } from "generaltranslation";
+import { renderContentToString } from "generaltranslation";
 
 type GTContextType = {
     [key: string]: any
@@ -26,23 +29,35 @@ export default function ClientProvider({
 }: ClientProviderProps) {
 
     const translate = useCallback((id: string, options: tOptions = {}, f?: Function) => {
-        let entry = dictionary[id];
-        if (typeof entry === 'object' && entry.function) {
-            if (typeof f === 'function') {
-                entry = addGTIdentifier(f(options));
-            } else {
-                entry = entry.defaultChildren;
-            }
+        let { entry, metadata } = getEntryMetadata(dictionary[id]);
+        if (metadata && metadata.isFunction && typeof f === 'function') {
+            entry = addGTIdentifier(f(options));
         }
         if (translationRequired) {
+            if (typeof entry === 'string') {
+                return renderContentToString(translations[id], [locale, defaultLocale], options, (
+                    metadata?.variableOptions ? metadata.variableOptions : undefined
+                ));
+            }
             return handleRender({
                 source: entry,
                 target: translations[id],
                 locale, defaultLocale,
-                variables: options, id
+                variables: options, id,
+                ...(metadata?.variableOptions && { variableOptions: metadata.variableOptions })
             })
         }
-        return renderDefaultLanguage({ source: entry, variables: options || {}, id, ...options })
+        if (typeof entry === 'string') {
+            return renderContentToString(entry, [locale, defaultLocale], options, (
+                metadata?.variableOptions ? metadata.variableOptions : undefined
+            ));
+        }
+        return renderDefaultLanguage({ 
+            source: entry, 
+            variables: options, 
+            id, 
+            ...(metadata?.variableOptions && { variableOptions: metadata.variableOptions })
+        })
     }, [dictionary, translations]);
 
     return (

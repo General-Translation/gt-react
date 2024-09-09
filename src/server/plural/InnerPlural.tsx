@@ -1,10 +1,10 @@
 import React, { ReactNode } from 'react';
 import renderPlural from '../value/renderVariable';
-import getPluralBranch, { Range } from '../../primitives/variables/getPluralBranch';
+import getPluralBranch from '../../primitives/variables/getPluralBranch';
 import createValues from '../../primitives/variables/createValues';
 
 const Plural = ({ 
-    locales, children, n, ranges,  
+    locales, children, n, 
     zero, one, two, few, many, other, singular, plural, dual, 
     values,
     ...props
@@ -12,7 +12,6 @@ const Plural = ({
     locales: string[];
     children?: any;
     n: number;
-    ranges?: Range[];
     zero?: any;
     one?: any;
     two?: any;
@@ -33,7 +32,7 @@ const Plural = ({
     const { 'data-generaltranslation': generaltranslation }: any = props;
 
     const branches = Object.fromEntries(
-        Object.entries({ ranges, zero, one, two, few, many, other, singular, plural, dual })
+        Object.entries({ zero, one, two, few, many, other, singular, plural, dual })
             .filter(([_, value]) => value !== undefined)
     );
 

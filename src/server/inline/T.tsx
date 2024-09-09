@@ -1,10 +1,10 @@
 import React, { ReactNode, Suspense } from 'react'
-import addGTIdentifier from '../../primitives/translation/addGTIdentifier';
-import writeChildrenAsObjects from '../../primitives/translation/writeChildrenAsObjects';
+import addGTIdentifier from '../../internal/addGTIdentifier';
+import { writeChildrenAsObjects } from '../../internal';
 import renderChildren from './renderChildren';
 import I18NConfiguration from '../../config/I18NConfiguration';
 import Resolver from './Resolver';
-import calculateHash from '../../primitives/calculateHash';
+import calculateHash from '../../internal/calculateHash';
 
 type ServerTProps = {
     I18NConfig: I18NConfiguration
@@ -86,14 +86,6 @@ const ServerT = async ({
         errorFallback = loadingFallback;
     }
 
-    const resolveI18NPromise = async () => {
-        try {
-            return await promise;
-        } catch {
-            return await errorFallback;
-        }
-    }
-
     if (renderMethod === "hang") {
         // Wait until the site is translated to return
         return (
@@ -104,7 +96,7 @@ const ServerT = async ({
         )
     }
 
-    if (!["skeleton", "replace"].includes(renderMethod)) {
+    if (!["skeleton", "replace"].includes(renderMethod) && !id) {
         // If none of those, i.e. "subtle" 
         // return the children, with no special rendering
         // a translation may be available from a cached translation dictionary next time the component is loaded

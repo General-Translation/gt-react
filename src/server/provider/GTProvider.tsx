@@ -1,18 +1,18 @@
 // On the server
-import 'server-only'
 
 import React, { isValidElement } from 'react';
 
 import ClientProvider from '../../client/ClientProvider';
 import I18NConfiguration from '../../config/I18NConfiguration';
-import flattenDictionary from '../../primitives/dictionary/flattenDictionary';
-import getEntryMetadata from '../../primitives/rendering/getEntryMetadata';
-import addGTIdentifier from '../../primitives/translation/addGTIdentifier';
-import writeChildrenAsObjects from '../../primitives/translation/writeChildrenAsObjects';
-import calculateHash from '../../primitives/calculateHash';
-import getEntryTranslationType from '../../primitives/rendering/getEntryTranslationType';
+import flattenDictionary from '../../internal/flattenDictionary';
+import getEntryMetadata from '../../dictionary/getEntryMetadata';
+import addGTIdentifier from '../../internal/addGTIdentifier';
+import { writeChildrenAsObjects } from '../../internal';
+import calculateHash from '../../internal/calculateHash';
+import getEntryTranslationType from '../../dictionary/getEntryTranslationType';
 import Plural from '../plural/InnerPlural';
 import cloneDictionary from '../../dictionary/cloneDictionary';
+import { splitStringToContent } from 'generaltranslation';
 
 /*
 e.g.
@@ -68,12 +68,12 @@ export default async function GTProvider({
             entry = <>{entry}</>;
         } else if (translationType === "plural") {
             const { 
-                ranges, zero, one, two, few, many, other, singular, dual, plural,
+                zero, one, two, few, many, other, singular, dual, plural,
                 ...tOptions 
             } = metadata || {};
             metadata = tOptions;
             const innerProps = {
-                ranges, zero, one, two, few, many, other, singular, dual, plural
+                zero, one, two, few, many, other, singular, dual, plural
             };
             entry = (
                 <Plural 
@@ -92,7 +92,14 @@ export default async function GTProvider({
         // change the dictionary here
         // elsewhere we are changing the cloned dictionary
         // we are just adding the gt identifier, nothing more
-        dictionary[id] = isFunction ? { function: true, defaultChildren: taggedEntry } : taggedEntry;
+        let dictionaryMetadata;
+        if (isFunction) {
+            dictionaryMetadata = { ...(dictionaryMetadata || {}), isFunction }
+        }
+        if (metadata?.variableOptions) {
+            dictionaryMetadata = { ...(dictionaryMetadata || {}), variableOptions: metadata.variableOptions }
+        }
+        dictionary[id] = dictionaryMetadata ? [taggedEntry, dictionaryMetadata] : taggedEntry;
     }
 
     const translationRequired: boolean = I18NConfig.translationRequired(locale);
@@ -124,7 +131,8 @@ export default async function GTProvider({
             
             // STRINGS
             if (translationType === "string") {
-                const translationPromise = I18NConfig.translate({ content: entry, targetLanguage: locale, options: { ...metadata, hash: key, id } });
+                const content = splitStringToContent(entry);
+                const translationPromise = I18NConfig.translate({ content, targetLanguage: locale, options: { ...metadata, hash: key, id } });
                 if (renderSettings.method !== "subtle") {
                     return translations[id] = await translationPromise;
                 }

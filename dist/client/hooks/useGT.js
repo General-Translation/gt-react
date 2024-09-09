@@ -25,7 +25,7 @@ function useGT(id) {
         (translate = (0, ClientProvider_1.useGTContext)().translate);
     }
     catch (_a) {
-        throw new Error("t('".concat(id, "'): No context provided. useGT() can only be used inside a GTProvider."));
+        throw new Error("useGT('".concat(id, "'): No context provided. You're trying to get the t() function on the client, which can only be done inside a <GTProvider> or <GTClientProvider>."));
     }
     // Return a translation function if available, otherwise return a no-op function
     return function (id, options, f) {

@@ -4,6 +4,14 @@ import getDictionaryEntry from "../dictionary/getDictionaryEntry";
 import LocalDictionaryManager from "./LocalDictionaryManager";
 import defaultGTProps from "../types/defaultGTProps";
 
+const isServer = () => { if (typeof window !== 'undefined') {
+    // proxy for import 'server-only'
+    throw new Error(
+        "This module cannot be imported from a Client Component module. " +
+        "It should only be used from a Server Component."
+    ); 
+} }; isServer();
+
 type I18NConfigurationParams = {
     apiKey: string;
     projectID: string;
@@ -79,6 +87,7 @@ export default class I18NConfiguration {
         getMetadata,
         ...metadata
     }: I18NConfigurationParams) {
+        isServer(); // redundant
         // Cloud integration
         this.projectID = projectID;
         this.remoteSource = (cacheURL && remoteSource) ? true : false;
@@ -101,7 +110,6 @@ export default class I18NConfiguration {
         // Local translations
         this.translations = translations;
         // GT
-        
         this.gt = new GT({ projectID, apiKey, defaultLanguage: defaultLocale, baseURL });
         // Other metadata
         this.getMetadata = getMetadata;

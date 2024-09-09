@@ -46,38 +46,26 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
-    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
-        if (ar || !(i in from)) {
-            if (!ar) ar = Array.prototype.slice.call(from, 0, i);
-            ar[i] = from[i];
-        }
-    }
-    return to.concat(ar || Array.prototype.slice.call(from));
-};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = createTranslateFunction;
-var calculateHash_1 = __importDefault(require("../../primitives/calculateHash"));
+var generaltranslation_1 = require("generaltranslation");
+var calculateHash_1 = __importDefault(require("../../internal/calculateHash"));
 // translate('Hello')
 function createTranslateFunction(I18NConfig) {
-    var _this = this;
     return function (content_1) {
-        var args_1 = [];
-        for (var _i = 1; _i < arguments.length; _i++) {
-            args_1[_i - 1] = arguments[_i];
-        }
-        return __awaiter(_this, __spreadArray([content_1], args_1, true), void 0, function (content, options) {
-            var key, _a, translation, translationPromise, renderSettings;
+        return __awaiter(this, arguments, void 0, function (content, options, variables, variableOptions) {
+            var contentAsArray, key, _a, translation, translationPromise, renderSettings, translation;
             if (options === void 0) { options = {}; }
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0:
+                        contentAsArray = (0, generaltranslation_1.splitStringToContent)(content);
                         options.targetLanguage = options.targetLanguage || I18NConfig.getLocale();
-                        if (!content || typeof content !== 'string' || !I18NConfig.translationRequired(options.targetLanguage))
-                            return [2 /*return*/, content];
+                        if (!I18NConfig.translationRequired(options.targetLanguage))
+                            return [2 /*return*/, (0, generaltranslation_1.renderContentToString)(contentAsArray, [options.targetLanguage, I18NConfig.getDefaultLocale()], variables, variableOptions)];
                         if (!options.context) return [3 /*break*/, 2];
                         return [4 /*yield*/, (0, calculateHash_1.default)([content, options.context])];
                     case 1:
@@ -89,18 +77,23 @@ function createTranslateFunction(I18NConfig) {
                         _b.label = 4;
                     case 4:
                         key = _a;
+                        if (!options.id) return [3 /*break*/, 6];
                         return [4 /*yield*/, I18NConfig.getTranslation(options.targetLanguage, key, options.id, options.dictionaryName)];
                     case 5:
                         translation = _b.sent();
                         if (translation)
-                            return [2 /*return*/, translation];
-                        if (!I18NConfig.automaticTranslationEnabled()) return [3 /*break*/, 7];
+                            return [2 /*return*/, (0, generaltranslation_1.renderContentToString)(translation, [options.targetLanguage, I18NConfig.getDefaultLocale()], variables, variableOptions)];
+                        _b.label = 6;
+                    case 6:
+                        if (!I18NConfig.automaticTranslationEnabled()) return [3 /*break*/, 8];
                         translationPromise = I18NConfig.translate({ content: content, targetLanguage: options.targetLanguage, options: __assign(__assign({}, options), { hash: key }) });
                         renderSettings = I18NConfig.getRenderSettings();
-                        if (!(renderSettings.method !== "subtle")) return [3 /*break*/, 7];
+                        if (!(renderSettings.method !== "subtle" && options.id)) return [3 /*break*/, 8];
                         return [4 /*yield*/, translationPromise];
-                    case 6: return [2 /*return*/, _b.sent()];
-                    case 7: return [2 /*return*/, content];
+                    case 7:
+                        translation = _b.sent();
+                        return [2 /*return*/, (0, generaltranslation_1.renderContentToString)(translation, [options.targetLanguage, I18NConfig.getDefaultLocale()], variables, variableOptions)];
+                    case 8: return [2 /*return*/, (0, generaltranslation_1.renderContentToString)(contentAsArray, [options.targetLanguage, I18NConfig.getDefaultLocale()], variables, variableOptions)];
                 }
             });
         });

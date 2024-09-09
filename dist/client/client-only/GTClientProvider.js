@@ -83,13 +83,13 @@ var defaultGTProps_1 = __importDefault(require("../../types/defaultGTProps"));
 var useBrowserLocale_1 = __importDefault(require("../hooks/useBrowserLocale"));
 var generaltranslation_1 = require("generaltranslation");
 var renderDefaultLanguage_1 = __importDefault(require("../helpers/renderDefaultLanguage"));
-var getDictionaryReference_1 = __importDefault(require("../../primitives/dictionary/getDictionaryReference"));
+var getDictionaryReference_1 = __importDefault(require("../../dictionary/getDictionaryReference"));
 var renderClientChildren_1 = __importDefault(require("../helpers/renderClientChildren"));
-var getEntryTranslationType_1 = __importDefault(require("../../primitives/rendering/getEntryTranslationType"));
-var getEntryMetadata_1 = __importDefault(require("../../primitives/rendering/getEntryMetadata"));
+var getEntryTranslationType_1 = __importDefault(require("../../dictionary/getEntryTranslationType"));
+var getEntryMetadata_1 = __importDefault(require("../../dictionary/getEntryMetadata"));
 var ClientPlural_1 = __importDefault(require("../plural/ClientPlural"));
-var addGTIdentifier_1 = __importDefault(require("../../primitives/translation/addGTIdentifier"));
-var flattenDictionary_1 = __importDefault(require("../../primitives/dictionary/flattenDictionary"));
+var addGTIdentifier_1 = __importDefault(require("../../internal/addGTIdentifier"));
+var flattenDictionary_1 = __importDefault(require("../../internal/flattenDictionary"));
 /**
  * GTClientProvider component for providing translations to entirely client-side React apps.
  *
@@ -111,7 +111,7 @@ var flattenDictionary_1 = __importDefault(require("../../primitives/dictionary/f
 */
 function GTClientProvider(_a) {
     var _this = this;
-    var children = _a.children, projectID = _a.projectID, _b = _a.dictionary, dictionary = _b === void 0 ? defaultGTProps_1.default.dictionary : _b, _c = _a.dictionaryName, dictionaryName = _c === void 0 ? defaultGTProps_1.default.dictionaryName : _c, approvedLocales = _a.approvedLocales, _d = _a.defaultLocale, defaultLocale = _d === void 0 ? (approvedLocales === null || approvedLocales === void 0 ? void 0 : approvedLocales[0]) || defaultGTProps_1.default.defaultLocale : _d, _e = _a.locale, locale = _e === void 0 ? '' : _e, _f = _a.remoteSource, remoteSource = _f === void 0 ? defaultGTProps_1.default.remoteSource : _f, _g = _a.cacheURL, cacheURL = _g === void 0 ? defaultGTProps_1.default.cacheURL : _g, translations = _a.translations;
+    var children = _a.children, projectID = _a.projectID, _b = _a.dictionary, dictionary = _b === void 0 ? defaultGTProps_1.default.dictionary : _b, _c = _a.dictionaryName, dictionaryName = _c === void 0 ? defaultGTProps_1.default.dictionaryName : _c, approvedLocales = _a.approvedLocales, _d = _a.defaultLocale, defaultLocale = _d === void 0 ? (approvedLocales === null || approvedLocales === void 0 ? void 0 : approvedLocales[0]) || defaultGTProps_1.default.defaultLocale : _d, _e = _a.locale, locale = _e === void 0 ? '' : _e, _f = _a.remoteSource, remoteSource = _f === void 0 ? defaultGTProps_1.default.remoteSource : _f, _g = _a.cacheURL, cacheURL = _g === void 0 ? defaultGTProps_1.default.cacheURL : _g;
     var suppliedDictionary = (0, react_1.useMemo)(function () { return (0, flattenDictionary_1.default)(dictionary); }, [dictionary]);
     if (!projectID && remoteSource && cacheURL === defaultGTProps_1.default.cacheURL) {
         throw new Error("gt-react Error: General Translation cloud services require a project ID! Find yours at www.generaltranslation.com/dashboard.");
@@ -123,18 +123,7 @@ function GTClientProvider(_a) {
         remote: false
     }), loaded = _h[0], setLoaded = _h[1];
     var translationRequired = (0, generaltranslation_1.isSameLanguage)(locale, defaultLocale) ? false : true;
-    var _j = (0, react_1.useState)(null), localDictionary = _j[0], setLocalDictionary = _j[1];
-    (0, react_1.useEffect)(function () {
-        if (locale) {
-            if (translations && translations[locale] && translationRequired) {
-                translations[locale]().then(setLocalDictionary).then(function () { return setLoaded(function (prev) { return (__assign(__assign({}, prev), { local: true })); }); });
-            }
-            else {
-                setLoaded(function (prev) { return (__assign(__assign({}, prev), { local: true })); });
-            }
-        }
-    }, [translations, locale]);
-    var _k = (0, react_1.useState)(null), remoteTranslations = _k[0], setRemoteTranslations = _k[1];
+    var _j = (0, react_1.useState)(null), remoteTranslations = _j[0], setRemoteTranslations = _j[1];
     (0, react_1.useEffect)(function () {
         if (locale) {
             if (remoteSource && translationRequired) {
@@ -174,9 +163,6 @@ function GTClientProvider(_a) {
     }, [cacheURL, remoteSource, locale]);
     var translate = (0, react_1.useCallback)(function (id, options, f) {
         if (options === void 0) { options = {}; }
-        if (translationRequired && localDictionary && localDictionary[id]) {
-            return (0, renderDefaultLanguage_1.default)(__assign({ source: localDictionary[id], variables: options, id: id }, options));
-        }
         var _a = (0, getEntryMetadata_1.default)(suppliedDictionary[id]), entry = _a.entry, metadata = _a.metadata;
         var _b = (0, getEntryTranslationType_1.default)(suppliedDictionary[id]), translationType = _b.type, isFunction = _b.isFunction;
         if (typeof f === 'function') {
@@ -195,20 +181,19 @@ function GTClientProvider(_a) {
         // if entry is "string", none of the above should have affected it
         if (translationRequired) {
             if (remoteTranslations && remoteTranslations[id] && remoteTranslations[id].t) {
-                return (0, renderClientChildren_1.default)({
-                    source: taggedEntry,
-                    target: remoteTranslations[id].t,
-                    locale: locale,
-                    defaultLocale: defaultLocale,
-                    id: id,
-                    variables: options || {},
-                });
+                if (typeof entry === 'string') {
+                    return (0, generaltranslation_1.renderContentToString)(remoteTranslations[id], [locale, defaultLocale], options, ((metadata === null || metadata === void 0 ? void 0 : metadata.variableOptions) ? metadata.variableOptions : undefined));
+                }
+                return (0, renderClientChildren_1.default)(__assign({ source: taggedEntry, target: remoteTranslations[id].t, locale: locale, defaultLocale: defaultLocale, id: id, variables: options }, ((metadata === null || metadata === void 0 ? void 0 : metadata.variableOptions) && { variables: metadata.variableOptions })));
             }
         }
         else {
-            return (0, renderDefaultLanguage_1.default)(__assign({ source: taggedEntry, variables: options || {}, id: id }, options));
+            if (typeof entry === 'string') {
+                return (0, generaltranslation_1.renderContentToString)(entry, [locale, defaultLocale], options, ((metadata === null || metadata === void 0 ? void 0 : metadata.variableOptions) ? metadata.variableOptions : undefined));
+            }
+            return (0, renderDefaultLanguage_1.default)(__assign({ source: taggedEntry, id: id, variables: options }, ((metadata === null || metadata === void 0 ? void 0 : metadata.variableOptions) && { variables: metadata.variableOptions })));
         }
-    }, [suppliedDictionary, translations, translationRequired, remoteTranslations]);
+    }, [suppliedDictionary, translationRequired, remoteTranslations]);
     return ((0, jsx_runtime_1.jsx)(ClientProvider_1.GTContext.Provider, { value: {
             translate: translate,
             locale: locale,

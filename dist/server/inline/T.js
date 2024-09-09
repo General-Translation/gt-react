@@ -63,13 +63,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var jsx_runtime_1 = require("react/jsx-runtime");
 var react_1 = require("react");
-var addGTIdentifier_1 = __importDefault(require("../../primitives/translation/addGTIdentifier"));
-var writeChildrenAsObjects_1 = __importDefault(require("../../primitives/translation/writeChildrenAsObjects"));
+var addGTIdentifier_1 = __importDefault(require("../../internal/addGTIdentifier"));
+var internal_1 = require("../../internal");
 var renderChildren_1 = __importDefault(require("./renderChildren"));
 var Resolver_1 = __importDefault(require("./Resolver"));
-var calculateHash_1 = __importDefault(require("../../primitives/calculateHash"));
+var calculateHash_1 = __importDefault(require("../../internal/calculateHash"));
 var ServerT = function (_a) { return __awaiter(void 0, void 0, void 0, function () {
-    var translationRequired, translationsPromise, defaultLocale, taggedChildren, childrenAsObjects, key, _b, id, translations, translation, translationExists, I18NChildren, I18NChildrenPromise, renderSettings, renderMethod, promise, loadingFallback, errorFallback, resolveI18NPromise;
+    var translationRequired, translationsPromise, defaultLocale, taggedChildren, childrenAsObjects, key, _b, id, translations, translation, translationExists, I18NChildren, I18NChildrenPromise, renderSettings, renderMethod, promise, loadingFallback, errorFallback;
     var I18NConfig = _a.I18NConfig, children = _a.children, locale = _a.locale, props = __rest(_a, ["I18NConfig", "children", "locale"]);
     return __generator(this, function (_c) {
         switch (_c.label) {
@@ -81,7 +81,7 @@ var ServerT = function (_a) { return __awaiter(void 0, void 0, void 0, function 
                 translationsPromise = I18NConfig.getTranslations(locale, props.dictionaryName);
                 defaultLocale = I18NConfig.getDefaultLocale();
                 taggedChildren = (0, addGTIdentifier_1.default)(children);
-                childrenAsObjects = (0, writeChildrenAsObjects_1.default)(taggedChildren);
+                childrenAsObjects = (0, internal_1.writeChildrenAsObjects)(taggedChildren);
                 if (!props.context) return [3 /*break*/, 2];
                 return [4 /*yield*/, (0, calculateHash_1.default)([childrenAsObjects, props.context])];
             case 1:
@@ -130,27 +130,11 @@ var ServerT = function (_a) { return __awaiter(void 0, void 0, void 0, function 
                     loadingFallback = (0, renderChildren_1.default)({ source: taggedChildren, target: translations.remote[id].t, locale: locale, defaultLocale: defaultLocale });
                     errorFallback = loadingFallback;
                 }
-                resolveI18NPromise = function () { return __awaiter(void 0, void 0, void 0, function () {
-                    var _a;
-                    return __generator(this, function (_b) {
-                        switch (_b.label) {
-                            case 0:
-                                _b.trys.push([0, 2, , 4]);
-                                return [4 /*yield*/, promise];
-                            case 1: return [2 /*return*/, _b.sent()];
-                            case 2:
-                                _a = _b.sent();
-                                return [4 /*yield*/, errorFallback];
-                            case 3: return [2 /*return*/, _b.sent()];
-                            case 4: return [2 /*return*/];
-                        }
-                    });
-                }); };
                 if (renderMethod === "hang") {
                     // Wait until the site is translated to return
                     return [2 /*return*/, ((0, jsx_runtime_1.jsx)(jsx_runtime_1.Fragment, { children: (0, jsx_runtime_1.jsx)(Resolver_1.default, { fallback: errorFallback, children: promise }) }))];
                 }
-                if (!["skeleton", "replace"].includes(renderMethod)) {
+                if (!["skeleton", "replace"].includes(renderMethod) && !id) {
                     // If none of those, i.e. "subtle" 
                     // return the children, with no special rendering
                     // a translation may be available from a cached translation dictionary next time the component is loaded

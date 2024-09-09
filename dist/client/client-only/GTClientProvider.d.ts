@@ -17,7 +17,7 @@
  *
  * @returns {JSX.Element} The GTClientProvider component.
 */
-export default function GTClientProvider({ children, projectID, dictionary, dictionaryName, approvedLocales, defaultLocale, locale, remoteSource, cacheURL, translations }: {
+export default function GTClientProvider({ children, projectID, dictionary, dictionaryName, approvedLocales, defaultLocale, locale, remoteSource, cacheURL }: {
     children?: any;
     projectID?: string;
     dictionary?: Record<string, any>;
@@ -27,6 +27,5 @@ export default function GTClientProvider({ children, projectID, dictionary, dict
     locale?: string;
     remoteSource?: boolean;
     cacheURL?: string;
-    translations?: Record<string, () => Promise<Record<string, any>>>;
 }): JSX.Element;
 //# sourceMappingURL=GTClientProvider.d.ts.map

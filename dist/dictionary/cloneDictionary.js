@@ -5,7 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = cloneDictionary;
 var react_1 = __importDefault(require("react"));
-var getEntryMetadata_1 = __importDefault(require("../primitives/rendering/getEntryMetadata"));
+var getEntryMetadata_1 = __importDefault(require("./getEntryMetadata"));
 function cloneMetadata(metadata) {
     if (react_1.default.isValidElement(metadata)) {
         return react_1.default.cloneElement(metadata);

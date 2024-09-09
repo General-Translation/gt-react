@@ -22,32 +22,28 @@ var jsx_runtime_1 = require("react/jsx-runtime");
 var react_1 = require("react");
 var handleRender_1 = __importDefault(require("./helpers/handleRender"));
 var renderDefaultLanguage_1 = __importDefault(require("./helpers/renderDefaultLanguage"));
-var addGTIdentifier_1 = __importDefault(require("../primitives/translation/addGTIdentifier"));
+var addGTIdentifier_1 = __importDefault(require("../internal/addGTIdentifier"));
+var getEntryMetadata_1 = __importDefault(require("../dictionary/getEntryMetadata"));
+var generaltranslation_1 = require("generaltranslation");
 exports.GTContext = (0, react_1.createContext)(undefined);
 function ClientProvider(_a) {
     var children = _a.children, locale = _a.locale, defaultLocale = _a.defaultLocale, dictionary = _a.dictionary, translations = _a.translations, translationRequired = _a.translationRequired;
     var translate = (0, react_1.useCallback)(function (id, options, f) {
         if (options === void 0) { options = {}; }
-        var entry = dictionary[id];
-        if (typeof entry === 'object' && entry.function) {
-            if (typeof f === 'function') {
-                entry = (0, addGTIdentifier_1.default)(f(options));
-            }
-            else {
-                entry = entry.defaultChildren;
-            }
+        var _a = (0, getEntryMetadata_1.default)(dictionary[id]), entry = _a.entry, metadata = _a.metadata;
+        if (metadata && metadata.isFunction && typeof f === 'function') {
+            entry = (0, addGTIdentifier_1.default)(f(options));
         }
         if (translationRequired) {
-            return (0, handleRender_1.default)({
-                source: entry,
-                target: translations[id],
-                locale: locale,
-                defaultLocale: defaultLocale,
-                variables: options,
-                id: id
-            });
+            if (typeof entry === 'string') {
+                return (0, generaltranslation_1.renderContentToString)(translations[id], [locale, defaultLocale], options, ((metadata === null || metadata === void 0 ? void 0 : metadata.variableOptions) ? metadata.variableOptions : undefined));
+            }
+            return (0, handleRender_1.default)(__assign({ source: entry, target: translations[id], locale: locale, defaultLocale: defaultLocale, variables: options, id: id }, ((metadata === null || metadata === void 0 ? void 0 : metadata.variableOptions) && { variableOptions: metadata.variableOptions })));
         }
-        return (0, renderDefaultLanguage_1.default)(__assign({ source: entry, variables: options || {}, id: id }, options));
+        if (typeof entry === 'string') {
+            return (0, generaltranslation_1.renderContentToString)(entry, [locale, defaultLocale], options, ((metadata === null || metadata === void 0 ? void 0 : metadata.variableOptions) ? metadata.variableOptions : undefined));
+        }
+        return (0, renderDefaultLanguage_1.default)(__assign({ source: entry, variables: options, id: id }, ((metadata === null || metadata === void 0 ? void 0 : metadata.variableOptions) && { variableOptions: metadata.variableOptions })));
     }, [dictionary, translations]);
     return ((0, jsx_runtime_1.jsx)(exports.GTContext.Provider, { value: {
             translate: translate,

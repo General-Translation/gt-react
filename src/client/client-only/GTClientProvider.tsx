@@ -7,15 +7,15 @@ import { GTContext } from "../ClientProvider"
 import defaultGTProps from "../../types/defaultGTProps";
 import useBrowserLocale from "../hooks/useBrowserLocale";
 import { tOptions } from "../../dictionary/createTFunction";
-import { getLanguageDirection, isSameLanguage } from "generaltranslation";
+import { isSameLanguage, renderContentToString, splitStringToContent } from "generaltranslation";
 import renderDefaultLanguage from "../helpers/renderDefaultLanguage";
-import getDictionaryReference from "../../primitives/dictionary/getDictionaryReference";
+import getDictionaryReference from "../../dictionary/getDictionaryReference";
 import renderClientChildren from "../helpers/renderClientChildren";
-import getEntryTranslationType from "../../primitives/rendering/getEntryTranslationType";
-import getEntryMetadata from "../../primitives/rendering/getEntryMetadata";
+import getEntryTranslationType from "../../dictionary/getEntryTranslationType";
+import getEntryMetadata from "../../dictionary/getEntryMetadata";
 import ClientPlural from "../plural/ClientPlural";
-import addGTIdentifier from "../../primitives/translation/addGTIdentifier";
-import flattenDictionary from "../../primitives/dictionary/flattenDictionary";
+import addGTIdentifier from "../../internal/addGTIdentifier";
+import flattenDictionary from "../../internal/flattenDictionary";
 
 /**
  * GTClientProvider component for providing translations to entirely client-side React apps.
@@ -44,8 +44,7 @@ export default function GTClientProvider({
     approvedLocales, defaultLocale = approvedLocales?.[0] || defaultGTProps.defaultLocale, 
     locale = '', 
     remoteSource = defaultGTProps.remoteSource,
-    cacheURL = defaultGTProps.cacheURL,
-    translations
+    cacheURL = defaultGTProps.cacheURL
 }: {
     children?: any;
     projectID?: string;
@@ -56,8 +55,6 @@ export default function GTClientProvider({
     locale?: string;
     remoteSource?: boolean;
     cacheURL?: string;
-    translations?: Record<string, () => Promise<Record<string, any>>>;
-    
 }): JSX.Element {
 
     const suppliedDictionary = useMemo(() => flattenDictionary(dictionary), [dictionary])
@@ -75,19 +72,6 @@ export default function GTClientProvider({
     });
     
     const translationRequired = isSameLanguage(locale, defaultLocale) ? false : true;
-
-    const [localDictionary, setLocalDictionary] = useState<Record<string, any> | null>(null);
-    useEffect(() => {
-        if (locale) {
-            if (translations && translations[locale] && translationRequired) {
-                translations[locale]().then(setLocalDictionary).then(() => setLoaded(prev => ({ ...prev, local: true })));
-            } 
-            else {
-                setLoaded(prev => ({ ...prev, local: true }))
-            }
-        }
-    }, [translations, locale])
-
 
     const [remoteTranslations, setRemoteTranslations] = useState<Record<string, any> | null>(null);
 
@@ -115,21 +99,16 @@ export default function GTClientProvider({
     }, [cacheURL, remoteSource, locale])
 
     const translate = useCallback((id: string, options: tOptions = {}, f?: Function) => {
-        if (translationRequired && localDictionary && localDictionary[id]) {
-            return renderDefaultLanguage({ 
-                source: localDictionary[id], 
-                variables: options, 
-                id, 
-                ...options 
-            })
-        }
+
         let { entry, metadata } = getEntryMetadata(suppliedDictionary[id]);
+        
         const { type: translationType, isFunction } = getEntryTranslationType(suppliedDictionary[id]);
         if (typeof f === 'function') {
             entry = f(options);
         } else if (isFunction) {
             entry = entry(options);
         }
+
         if (translationType === "t") {
             entry = <React.Fragment key={id}>{entry}</React.Fragment>;
         } else if (translationType === "plural") {
@@ -146,20 +125,35 @@ export default function GTClientProvider({
 
         const taggedEntry = addGTIdentifier(entry);
         // if entry is "string", none of the above should have affected it
-        
+
         if (translationRequired) {
             if (remoteTranslations && remoteTranslations[id] && remoteTranslations[id].t) {
+                if (typeof entry === 'string') {
+                    return renderContentToString(remoteTranslations[id], [locale, defaultLocale], options, (
+                        metadata?.variableOptions ? metadata.variableOptions : undefined
+                    ));
+                }
                 return renderClientChildren({
                     source: taggedEntry,
                     target: remoteTranslations[id].t,
                     locale, defaultLocale,
-                    id, variables: options || {},
+                    id, variables: options, 
+                    ...(metadata?.variableOptions && { variables: metadata.variableOptions })
                 })
             }
         } else {
-            return renderDefaultLanguage({ source: taggedEntry, variables: options || {}, id, ...options })
+            if (typeof entry === 'string') {
+                return renderContentToString(entry, [locale, defaultLocale], options, (
+                    metadata?.variableOptions ? metadata.variableOptions : undefined
+                ));
+            }
+            return renderDefaultLanguage({ 
+                source: taggedEntry, 
+                id, variables: options, 
+                ...(metadata?.variableOptions && { variables: metadata.variableOptions })
+            })
         }
-    }, [suppliedDictionary, translations, translationRequired, remoteTranslations]);
+    }, [suppliedDictionary, translationRequired, remoteTranslations]);
 
     return (
         <GTContext.Provider value={{

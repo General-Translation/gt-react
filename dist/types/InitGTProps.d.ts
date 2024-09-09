@@ -1,0 +1,23 @@
+type InitGTProps = {
+    apiKey?: string;
+    projectID?: string;
+    baseURL?: string;
+    cacheURL?: string;
+    remoteSource?: boolean;
+    automaticTranslation?: boolean;
+    approvedLocales?: string[];
+    defaultLocale?: string;
+    getLocale?: () => string;
+    renderPrevious?: boolean;
+    renderMethod?: string;
+    renderTimeout?: number | null;
+    dictionaryName?: string;
+    dictionary?: Record<string, any>;
+    translations?: Record<string, () => Promise<Record<string, any>>>;
+    maxConcurrentRequests?: number;
+    batchInterval?: number;
+    getMetadata?: () => Record<string, any>;
+    [key: string]: any;
+};
+export default InitGTProps;
+//# sourceMappingURL=InitGTProps.d.ts.map

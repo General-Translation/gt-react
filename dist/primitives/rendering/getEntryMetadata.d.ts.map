@@ -1,1 +1,0 @@
-{"version":3,"file":"getEntryMetadata.d.ts","sourceRoot":"","sources":["../../../src/primitives/rendering/getEntryMetadata.ts"],"names":[],"mappings":"AAqBA,MAAM,CAAC,OAAO,UAAU,gBAAgB,CAAC,KAAK,EAAE,GAAG,GAAG;IAClD,KAAK,EAAE,GAAG,CAAC;IACX,QAAQ,CAAC,EAAE,MAAM,CAAC,MAAM,EAAE,GAAG,CAAC,CAAA;CACjC,CAgBA"}

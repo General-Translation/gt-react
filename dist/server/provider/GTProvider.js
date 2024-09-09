@@ -64,17 +64,17 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = GTProvider;
 var jsx_runtime_1 = require("react/jsx-runtime");
 // On the server
-require("server-only");
 var react_1 = require("react");
 var ClientProvider_1 = __importDefault(require("../../client/ClientProvider"));
-var flattenDictionary_1 = __importDefault(require("../../primitives/dictionary/flattenDictionary"));
-var getEntryMetadata_1 = __importDefault(require("../../primitives/rendering/getEntryMetadata"));
-var addGTIdentifier_1 = __importDefault(require("../../primitives/translation/addGTIdentifier"));
-var writeChildrenAsObjects_1 = __importDefault(require("../../primitives/translation/writeChildrenAsObjects"));
-var calculateHash_1 = __importDefault(require("../../primitives/calculateHash"));
-var getEntryTranslationType_1 = __importDefault(require("../../primitives/rendering/getEntryTranslationType"));
+var flattenDictionary_1 = __importDefault(require("../../internal/flattenDictionary"));
+var getEntryMetadata_1 = __importDefault(require("../../dictionary/getEntryMetadata"));
+var addGTIdentifier_1 = __importDefault(require("../../internal/addGTIdentifier"));
+var internal_1 = require("../../internal");
+var calculateHash_1 = __importDefault(require("../../internal/calculateHash"));
+var getEntryTranslationType_1 = __importDefault(require("../../dictionary/getEntryTranslationType"));
 var InnerPlural_1 = __importDefault(require("../plural/InnerPlural"));
 var cloneDictionary_1 = __importDefault(require("../../dictionary/cloneDictionary"));
+var generaltranslation_1 = require("generaltranslation");
 /*
 e.g.
 dictionary = {
@@ -84,7 +84,7 @@ dictionary = {
 */
 function GTProvider(_a) {
     return __awaiter(this, void 0, void 0, function () {
-        var dictionary, providerID, entry, translations, renderSettings, clonedDictionary, _i, _b, id_1, _c, entry, metadata, _d, translationType, isFunction, _e, ranges, zero, one, two, few, many, other, singular, dual, plural, tOptions, innerProps, taggedEntry, translationRequired, _f, local_1, remote_1;
+        var dictionary, providerID, entry, translations, renderSettings, clonedDictionary, _i, _b, id_1, _c, entry, metadata, _d, translationType, isFunction, _e, zero, one, two, few, many, other, singular, dual, plural, tOptions, innerProps, taggedEntry, dictionaryMetadata, translationRequired, _f, local_1, remote_1;
         var _this = this;
         var I18NConfig = _a.I18NConfig, locale = _a.locale, defaultLocale = _a.defaultLocale, children = _a.children, _g = _a.id, id = _g === void 0 ? '' : _g, props = __rest(_a, ["I18NConfig", "locale", "defaultLocale", "children", "id"]);
         return __generator(this, function (_h) {
@@ -116,10 +116,9 @@ function GTProvider(_a) {
                             entry = (0, jsx_runtime_1.jsx)(jsx_runtime_1.Fragment, { children: entry });
                         }
                         else if (translationType === "plural") {
-                            _e = metadata || {}, ranges = _e.ranges, zero = _e.zero, one = _e.one, two = _e.two, few = _e.few, many = _e.many, other = _e.other, singular = _e.singular, dual = _e.dual, plural = _e.plural, tOptions = __rest(_e, ["ranges", "zero", "one", "two", "few", "many", "other", "singular", "dual", "plural"]);
+                            _e = metadata || {}, zero = _e.zero, one = _e.one, two = _e.two, few = _e.few, many = _e.many, other = _e.other, singular = _e.singular, dual = _e.dual, plural = _e.plural, tOptions = __rest(_e, ["zero", "one", "two", "few", "many", "other", "singular", "dual", "plural"]);
                             metadata = tOptions;
                             innerProps = {
-                                ranges: ranges,
                                 zero: zero,
                                 one: one,
                                 two: two,
@@ -134,10 +133,14 @@ function GTProvider(_a) {
                         }
                         taggedEntry = (0, addGTIdentifier_1.default)(entry);
                         clonedDictionary[id_1] = [taggedEntry, metadata];
-                        // change the dictionary here
-                        // elsewhere we are changing the cloned dictionary
-                        // we are just adding the gt identifier, nothing more
-                        dictionary[id_1] = isFunction ? { function: true, defaultChildren: taggedEntry } : taggedEntry;
+                        dictionaryMetadata = void 0;
+                        if (isFunction) {
+                            dictionaryMetadata = __assign(__assign({}, (dictionaryMetadata || {})), { isFunction: isFunction });
+                        }
+                        if (metadata === null || metadata === void 0 ? void 0 : metadata.variableOptions) {
+                            dictionaryMetadata = __assign(__assign({}, (dictionaryMetadata || {})), { variableOptions: metadata.variableOptions });
+                        }
+                        dictionary[id_1] = dictionaryMetadata ? [taggedEntry, dictionaryMetadata] : taggedEntry;
                     }
                     translationRequired = I18NConfig.translationRequired(locale);
                     if (!translationRequired) return [3 /*break*/, 3];
@@ -145,13 +148,13 @@ function GTProvider(_a) {
                 case 1:
                     _f = _h.sent(), local_1 = _f.local, remote_1 = _f.remote;
                     return [4 /*yield*/, Promise.all(Object.keys(clonedDictionary).map(function (id) { return __awaiter(_this, void 0, void 0, function () {
-                            var _a, entry, metadata, translationType, entryAsObjects, key, _b, translation, translationPromise, _c, _d, targetPromise, renderMethod, _e, _f, loadingFallbackTarget, errorFallbackTarget;
+                            var _a, entry, metadata, translationType, entryAsObjects, key, _b, translation, content, translationPromise, _c, _d, targetPromise, renderMethod, _e, _f, loadingFallbackTarget, errorFallbackTarget;
                             return __generator(this, function (_g) {
                                 switch (_g.label) {
                                     case 0:
                                         _a = (0, getEntryMetadata_1.default)(clonedDictionary[id]), entry = _a.entry, metadata = _a.metadata;
                                         translationType = (0, getEntryTranslationType_1.default)(clonedDictionary[id]).type;
-                                        entryAsObjects = (0, writeChildrenAsObjects_1.default)(entry);
+                                        entryAsObjects = (0, internal_1.writeChildrenAsObjects)(entry);
                                         if (!(metadata === null || metadata === void 0 ? void 0 : metadata.context)) return [3 /*break*/, 2];
                                         return [4 /*yield*/, (0, calculateHash_1.default)([entryAsObjects, metadata.context])];
                                     case 1:
@@ -173,7 +176,8 @@ function GTProvider(_a) {
                                         if (!I18NConfig.automaticTranslationEnabled())
                                             return [2 /*return*/];
                                         if (!(translationType === "string")) return [3 /*break*/, 8];
-                                        translationPromise = I18NConfig.translate({ content: entry, targetLanguage: locale, options: __assign(__assign({}, metadata), { hash: key, id: id }) });
+                                        content = (0, generaltranslation_1.splitStringToContent)(entry);
+                                        translationPromise = I18NConfig.translate({ content: content, targetLanguage: locale, options: __assign(__assign({}, metadata), { hash: key, id: id }) });
                                         if (!(renderSettings.method !== "subtle")) return [3 /*break*/, 7];
                                         _c = translations;
                                         _d = id;

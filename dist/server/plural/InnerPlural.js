@@ -19,12 +19,12 @@ var renderVariable_1 = __importDefault(require("../value/renderVariable"));
 var getPluralBranch_1 = __importDefault(require("../../primitives/variables/getPluralBranch"));
 var createValues_1 = __importDefault(require("../../primitives/variables/createValues"));
 var Plural = function (_a) {
-    var locales = _a.locales, children = _a.children, n = _a.n, ranges = _a.ranges, zero = _a.zero, one = _a.one, two = _a.two, few = _a.few, many = _a.many, other = _a.other, singular = _a.singular, plural = _a.plural, dual = _a.dual, values = _a.values, props = __rest(_a, ["locales", "children", "n", "ranges", "zero", "one", "two", "few", "many", "other", "singular", "plural", "dual", "values"]);
+    var locales = _a.locales, children = _a.children, n = _a.n, zero = _a.zero, one = _a.one, two = _a.two, few = _a.few, many = _a.many, other = _a.other, singular = _a.singular, plural = _a.plural, dual = _a.dual, values = _a.values, props = __rest(_a, ["locales", "children", "n", "zero", "one", "two", "few", "many", "other", "singular", "plural", "dual", "values"]);
     if (typeof n !== 'number') {
         console.warn("WARNING: No 'n' parameter provided to <Plural> component with children ".concat(JSON.stringify(children), "."));
     }
     var generaltranslation = props["data-generaltranslation"];
-    var branches = Object.fromEntries(Object.entries({ ranges: ranges, zero: zero, one: one, two: two, few: few, many: many, other: other, singular: singular, plural: plural, dual: dual })
+    var branches = Object.fromEntries(Object.entries({ zero: zero, one: one, two: two, few: few, many: many, other: other, singular: singular, plural: plural, dual: dual })
         .filter(function (_a) {
         var _ = _a[0], value = _a[1];
         return value !== undefined;

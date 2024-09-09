@@ -29,7 +29,7 @@ export default function useGT(id: string = ''):
     try {
         ({ translate } = useGTContext());
     } catch {
-        throw new Error(`t('${id}'): No context provided. useGT() can only be used inside a GTProvider.`);
+        throw new Error(`useGT('${id}'): No context provided. You're trying to get the t() function on the client, which can only be done inside a <GTProvider> or <GTClientProvider>.`);
     }
 
     // Return a translation function if available, otherwise return a no-op function

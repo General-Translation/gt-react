@@ -1,8 +1,8 @@
 import I18NConfiguration from "../config/I18NConfiguration";
 import Value from "../server/value/InnerValue";
 import Plural from "../server/plural/InnerPlural";
-import getEntryMetadata from "../primitives/rendering/getEntryMetadata";
-import getEntryTranslationType from "../primitives/rendering/getEntryTranslationType";
+import getEntryMetadata from "./getEntryMetadata";
+import getEntryTranslationType from "./getEntryTranslationType";
 import getDictionaryEntry from "./getDictionaryEntry";
 
 export type tOptions = {
@@ -16,15 +16,20 @@ export default function createTFunction(I18NConfig: I18NConfiguration, T: any, t
         const raw = getDictionaryEntry(id, dictionary);
         let { entry, metadata } = getEntryMetadata(raw);
 
-        if (Object.keys(entry).length === 0 && entry.constructor === Object) {
+        if (entry && typeof entry === 'object' && !Object.keys(entry).length) {
             throw new Error(`Dictionary contains an empty object. This usually happens when you try to use a client-side function as an entry in a server-side dictionary. Check your dictionary entry with id "${id}".`)
         }
 
         // Checks to see if options are valid
-        const { type: translationType, isFunction } = getEntryTranslationType(raw);
+        const { type: translationType, isFunction } = getEntryTranslationType(raw); 
         
         // Turn into an async function if the target is a string
-        if (translationType === "string") return translate(entry, { id, ...metadata });
+        if (translationType === "string") {
+            const { variableOptions, ...otherMetadata } = (metadata || {});
+            return translate(
+                entry, { id, ...otherMetadata }, options, variableOptions
+            );
+        } 
 
         // execute function with options
         if (typeof f === 'function') {
@@ -34,9 +39,9 @@ export default function createTFunction(I18NConfig: I18NConfiguration, T: any, t
         }
 
         // If a plural or value is required
-        if (Object.keys(options).length) {
+        if (typeof options === 'object' && Object.keys(options).length) {
             const locales = [I18NConfig.getLocale(), I18NConfig.getDefaultLocale()];
-            const { ranges, zero, one, two, few, many, other, singular, dual, plural,
+            const { zero, one, two, few, many, other, singular, dual, plural,
                 ...tOptions 
             } = metadata || {};
             if (translationType === "plural") {
@@ -44,7 +49,6 @@ export default function createTFunction(I18NConfig: I18NConfiguration, T: any, t
                     throw new Error(`ID "${id}" requires an "n" option.\n\ne.g. t("${id}", { n: 1 })`)
                 }
                 const innerProps = {
-                    ranges, 
                     zero, one,
                     two, few,
                     many, other,

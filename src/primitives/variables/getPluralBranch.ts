@@ -35,38 +35,16 @@ function getBranchNameFromNumber(n: number, locales: string[], options: Record<s
     return "";
 }
 
-
-export type Range = {
-    max: number;
-    min: number;
-    children: any;
-}
-
-/**
- * Helper function to get the branch from a list of ranges.
- * 
- * @param {number} n - The number to determine the branch for.
- * @param {Range[]} ranges - The list of ranges containing possible branches.
- * @returns {any | undefined} The determined branch or undefined if no matching range is found.
- */
-function getBranchFromRanges(n: number, ranges: Range[]): any | undefined {
-    for (const range of ranges) {
-        if (range.min <= n && range.max >= n) return range.children;
-    }
-    return undefined;
-}
-
 /**
  * Main function to get the appropriate branch based on the provided number and branches.
  * 
  * @param {number} n - The number to determine the branch for.
- * @param {any} branches - The object containing possible branches and their corresponding ranges and options.
+ * @param {any} branches - The object containing possible branches.
  * @returns {any} The determined branch.
  */
 export default function getPluralBranch(n: number, locales: string[], branches: any) {
     let branchName = '';
     let branch = null;
-    if (typeof n === 'number' && branches?.ranges) branch = getBranchFromRanges(n, branches.ranges);
     if (typeof n === 'number' && !branch && branches) branchName = getBranchNameFromNumber(n, locales, branches);
     if (branchName && !branch) branch = branches[branchName];
     return branch;

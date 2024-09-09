@@ -4,10 +4,10 @@ import Plural from "./InnerPlural"
 export default function createPluralComponent(T: any, getLocale: () => string, defaultLocale: string) {
     const PluralT = ({ 
         children, 
-        n, ranges, zero, one, two, few, many, other, singular, dual, plural, values,
+        n, zero, one, two, few, many, other, singular, dual, plural, values,
         ...props
     }: { children?: any, [key: string]: any }) => {
-        const innerProps = { n, ranges, zero, one, two, few, many, other, singular, dual, plural, values };
+        const innerProps = { n, zero, one, two, few, many, other, singular, dual, plural, values };
         const locales = [getLocale(), defaultLocale];
         return <T {...props}><Plural locales={locales} {...innerProps}>{children}</Plural></T>
     };

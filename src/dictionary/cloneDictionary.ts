@@ -1,5 +1,5 @@
 import React from "react";
-import getEntryMetadata from "../primitives/rendering/getEntryMetadata";
+import getEntryMetadata from "./getEntryMetadata";
 
 function cloneMetadata(metadata: Record<string, any>): Record<string, any> {
     if (React.isValidElement(metadata)) {

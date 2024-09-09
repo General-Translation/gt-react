@@ -1,10 +1,10 @@
 import React, { isValidElement, ReactElement, ReactNode } from 'react'
 import getPluralBranch from '../../primitives/variables/getPluralBranch';
 import isValidReactNode from '../../primitives/rendering/isValidReactNode';
-import Var from '../variables/Var/Var';
-import DateTime from '../variables/DateTime/DateTime';
-import Num from '../variables/Num/Num';
-import Currency from '../variables/Currency/Currency';
+import Var from '../variables/Var';
+import DateTime from '../variables/DateTime';
+import Num from '../variables/Num';
+import Currency from '../variables/Currency';
 import { Target, TargetElement, Source, SourceChild } from '../../types/SourceTargetTypes';
 import isTargetVariable from '../../primitives/variables/isTargetVariable';
 import getVariableProps from '../../primitives/variables/getVariableProps';

@@ -1,9 +1,9 @@
 import React from 'react'
 import isValidReactNode from '../../primitives/rendering/isValidReactNode';
-import Var from '../variables/Var/Var';
-import Currency from '../variables/Currency/Currency';
-import Num from '../variables/Num/Num';
-import DateTime from '../variables/DateTime/DateTime';
+import Var from '../variables/Var';
+import Currency from '../variables/Currency';
+import Num from '../variables/Num';
+import DateTime from '../variables/DateTime';
 import defaultVariableNames from '../../primitives/variables/defaultVariableNames';
 
 /**

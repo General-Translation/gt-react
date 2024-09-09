@@ -89,6 +89,14 @@ var RemoteDictionaryManager_1 = __importDefault(require("./RemoteDictionaryManag
 var getDictionaryEntry_1 = __importDefault(require("../dictionary/getDictionaryEntry"));
 var LocalDictionaryManager_1 = __importDefault(require("./LocalDictionaryManager"));
 var defaultGTProps_1 = __importDefault(require("../types/defaultGTProps"));
+var isServer = function () {
+    if (typeof window !== 'undefined') {
+        // proxy for import 'server-only'
+        throw new Error("This module cannot be imported from a Client Component module. " +
+            "It should only be used from a Server Component.");
+    }
+};
+isServer();
 var I18NConfiguration = /** @class */ (function () {
     function I18NConfiguration(_a) {
         var 
@@ -106,6 +114,7 @@ var I18NConfiguration = /** @class */ (function () {
         maxConcurrentRequests = _a.maxConcurrentRequests, batchInterval = _a.batchInterval, 
         // Other metadata
         getMetadata = _a.getMetadata, metadata = __rest(_a, ["apiKey", "projectID", "baseURL", "cacheURL", "remoteSource", "automaticTranslation", "getLocale", "defaultLocale", "approvedLocales", "renderPrevious", "renderMethod", "renderTimeout", "dictionary", "dictionaryName", "translations", "maxConcurrentRequests", "batchInterval", "getMetadata"]);
+        isServer(); // redundant
         // Cloud integration
         this.projectID = projectID;
         this.remoteSource = (cacheURL && remoteSource) ? true : false;

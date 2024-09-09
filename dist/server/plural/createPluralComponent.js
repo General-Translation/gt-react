@@ -30,8 +30,8 @@ var jsx_runtime_1 = require("react/jsx-runtime");
 var InnerPlural_1 = __importDefault(require("./InnerPlural"));
 function createPluralComponent(T, getLocale, defaultLocale) {
     var PluralT = function (_a) {
-        var children = _a.children, n = _a.n, ranges = _a.ranges, zero = _a.zero, one = _a.one, two = _a.two, few = _a.few, many = _a.many, other = _a.other, singular = _a.singular, dual = _a.dual, plural = _a.plural, values = _a.values, props = __rest(_a, ["children", "n", "ranges", "zero", "one", "two", "few", "many", "other", "singular", "dual", "plural", "values"]);
-        var innerProps = { n: n, ranges: ranges, zero: zero, one: one, two: two, few: few, many: many, other: other, singular: singular, dual: dual, plural: plural, values: values };
+        var children = _a.children, n = _a.n, zero = _a.zero, one = _a.one, two = _a.two, few = _a.few, many = _a.many, other = _a.other, singular = _a.singular, dual = _a.dual, plural = _a.plural, values = _a.values, props = __rest(_a, ["children", "n", "zero", "one", "two", "few", "many", "other", "singular", "dual", "plural", "values"]);
+        var innerProps = { n: n, zero: zero, one: one, two: two, few: few, many: many, other: other, singular: singular, dual: dual, plural: plural, values: values };
         var locales = [getLocale(), defaultLocale];
         return (0, jsx_runtime_1.jsx)(T, __assign({}, props, { children: (0, jsx_runtime_1.jsx)(InnerPlural_1.default, __assign({ locales: locales }, innerProps, { children: children })) }));
     };

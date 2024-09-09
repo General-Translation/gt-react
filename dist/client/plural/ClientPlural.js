@@ -37,14 +37,13 @@ var createValues_1 = __importDefault(require("../../primitives/variables/createV
  *
  * @param {ReactNode} children - Default children.
  * @param {number} n - Number to branch based on.
- * @param {Range[]} ranges - Array of range objects used for branch selection.
  * @param {Record<string, any>} ...branches - Named branches, e.g. "singular", "plural" and their associated branches.
  * @returns {ReactNode}
  */
 var ClientPlural = function (_a) {
-    var children = _a.children, n = _a.n, values = _a.values, ranges = _a.ranges, branches = __rest(_a, ["children", "n", "values", "ranges"]);
+    var children = _a.children, n = _a.n, values = _a.values, branches = __rest(_a, ["children", "n", "values"]);
     var locales = [(0, useLocale_1.default)(), (0, useDefaultLocale_1.default)()]; // user's language
-    return ((0, jsx_runtime_1.jsx)(RenderClientVariable_1.default, { variables: (0, createValues_1.default)(n, values), children: ((typeof n === 'number' && __assign(__assign({}, branches), { ranges: ranges })) ? (0, getPluralBranch_1.default)(n, locales, __assign(__assign({}, branches), { ranges: ranges })) : null) || children }));
+    return ((0, jsx_runtime_1.jsx)(RenderClientVariable_1.default, { variables: (0, createValues_1.default)(n, values), children: ((typeof n === 'number' && __assign({}, branches)) ? (0, getPluralBranch_1.default)(n, locales, branches) : null) || children }));
 };
 ClientPlural.gtTransformation = "plural";
 exports.default = ClientPlural;

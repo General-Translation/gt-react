@@ -54,32 +54,15 @@ function getBranchNameFromNumber(n, locales, options) {
     return "";
 }
 /**
- * Helper function to get the branch from a list of ranges.
- *
- * @param {number} n - The number to determine the branch for.
- * @param {Range[]} ranges - The list of ranges containing possible branches.
- * @returns {any | undefined} The determined branch or undefined if no matching range is found.
- */
-function getBranchFromRanges(n, ranges) {
-    for (var _i = 0, ranges_1 = ranges; _i < ranges_1.length; _i++) {
-        var range = ranges_1[_i];
-        if (range.min <= n && range.max >= n)
-            return range.children;
-    }
-    return undefined;
-}
-/**
  * Main function to get the appropriate branch based on the provided number and branches.
  *
  * @param {number} n - The number to determine the branch for.
- * @param {any} branches - The object containing possible branches and their corresponding ranges and options.
+ * @param {any} branches - The object containing possible branches.
  * @returns {any} The determined branch.
  */
 function getPluralBranch(n, locales, branches) {
     var branchName = '';
     var branch = null;
-    if (typeof n === 'number' && (branches === null || branches === void 0 ? void 0 : branches.ranges))
-        branch = getBranchFromRanges(n, branches.ranges);
     if (typeof n === 'number' && !branch && branches)
         branchName = getBranchNameFromNumber(n, locales, branches);
     if (branchName && !branch)
