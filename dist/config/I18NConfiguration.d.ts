@@ -14,7 +14,6 @@ type I18NConfigurationParams = {
     renderTimeout: number | null;
     dictionary: Record<string, any>;
     dictionaryName: string;
-    saveByDefault?: boolean;
     translations?: Record<string, () => Promise<Record<string, any>>>;
     maxConcurrentRequests: number;
     batchInterval: number;
@@ -33,7 +32,6 @@ export default class I18NConfiguration {
     renderTimeout: number | null;
     dictionaryName: string;
     dictionary: Record<string, any>;
-    saveByDefault?: boolean;
     translations?: Record<string, () => Promise<Record<string, any>>>;
     private _localDictionaryManager;
     private _remoteDictionaryManager;
@@ -45,7 +43,7 @@ export default class I18NConfiguration {
     private _queue;
     private _activeRequests;
     private _translationCache;
-    constructor({ apiKey, projectID, baseURL, cacheURL, remoteSource, automaticTranslation, getLocale, defaultLocale, approvedLocales, renderPrevious, renderMethod, renderTimeout, dictionary, dictionaryName, saveByDefault, translations, maxConcurrentRequests, batchInterval, getMetadata, ...metadata }: I18NConfigurationParams);
+    constructor({ apiKey, projectID, baseURL, cacheURL, remoteSource, automaticTranslation, getLocale, defaultLocale, approvedLocales, renderPrevious, renderMethod, renderTimeout, dictionary, dictionaryName, translations, maxConcurrentRequests, batchInterval, getMetadata, ...metadata }: I18NConfigurationParams);
     /**
      * Gets the application's default locale
      * @returns {string} A BCP-47 language tag
@@ -94,12 +92,6 @@ export default class I18NConfiguration {
      * @returns True if translation is required, otherwise false
      */
     translationRequired(locale: string): boolean;
-    /**
-     * Returns a boolean determining whether or not a translation should be saved remotely
-     * Undefined if not set
-     * @returns {string} A BCP-47 language tag
-    */
-    shouldSave(): boolean | undefined;
     /**
      * Get the translation dictionaries for this user's locale, if they exist
      * @param locale - The language set by the user

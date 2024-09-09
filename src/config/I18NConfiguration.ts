@@ -19,7 +19,6 @@ type I18NConfigurationParams = {
     renderTimeout: number | null,
     dictionary: Record<string, any>, 
     dictionaryName: string;
-    saveByDefault?: boolean;
     translations?: Record<string, () => Promise<Record<string, any>>>;
     maxConcurrentRequests: number;
     batchInterval: number;
@@ -43,7 +42,6 @@ export default class I18NConfiguration {
     // Dictionaries
     dictionaryName: string;
     dictionary: Record<string, any>;
-    saveByDefault?: boolean;
     translations?: Record<string, () => Promise<Record<string, any>>>;
     private _localDictionaryManager: LocalDictionaryManager | undefined;
     private _remoteDictionaryManager: RemoteDictionaryManager | undefined;
@@ -73,7 +71,6 @@ export default class I18NConfiguration {
         renderPrevious, renderMethod, renderTimeout,
         // Dictionaries
         dictionary, dictionaryName,
-        saveByDefault,
         // Translations
         translations,
         // Batching config
@@ -101,7 +98,6 @@ export default class I18NConfiguration {
         // Dictionaries
         this.dictionary = dictionary;
         this.dictionaryName = dictionaryName;
-        this.saveByDefault = saveByDefault;
         // Local translations
         this.translations = translations;
         // GT
@@ -210,15 +206,6 @@ export default class I18NConfiguration {
         if (this.approvedLocales && !this.approvedLocales.some(approvedLocale => isSameLanguage(locale, approvedLocale))) return false;
         if (isSameLanguage(locale, this.defaultLocale)) return false;
         return true;
-    }
-
-    /**
-     * Returns a boolean determining whether or not a translation should be saved remotely
-     * Undefined if not set
-     * @returns {string} A BCP-47 language tag
-    */
-    shouldSave(): boolean | undefined {
-        return this.saveByDefault
     }
 
     /**

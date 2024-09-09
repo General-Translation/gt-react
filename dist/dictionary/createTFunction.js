@@ -33,9 +33,7 @@ var getEntryMetadata_1 = __importDefault(require("../primitives/rendering/getEnt
 var getEntryTranslationType_1 = __importDefault(require("../primitives/rendering/getEntryTranslationType"));
 var getDictionaryEntry_1 = __importDefault(require("./getDictionaryEntry"));
 function createTFunction(I18NConfig, T, translate, dictionary) {
-    var _a;
     if (dictionary === void 0) { dictionary = I18NConfig.getDictionary(); }
-    var shouldSave = (_a = I18NConfig.shouldSave()) !== null && _a !== void 0 ? _a : true;
     return function t(id, options, f) {
         if (options === void 0) { options = {}; }
         var raw = (0, getDictionaryEntry_1.default)(id, dictionary);
@@ -47,7 +45,7 @@ function createTFunction(I18NConfig, T, translate, dictionary) {
         var _b = (0, getEntryTranslationType_1.default)(raw), translationType = _b.type, isFunction = _b.isFunction;
         // Turn into an async function if the target is a string
         if (translationType === "string")
-            return translate(entry, __assign({ id: id, save: shouldSave }, metadata));
+            return translate(entry, __assign({ id: id }, metadata));
         // execute function with options
         if (typeof f === 'function') {
             entry = f(options);
@@ -64,12 +62,12 @@ function createTFunction(I18NConfig, T, translate, dictionary) {
                     throw new Error("ID \"".concat(id, "\" requires an \"n\" option.\n\ne.g. t(\"").concat(id, "\", { n: 1 })"));
                 }
                 var innerProps = __assign({ ranges: ranges, zero: zero, one: one, two: two, few: few, many: many, other: other, singular: singular, dual: dual, plural: plural }, options);
-                return ((0, jsx_runtime_1.jsx)(T, __assign({ id: id, save: shouldSave }, tOptions, { children: (0, jsx_runtime_1.jsx)(InnerPlural_1.default, __assign({ n: options.n, locales: locales }, innerProps, { children: entry })) })));
+                return ((0, jsx_runtime_1.jsx)(T, __assign({ id: id }, tOptions, { children: (0, jsx_runtime_1.jsx)(InnerPlural_1.default, __assign({ n: options.n, locales: locales }, innerProps, { children: entry })) })));
             }
-            return ((0, jsx_runtime_1.jsx)(T, __assign({ id: id, save: shouldSave }, tOptions, { children: (0, jsx_runtime_1.jsx)(InnerValue_1.default, { values: options, locales: locales, children: entry }) })));
+            return ((0, jsx_runtime_1.jsx)(T, __assign({ id: id }, tOptions, { children: (0, jsx_runtime_1.jsx)(InnerValue_1.default, { values: options, locales: locales, children: entry }) })));
         }
         // base case, just return T with an inner fragment (</>) for consistency
-        return ((0, jsx_runtime_1.jsx)(T, __assign({ id: id, save: shouldSave }, metadata, { children: (0, jsx_runtime_1.jsx)(jsx_runtime_1.Fragment, { children: entry }) })));
+        return ((0, jsx_runtime_1.jsx)(T, __assign({ id: id }, metadata, { children: (0, jsx_runtime_1.jsx)(jsx_runtime_1.Fragment, { children: entry }) })));
     };
 }
 //# sourceMappingURL=createTFunction.js.map

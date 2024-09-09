@@ -14,7 +14,6 @@ type CreateGTProps = {
     renderPrevious?: boolean,
     renderMethod?: string;
     renderTimeout?: number | null;
-    shouldSave?: boolean;
     // Dictionaries
     dictionaryName?: string;
     dictionary?: Record<string, any>;

@@ -30,14 +30,12 @@ var jsx_runtime_1 = require("react/jsx-runtime");
 var GTProvider_1 = __importDefault(require("./GTProvider"));
 function createGTProviderComponent(I18NConfig) {
     return function (_a) {
-        var _b;
         var children = _a.children, props = __rest(_a, ["children"]);
         var locale = I18NConfig.getLocale();
         var dictionaryName = I18NConfig.getDictionaryName();
         var defaultLocale = I18NConfig.getDefaultLocale();
-        var shouldSave = (_b = I18NConfig.shouldSave()) !== null && _b !== void 0 ? _b : true;
         /* @ts-expect-error Server Component */
-        return (0, jsx_runtime_1.jsx)(GTProvider_1.default, __assign({ locale: locale, dictionaryName: dictionaryName, defaultLocale: defaultLocale, shouldSave: shouldSave }, props, { I18NConfig: I18NConfig, children: children }));
+        return (0, jsx_runtime_1.jsx)(GTProvider_1.default, __assign({ locale: locale, dictionaryName: dictionaryName, defaultLocale: defaultLocale }, props, { I18NConfig: I18NConfig, children: children }));
     };
 }
 //# sourceMappingURL=createGTProviderComponent.js.map

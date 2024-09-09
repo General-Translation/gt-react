@@ -10,8 +10,6 @@ export type tOptions = {
 }
 
 export default function createTFunction(I18NConfig: I18NConfiguration, T: any, translate: any, dictionary = I18NConfig.getDictionary()) {
-    
-    const shouldSave = I18NConfig.shouldSave() ?? true;
 
     return function t(id: string, options: tOptions = {}, f?: Function): JSX.Element | Promise<string> {
 
@@ -26,7 +24,7 @@ export default function createTFunction(I18NConfig: I18NConfiguration, T: any, t
         const { type: translationType, isFunction } = getEntryTranslationType(raw);
         
         // Turn into an async function if the target is a string
-        if (translationType === "string") return translate(entry, { id, save: shouldSave, ...metadata });
+        if (translationType === "string") return translate(entry, { id, ...metadata });
 
         // execute function with options
         if (typeof f === 'function') {
@@ -54,7 +52,7 @@ export default function createTFunction(I18NConfig: I18NConfiguration, T: any, t
                     ...options
                 };
                 return (
-                    <T id={id} save={shouldSave} {...tOptions}>
+                    <T id={id} {...tOptions}>
                         <Plural n={options.n} locales={locales} {...innerProps}>
                             {entry}
                         </Plural>
@@ -62,7 +60,7 @@ export default function createTFunction(I18NConfig: I18NConfiguration, T: any, t
                 );
             }
             return (
-                <T id={id} save={shouldSave} {...tOptions}>
+                <T id={id} {...tOptions}>
                     <Value values={options} locales={locales}>
                         {entry}
                     </Value>
@@ -72,7 +70,7 @@ export default function createTFunction(I18NConfig: I18NConfiguration, T: any, t
 
         // base case, just return T with an inner fragment (</>) for consistency
         return (
-            <T id={id} save={shouldSave} {...metadata}>
+            <T id={id} {...metadata}>
                 <>{entry}</>
             </T>
         )

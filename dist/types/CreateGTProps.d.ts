@@ -11,7 +11,6 @@ type CreateGTProps = {
     renderPrevious?: boolean;
     renderMethod?: string;
     renderTimeout?: number | null;
-    shouldSave?: boolean;
     dictionaryName?: string;
     dictionary?: Record<string, any>;
     translations?: Record<string, () => Promise<Record<string, any>>>;
