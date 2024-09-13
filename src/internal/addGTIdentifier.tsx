@@ -88,7 +88,7 @@ export default function addGTIdentifier(children: Children, branches?: Record<st
     }, {});
 
     // check that work has actually been done, if not just return the default children
-    if (Object.keys(pluralBranches).length === 1) return taggedChildren;
+    if (!Object.keys(pluralBranches).length) return taggedChildren;
 
     return React.createElement('span', { 'data-generaltranslation': { id: 0, branches: pluralBranches, transformation: 'plural' }, children: taggedChildren });;
 
