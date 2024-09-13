@@ -51,7 +51,7 @@ function _ClientProvider(_a) {
         }
         ;
         var source = entry;
-        var isPlural = entry && typeof entry === 'object' && internal_1.primitives.pluralBranchNames.some(function (branchName) { var _a, _b; return branchName in ((_b = (_a = entry === null || entry === void 0 ? void 0 : entry.props) === null || _a === void 0 ? void 0 : _a['data-generaltranslation']) === null || _b === void 0 ? void 0 : _b.branches) || {}; });
+        var isPlural = entry && typeof entry === 'object' && internal_1.primitives.pluralBranchNames.some(function (branchName) { var _a, _b; return branchName in (((_b = (_a = entry === null || entry === void 0 ? void 0 : entry.props) === null || _a === void 0 ? void 0 : _a['data-generaltranslation']) === null || _b === void 0 ? void 0 : _b.branches) || {}); });
         if (isPlural) {
             if (typeof (variables === null || variables === void 0 ? void 0 : variables.n) !== 'number')
                 throw new Error("t(\"".concat(id, "\"): Plural requires \"n\" option."));
@@ -65,8 +65,8 @@ function _ClientProvider(_a) {
             });
         }
         if (translations[id]) {
-            var renderTranslation = (function (translation) {
-                var target = translation;
+            var renderTranslation = (function (entry) {
+                var target = entry.t;
                 if (isPlural) {
                     target = (0, internal_1.getPluralBranch)(variables.n, [locale, defaultLocale], target.props['data-generaltranslation'].branches) || target.props.children;
                 }
