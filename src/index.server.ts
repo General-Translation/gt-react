@@ -7,8 +7,9 @@ import getLocale from './request/getLocale'
 import getGT from './server/getGT'
 import GTProvider from './provider/GTServerProvider'
 
-const I18NConfig = getI18NConfig();
-const getDefaultLocale = I18NConfig.getDefaultLocale;
+const getDefaultLocale = () => {
+    getI18NConfig().getDefaultLocale();
+}
 
 export {
     getGT, GTProvider,

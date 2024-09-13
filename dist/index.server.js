@@ -19,7 +19,8 @@ var getGT_1 = __importDefault(require("./server/getGT"));
 exports.getGT = getGT_1.default;
 var GTServerProvider_1 = __importDefault(require("./provider/GTServerProvider"));
 exports.GTProvider = GTServerProvider_1.default;
-var I18NConfig = (0, getI18NConfig_1.default)();
-var getDefaultLocale = I18NConfig.getDefaultLocale;
+var getDefaultLocale = function () {
+    (0, getI18NConfig_1.default)().getDefaultLocale();
+};
 exports.getDefaultLocale = getDefaultLocale;
 //# sourceMappingURL=index.server.js.map
