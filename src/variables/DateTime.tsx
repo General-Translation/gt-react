@@ -54,7 +54,7 @@ const DateTime = ({ children, name = "date", defaultValue, options = {}, ...prop
             data-gt-variable-name={name} 
             data-gt-variable-type={"date"} 
             data-gt-variable-options={options}
-            data-gt-unformatted-value={dateValue}
+            data-gt-unformatted-value={isValidDate(dateValue) ? dateValue : undefined}
         >
             {formattedValue}
         </span>
@@ -64,3 +64,13 @@ const DateTime = ({ children, name = "date", defaultValue, options = {}, ...prop
 DateTime.gtTransformation = "variable-datetime"
 
 export default DateTime;
+
+/**
+ * Checks if the input is a valid date object or a string that can be converted to a date.
+ * @param {any} input - The input to check.
+ * @returns {boolean} - Returns true if the input is a valid date, false otherwise.
+ */
+function isValidDate(input: any): boolean {
+    const date = new Date(input);
+    return !isNaN(date.getTime());
+}

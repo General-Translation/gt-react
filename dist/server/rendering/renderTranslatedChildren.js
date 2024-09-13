@@ -60,7 +60,7 @@ function renderTranslatedChildren(_a) {
     if (Array.isArray(source) && Array.isArray(target)) {
         var sourceElements_1 = source.filter(function (sourceChild) {
             if (react_1.default.isValidElement(sourceChild)) {
-                var generaltranslation = (0, getGTProp_1.default)(sourceChild.props);
+                var generaltranslation = (0, getGTProp_1.default)(sourceChild);
                 if ((generaltranslation === null || generaltranslation === void 0 ? void 0 : generaltranslation.transformation) === "variable") {
                     var _a = (0, internal_1.getVariableProps)(sourceChild.props), variableName = _a.variableName, variableValue = _a.variableValue, variableOptions = _a.variableOptions;
                     if (typeof variables[variableName] === 'undefined') {

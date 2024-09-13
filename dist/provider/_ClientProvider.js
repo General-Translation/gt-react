@@ -27,14 +27,12 @@ function _ClientProvider(_a) {
     var children = _a.children, dictionary = _a.dictionary, translations = _a.translations, locale = _a.locale, defaultLocale = _a.defaultLocale, translationRequired = _a.translationRequired;
     var _b = (0, react_1.useState)(false), hasMounted = _b[0], setHasMounted = _b[1];
     (0, react_1.useLayoutEffect)(function () {
-        console.log(translations);
         // prevent hydration errors + flickering when translations load
         setHasMounted(true);
     }, []);
     var translate = (0, react_1.useCallback)(function (id, options, f) {
         if (options === void 0) { options = {}; }
         var _a = (0, internal_1.extractEntryMetadata)(dictionary[id]), entry = _a.entry, metadata = _a.metadata;
-        console.log(entry);
         if (metadata && metadata.isFunction) {
             if (typeof f !== 'function') {
                 throw new Error("You're trying to call a function in the server dictionary on the client-side, but functions can't be passed directly from server to client. "

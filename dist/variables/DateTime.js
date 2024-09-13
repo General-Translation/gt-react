@@ -46,8 +46,17 @@ var DateTime = function (_a) {
     var dateString = dateValue ? (0, generaltranslation_1.formatDateTime)({ value: dateValue, languages: locales, options: options }) : '';
     var formattedValue = dateString.replace(/[\u200F\u202B\u202E]/g, '');
     // Render the formatted date within a span element
-    return ((0, jsx_runtime_1.jsx)("span", { "data-generaltranslation": generaltranslation, "data-gt-variable-name": name, "data-gt-variable-type": "date", "data-gt-variable-options": options, "data-gt-unformatted-value": dateValue, children: formattedValue }));
+    return ((0, jsx_runtime_1.jsx)("span", { "data-generaltranslation": generaltranslation, "data-gt-variable-name": name, "data-gt-variable-type": "date", "data-gt-variable-options": options, "data-gt-unformatted-value": isValidDate(dateValue) ? dateValue : undefined, children: formattedValue }));
 };
 DateTime.gtTransformation = "variable-datetime";
 exports.default = DateTime;
+/**
+ * Checks if the input is a valid date object or a string that can be converted to a date.
+ * @param {any} input - The input to check.
+ * @returns {boolean} - Returns true if the input is a valid date, false otherwise.
+ */
+function isValidDate(input) {
+    var date = new Date(input);
+    return !isNaN(date.getTime());
+}
 //# sourceMappingURL=DateTime.js.map

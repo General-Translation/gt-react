@@ -23,7 +23,9 @@ const Num = ({
     value = (typeof value === 'string') ? parseFloat(value) : value;
 
     // Format the number according to the locale
-    const formattedValue = (typeof value === 'number') ? formatNum({ value, languages: locales, options }) : defaultValue;
+    const formattedValue = (typeof value === 'number') ? 
+        formatNum({ value, languages: locales, options }) : 
+            defaultValue;
 
     return (
         <span 
@@ -31,7 +33,7 @@ const Num = ({
             data-gt-variable-name={name} 
             data-gt-variable-type={"number"} 
             data-gt-variable-options={options}
-            data-gt-unformatted-value={value}
+            data-gt-unformatted-value={typeof value === 'number' && !isNaN(value) ? value : undefined}
         >
             {formattedValue}
         </span>

@@ -13,7 +13,7 @@ const Currency = ({
     "data-generaltranslation"?: Record<string, any>;
     options?: Intl.NumberFormatOptions;
 }): ReactNode => {
-
+    
     const I18NConfig = getI18NConfig();
     const locales = [ getLocale(), I18NConfig.getDefaultLocale() ];
 
@@ -34,9 +34,9 @@ const Currency = ({
             data-gt-variable-name={name} 
             data-gt-variable-type={"currency"} 
             data-gt-variable-options={{ style: 'currency', currency, ...options }}
-            data-gt-unformatted-value={value}
+            data-gt-unformatted-value={typeof value === 'number' && !isNaN(value) ? value : undefined}
         >
-            {formattedValue}
+            {typeof formattedValue === 'string' ? formattedValue : undefined}
         </span>
     );
 };

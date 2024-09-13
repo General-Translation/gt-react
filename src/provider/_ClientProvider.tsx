@@ -23,7 +23,6 @@ export default function _ClientProvider({
 
     const [hasMounted, setHasMounted] = useState<boolean>(false);
     useLayoutEffect(() => {
-        console.log(translations)
         // prevent hydration errors + flickering when translations load
         setHasMounted(true);
     }, []);
@@ -32,7 +31,6 @@ export default function _ClientProvider({
 
         let { entry, metadata } = extractEntryMetadata(dictionary[id]);
 
-        console.log(entry)
         if (metadata && metadata.isFunction) {
             if (typeof f !== 'function') {
                 throw new Error(

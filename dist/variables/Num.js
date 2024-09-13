@@ -27,8 +27,10 @@ var Num = function (_a) {
     var value = (typeof children !== 'undefined' && typeof defaultValue === 'undefined') ? children : defaultValue;
     value = (typeof value === 'string') ? parseFloat(value) : value;
     // Format the number according to the locale
-    var formattedValue = (typeof value === 'number') ? (0, generaltranslation_1.formatNum)({ value: value, languages: locales, options: options }) : defaultValue;
-    return ((0, jsx_runtime_1.jsx)("span", { "data-generaltranslation": generaltranslation, "data-gt-variable-name": name, "data-gt-variable-type": "number", "data-gt-variable-options": options, "data-gt-unformatted-value": value, children: formattedValue }));
+    var formattedValue = (typeof value === 'number') ?
+        (0, generaltranslation_1.formatNum)({ value: value, languages: locales, options: options }) :
+        defaultValue;
+    return ((0, jsx_runtime_1.jsx)("span", { "data-generaltranslation": generaltranslation, "data-gt-variable-name": name, "data-gt-variable-type": "number", "data-gt-variable-options": options, "data-gt-unformatted-value": typeof value === 'number' && !isNaN(value) ? value : undefined, children: formattedValue }));
 };
 Num.gtTransformation = "variable-number";
 exports.default = Num;

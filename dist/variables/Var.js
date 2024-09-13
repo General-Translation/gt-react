@@ -17,7 +17,7 @@ var Var = function (_a) {
     var generaltranslation = props["data-generaltranslation"];
     if (typeof children !== 'undefined' && typeof defaultValue === 'undefined')
         defaultValue = children;
-    return ((0, jsx_runtime_1.jsx)("span", { "data-generaltranslation": generaltranslation, "data-gt-variable-name": name, "data-gt-variable-type": "variable", "data-gt-unformatted-value": defaultValue, children: defaultValue }));
+    return ((0, jsx_runtime_1.jsx)("span", { "data-generaltranslation": generaltranslation, "data-gt-variable-name": name, "data-gt-variable-type": "variable", "data-gt-unformatted-value": defaultValue !== null && defaultValue !== void 0 ? defaultValue : undefined, children: defaultValue }));
 };
 Var.gtTransformation = "variable-variable"; // keep this because Var is imported in other functions
 exports.default = Var;
