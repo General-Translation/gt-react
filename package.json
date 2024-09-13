@@ -63,33 +63,36 @@
   },
   "typesVersions": {
     "*": {
-      "internal": [
-        "./dist/internal.d.ts"
+      "config": [
+        "./dist/config.d.ts"
       ],
       "client": [
         "./dist/client.d.ts"
-      ],
-      "next": [
-        "./dist/next.d.ts"
       ],
       "server": [
         "./dist/server.d.ts"
       ],
       "middleware": [
         "./dist/middleware.d.ts"
+      ],
+      "_request": [
+        "./dist/_request.d.ts"
+      ],
+      "_dictionary": [
+        "./dist/_request.d.ts"
       ]
     }
   },
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
+      "gt-react/config": [
+        "/dist/config",
+        "/dist/config"
+      ],
       "gt-react/client": [
         "/dist/client",
         "/dist/client"
-      ],
-      "gt-react/next": [
-        "/dist/next",
-        "/dist/next"
       ],
       "gt-react/server": [
         "/dist/server",
@@ -98,6 +101,14 @@
       "gt-react/middleware": [
         "/dist/middleware",
         "/dist/middleware"
+      ],
+      "gt-react/_request": [
+        "/dist/_request",
+        "/dist/_request"
+      ],
+      "gt-react/_dictionary": [
+        "/dist/_dictionary",
+        "/dist/_dictionary"
       ]
     }
   },
