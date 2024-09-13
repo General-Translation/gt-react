@@ -85,10 +85,7 @@ export default async function GTProvider({
         let loadingFallback;
         let errorFallback;
 
-        if (renderSettings.fallbackToPrevious && existingTranslations && existingTranslations[id]) {
-            loadingFallback = existingTranslations[id];
-            errorFallback = loadingFallback;
-        } else if (renderSettings.method === "skeleton") {
+        if (renderSettings.method === "skeleton") {
             loadingFallback = <React.Fragment key={`skeleton_${id}`}></React.Fragment>
         }
 

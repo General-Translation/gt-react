@@ -161,11 +161,7 @@ function GTProvider(_a) {
                                             targetLanguage: locale,
                                             metadata: __assign(__assign({ id: id, hash: key }, additionalMetadata), (renderSettings.timeout && { timeout: renderSettings.timeout }))
                                         });
-                                        if (renderSettings.fallbackToPrevious && existingTranslations && existingTranslations[id]) {
-                                            loadingFallback = existingTranslations[id];
-                                            errorFallback = loadingFallback;
-                                        }
-                                        else if (renderSettings.method === "skeleton") {
+                                        if (renderSettings.method === "skeleton") {
                                             loadingFallback = (0, jsx_runtime_1.jsx)(react_1.default.Fragment, {}, "skeleton_".concat(id));
                                         }
                                         return [2 /*return*/, translations[id] = {

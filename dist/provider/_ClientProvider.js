@@ -65,8 +65,8 @@ function _ClientProvider(_a) {
             });
         }
         if (translations[id]) {
-            var renderTranslation = (function (entry) {
-                var target = entry.t;
+            var renderTranslation = (function (translationEntry) {
+                var target = translationEntry;
                 if (isPlural) {
                     target = (0, internal_1.getPluralBranch)(variables.n, [locale, defaultLocale], target.props['data-generaltranslation'].branches) || target.props.children;
                 }
@@ -86,15 +86,12 @@ function _ClientProvider(_a) {
                         variablesOptions: variablesOptions
                     });
                 }
-                else {
-                    translation.errorFallback = renderTranslation(translation.errorFallback);
-                }
                 if (!translation.loadingFallback) {
                     translation.loadingFallback = translation.errorFallback;
                 }
                 return ((0, jsx_runtime_1.jsx)(ClientResolver_1.default, { promise: translation.promise, renderTranslation: renderTranslation, errorFallback: translation.errorFallback, loadingFallback: translation.loadingFallback }));
             }
-            return renderTranslation(translation);
+            return renderTranslation(translation.t);
         }
     }, [dictionary, translations]);
     return ((0, jsx_runtime_1.jsx)(client_1._GTContext.Provider, { value: {

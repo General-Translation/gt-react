@@ -44,18 +44,19 @@ function ClientResolver(_a) {
     var promise = _a.promise, loadingFallback = _a.loadingFallback, errorFallback = _a.errorFallback, renderTranslation = _a.renderTranslation;
     var _b = (0, react_1.useState)(loadingFallback), renderedChildren = _b[0], setRenderedChildren = _b[1];
     var resolvePromise = function () { return __awaiter(_this, void 0, void 0, function () {
-        var _a, error_1;
-        return __generator(this, function (_b) {
-            switch (_b.label) {
+        var _a, _b, error_1;
+        return __generator(this, function (_c) {
+            switch (_c.label) {
                 case 0:
-                    _b.trys.push([0, 2, , 3]);
-                    _a = renderTranslation;
+                    _c.trys.push([0, 2, , 3]);
+                    _a = setRenderedChildren;
+                    _b = renderTranslation;
                     return [4 /*yield*/, promise];
                 case 1:
-                    _a.apply(void 0, [_b.sent()]);
+                    _a.apply(void 0, [_b.apply(void 0, [_c.sent()])]);
                     return [3 /*break*/, 3];
                 case 2:
-                    error_1 = _b.sent();
+                    error_1 = _c.sent();
                     console.error(error_1);
                     setRenderedChildren(errorFallback);
                     return [3 /*break*/, 3];

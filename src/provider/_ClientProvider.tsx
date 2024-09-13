@@ -58,8 +58,6 @@ export default function _ClientProvider({
 
         let source = entry;
 
-        
-
         const isPlural = entry && typeof entry === 'object' && primitives.pluralBranchNames.some(branchName => branchName in (entry?.props?.['data-generaltranslation']?.branches || {}));
         if (isPlural) {
             if (typeof variables?.n !== 'number')
@@ -78,8 +76,8 @@ export default function _ClientProvider({
         }
 
         if (translations[id]) {
-            const renderTranslation = ((entry: any) => {
-                let target = entry.t;
+            const renderTranslation = ((translationEntry: any) => {
+                let target = translationEntry;
                 if (isPlural) {
                     target = getPluralBranch(
                         variables.n,
@@ -98,8 +96,6 @@ export default function _ClientProvider({
                     translation.errorFallback = _renderDefaultChildren({
                         entry: source, variables, variablesOptions
                     })
-                } else {
-                    translation.errorFallback = renderTranslation(translation.errorFallback);
                 }
                 if (!translation.loadingFallback) {
                     translation.loadingFallback = translation.errorFallback;
@@ -113,7 +109,7 @@ export default function _ClientProvider({
                     />
                 );
             }
-            return renderTranslation(translation);
+            return renderTranslation(translation.t);
         }
 
     }, [dictionary, translations]);
