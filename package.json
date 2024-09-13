@@ -46,11 +46,11 @@
   },
   "typesVersions": {
     "*": {
-      "internal": [
-        "./dist/internal.d.ts"
-      ],
       "client": [
         "./dist/client.d.ts"
+      ],
+      "internal": [
+        "./dist/internal.d.ts"
       ]
     }
   },
@@ -61,17 +61,9 @@
         "/dist/client",
         "/dist/client"
       ],
-      "gt-react/next": [
-        "/dist/next",
-        "/dist/next"
-      ],
-      "gt-react/server": [
-        "/dist/server",
-        "/dist/server"
-      ],
-      "gt-react/middleware": [
-        "/dist/middleware",
-        "/dist/middleware"
+      "gt-react/internal": [
+        "/dist/internal",
+        "/dist/internal"
       ]
     }
   },
