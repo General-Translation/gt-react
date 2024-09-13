@@ -74,9 +74,10 @@ var renderDefaultChildren_1 = __importDefault(require("../rendering/renderDefaul
 function T(_a) {
     return __awaiter(this, void 0, void 0, function () {
         var I18NConfig, locale, defaultLocale, translationRequired, translationsPromise, taggedChildren, source, isPlural, childrenAsObjects, key, _b, translations, translation, target, translationPromise, promise, loadingFallback, errorFallback, target;
+        var _c, _d, _e;
         var children = _a.children, id = _a.id, variables = _a.variables, variablesOptions = _a.variablesOptions, n = _a.n, renderSettings = _a.renderSettings, props = __rest(_a, ["children", "id", "variables", "variablesOptions", "n", "renderSettings"]);
-        return __generator(this, function (_c) {
-            switch (_c.label) {
+        return __generator(this, function (_f) {
+            switch (_f.label) {
                 case 0:
                     I18NConfig = (0, getI18NConfig_1.default)();
                     locale = (0, getLocale_1.default)();
@@ -86,7 +87,6 @@ function T(_a) {
                         translationsPromise = I18NConfig.getTranslations(locale, props.dictionaryName);
                     }
                     taggedChildren = (0, internal_1.addGTIdentifier)(children, props);
-                    console.log(props);
                     source = taggedChildren;
                     isPlural = props && internal_1.primitives.pluralBranchNames.some(function (branchName) { return branchName in props; });
                     if (isPlural) {
@@ -111,17 +111,17 @@ function T(_a) {
                     if (!props.context) return [3 /*break*/, 2];
                     return [4 /*yield*/, (0, internal_1.calculateHash)([childrenAsObjects, props.context])];
                 case 1:
-                    _b = _c.sent();
+                    _b = _f.sent();
                     return [3 /*break*/, 4];
                 case 2: return [4 /*yield*/, (0, internal_1.calculateHash)(childrenAsObjects)];
                 case 3:
-                    _b = _c.sent();
-                    _c.label = 4;
+                    _b = _f.sent();
+                    _f.label = 4;
                 case 4:
                     key = _b;
                     return [4 /*yield*/, translationsPromise];
                 case 5:
-                    translations = _c.sent();
+                    translations = _f.sent();
                     translation = translations === null || translations === void 0 ? void 0 : translations[id || key];
                     if ((translation === null || translation === void 0 ? void 0 : translation.k) === key) {
                         target = translation.t;
@@ -142,7 +142,7 @@ function T(_a) {
                         metadata: __assign(__assign(__assign(__assign(__assign({}, props), (id && { id: id })), { hash: key }), ((0, getMetadata_1.default)())), (renderSettings.timeout && { timeout: renderSettings.timeout }))
                     });
                     promise = translationPromise.then(function (translation) {
-                        var target = translation.t;
+                        var target = translation;
                         if (isPlural) {
                             target = (0, internal_1.getPluralBranch)(variables === null || variables === void 0 ? void 0 : variables.n, [locale, defaultLocale], target.props['data-generaltranslation'].branches) || target.props.children;
                         }
@@ -156,7 +156,7 @@ function T(_a) {
                     if (renderSettings.fallbackToPrevious && translation) {
                         target = translation.t;
                         if (isPlural) {
-                            target = (0, internal_1.getPluralBranch)(variables === null || variables === void 0 ? void 0 : variables.n, [locale, defaultLocale], target.props['data-generaltranslation'].branches) || target.props.children;
+                            target = (0, internal_1.getPluralBranch)(variables === null || variables === void 0 ? void 0 : variables.n, [locale, defaultLocale], (_d = (_c = target === null || target === void 0 ? void 0 : target.props) === null || _c === void 0 ? void 0 : _c['data-generaltranslation']) === null || _d === void 0 ? void 0 : _d.branches) || ((_e = target === null || target === void 0 ? void 0 : target.props) === null || _e === void 0 ? void 0 : _e.children);
                         }
                         loadingFallback = (0, renderTranslatedChildren_1.default)({
                             source: source,

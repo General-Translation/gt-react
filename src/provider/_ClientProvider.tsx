@@ -58,7 +58,7 @@ export default function _ClientProvider({
 
         let source = entry;
 
-        const isPlural = entry && typeof entry === 'object' && entry.t && primitives.pluralBranchNames.some(branchName => branchName in entry);
+        const isPlural = entry && typeof entry === 'object' && primitives.pluralBranchNames.some(branchName => branchName in entry?.props?.['data-generaltranslation']?.branches || {});
         if (isPlural) {
             if (typeof variables?.n !== 'number')
                 throw new Error(`t("${id}"): Plural requires "n" option.`)
@@ -77,7 +77,7 @@ export default function _ClientProvider({
 
         if (translations[id]) {
             const renderTranslation = ((translation: any) => {
-                let target = translation.t;
+                let target = translation;
                 if (isPlural) {
                     target = getPluralBranch(
                         variables.n,
@@ -101,8 +101,6 @@ export default function _ClientProvider({
                 }
                 if (!translation.loadingFallback) {
                     translation.loadingFallback = translation.errorFallback;
-                } else {
-                    translation.errorFallback = renderTranslation(translation.errorFallback);
                 }
                 return (
                     <ClientResolver 

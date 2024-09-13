@@ -40,8 +40,6 @@ export default async function T({
 
     const taggedChildren = addGTIdentifier(children, props);
 
-    console.log(props)
-
     let source = taggedChildren;
     
     // Get a plural if appropriate (check type, if type, get branch, entry =)
@@ -99,7 +97,7 @@ export default async function T({
         metadata: { ...props, ...(id && { id }), hash: key, ...(getMetadata()), ...(renderSettings.timeout && { timeout: renderSettings.timeout }) } 
     });
     let promise = translationPromise.then(translation => {
-        let target = translation.t;
+        let target = translation;
         if (isPlural) {
             target = getPluralBranch(
                 variables?.n as number,
@@ -124,8 +122,8 @@ export default async function T({
             target = getPluralBranch(
                 variables?.n as number,
                 [locale, defaultLocale],
-                target.props['data-generaltranslation'].branches
-            ) || target.props.children;
+                target?.props?.['data-generaltranslation']?.branches
+            ) || target?.props?.children;
         }
         loadingFallback = renderTranslatedChildren({
             source, target, variables, variablesOptions
