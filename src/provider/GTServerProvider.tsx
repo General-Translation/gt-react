@@ -24,6 +24,10 @@ export default async function GTProvider({
         getDictionary()
     );
 
+    const getID = (suffix: string) => {
+        return id ? `${id}.${suffix}` : suffix;
+    }
+
     const locale = getLocale();
     const additionalMetadata = getMetadata();
     const defaultLocale = I18NConfig.getDefaultLocale();
@@ -36,6 +40,8 @@ export default async function GTProvider({
     const translationRequired = I18NConfig.translationRequired(locale)
 
     await Promise.all(Object.entries(rawDictionary).map(async ([id, dictionaryEntry]) => {
+
+        id = getID(id);
 
         let { entry, metadata } = extractEntryMetadata(dictionaryEntry);
 

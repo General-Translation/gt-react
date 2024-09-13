@@ -86,7 +86,7 @@ var generaltranslation_1 = require("generaltranslation");
 var getDictionary_1 = __importStar(require("../dictionary/getDictionary"));
 function GTProvider(_a) {
     return __awaiter(this, arguments, void 0, function (_b) {
-        var I18NConfig, rawDictionary, locale, additionalMetadata, defaultLocale, renderSettings, dictionary, translations, existingTranslations, translationRequired;
+        var I18NConfig, rawDictionary, getID, locale, additionalMetadata, defaultLocale, renderSettings, dictionary, translations, existingTranslations, translationRequired;
         var _this = this;
         var children = _b.children, id = _b.id;
         return __generator(this, function (_c) {
@@ -96,6 +96,9 @@ function GTProvider(_a) {
                     rawDictionary = (0, internal_1.flattenDictionary)(id ?
                         (0, getDictionary_1.getDictionaryEntry)(id) :
                         (0, getDictionary_1.default)());
+                    getID = function (suffix) {
+                        return id ? "".concat(id, ".").concat(suffix) : suffix;
+                    };
                     locale = (0, getLocale_1.default)();
                     additionalMetadata = (0, getMetadata_1.default)();
                     defaultLocale = I18NConfig.getDefaultLocale();
@@ -112,6 +115,7 @@ function GTProvider(_a) {
                             return __generator(this, function (_g) {
                                 switch (_g.label) {
                                     case 0:
+                                        id = getID(id);
                                         _c = (0, internal_1.extractEntryMetadata)(dictionaryEntry), entry = _c.entry, metadata = _c.metadata;
                                         if (typeof entry === 'function') {
                                             entry = entry({});
