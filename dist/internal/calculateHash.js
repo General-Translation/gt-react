@@ -62,12 +62,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = calculateHash;
-var xxhash_wasm_1 = __importDefault(require("xxhash-wasm"));
-var hashFunctionPromise = (0, xxhash_wasm_1.default)().then(function (hasher) { return hasher.h64ToString; });
-var hashFunction = null;
-hashFunctionPromise.then(function (fn) {
-    hashFunction = fn;
-});
+var xxhashjs_1 = __importDefault(require("xxhashjs"));
 /**
  * Calculates a unique ID for the given children objects by hashing their sanitized JSON string representation.
  *
@@ -78,17 +73,8 @@ function calculateHash(childrenAsObjects) {
     return __awaiter(this, void 0, void 0, function () {
         var unhashedKey;
         return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0:
-                    if (!!hashFunction) return [3 /*break*/, 2];
-                    return [4 /*yield*/, hashFunctionPromise];
-                case 1:
-                    hashFunction = _a.sent();
-                    _a.label = 2;
-                case 2:
-                    unhashedKey = JSON.stringify(sanitizeChildrenAsObjects(childrenAsObjects));
-                    return [2 /*return*/, hashFunction(unhashedKey)];
-            }
+            unhashedKey = JSON.stringify(sanitizeChildrenAsObjects(childrenAsObjects));
+            return [2 /*return*/, xxhashjs_1.default.h64().update(unhashedKey).digest().toString(16)];
         });
     });
 }

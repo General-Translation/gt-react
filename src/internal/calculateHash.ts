@@ -1,11 +1,4 @@
-import xxhash from "xxhash-wasm";
-
-let hashFunctionPromise = xxhash().then(hasher => hasher.h64ToString);
-let hashFunction: ((input: string) => string) | null = null;
-
-hashFunctionPromise.then(fn => {
-    hashFunction = fn;
-});
+import XXH from 'xxhashjs';
 
 /**
  * Calculates a unique ID for the given children objects by hashing their sanitized JSON string representation.
@@ -14,11 +7,8 @@ hashFunctionPromise.then(fn => {
  * @returns {Promise<string>} - A promise that resolves to the unique ID.
  */
 export default async function calculateHash(childrenAsObjects: any): Promise<string> {
-    if (!hashFunction) {
-        hashFunction = await hashFunctionPromise;
-    }
     const unhashedKey = JSON.stringify(sanitizeChildrenAsObjects(childrenAsObjects));
-    return hashFunction(unhashedKey);
+    return XXH.h64().update(unhashedKey).digest().toString(16);
 }
 
 function sanitizeChildrenAsObjects(childrenAsObjects: any) {
