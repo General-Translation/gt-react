@@ -288,7 +288,7 @@ var I18NConfiguration = /** @class */ (function () {
                         _a.trys.push([1, 3, 4, 5]);
                         bundlePromise = this.gt.translateBundle(batch);
                         batch.forEach(function (item) {
-                            if (_this._remoteTranslationsManager && item.cache)
+                            if (_this._remoteTranslationsManager && item.revalidate)
                                 _this._remoteTranslationsManager.setTranslationRequested(item.data.targetLanguage, item.data.metadata.dictionaryName);
                         });
                         return [4 /*yield*/, bundlePromise];

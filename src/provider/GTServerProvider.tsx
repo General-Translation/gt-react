@@ -41,7 +41,7 @@ export default async function GTProvider({
 
     await Promise.all(Object.entries(rawDictionary).map(async ([id, dictionaryEntry]) => {
 
-        id = getID(id);
+        const prefixedID = getID(id)
 
         let { entry, metadata } = extractEntryMetadata(dictionaryEntry);
 
@@ -50,7 +50,7 @@ export default async function GTProvider({
             metadata = { ...metadata, isFunction: true };
         }
 
-        const taggedEntry = addGTIdentifier(entry, metadata, id);
+        const taggedEntry = addGTIdentifier(entry, metadata, prefixedID);
 
         dictionary[id] = [taggedEntry, metadata];
         
@@ -60,7 +60,7 @@ export default async function GTProvider({
 
         const key: string = metadata?.context ? await calculateHash([entryAsObjects, metadata.context]) : await calculateHash(entryAsObjects);
 
-        const translation = existingTranslations?.[id];
+        const translation = existingTranslations?.[prefixedID];
 
         if (translation) {
             return translations[id] = translation;
@@ -69,7 +69,7 @@ export default async function GTProvider({
         if (!I18NConfig.translationEnabled()) return;
 
         if (typeof taggedEntry === 'string') {
-            const translationPromise = I18NConfig.translate({ content: splitStringToContent(taggedEntry), targetLanguage: locale, options: { id, hash: key, ...additionalMetadata } });
+            const translationPromise = I18NConfig.translate({ content: splitStringToContent(taggedEntry), targetLanguage: locale, options: { id: prefixedID, hash: key, ...additionalMetadata } });
             return renderSettings.method !== "subtle" 
                 ? translations[id] === await translationPromise :
                 undefined
@@ -79,7 +79,7 @@ export default async function GTProvider({
         const translationPromise = I18NConfig.translateChildren({ 
             children: entryAsObjects, 
             targetLanguage: locale, 
-            metadata: { id, hash: key, ...additionalMetadata, ...(renderSettings.timeout && { timeout: renderSettings.timeout }) } 
+            metadata: { id: prefixedID, hash: key, ...additionalMetadata, ...(renderSettings.timeout && { timeout: renderSettings.timeout }) } 
         });
 
         let loadingFallback;

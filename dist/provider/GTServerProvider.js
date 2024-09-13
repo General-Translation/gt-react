@@ -110,18 +110,18 @@ function GTProvider(_a) {
                     existingTranslations = _c.sent();
                     translationRequired = I18NConfig.translationRequired(locale);
                     return [4 /*yield*/, Promise.all(Object.entries(rawDictionary).map(function (_a) { return __awaiter(_this, [_a], void 0, function (_b) {
-                            var _c, entry, metadata, taggedEntry, entryAsObjects, key, _d, translation, translationPromise_1, _e, _f, translationPromise, loadingFallback, errorFallback;
+                            var prefixedID, _c, entry, metadata, taggedEntry, entryAsObjects, key, _d, translation, translationPromise_1, _e, _f, translationPromise, loadingFallback, errorFallback;
                             var id = _b[0], dictionaryEntry = _b[1];
                             return __generator(this, function (_g) {
                                 switch (_g.label) {
                                     case 0:
-                                        id = getID(id);
+                                        prefixedID = getID(id);
                                         _c = (0, internal_1.extractEntryMetadata)(dictionaryEntry), entry = _c.entry, metadata = _c.metadata;
                                         if (typeof entry === 'function') {
                                             entry = entry({});
                                             metadata = __assign(__assign({}, metadata), { isFunction: true });
                                         }
-                                        taggedEntry = (0, internal_1.addGTIdentifier)(entry, metadata, id);
+                                        taggedEntry = (0, internal_1.addGTIdentifier)(entry, metadata, prefixedID);
                                         dictionary[id] = [taggedEntry, metadata];
                                         if (!translationRequired || !entry)
                                             return [2 /*return*/];
@@ -137,14 +137,14 @@ function GTProvider(_a) {
                                         _g.label = 4;
                                     case 4:
                                         key = _d;
-                                        translation = existingTranslations === null || existingTranslations === void 0 ? void 0 : existingTranslations[id];
+                                        translation = existingTranslations === null || existingTranslations === void 0 ? void 0 : existingTranslations[prefixedID];
                                         if (translation) {
                                             return [2 /*return*/, translations[id] = translation];
                                         }
                                         if (!I18NConfig.translationEnabled())
                                             return [2 /*return*/];
                                         if (!(typeof taggedEntry === 'string')) return [3 /*break*/, 8];
-                                        translationPromise_1 = I18NConfig.translate({ content: (0, generaltranslation_1.splitStringToContent)(taggedEntry), targetLanguage: locale, options: __assign({ id: id, hash: key }, additionalMetadata) });
+                                        translationPromise_1 = I18NConfig.translate({ content: (0, generaltranslation_1.splitStringToContent)(taggedEntry), targetLanguage: locale, options: __assign({ id: prefixedID, hash: key }, additionalMetadata) });
                                         if (!(renderSettings.method !== "subtle")) return [3 /*break*/, 6];
                                         _f = translations[id];
                                         return [4 /*yield*/, translationPromise_1];
@@ -159,7 +159,7 @@ function GTProvider(_a) {
                                         translationPromise = I18NConfig.translateChildren({
                                             children: entryAsObjects,
                                             targetLanguage: locale,
-                                            metadata: __assign(__assign({ id: id, hash: key }, additionalMetadata), (renderSettings.timeout && { timeout: renderSettings.timeout }))
+                                            metadata: __assign(__assign({ id: prefixedID, hash: key }, additionalMetadata), (renderSettings.timeout && { timeout: renderSettings.timeout }))
                                         });
                                         if (renderSettings.method === "skeleton") {
                                             loadingFallback = (0, jsx_runtime_1.jsx)(react_1.default.Fragment, {}, "skeleton_".concat(id));
