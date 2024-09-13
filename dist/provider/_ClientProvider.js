@@ -55,7 +55,7 @@ function _ClientProvider(_a) {
         if (isPlural) {
             if (typeof (variables === null || variables === void 0 ? void 0 : variables.n) !== 'number')
                 throw new Error("t(\"".concat(id, "\"): Plural requires \"n\" option."));
-            source = (0, internal_1.getPluralBranch)(variables.n, [locale, defaultLocale], entry) || entry.t;
+            source = (0, internal_1.getPluralBranch)(variables.n, [locale, defaultLocale], source.props['data-generaltranslation'].branches) || source.props.children;
         }
         if (!translationRequired) {
             return (0, client_1._renderDefaultChildren)({
@@ -68,7 +68,7 @@ function _ClientProvider(_a) {
             var renderTranslation = (function (translation) {
                 var target = translation.t;
                 if (isPlural) {
-                    target = (0, internal_1.getPluralBranch)(variables.n, [locale, defaultLocale], translation) || target;
+                    target = (0, internal_1.getPluralBranch)(variables.n, [locale, defaultLocale], target.props['data-generaltranslation'].branches) || target.props.children;
                 }
                 return (0, client_1._renderTranslatedChildren)({
                     source: source,

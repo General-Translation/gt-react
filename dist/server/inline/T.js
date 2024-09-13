@@ -86,6 +86,7 @@ function T(_a) {
                         translationsPromise = I18NConfig.getTranslations(locale, props.dictionaryName);
                     }
                     taggedChildren = (0, internal_1.addGTIdentifier)(children, props);
+                    console.log(props);
                     source = taggedChildren;
                     isPlural = props && internal_1.primitives.pluralBranchNames.some(function (branchName) { return branchName in props; });
                     if (isPlural) {
@@ -97,7 +98,7 @@ function T(_a) {
                                 "<T> with props ".concat(JSON.stringify(props), ": Plural requires \"n\" option."));
                         }
                         source = (0, internal_1.getPluralBranch)(variables.n, [locale, defaultLocale], // not redundant, as locale could be a different dialect of the same language
-                        taggedChildren) || taggedChildren.t;
+                        source.props['data-generaltranslation'].branches) || source.props.children;
                     }
                     if (!translationRequired) {
                         return [2 /*return*/, (0, renderDefaultChildren_1.default)({
@@ -125,7 +126,7 @@ function T(_a) {
                     if ((translation === null || translation === void 0 ? void 0 : translation.k) === key) {
                         target = translation.t;
                         if (isPlural) {
-                            target = (0, internal_1.getPluralBranch)(variables === null || variables === void 0 ? void 0 : variables.n, [locale, defaultLocale], translation) || target;
+                            target = (0, internal_1.getPluralBranch)(variables === null || variables === void 0 ? void 0 : variables.n, [locale, defaultLocale], target.props['data-generaltranslation'].branches) || target.props.children;
                         }
                         return [2 /*return*/, (0, renderTranslatedChildren_1.default)({
                                 source: source,
@@ -141,9 +142,9 @@ function T(_a) {
                         metadata: __assign(__assign(__assign(__assign(__assign({}, props), (id && { id: id })), { hash: key }), ((0, getMetadata_1.default)())), (renderSettings.timeout && { timeout: renderSettings.timeout }))
                     });
                     promise = translationPromise.then(function (translation) {
-                        var target = translation.t ? translation.t : translation;
+                        var target = translation.t;
                         if (isPlural) {
-                            target = (0, internal_1.getPluralBranch)(variables === null || variables === void 0 ? void 0 : variables.n, [locale, defaultLocale], translation) || target;
+                            target = (0, internal_1.getPluralBranch)(variables === null || variables === void 0 ? void 0 : variables.n, [locale, defaultLocale], target.props['data-generaltranslation'].branches) || target.props.children;
                         }
                         return (0, renderTranslatedChildren_1.default)({
                             source: source,
@@ -155,7 +156,7 @@ function T(_a) {
                     if (renderSettings.fallbackToPrevious && translation) {
                         target = translation.t;
                         if (isPlural) {
-                            target = (0, internal_1.getPluralBranch)(variables === null || variables === void 0 ? void 0 : variables.n, [locale, defaultLocale], translation) || target;
+                            target = (0, internal_1.getPluralBranch)(variables === null || variables === void 0 ? void 0 : variables.n, [locale, defaultLocale], target.props['data-generaltranslation'].branches) || target.props.children;
                         }
                         loadingFallback = (0, renderTranslatedChildren_1.default)({
                             source: source,

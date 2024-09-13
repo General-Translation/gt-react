@@ -40,6 +40,8 @@ export default async function T({
 
     const taggedChildren = addGTIdentifier(children, props);
 
+    console.log(props)
+
     let source = taggedChildren;
     
     // Get a plural if appropriate (check type, if type, get branch, entry =)
@@ -56,8 +58,8 @@ export default async function T({
         source = getPluralBranch(
             (variables as any).n, 
             [locale, defaultLocale], // not redundant, as locale could be a different dialect of the same language
-            taggedChildren
-        ) || taggedChildren.t;
+            source.props['data-generaltranslation'].branches
+        ) || source.props.children;
     }
 
     if (!translationRequired) {
@@ -80,8 +82,8 @@ export default async function T({
             target = getPluralBranch(
                 variables?.n as number,
                 [locale, defaultLocale],
-                translation
-            ) || target;
+                target.props['data-generaltranslation'].branches
+            ) || target.props.children;
         }
         return renderTranslatedChildren({
             source, target,
@@ -97,13 +99,13 @@ export default async function T({
         metadata: { ...props, ...(id && { id }), hash: key, ...(getMetadata()), ...(renderSettings.timeout && { timeout: renderSettings.timeout }) } 
     });
     let promise = translationPromise.then(translation => {
-        let target = translation.t ? translation.t : translation;
+        let target = translation.t;
         if (isPlural) {
             target = getPluralBranch(
                 variables?.n as number,
                 [locale, defaultLocale],
-                translation
-            ) || target;
+                target.props['data-generaltranslation'].branches
+            ) || target.props.children;
         }
         return renderTranslatedChildren({
             source, target, 
@@ -122,8 +124,8 @@ export default async function T({
             target = getPluralBranch(
                 variables?.n as number,
                 [locale, defaultLocale],
-                translation
-            ) || target;
+                target.props['data-generaltranslation'].branches
+            ) || target.props.children;
         }
         loadingFallback = renderTranslatedChildren({
             source, target, variables, variablesOptions

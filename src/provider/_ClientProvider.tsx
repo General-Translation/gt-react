@@ -65,8 +65,8 @@ export default function _ClientProvider({
             source = getPluralBranch(
                 variables.n,
                 [locale, defaultLocale],
-                entry
-            ) || entry.t;
+                source.props['data-generaltranslation'].branches
+            ) || source.props.children;
         }
 
         if (!translationRequired) {
@@ -82,8 +82,8 @@ export default function _ClientProvider({
                     target = getPluralBranch(
                         variables.n,
                         [locale, defaultLocale],
-                        translation
-                    ) || target;
+                        target.props['data-generaltranslation'].branches
+                    ) || target.props.children;
                 }
                 return _renderTranslatedChildren({
                     source, target, variables,
