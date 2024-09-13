@@ -96,15 +96,16 @@ function addGTIdentifier(children, branches, dictionaryID) {
     if (typeof branches === 'undefined') {
         return taggedChildren;
     }
-    var pluralObject = Object.keys(branches).reduce(function (acc, branchName) {
+    var pluralBranches = Object.keys(branches).reduce(function (acc, branchName) {
         if (acceptedPluralProps[branchName]) {
             acc[branchName] = addIdentifierRecursively(branches[branchName], dictionaryID); // process!
         }
         return acc;
-    }, { t: taggedChildren });
+    }, {});
     // check that work has actually been done, if not just return the default children
-    if (Object.keys(pluralObject).length === 1)
+    if (Object.keys(pluralBranches).length === 1)
         return taggedChildren;
-    return pluralObject;
+    return react_1.default.createElement('span', { 'data-generaltranslation': { id: 0, branches: pluralBranches, transformation: 'plural' }, children: taggedChildren });
+    ;
 }
 //# sourceMappingURL=addGTIdentifier.js.map

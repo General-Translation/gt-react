@@ -80,16 +80,16 @@ export default function addGTIdentifier(children: Children, branches?: Record<st
         return taggedChildren;
     }
 
-    const pluralObject = Object.keys(branches).reduce<Record<string, any>>((acc, branchName) => {
+    const pluralBranches = Object.keys(branches).reduce<Record<string, any>>((acc, branchName) => {
         if (acceptedPluralProps[branchName]) {
             acc[branchName] = addIdentifierRecursively(branches[branchName], dictionaryID); // process!
         }
         return acc;
-    }, { t: taggedChildren });
+    }, {});
 
     // check that work has actually been done, if not just return the default children
-    if (Object.keys(pluralObject).length === 1) return taggedChildren;
+    if (Object.keys(pluralBranches).length === 1) return taggedChildren;
 
-    return pluralObject;
+    return React.createElement('span', { 'data-generaltranslation': { id: 0, branches: pluralBranches, transformation: 'plural' }, children: taggedChildren });;
 
 }

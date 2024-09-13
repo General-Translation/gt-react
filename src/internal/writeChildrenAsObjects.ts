@@ -1,8 +1,5 @@
-import React, { ReactNode, ReactElement } from 'react'
+import React, { ReactElement } from 'react'
 import defaultVariableNames from '../variables/_defaultVariableNames';
-
-type Child = ReactNode | Record<string, any>;
-type Children = Child | Child[];
 
 /**
  * Gets the tag name of a React element.
@@ -25,27 +22,37 @@ const getTagName = (child: ReactElement): string => {
 const handleSingleChild = (child: any): any => {
     if (React.isValidElement(child)) {
         const { type, props } = child as ReactElement;
-        let newProps: any = {};
+        let objectElement: Record<string, any> = {
+            type: getTagName(child),
+            props: {}
+        };
         if (props['data-generaltranslation']) {
+
             const generaltranslation = props['data-generaltranslation'];
-            if (generaltranslation?.transformation === "variable") {
+            let newGTProp: Record<string, any> = {
+                ...generaltranslation
+            };
+
+            const transformation = generaltranslation.transformation;
+            if (transformation === "variable") {
                 const variableName = props.name || (defaultVariableNames as any)[generaltranslation?.variableType] || "value";
                 return { variable:  generaltranslation.variableType || "variable", key: variableName };
             }
+            if (transformation === "plural" && generaltranslation.branches) {
+                objectElement.type = 'Plural',
+                newGTProp = { ...newGTProp, branches: Object.entries(generaltranslation.branches).reduce((acc: Record<string, any>, [key, value]) => {
+                    return acc[key] = writeChildrenAsObjects(value);
+                }, {})  }
+            }
+            
+            objectElement.props['data-generaltranslation'] = newGTProp;
         }
         if (props.children) {
-            newProps.children = handleChildren(props.children)
+            objectElement.props.children = writeChildrenAsObjects(props.children)
         }
-        return {
-            type: getTagName(child),
-            props: newProps
-        }
+        return objectElement;
     };
     return child;
-}
-
-const handleChildren = (children: any) => {
-    return Array.isArray(children) ? children.map(handleSingleChild): handleSingleChild(children);
 }
 
 /**
@@ -54,12 +61,5 @@ const handleChildren = (children: any) => {
  * @returns {object} The processed children as objects.
 */
 export default function writeChildrenAsObjects(children: any): any {
-    if (children && typeof children === 'object' && !children.type && children.t) {
-        const result: Record<string, any> = {};
-        Object.entries(children).forEach(([branchName, branch]) => {
-            result[branchName] = handleChildren(branch);
-        });
-        return result;
-    }
-    return handleChildren(children);
+    return Array.isArray(children) ? children.map(handleSingleChild): handleSingleChild(children);
 }

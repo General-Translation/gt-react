@@ -18,11 +18,13 @@ export default function getVariableProps(props: {
     } = {
         variableType,
         variableName: props.name || props['data-gt-variable-name'] || defaultVariableNames[variableType],
-        variableValue: (
-            (typeof props.defaultValue !== 'undefined') ? props.defaultValue : 
-            (typeof props['data-gt-unformatted-value'] !== 'undefined') ? props['data-gt-unformatted-value'] :
-            (typeof props.children !== 'undefined') ? props.children : undefined
-        ),
+        variableValue: (() => {
+            if (typeof props.defaultValue !== 'undefined') return props.defaultValue;
+            if (typeof props['data-gt-unformatted-value'] !== 'undefined') return props['data-gt-unformatted-value'];
+            if (typeof props.children !== 'undefined') return props.children;
+            return undefined;
+        }
+        )(),
         variableOptions: props.options || props['data-gt-variable-options'] || undefined
     };
 

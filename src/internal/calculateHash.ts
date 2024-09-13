@@ -33,15 +33,5 @@ function sanitizeChildrenAsObjects(childrenAsObjects: any) {
     const sanitizeChildren = (children: any): any => {
         return Array.isArray(children) ? children.map(sanitizeChild) : sanitizeChild(children)
     }
-    if (
-        typeof childrenAsObjects === 'object' &&
-        childrenAsObjects && childrenAsObjects.t && !childrenAsObjects.type
-    ) {
-        const result: Record<string, any> = {};
-        Object.entries(childrenAsObjects).forEach(([branchName, branch]) => {
-            result[branchName] = sanitizeChildren(branch);
-        });
-        return result;
-    }
     return sanitizeChildren(childrenAsObjects);
 }

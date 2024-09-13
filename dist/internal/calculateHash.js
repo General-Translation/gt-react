@@ -96,15 +96,6 @@ function sanitizeChildrenAsObjects(childrenAsObjects) {
     var sanitizeChildren = function (children) {
         return Array.isArray(children) ? children.map(sanitizeChild) : sanitizeChild(children);
     };
-    if (typeof childrenAsObjects === 'object' &&
-        childrenAsObjects && childrenAsObjects.t && !childrenAsObjects.type) {
-        var result_1 = {};
-        Object.entries(childrenAsObjects).forEach(function (_a) {
-            var branchName = _a[0], branch = _a[1];
-            result_1[branchName] = sanitizeChildren(branch);
-        });
-        return result_1;
-    }
     return sanitizeChildren(childrenAsObjects);
 }
 //# sourceMappingURL=calculateHash.js.map

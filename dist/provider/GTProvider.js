@@ -89,9 +89,10 @@ function GTProvider(_a) {
         }
     }, [translations, translationRequired]);
     var translate = (0, react_1.useCallback)(function (id, options, f) {
+        var _a, _b, _c, _d;
         if (options === void 0) { options = {}; }
         // get the dictionary entry
-        var _a = (0, extractEntryMetadata_1.default)((0, getDictionaryEntry_1.default)(dictionary, id)), entry = _a.entry, metadata = _a.metadata;
+        var _e = (0, extractEntryMetadata_1.default)((0, getDictionaryEntry_1.default)(dictionary, id)), entry = _e.entry, metadata = _e.metadata;
         // Get variables and variable options
         var variables;
         var variablesOptions;
@@ -115,7 +116,7 @@ function GTProvider(_a) {
         if (isPlural) {
             if (typeof (variables === null || variables === void 0 ? void 0 : variables.n) !== 'number')
                 throw new Error("t(\"".concat(id, "\"): Plural requires \"n\" option."));
-            source = (0, getPluralBranch_1.default)(variables.n, [locale, defaultLocale], taggedEntry) || taggedEntry.t; // we know t exists because isPlural
+            source = (0, getPluralBranch_1.default)(variables.n, [locale, defaultLocale], (_a = source.props) === null || _a === void 0 ? void 0 : _a['data-generaltranslation'].branches) || source.props.children; // we know t exists because isPlural
         }
         // If no translations are required
         if (!translationRequired) {
@@ -136,7 +137,7 @@ function GTProvider(_a) {
             }
             var target = translation.t;
             if (isPlural) {
-                target = (0, getPluralBranch_1.default)(variables === null || variables === void 0 ? void 0 : variables.n, [locale, defaultLocale], translation) || translation.t;
+                target = (0, getPluralBranch_1.default)(variables === null || variables === void 0 ? void 0 : variables.n, [locale, defaultLocale], (_c = (_b = target.props) === null || _b === void 0 ? void 0 : _b['data-generaltranslation']) === null || _c === void 0 ? void 0 : _c.branches) || ((_d = target === null || target === void 0 ? void 0 : target.props) === null || _d === void 0 ? void 0 : _d.children);
             }
             return (0, renderTranslatedChildren_1.default)({
                 source: source,

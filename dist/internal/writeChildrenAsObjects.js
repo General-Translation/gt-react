@@ -1,4 +1,15 @@
 "use strict";
+var __assign = (this && this.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -33,27 +44,34 @@ var getTagName = function (child) {
 var handleSingleChild = function (child) {
     if (react_1.default.isValidElement(child)) {
         var _a = child, type = _a.type, props = _a.props;
-        var newProps = {};
+        var objectElement = {
+            type: getTagName(child),
+            props: {}
+        };
         if (props['data-generaltranslation']) {
             var generaltranslation = props['data-generaltranslation'];
-            if ((generaltranslation === null || generaltranslation === void 0 ? void 0 : generaltranslation.transformation) === "variable") {
+            var newGTProp = __assign({}, generaltranslation);
+            var transformation = generaltranslation.transformation;
+            if (transformation === "variable") {
                 var variableName = props.name || _defaultVariableNames_1.default[generaltranslation === null || generaltranslation === void 0 ? void 0 : generaltranslation.variableType] || "value";
                 return { variable: generaltranslation.variableType || "variable", key: variableName };
             }
+            if (transformation === "plural" && generaltranslation.branches) {
+                objectElement.type = 'Plural',
+                    newGTProp = __assign(__assign({}, newGTProp), { branches: Object.entries(generaltranslation.branches).reduce(function (acc, _a) {
+                            var key = _a[0], value = _a[1];
+                            return acc[key] = writeChildrenAsObjects(value);
+                        }, {}) });
+            }
+            objectElement.props['data-generaltranslation'] = newGTProp;
         }
         if (props.children) {
-            newProps.children = handleChildren(props.children);
+            objectElement.props.children = writeChildrenAsObjects(props.children);
         }
-        return {
-            type: getTagName(child),
-            props: newProps
-        };
+        return objectElement;
     }
     ;
     return child;
-};
-var handleChildren = function (children) {
-    return Array.isArray(children) ? children.map(handleSingleChild) : handleSingleChild(children);
 };
 /**
  * Transforms children elements into objects, processing each child recursively if needed.
@@ -61,14 +79,6 @@ var handleChildren = function (children) {
  * @returns {object} The processed children as objects.
 */
 function writeChildrenAsObjects(children) {
-    if (children && typeof children === 'object' && !children.type && children.t) {
-        var result_1 = {};
-        Object.entries(children).forEach(function (_a) {
-            var branchName = _a[0], branch = _a[1];
-            result_1[branchName] = handleChildren(branch);
-        });
-        return result_1;
-    }
-    return handleChildren(children);
+    return Array.isArray(children) ? children.map(handleSingleChild) : handleSingleChild(children);
 }
 //# sourceMappingURL=writeChildrenAsObjects.js.map

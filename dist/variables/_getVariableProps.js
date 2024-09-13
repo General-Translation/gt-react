@@ -11,9 +11,15 @@ function getVariableProps(props) {
     var result = {
         variableType: variableType,
         variableName: props.name || props['data-gt-variable-name'] || _defaultVariableNames_1.default[variableType],
-        variableValue: ((typeof props.defaultValue !== 'undefined') ? props.defaultValue :
-            (typeof props['data-gt-unformatted-value'] !== 'undefined') ? props['data-gt-unformatted-value'] :
-                (typeof props.children !== 'undefined') ? props.children : undefined),
+        variableValue: (function () {
+            if (typeof props.defaultValue !== 'undefined')
+                return props.defaultValue;
+            if (typeof props['data-gt-unformatted-value'] !== 'undefined')
+                return props['data-gt-unformatted-value'];
+            if (typeof props.children !== 'undefined')
+                return props.children;
+            return undefined;
+        })(),
         variableOptions: props.options || props['data-gt-variable-options'] || undefined
     };
     return result;

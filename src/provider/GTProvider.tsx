@@ -103,8 +103,8 @@ export default function GTProvider({
             source = getPluralBranch(
                 variables.n, 
                 [locale, defaultLocale],
-                taggedEntry
-            ) || taggedEntry.t; // we know t exists because isPlural
+                source.props?.['data-generaltranslation'].branches
+            ) || source.props.children; // we know t exists because isPlural
         }
 
         // If no translations are required
@@ -134,8 +134,8 @@ export default function GTProvider({
                 target = getPluralBranch(
                     variables?.n as number,
                     [locale, defaultLocale],
-                    translation
-                ) || translation.t;
+                    (target as any).props?.['data-generaltranslation']?.branches
+                ) || (target as any)?.props?.children;
             }
             return renderTranslatedChildren({
                 source,
