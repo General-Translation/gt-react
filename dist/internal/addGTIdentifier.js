@@ -96,15 +96,17 @@ function addGTIdentifier(children, branches, dictionaryID) {
     if (typeof branches === 'undefined') {
         return taggedChildren;
     }
-    var pluralBranches = Object.keys(branches).reduce(function (acc, branchName) {
-        if (acceptedPluralProps[branchName]) {
-            acc[branchName] = addIdentifierRecursively(branches[branchName], dictionaryID); // process!
+    var pluralBranches = Object.entries(branches).reduce(function (acc, _a) {
+        var key = _a[0], value = _a[1];
+        if (acceptedPluralProps[key]) {
+            acc[key] = addIdentifierRecursively(value, dictionaryID); // process!
         }
         return acc;
     }, {});
     // check that work has actually been done, if not just return the default children
     if (!Object.keys(pluralBranches).length)
         return taggedChildren;
+    console.log('pluralBranches', pluralBranches);
     return react_1.default.createElement('span', { 'data-generaltranslation': { id: 0, branches: pluralBranches, transformation: 'plural' }, children: taggedChildren });
     ;
 }

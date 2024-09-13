@@ -110,13 +110,16 @@ function GTProvider(_a) {
             entry = entry(options);
         }
         var taggedEntry = (0, internal_1.addGTIdentifier)(entry, metadata);
-        var source = taggedEntry;
+        var source;
         // Get a plural if appropriate (check type, if type, get branch, entry =)
         var isPlural = metadata && primitives_1.pluralBranchNames.some(function (branchName) { return branchName in metadata; });
         if (isPlural) {
             if (typeof (variables === null || variables === void 0 ? void 0 : variables.n) !== 'number')
                 throw new Error("t(\"".concat(id, "\"): Plural requires \"n\" option."));
-            source = (0, getPluralBranch_1.default)(variables.n, [locale, defaultLocale], (_a = source.props) === null || _a === void 0 ? void 0 : _a['data-generaltranslation'].branches) || source.props.children; // we know t exists because isPlural
+            source = (0, getPluralBranch_1.default)(variables.n, [locale, defaultLocale], (_a = taggedEntry.props) === null || _a === void 0 ? void 0 : _a['data-generaltranslation'].branches) || taggedEntry.props.children; // we know t exists because isPlural
+        }
+        else {
+            source = taggedEntry;
         }
         // If no translations are required
         if (!translationRequired) {

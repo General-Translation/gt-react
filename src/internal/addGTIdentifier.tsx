@@ -80,9 +80,9 @@ export default function addGTIdentifier(children: Children, branches?: Record<st
         return taggedChildren;
     }
 
-    const pluralBranches = Object.keys(branches).reduce<Record<string, any>>((acc, branchName) => {
-        if (acceptedPluralProps[branchName]) {
-            acc[branchName] = addIdentifierRecursively(branches[branchName], dictionaryID); // process!
+    const pluralBranches = Object.entries(branches).reduce<Record<string, any>>((acc, [key, value]) => {
+        if (acceptedPluralProps[key]) {
+            acc[key] = addIdentifierRecursively(value, dictionaryID); // process!
         }
         return acc;
     }, {});

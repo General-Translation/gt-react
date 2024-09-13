@@ -93,7 +93,7 @@ export default function GTProvider({
 
         const taggedEntry = addGTIdentifier(entry, metadata);
 
-        let source = taggedEntry;
+        let source;
 
         // Get a plural if appropriate (check type, if type, get branch, entry =)
         const isPlural = metadata && pluralBranchNames.some(branchName => branchName in metadata);
@@ -103,8 +103,10 @@ export default function GTProvider({
             source = getPluralBranch(
                 variables.n, 
                 [locale, defaultLocale],
-                source.props?.['data-generaltranslation'].branches
-            ) || source.props.children; // we know t exists because isPlural
+                taggedEntry.props?.['data-generaltranslation'].branches
+            ) || taggedEntry.props.children; // we know t exists because isPlural
+        } else {
+            source = taggedEntry;
         }
 
         // If no translations are required
