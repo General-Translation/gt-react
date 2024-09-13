@@ -1,1 +1,0 @@
-{"version":3,"file":"createPluralComponent.d.ts","sourceRoot":"","sources":["../../../src/server/plural/createPluralComponent.tsx"],"names":[],"mappings":"AAGA,MAAM,CAAC,OAAO,UAAU,qBAAqB,CAAC,CAAC,EAAE,GAAG,EAAE,SAAS,EAAE,MAAM,MAAM,EAAE,aAAa,EAAE,MAAM;kGAK7F;QAAE,QAAQ,CAAC,EAAE,GAAG,CAAC;QAAC,CAAC,GAAG,EAAE,MAAM,GAAG,GAAG,CAAA;KAAE;;EAO5C"}

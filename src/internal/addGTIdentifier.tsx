@@ -1,4 +1,4 @@
-import React, { ReactNode, ReactElement } from 'react'
+import React, { ReactNode, ReactElement, isValidElement } from 'react'
 
 type Child = ReactNode;
 type Children = Child[] | Child;
@@ -13,33 +13,8 @@ const acceptedPluralProps: Record<string, boolean> = {
     "zero": true, "one": true, "two": true, "few": true, "many": true, "other": true
 }
 
-/**
- * Helper function to validate the properties of the component to prevent nested translations
- * @param props - The properties of the current React element
- */
-const validateChild = (child: any): void => {
-    const { type, props } = child;
-    // check that 
-    if (((type as any)?.$$typeof === Symbol.for('react.lazy'))) {
-        (type as any)?._payload?.then((result: any) => {
-            if (result.gtTransformation) {
-                throw new Error(`You can't use client-side gt-react variables like <${result.name}> in a server-side dictionary. Import createVariables() instead.\n\nIf you really, really want to use client-side gt-react components, mark your dictionary with 'use client'.`)
-            }
-        })
-    }
-    if (props && props['data-generaltranslation'] && typeof props['data-generaltranslation'].id === 'number') {
-        throw new Error(`Nesting of <T>, <Plural>, <Value> components is not permitted. This prevents components from being translated twice!
-            Found nested component with id: ${props?.id}, content: ${props?.children}`);
-    }
-}
-
-/**
- * Add data-generaltranslation props, with identifiers, to React children
- * @param children - The children elements to which GT identifiers will be added
- * @returns - The children with added GT identifiers
- */
-export default function addGTIdentifier(children: Children) {
-
+function addIdentifierRecursively(children: Children, dictionaryID?: string | undefined) {
+    
     // Object to keep track of the current index for GT IDs
     let indexObject: { index: number } = { index: 0 };
 
@@ -49,7 +24,7 @@ export default function addGTIdentifier(children: Children) {
      * @returns - The GTProp object
      */
     const createGTProp = (child: ReactElement): GTProp => {
-        const { type, props } = child;
+        const { type } = child;
         indexObject.index += 1;
         let result: GTProp = { id: indexObject.index };
         const transformation: string = typeof type === 'function' ? ((type as any).gtTransformation || '') : '';
@@ -60,110 +35,61 @@ export default function addGTIdentifier(children: Children) {
             } 
             result.transformation = transformationParts[0];
         }
-        
         return result;
     }
 
-    /**
-     * Function to handle valid React elements and add GT identifiers
-     * @param child - The ReactElement to handle
-     * @returns - The new ReactElement with added GT identifiers
-     */
-    const handleValidReactElement = (child: ReactElement): ReactElement => {
-    
-        // Validate the props to ensure there are no nested translations
-        validateChild(child);
-
-        // Destructure the props from the child element
-        const { props } = child;
-    
-        // Create new props for the element, including the GT identifier and a key
-        let generaltranslation = createGTProp(child);  
-       
-        let newProps = {
-            ...props,
-            'data-generaltranslation': generaltranslation
-        };
-
-        // If branches are needed for a number or value variable
-        const transformation = generaltranslation.transformation;
-
-        if (transformation === "plural") {
-
-            // Updates indices to keep a consistent identification system across branches
-            let frozenIndex = indexObject.index;
-            let championIndex = indexObject.index;
-            const updateIndices = () => {
-                if (indexObject.index > frozenIndex) {
-                    if (indexObject.index > championIndex) {
-                        championIndex = indexObject.index;
-                    }
-                    indexObject.index = frozenIndex;
-                }
+    function handleSingleChild(child: any) {
+        if (isValidElement(child)) {
+            const { props } = child as ReactElement;
+            // Create new props for the element, including the GT identifier and a key
+            let generaltranslation = createGTProp(child);  
+            let newProps = {
+                ...props,
+                'data-generaltranslation': generaltranslation
+            };
+            if (dictionaryID) {
+                newProps.key = dictionaryID;
+                dictionaryID = undefined;
             }
-
-            // Adds ID to children
+            // Recursively add IDs to children
             if (props.children) {
-                newProps.children = addIdentifierRecursively(props.children);
+                newProps.children = handleChildren(props.children);
             }
-
-            // define branches
-            let branches: any = {};
-            
-            // add identifier to number branches (e.g. singular, plural)
-            if (transformation === "plural") {
-                const { n, children, locales, ...options } = props;
-                for (const option of Object.keys(options)) {
-                    if (acceptedPluralProps[option] && options[option]) {
-                        updateIndices();
-                        branches[option] = addIdentifierRecursively(options[option]);
-                    }
-                }
-                newProps = { ...newProps, ...branches };
-            }
-
-            // modify newProps if necessary
-            if (Object.keys(branches).length > 0) newProps['data-generaltranslation'].branches = branches;
-            if (newProps.children) newProps['data-generaltranslation'].defaultChildren = newProps.children;
-            
-            // reset index
-            indexObject.index = championIndex; 
-
+            return React.cloneElement(child, newProps);
         }
-
-        // if no transformation is required
-        if (transformation !== "plural") {
-            if (props.children) {
-                newProps.children = addIdentifierRecursively(props.children);
-            }
-        }
-
-        // return the element with new props
-        return React.cloneElement(child, newProps); 
-    }
-
-    /**
-     * Function to handle a single child element and determine if it's a valid React element
-     * @param child - The child element to handle
-     * @returns - The handled child element
-     */
-    const handleSingleChild = (child: Child) => {
-        if (React.isValidElement(child)) return handleValidReactElement(child);
         return child;
     }
-
-    /**
-     * Recursive function to add GT identifiers to all child elements
-     * @param children - The children elements to process
-     * @returns - The children elements with added GT identifiers
-     */
-    const addIdentifierRecursively = (children: ReactNode) => {
+    
+    function handleChildren(children: Children) {
         if (Array.isArray(children)) {
-            return children.map(child => handleSingleChild(child))
+            dictionaryID = undefined;
+            return React.Children.map(children, handleSingleChild)
+        } else {
+            return handleSingleChild(children);
         }
-        return handleSingleChild(children);
     }
 
-    return addIdentifierRecursively(children);
+    return handleChildren(children);
+}
+  
+export default function addGTIdentifier(children: Children, branches?: Record<string, any>, dictionaryID?: string | undefined): any {
+
+    const taggedChildren = addIdentifierRecursively(children, dictionaryID);
+    
+    if (typeof branches === 'undefined') {
+        return taggedChildren;
+    }
+
+    const pluralObject = Object.keys(branches).reduce<Record<string, any>>((acc, branchName) => {
+        if (acceptedPluralProps[branchName]) {
+            acc[branchName] = addIdentifierRecursively(branches[branchName], dictionaryID); // process!
+        }
+        return acc;
+    }, { t: taggedChildren });
+
+    // check that work has actually been done, if not just return the default children
+    if (Object.keys(pluralObject).length === 1) return taggedChildren;
+
+    return pluralObject;
 
 }

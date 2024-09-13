@@ -1,0 +1,1 @@
+{"version":3,"file":"primitives.d.ts","sourceRoot":"","sources":["../../src/primitives/primitives.ts"],"names":[],"mappings":"AAEA,eAAO,MAAM,oBAAoB;;;;;CAAwB,CAAC;AAE1D,eAAO,MAAM,gBAAgB,8BAA8B,CAAC;AAE5D,eAAO,MAAM,oBAAoB,OAAO,CAAC;AAEzC,eAAO,MAAM,iBAAiB,UAA+E,CAAA;AAE7G,eAAO,MAAM,iBAAiB,IAAK,CAAC;AAEpC,eAAO,MAAM,qBAAqB,YAAY,CAAC;AAE/C,eAAO,MAAM,eAAe,0BAA0B,CAAC"}

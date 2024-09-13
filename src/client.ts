@@ -1,19 +1,8 @@
-import useDefaultLocale from "./client/hooks/useDefaultLocale";
-import useLocale from "./client/hooks/useLocale";
-import useGT from "./client/hooks/useGT";
-import ClientVar from "./client/variables/ClientVar";
-import ClientNum from "./client/variables/ClientNum";
-import ClientDateTime from "./client/variables/ClientDateTime";
-import ClientCurrency from "./client/variables/ClientCurrency";
-import GTClientProvider from "./client/client-only/GTClientProvider";
-import useBrowserLocale from "./client/hooks/useBrowserLocale";
-
+import { GTContext as _GTContext } from "./provider/GTContext";
+import _renderDefaultChildren from "./provider/rendering/renderDefaultChildren";
+import _renderTranslatedChildren from "./provider/rendering/renderTranslatedChildren";
+import useBrowserLocale from './hooks/useBrowserLocale'
 export {
-    useGT, GTClientProvider,
-    useLocale, useDefaultLocale,
-    ClientVar as Var,
-    ClientNum as Num,
-    ClientDateTime as DateTime,
-    ClientCurrency as Currency,
-    useBrowserLocale
+    _renderDefaultChildren, _renderTranslatedChildren,
+    _GTContext, useBrowserLocale
 }

@@ -1,5 +1,5 @@
 import React, { ReactNode, ReactElement } from 'react'
-import defaultVariableNames from '../primitives/variables/defaultVariableNames';
+import defaultVariableNames from '../variables/_defaultVariableNames';
 
 type Child = ReactNode | Record<string, any>;
 type Children = Child | Child[];
@@ -22,73 +22,30 @@ const getTagName = (child: ReactElement): string => {
     return 'function';
 };
 
-/**
- * Handles processing of a valid React element, transforming its properties and children as needed.
- * @param {ReactElement} child - The React element to process.
- * @returns {object} - The processed element with its type and transformed props.
- */
-const handleValidReactElement = (child: ReactElement): object => {
-    
-    const { type, props } = child;
-    let newProps: any = {};
-
-    // Transform children if they exist and are not private
-    if (props.children) {
-        newProps.children = writeChildrenAsObjects(props.children)
-    }
-
-    // Write the branches of 'data-generaltranslation' as objects
-    if (props['data-generaltranslation']) {
-
-        const generaltranslation = props['data-generaltranslation']
-        let result = { ...generaltranslation };
-
-        if (generaltranslation.transformation && generaltranslation.transformation === "variable") {
-            const variableName: string = props.name || defaultVariableNames[generaltranslation.variableType] || "value";
-            return { variable:  generaltranslation.variableType || "variable", key: variableName };
-        }
-
-        // Write all the branches as objects
-        if (generaltranslation.transformation && generaltranslation.branches) {
-
-            const transformation = generaltranslation.transformation;
-            
-            // Write the branches of a number variable transformation
-            if (transformation === "plural") {
-                const branches = generaltranslation.branches;
-                for (const option of Object.keys(branches)) {
-                    result.branches[option] = writeChildrenAsObjects(branches[option]);
-                }
+const handleSingleChild = (child: any): any => {
+    if (React.isValidElement(child)) {
+        const { type, props } = child as ReactElement;
+        let newProps: any = {};
+        if (props['data-generaltranslation']) {
+            const generaltranslation = props['data-generaltranslation'];
+            if (generaltranslation?.transformation === "variable") {
+                const variableName = props.name || (defaultVariableNames as any)[generaltranslation?.variableType] || "value";
+                return { variable:  generaltranslation.variableType || "variable", key: variableName };
             }
-
         }
-
-        // Write defaultChildren
-        if (generaltranslation.defaultChildren) {
-            result.defaultChildren = writeChildrenAsObjects(generaltranslation.defaultChildren)
+        if (props.children) {
+            newProps.children = handleChildren(props.children)
         }
-
-        newProps['data-generaltranslation'] = result;
-        
-    }
-
-    return {
-        type: getTagName(child),
-        props: newProps
-    }
+        return {
+            type: getTagName(child),
+            props: newProps
+        }
+    };
+    return child;
 }
 
-/**
- * Handles processing of a single child, determining if it is a valid React element or an object.
- * @param {any} child - The child to process.
- * @returns {object} - The processed child or the original child if no transformation is needed.
- */
-const handleSingleChild = (child: any): object => {
-    if (React.isValidElement(child)) return handleValidReactElement(child);
-    else if (child && typeof child === 'object') {
-        return { variable: true, keys: Object.keys(child) }
-    }
-    else return child;
+const handleChildren = (children: any) => {
+    return Array.isArray(children) ? children.map(handleSingleChild): handleSingleChild(children);
 }
 
 /**
@@ -96,9 +53,13 @@ const handleSingleChild = (child: any): object => {
  * @param {Children} children - The children to process.
  * @returns {object} The processed children as objects.
 */
-export default function writeChildrenAsObjects(children: Children): any {
-    if (Array.isArray(children)) {
-        return children.map(child => handleSingleChild(child))
+export default function writeChildrenAsObjects(children: any): any {
+    if (children && typeof children === 'object' && !children.type && children.t) {
+        const result: Record<string, any> = {};
+        Object.entries(children).forEach(([branchName, branch]) => {
+            result[branchName] = handleChildren(branch);
+        });
+        return result;
     }
-    return handleSingleChild(children)
+    return handleChildren(children);
 }

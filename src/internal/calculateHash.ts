@@ -23,7 +23,7 @@ export default async function calculateHash(childrenAsObjects: any): Promise<str
 
 function sanitizeChildrenAsObjects(childrenAsObjects: any) {
     const sanitizeChild = (child: any): any => {
-        if (typeof child === 'object' && child.props) {
+        if (child && typeof child === 'object' && child.props) {
             if (child?.props?.children) {
                 const { type, ...rest } = child;
                 return {
@@ -41,7 +41,17 @@ function sanitizeChildrenAsObjects(childrenAsObjects: any) {
         return child;
     }
     const sanitizeChildren = (children: any): any => {
-        return (Array.isArray(children)) ? children.map(sanitizeChild) : sanitizeChild(children)
+        return Array.isArray(children) ? children.map(sanitizeChild) : sanitizeChild(children)
     }
-    return sanitizeChildren(structuredClone(childrenAsObjects));
+    if (
+        typeof childrenAsObjects === 'object' &&
+        childrenAsObjects && childrenAsObjects.t && !childrenAsObjects.type
+    ) {
+        const result: Record<string, any> = {};
+        Object.entries(childrenAsObjects).forEach(([branchName, branch]) => {
+            result[branchName] = sanitizeChildren(branch);
+        });
+        return result;
+    }
+    return sanitizeChildren(childrenAsObjects);
 }

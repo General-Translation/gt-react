@@ -1,1 +1,0 @@
-{"version":3,"file":"createGTProviderComponent.d.ts","sourceRoot":"","sources":["../../../src/server/provider/createGTProviderComponent.tsx"],"names":[],"mappings":"AAEA,OAAO,iBAAiB,MAAM,gCAAgC,CAAC;AAG/D,MAAM,CAAC,OAAO,UAAU,yBAAyB,CAAC,UAAU,EAAE,iBAAiB,4BAC3C;IAAE,QAAQ,CAAC,EAAE,GAAG,CAAC;IAAC,CAAC,GAAG,EAAE,MAAM,GAAG,GAAG,CAAA;CAAE,6CAOzE"}

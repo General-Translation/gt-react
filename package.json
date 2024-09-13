@@ -1,6 +1,6 @@
 {
   "name": "gt-react",
-  "version": "3.2.0",
+  "version": "4.0.0",
   "description": "",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -32,10 +32,8 @@
   },
   "exports": {
     ".": {
-      "node": "./dist/server-index.js",
-      "browser": "./dist/client-index.js",
-      "types": "./dist/server-index.d.ts",
-      "default": "./dist/server-index.js"
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
     },
     "./internal": {
       "types": "./dist/internal.d.ts",
@@ -44,21 +42,6 @@
     "./client": {
       "types": "./dist/client.d.ts",
       "default": "./dist/client.js"
-    },
-    "./next": {
-      "node": "./dist/next.server.js",
-      "browser": "./dist/client-index.js",
-      "types": "./dist/next.server.d.ts",
-      "default": "./dist/next.server.js"
-    },
-    "./server": {
-      "browser": null,
-      "types": "./dist/server-index.d.ts",
-      "default": "./dist/server.js"
-    },
-    "./middleware": {
-      "types": "./dist/middleware.d.ts",
-      "default": "./dist/middleware.js"
     }
   },
   "typesVersions": {
@@ -68,15 +51,6 @@
       ],
       "client": [
         "./dist/client.d.ts"
-      ],
-      "next": [
-        "./dist/next.d.ts"
-      ],
-      "server": [
-        "./dist/server.d.ts"
-      ],
-      "middleware": [
-        "./dist/middleware.d.ts"
       ]
     }
   },
@@ -109,7 +83,7 @@
     "i18n"
   ],
   "dependencies": {
-    "generaltranslation": "latest",
+    "generaltranslation": "^2.0.66",
     "xxhash-wasm": "^1.0.2"
   }
 }

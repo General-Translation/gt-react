@@ -95,7 +95,7 @@ function calculateHash(childrenAsObjects) {
 function sanitizeChildrenAsObjects(childrenAsObjects) {
     var sanitizeChild = function (child) {
         var _a;
-        if (typeof child === 'object' && child.props) {
+        if (child && typeof child === 'object' && child.props) {
             if ((_a = child === null || child === void 0 ? void 0 : child.props) === null || _a === void 0 ? void 0 : _a.children) {
                 var type = child.type, rest = __rest(child, ["type"]);
                 return __assign(__assign({}, rest), { props: __assign(__assign({}, child.props), { children: sanitizeChildren(child.props.children) }) });
@@ -108,8 +108,17 @@ function sanitizeChildrenAsObjects(childrenAsObjects) {
         return child;
     };
     var sanitizeChildren = function (children) {
-        return (Array.isArray(children)) ? children.map(sanitizeChild) : sanitizeChild(children);
+        return Array.isArray(children) ? children.map(sanitizeChild) : sanitizeChild(children);
     };
-    return sanitizeChildren(structuredClone(childrenAsObjects));
+    if (typeof childrenAsObjects === 'object' &&
+        childrenAsObjects && childrenAsObjects.t && !childrenAsObjects.type) {
+        var result_1 = {};
+        Object.entries(childrenAsObjects).forEach(function (_a) {
+            var branchName = _a[0], branch = _a[1];
+            result_1[branchName] = sanitizeChildren(branch);
+        });
+        return result_1;
+    }
+    return sanitizeChildren(childrenAsObjects);
 }
 //# sourceMappingURL=calculateHash.js.map
