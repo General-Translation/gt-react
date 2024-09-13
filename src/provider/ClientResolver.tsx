@@ -12,7 +12,8 @@ export default function ClientResolver({
 
     const resolvePromise = async () => {
         try {
-            setRenderedChildren(renderTranslation(await promise));
+            const translation = renderTranslation(await promise);
+            setRenderedChildren(translation);
         } catch (error) {
             console.error(error);
             setRenderedChildren(errorFallback)
