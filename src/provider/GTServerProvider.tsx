@@ -54,7 +54,7 @@ export default async function GTProvider({
 
         dictionary[id] = [taggedEntry, metadata];
         
-        if (!translationRequired) return;
+        if (!translationRequired || !entry) return;
 
         const entryAsObjects = writeChildrenAsObjects(taggedEntry);
 

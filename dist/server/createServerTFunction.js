@@ -46,6 +46,10 @@ function createServerTFunction(prefixID) {
             entry = entry(options);
         }
         var isPlural = metadata && internal_1.primitives.pluralBranchNames.some(function (branchName) { return branchName in metadata; });
+        if (!entry) {
+            console.warn("No entry found for id: ".concat(id));
+            return;
+        }
         if (typeof entry === 'string' && !isPlural) {
             return (0, translate_1.default)(entry, {
                 id: id

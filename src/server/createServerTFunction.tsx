@@ -45,6 +45,11 @@ export default function createServerTFunction(
 
         const isPlural = metadata && primitives.pluralBranchNames.some(branchName => branchName in metadata);
 
+        if (!entry) {
+            console.warn(`No entry found for id: ${id}`);
+            return;
+        }
+
         if (typeof entry === 'string' && !isPlural) {
             return translate(entry, { 
                 id 

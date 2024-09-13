@@ -63,6 +63,8 @@ function translate(content_1) {
         return __generator(this, function (_b) {
             switch (_b.label) {
                 case 0:
+                    if (!content)
+                        return [2 /*return*/, ''];
                     I18NConfig = (0, getI18NConfig_1.default)();
                     contentAsArray = (0, generaltranslation_1.splitStringToContent)(content);
                     options.language = options.language || (0, getLocale_1.default)();

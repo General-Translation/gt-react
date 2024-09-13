@@ -123,7 +123,7 @@ function GTProvider(_a) {
                                         }
                                         taggedEntry = (0, internal_1.addGTIdentifier)(entry, metadata, id);
                                         dictionary[id] = [taggedEntry, metadata];
-                                        if (!translationRequired)
+                                        if (!translationRequired || !entry)
                                             return [2 /*return*/];
                                         entryAsObjects = (0, internal_1.writeChildrenAsObjects)(taggedEntry);
                                         if (!(metadata === null || metadata === void 0 ? void 0 : metadata.context)) return [3 /*break*/, 2];

@@ -16,6 +16,8 @@ export default async function translate<V extends Record<string, any>>(
     variableOptions?: { [key in keyof V]?: Intl.NumberFormatOptions | Intl.DateTimeFormatOptions }
 ): Promise<string> {
 
+    if (!content) return '';
+
     const I18NConfig = getI18NConfig();
 
     const contentAsArray = splitStringToContent(content);

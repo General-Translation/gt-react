@@ -28,6 +28,10 @@ export default async function T({
     [key: string]: any
 }) {
 
+    if (!children) {
+        return;
+    }
+
     const I18NConfig = getI18NConfig();
     const locale = getLocale();
     const defaultLocale = I18NConfig.getDefaultLocale();
@@ -39,8 +43,9 @@ export default async function T({
     }
 
     const taggedChildren = addGTIdentifier(children, props);
-
-    let source = taggedChildren;
+    const childrenAsObjects = writeChildrenAsObjects(taggedChildren);
+    
+    let source;
     
     // Get a plural if appropriate (check type, if type, get branch, entry =)
     const isPlural = props && primitives.pluralBranchNames.some(branchName => branchName in props);
@@ -56,8 +61,10 @@ export default async function T({
         source = getPluralBranch(
             (variables as any).n, 
             [locale, defaultLocale], // not redundant, as locale could be a different dialect of the same language
-            source.props['data-generaltranslation'].branches
-        ) || source.props.children;
+            taggedChildren.props['data-generaltranslation'].branches
+        ) || taggedChildren.props.children;
+    } else {
+        source = taggedChildren;
     }
 
     if (!translationRequired) {
@@ -65,8 +72,6 @@ export default async function T({
             children: source, variables, variablesOptions
         });
     }
-    
-    const childrenAsObjects = writeChildrenAsObjects(taggedChildren);
 
     const key: string = props.context ? await calculateHash([childrenAsObjects, props.context]) : await calculateHash(childrenAsObjects);
 

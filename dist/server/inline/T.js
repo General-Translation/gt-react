@@ -73,12 +73,15 @@ var renderTranslatedChildren_1 = __importDefault(require("../rendering/renderTra
 var renderDefaultChildren_1 = __importDefault(require("../rendering/renderDefaultChildren"));
 function T(_a) {
     return __awaiter(this, void 0, void 0, function () {
-        var I18NConfig, locale, defaultLocale, translationRequired, translationsPromise, taggedChildren, source, isPlural, childrenAsObjects, key, _b, translations, translation, target, translationPromise, promise, loadingFallback, errorFallback, target;
+        var I18NConfig, locale, defaultLocale, translationRequired, translationsPromise, taggedChildren, childrenAsObjects, source, isPlural, key, _b, translations, translation, target, translationPromise, promise, loadingFallback, errorFallback, target;
         var _c, _d, _e;
         var children = _a.children, id = _a.id, variables = _a.variables, variablesOptions = _a.variablesOptions, n = _a.n, renderSettings = _a.renderSettings, props = __rest(_a, ["children", "id", "variables", "variablesOptions", "n", "renderSettings"]);
         return __generator(this, function (_f) {
             switch (_f.label) {
                 case 0:
+                    if (!children) {
+                        return [2 /*return*/];
+                    }
                     I18NConfig = (0, getI18NConfig_1.default)();
                     locale = (0, getLocale_1.default)();
                     defaultLocale = I18NConfig.getDefaultLocale();
@@ -87,7 +90,7 @@ function T(_a) {
                         translationsPromise = I18NConfig.getTranslations(locale, props.dictionaryName);
                     }
                     taggedChildren = (0, internal_1.addGTIdentifier)(children, props);
-                    source = taggedChildren;
+                    childrenAsObjects = (0, internal_1.writeChildrenAsObjects)(taggedChildren);
                     isPlural = props && internal_1.primitives.pluralBranchNames.some(function (branchName) { return branchName in props; });
                     if (isPlural) {
                         if (typeof n === 'number')
@@ -98,7 +101,10 @@ function T(_a) {
                                 "<T> with props ".concat(JSON.stringify(props), ": Plural requires \"n\" option."));
                         }
                         source = (0, internal_1.getPluralBranch)(variables.n, [locale, defaultLocale], // not redundant, as locale could be a different dialect of the same language
-                        source.props['data-generaltranslation'].branches) || source.props.children;
+                        taggedChildren.props['data-generaltranslation'].branches) || taggedChildren.props.children;
+                    }
+                    else {
+                        source = taggedChildren;
                     }
                     if (!translationRequired) {
                         return [2 /*return*/, (0, renderDefaultChildren_1.default)({
@@ -107,7 +113,6 @@ function T(_a) {
                                 variablesOptions: variablesOptions
                             })];
                     }
-                    childrenAsObjects = (0, internal_1.writeChildrenAsObjects)(taggedChildren);
                     if (!props.context) return [3 /*break*/, 2];
                     return [4 /*yield*/, (0, internal_1.calculateHash)([childrenAsObjects, props.context])];
                 case 1:
