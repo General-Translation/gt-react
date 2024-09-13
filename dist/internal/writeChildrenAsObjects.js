@@ -57,11 +57,13 @@ var handleSingleChild = function (child) {
                 return { variable: generaltranslation.variableType || "variable", key: variableName };
             }
             if (transformation === "plural" && generaltranslation.branches) {
-                objectElement.type = 'Plural',
-                    newGTProp = __assign(__assign({}, newGTProp), { branches: Object.entries(generaltranslation.branches).reduce(function (acc, _a) {
-                            var key = _a[0], value = _a[1];
-                            return acc[key] = writeChildrenAsObjects(value);
-                        }, {}) });
+                objectElement.type = 'Plural';
+                var newBranches_1 = {};
+                Object.entries(generaltranslation.branches).forEach(function (_a) {
+                    var key = _a[0], value = _a[1];
+                    newBranches_1[key] = writeChildrenAsObjects(value);
+                });
+                newGTProp = __assign(__assign({}, newGTProp), { branches: newBranches_1 });
             }
             objectElement.props['data-generaltranslation'] = newGTProp;
         }

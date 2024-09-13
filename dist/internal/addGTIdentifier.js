@@ -106,7 +106,6 @@ function addGTIdentifier(children, branches, dictionaryID) {
     // check that work has actually been done, if not just return the default children
     if (!Object.keys(pluralBranches).length)
         return taggedChildren;
-    console.log('pluralBranches', pluralBranches);
     return react_1.default.createElement('span', { 'data-generaltranslation': { id: 0, branches: pluralBranches, transformation: 'plural' }, children: taggedChildren });
     ;
 }

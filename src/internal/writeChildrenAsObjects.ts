@@ -39,10 +39,12 @@ const handleSingleChild = (child: any): any => {
                 return { variable:  generaltranslation.variableType || "variable", key: variableName };
             }
             if (transformation === "plural" && generaltranslation.branches) {
-                objectElement.type = 'Plural',
-                newGTProp = { ...newGTProp, branches: Object.entries(generaltranslation.branches).reduce((acc: Record<string, any>, [key, value]) => {
-                    return acc[key] = writeChildrenAsObjects(value);
-                }, {})  }
+                objectElement.type = 'Plural';
+                let newBranches: Record<string, any> = {};
+                Object.entries(generaltranslation.branches).forEach(([key, value]: any) => {
+                    newBranches[key] = writeChildrenAsObjects(value);
+                });
+                newGTProp = { ...newGTProp, branches: newBranches }
             }
             
             objectElement.props['data-generaltranslation'] = newGTProp;
