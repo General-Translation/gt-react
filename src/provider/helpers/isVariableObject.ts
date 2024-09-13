@@ -1,4 +1,7 @@
-import { VariableObject } from "generaltranslation/dist/types/types";
+type VariableObject = {
+    key: string,
+    variable?: "variable" | "number" | "datetime" | "currency"
+}
 
 export default function isVariableObject(obj: unknown): obj is VariableObject {
     if (obj && typeof obj === 'object' && typeof (obj as VariableObject).key === 'string') {
