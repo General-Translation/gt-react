@@ -26,7 +26,8 @@ function renderDefaultChildren(_a) {
             var generaltranslation = (0, getGTProp_1.default)(child);
             if ((generaltranslation === null || generaltranslation === void 0 ? void 0 : generaltranslation.transformation) === "variable") {
                 var _a = (0, _getVariableProps_1.default)(child.props), variableName = _a.variableName, variableType = _a.variableType, variableValue = _a.variableValue, variableOptions = _a.variableOptions;
-                variableValue = variables[variableName] || variableValue;
+                variableValue = (typeof variables[variableName] !== 'undefined') ?
+                    variables[variableName] : variableValue;
                 return (0, renderTranslatedChildren_1.renderVariable)({
                     variableName: variableName,
                     variableType: variableType,
