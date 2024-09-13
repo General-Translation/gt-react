@@ -23,7 +23,8 @@ export default function renderDefaultChildren({
                     variableValue,
                     variableOptions
                 } = getVariableProps(child.props);
-                variableValue = variables[variableName] || variableValue;
+                variableValue = (typeof variables[variableName] !== 'undefined') ?
+                    variables[variableName] : variableValue;
                 return renderVariable({
                     variableName, variableType, variableValue, variableOptions: {
                         ...variablesOptions[variableName],
