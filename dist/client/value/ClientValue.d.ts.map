@@ -1,1 +1,0 @@
-{"version":3,"file":"ClientValue.d.ts","sourceRoot":"","sources":["../../../src/client/value/ClientValue.tsx"],"names":[],"mappings":"AAEA,OAAc,EAAE,SAAS,EAAE,MAAM,OAAO,CAAC;AAGzC;;;;;;;GAOG;AACH,QAAA,MAAM,WAAW,yBAA0B;IACvC,QAAQ,CAAC,EAAE,GAAG,CAAC;IACf,MAAM,EAAE,MAAM,CAAC,MAAM,EAAE,GAAG,CAAC,CAAC;CAC/B,KAAG,SAQH,CAAC;AAEF,eAAe,WAAW,CAAC"}

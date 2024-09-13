@@ -1,10 +1,11 @@
+import { NextResponse } from "next/server";
 /**
  * Middleware to set a cookie based on the locale.
  * @param {NextRequest} req - The incoming request object.
  */
-export default function createNextMiddleware({ defaultLocale, approvedLocales, localeRouting }?: {
+export default function createNextMiddleware({ defaultLocale, locales, localeRouting }?: {
     defaultLocale: string;
-    approvedLocales?: string[];
+    locales?: string[];
     localeRouting: boolean;
-}): (req: any) => any;
+}): (req: any) => NextResponse<unknown>;
 //# sourceMappingURL=createNextMiddleware.d.ts.map

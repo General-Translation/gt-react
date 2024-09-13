@@ -1,7 +1,8 @@
-import { isValidLanguageCode, isSameLanguage } from "generaltranslation";
-import { getNextHeaders, getNextResponse, getNextRequestCookies, getNextResponseCookies } from "../next/imports/imports";
-import { localeCookieName } from "./cookieSettings";
-
+import { isValidLanguageCode, isSameLanguage, determineLanguage } from "generaltranslation";
+import { headers } from 'next/headers'
+import { NextResponse } from "next/server";
+import { primitives } from 'gt-react/internal'
+import { ResponseCookies, RequestCookies } from "next/dist/compiled/@edge-runtime/cookies";
 /**
  * Extracts the locale from the given pathname.
  * 
@@ -19,15 +20,6 @@ function extractLocale(pathname: string): string | null {
  * via 
  */
 function applyNewCookies(req: any, res: any) {
-
-    const NextResponse = getNextResponse();
-    if (!NextResponse) return;
-
-    const ResponseCookies = getNextResponseCookies();
-    if (!ResponseCookies) return;
-
-    const RequestCookies = getNextRequestCookies();
-    if (!RequestCookies) return;
 
     // 1. Parse Set-Cookie header from the response
     const setCookies = new ResponseCookies(res.headers);
@@ -55,17 +47,11 @@ function applyNewCookies(req: any, res: any) {
  * @param {NextRequest} req - The incoming request object.
  */
 export default function createNextMiddleware({
-    defaultLocale = 'en', approvedLocales, localeRouting = true
-}: { defaultLocale: string; approvedLocales?: string[]; localeRouting: boolean } 
+    defaultLocale = 'en', locales, localeRouting = true
+}: { defaultLocale: string; locales?: string[]; localeRouting: boolean } 
 = { defaultLocale: 'en', localeRouting: true }) {
 
     return (req: any) => {
-
-        const NextResponse = getNextResponse();
-        if (!NextResponse) return;
-
-        const headers = getNextHeaders();
-        if (!headers) return;
 
         const headerList = headers();
 
@@ -83,13 +69,11 @@ export default function createNextMiddleware({
             let pathnameHasLocale: boolean = false;
         
             if (locale && isValidLanguageCode(locale)) {
-                if (approvedLocales) {
-                    for (const approvedLocale of approvedLocales) {
-                        if (isSameLanguage(approvedLocale, locale)) {
-                            userLocale = approvedLocale;
-                            pathnameHasLocale = true;
-                            break;
-                        }
+                if (locales) {
+                    const approvedLocale = determineLanguage(locale, locales);
+                    if (approvedLocale) {
+                        userLocale = approvedLocale;
+                        pathnameHasLocale = true;
                     }
                 } else {
                     userLocale = locale;
@@ -98,7 +82,7 @@ export default function createNextMiddleware({
             }
 
             if (pathnameHasLocale) {
-                res.cookies.set(localeCookieName, userLocale)
+                res.cookies.set(primitives.localeCookieName, userLocale)
                 applyNewCookies(req, res);
                 return res;
             }
@@ -110,13 +94,11 @@ export default function createNextMiddleware({
                 const refererLocale = extractLocale((new URL(referer))?.pathname);
                 if (refererLocale) {
                     let refererLocaleIsValid = false;
-                    if (approvedLocales) {
-                        for (const approvedLocale of approvedLocales) {
-                            if (isSameLanguage(approvedLocale, refererLocale)) {
-                                userLocale = approvedLocale;
-                                refererLocaleIsValid = true;
-                                break;
-                            }
+                    if (locales) {
+                        const approvedLocale = determineLanguage(refererLocale, locales);
+                        if (approvedLocale) {
+                            userLocale = approvedLocale;
+                            refererLocaleIsValid = true;
                         }
                     } else {
                         if (isValidLanguageCode(refererLocale)) {
@@ -137,14 +119,10 @@ export default function createNextMiddleware({
         const acceptedLocales = headerList.get('accept-language')?.split(',').map(item => item.split(';')?.[0].trim())?.filter(code => isValidLanguageCode(code));
         
         if (acceptedLocales && acceptedLocales.length > 0) {
-            if (approvedLocales) {
-                outerLoop: for (const locale of acceptedLocales) {
-                    for (const approvedLocale of approvedLocales) {
-                        if (isSameLanguage(locale, approvedLocale)) {
-                            userLocale = approvedLocale;
-                            break outerLoop;
-                        }
-                    }
+            if (locales) {
+                const approvedLocale = determineLanguage(acceptedLocales, locales);
+                if (approvedLocale) {
+                    userLocale = approvedLocale;
                 }
             }
             else {
@@ -152,7 +130,7 @@ export default function createNextMiddleware({
             }
         }
 
-        res.cookies.set(localeCookieName, userLocale)
+        res.cookies.set(primitives.localeCookieName, userLocale)
 
         if (localeRouting) {
 

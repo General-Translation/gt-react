@@ -1,62 +1,44 @@
 import GT, { isSameLanguage } from "generaltranslation";
-import remoteDictionaryManager, { RemoteDictionaryManager } from "./RemoteDictionaryManager";
-import getDictionaryEntry from "../dictionary/getDictionaryEntry";
-import LocalDictionaryManager from "./LocalDictionaryManager";
-import defaultGTProps from "../types/defaultGTProps";
-
-const isServer = () => { if (typeof window !== 'undefined') {
-    // proxy for import 'server-only'
-    throw new Error(
-        "This module cannot be imported from a Client Component module. " +
-        "It should only be used from a Server Component."
-    ); 
-} }; isServer();
+import remoteTranslationsManager, { RemoteTranslationsManager } from "./RemoteTranslationsManager";
 
 type I18NConfigurationParams = {
     apiKey: string;
     projectID: string;
     cacheURL: string;
-    baseURL: string, 
-    remoteSource: boolean;
-    automaticTranslation: boolean;
-    getLocale: () => string;
+    baseURL: string,
     defaultLocale: string, 
-    approvedLocales?: string[],
-    renderPrevious: boolean,
-    renderMethod: string, 
-    renderTimeout: number | null,
-    dictionary: Record<string, any>, 
+    locales?: string[],
+    renderSettings: {
+        fallbackToPrevious: boolean,
+        method: "skeleton" | "replace" | "hang" | "subtle",
+        timeout: number | null
+    }
     dictionaryName: string;
     translations?: Record<string, () => Promise<Record<string, any>>>;
     maxConcurrentRequests: number;
     batchInterval: number;
-    getMetadata: () => Record<string, any>;
     [key: string]: any;
 }
 
 export default class I18NConfiguration {
     // Cloud integration
+    baseURL: string;
     projectID: string;
-    remoteSource: boolean;
-    automaticTranslation: boolean;
     // Locale info
-    getLocale: () => string;
     defaultLocale: string;
-    approvedLocales: string[] | undefined;
+    locales: string[] | undefined;
     // Rendering
-    renderPrevious: boolean;
-    renderMethod: string;
-    renderTimeout: number | null;
+    renderSettings: {
+        fallbackToPrevious: boolean,
+        method: "skeleton" | "replace" | "hang" | "subtle",
+        timeout: number | null
+    }
     // Dictionaries
     dictionaryName: string;
-    dictionary: Record<string, any>;
-    translations?: Record<string, () => Promise<Record<string, any>>>;
-    private _localDictionaryManager: LocalDictionaryManager | undefined;
-    private _remoteDictionaryManager: RemoteDictionaryManager | undefined;
+    private _remoteTranslationsManager: RemoteTranslationsManager | undefined;
     // GT
     gt: GT;
     // Other metadata
-    getMetadata: () => Record<string, any>;
     metadata: Record<string, any>
     // Batching config
     maxConcurrentRequests: number;
@@ -70,65 +52,42 @@ export default class I18NConfiguration {
         // Cloud integration
         apiKey, projectID,
         baseURL, cacheURL, 
-        remoteSource, automaticTranslation,
         // Locale info
-        getLocale,
         defaultLocale,
-        approvedLocales,
+        locales,
         // Render method
-        renderPrevious, renderMethod, renderTimeout,
+        renderSettings,
         // Dictionaries
         dictionary, dictionaryName,
-        // Translations
-        translations,
         // Batching config
         maxConcurrentRequests, batchInterval,
         // Other metadata
-        getMetadata,
         ...metadata
     }: I18NConfigurationParams) {
-        isServer(); // redundant
         // Cloud integration
         this.projectID = projectID;
-        this.remoteSource = (cacheURL && remoteSource) ? true : false;
-        this.automaticTranslation = (baseURL && automaticTranslation && apiKey) ? true : false;
-        // Validate required parameters
-        if (!projectID && ((this.automaticTranslation && baseURL === defaultGTProps.baseURL) || (this.remoteSource && cacheURL === defaultGTProps.cacheURL))) {
-            throw new Error("gt-react Error: General Translation cloud services require a project ID! Find yours at www.generaltranslation.com/dashboard.");
-        }
+        this.baseURL = baseURL;
         // Locales
-        this.getLocale = getLocale;
         this.defaultLocale = defaultLocale;
-        this.approvedLocales = approvedLocales;
+        this.locales = locales;
         // Render method
-        this.renderPrevious = renderPrevious;
-        this.renderMethod = renderMethod;
-        this.renderTimeout = renderTimeout;
+        this.renderSettings = renderSettings;
         // Dictionaries
-        this.dictionary = dictionary;
         this.dictionaryName = dictionaryName;
-        // Local translations
-        this.translations = translations;
         // GT
         this.gt = new GT({ projectID, apiKey, defaultLanguage: defaultLocale, baseURL });
         // Other metadata
-        this.getMetadata = getMetadata;
         this.metadata = { 
             projectID: this.projectID, 
             defaultLanguage: this.defaultLocale, 
             dictionaryName,
-            ...(this.renderTimeout && { timeout: this.renderTimeout - batchInterval }),
+            ...(this.renderSettings.timeout && { timeout: this.renderSettings.timeout - batchInterval }),
             ...metadata
         };
         // Dictionary managers
-        if (this.translations) {
-            this._localDictionaryManager = new LocalDictionaryManager({
-                translations: this.translations
-            })
-        }
-        if (this.remoteSource) {
-            this._remoteDictionaryManager = remoteDictionaryManager;
-            this._remoteDictionaryManager.setConfig({
+        if (cacheURL && projectID) {
+            this._remoteTranslationsManager = remoteTranslationsManager;
+            this._remoteTranslationsManager.setConfig({
                 cacheURL, projectID
             })
         }
@@ -153,16 +112,8 @@ export default class I18NConfiguration {
      * Gets the list of approved locales for this app
      * @returns {string[] | undefined} A list of BCP-47 language tags, or undefined if none were provided
     */
-    getApprovedLocales(): string[] | undefined {
-        return this.approvedLocales;
-    }
-
-    /**
-     * Get dictionary
-     * @returns The entire dictionary, or an empty object if none found
-    */
-    getDictionary(): Record<string, any> {
-        return this.dictionary;
+    getLocales(): string[] | undefined {
+        return this.locales;
     }
 
     /**
@@ -174,19 +125,10 @@ export default class I18NConfiguration {
     }
 
     /**
-     * Get an entry from the dictionary
-     * @returns An entry from the dictionary determined by id
+     * @returns A boolean indicating whether automatic translation is enabled or disabled for this config
     */
-    getDictionaryEntry(id: string): any {
-        return getDictionaryEntry(id, this.dictionary);
-    }
-
-    /**
-     * Get an entry from the dictionary
-     * @returns An entry from the dictionary determined by id
-    */
-    automaticTranslationEnabled(): boolean {
-        return this.automaticTranslation;
+    translationEnabled(): boolean {
+        return (this.baseURL && this.projectID) ? true : false;
     }
 
     /**
@@ -194,14 +136,14 @@ export default class I18NConfiguration {
      * @returns An object containing the current method and timeout. 
      * As of 7/31/24: method is "skeleton", "replace", "hang", "subtle".
      * Timeout is a number or null, representing no assigned timeout.
-     * renderPrevious determines whether a non-matching previous entry should be rendered while the new translation loads.
+     * fallbackToPrevious determines whether a non-matching previous entry should be rendered while the new translation loads.
     */
-    getRenderSettings(): { method: string, timeout: number | null, renderPrevious: boolean } {
-        return {
-            method: this.renderMethod,
-            timeout: this.renderTimeout,
-            renderPrevious: this.renderPrevious
-        }
+    getRenderSettings(): { 
+        method: "skeleton" | "replace" | "hang" | "subtle", 
+        timeout: number | null, 
+        fallbackToPrevious: boolean 
+    } {
+        return this.renderSettings;
     }
 
     /**
@@ -211,7 +153,7 @@ export default class I18NConfiguration {
      */
     translationRequired(locale: string): boolean {
         if (!locale) return false;
-        if (this.approvedLocales && !this.approvedLocales.some(approvedLocale => isSameLanguage(locale, approvedLocale))) return false;
+        if (this.locales && !this.locales.some(approvedLocale => isSameLanguage(locale, approvedLocale))) return false;
         if (isSameLanguage(locale, this.defaultLocale)) return false;
         return true;
     }
@@ -222,40 +164,8 @@ export default class I18NConfiguration {
      * @param dictionaryName - User-defined dictionary name, for distinguishing between multiple translation dictionaries for a single language.
      * @returns A promise that resolves to the translations.
     */
-    async getTranslations(locale: string, dictionaryName: string = this.dictionaryName): Promise<{
-        local?: any, remote?: any
-    }> {
-        let translations: { local?: any, remote?: any } = {};
-        const localPromise = this._localDictionaryManager ? this._localDictionaryManager.getDictionary(locale) : Promise.resolve(undefined);
-        const remotePromise = this._remoteDictionaryManager ? this._remoteDictionaryManager.getDictionary(locale, dictionaryName) : Promise.resolve(undefined);
-        const [local, remote] = await Promise.all([localPromise, remotePromise]);
-        if (local !== undefined) {
-            translations.local = local;
-        }
-        if (remote !== undefined) {
-            translations.remote = remote;
-        }
-        return translations;
-    }
-
-    /**
-     * Get the entry in the translation dictionary for the user's locale, if it exists
-     * @param locale - The user's locale
-     * @param key - Key in the dictionary. For strings, the original language version of that string. For React children, a hash.
-     * @param dictionaryName - User-defined dictionary name, for distinguishing between multiple translation dictionaries for a single language.
-     * @param translations - Optional translations to search.
-     * @returns A promise that resolves to the a value in the translations.
-    */
-    async getTranslation(locale: string, key: string, id: string = key, dictionaryName: string = this.dictionaryName, translations?: { local?: any, remote?: any }): Promise<any | null> {
-        translations = translations || await this.getTranslations(locale, dictionaryName);
-        if (translations.local) {
-            const translation = getDictionaryEntry(id, translations.local);
-            if (translation) return translation;
-        }
-        if (translations.remote) {
-            if (translations.remote[id] && translations.remote[id].k === key) return translations.remote[id].t;
-        }
-        return null;
+    async getTranslations(locale: string, dictionaryName: string = this.dictionaryName): Promise<Record<string, any>> {
+        return (await this._remoteTranslationsManager?.getTranslations(locale, dictionaryName)) || {};
     }
    
     /**
@@ -277,9 +187,9 @@ export default class I18NConfiguration {
                     content,
                     targetLanguage,
                     projectID: this.projectID,
-                    metadata: { ...this.metadata, ...this.getMetadata(), ...options }
+                    metadata: { ...this.metadata, ...options }
                 },
-                revalidate: (this._remoteDictionaryManager) ? this._remoteDictionaryManager.getTranslationRequested(targetLanguage, dictionaryName) : false,
+                revalidate: (this._remoteTranslationsManager) ? this._remoteTranslationsManager.getTranslationRequested(targetLanguage, dictionaryName) : false,
                 resolve,
                 reject
             });
@@ -306,9 +216,9 @@ export default class I18NConfiguration {
                 data: {
                     children,
                     targetLanguage,
-                    metadata: { ...this.metadata, ...this.getMetadata(), ...metadata }
+                    metadata: { ...this.metadata, ...metadata }
                 },
-                revalidate: (this._remoteDictionaryManager) ? this._remoteDictionaryManager.getTranslationRequested(targetLanguage, dictionaryName) : false,
+                revalidate: (this._remoteTranslationsManager) ? this._remoteTranslationsManager.getTranslationRequested(targetLanguage, dictionaryName) : false,
                 resolve,
                 reject
             });
@@ -326,7 +236,7 @@ export default class I18NConfiguration {
         try {
             const bundlePromise = this.gt.translateBundle(batch);
             batch.forEach((item) => {
-                if (this._remoteDictionaryManager && item.cache) this._remoteDictionaryManager.setTranslationRequested(item.data.targetLanguage, item.data.metadata.dictionaryName);
+                if (this._remoteTranslationsManager && item.cache) this._remoteTranslationsManager.setTranslationRequested(item.data.targetLanguage, item.data.metadata.dictionaryName);
             })
             const results = await bundlePromise;
             batch.forEach((item, index) => {
@@ -334,8 +244,8 @@ export default class I18NConfiguration {
                 if (!result) return item.reject('Translation failed.');
                 if (result && typeof result === 'object') {
                     item.resolve(result.translation);
-                    if (result.translation && result.language && result.reference && this._remoteDictionaryManager) {
-                        this._remoteDictionaryManager.setDictionary(
+                    if (result.translation && result.language && result.reference && this._remoteTranslationsManager) {
+                        this._remoteTranslationsManager.setTranslations(
                             result.language,
                             result.reference.dictionaryName,
                             result.reference.key,

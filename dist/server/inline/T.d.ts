@@ -1,15 +1,16 @@
-import { ReactNode } from 'react';
-import I18NConfiguration from '../../config/I18NConfiguration';
-type ServerTProps = {
-    I18NConfig: I18NConfiguration;
+export default function T({ children, id, variables, variablesOptions, n, renderSettings, ...props }: {
     children: any;
-    locale: string;
     id?: string;
+    n?: number;
+    variables?: Record<string, any>;
+    variablesOptions?: {
+        [key: string]: Intl.NumberFormatOptions | Intl.DateTimeFormatOptions;
+    };
+    renderSettings?: {
+        method: "skeleton" | "replace" | "hang" | "subtle";
+        timeout: number | null;
+        fallbackToPrevious: boolean;
+    };
     [key: string]: any;
-};
-declare const ServerT: {
-    ({ I18NConfig, children, locale, ...props }: ServerTProps): Promise<ReactNode>;
-    gtTransformation: string;
-};
-export default ServerT;
+}): Promise<string | number | bigint | boolean | Iterable<import("react").ReactNode> | import("react/jsx-runtime").JSX.Element | null | undefined>;
 //# sourceMappingURL=T.d.ts.map

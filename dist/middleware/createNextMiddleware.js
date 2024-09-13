@@ -2,8 +2,10 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = createNextMiddleware;
 var generaltranslation_1 = require("generaltranslation");
-var imports_1 = require("../next/imports/imports");
-var cookieSettings_1 = require("./cookieSettings");
+var headers_1 = require("next/headers");
+var server_1 = require("next/server");
+var internal_1 = require("gt-react/internal");
+var cookies_1 = require("next/dist/compiled/@edge-runtime/cookies");
 /**
  * Extracts the locale from the given pathname.
  *
@@ -20,25 +22,16 @@ function extractLocale(pathname) {
  * via
  */
 function applyNewCookies(req, res) {
-    var NextResponse = (0, imports_1.getNextResponse)();
-    if (!NextResponse)
-        return;
-    var ResponseCookies = (0, imports_1.getNextResponseCookies)();
-    if (!ResponseCookies)
-        return;
-    var RequestCookies = (0, imports_1.getNextRequestCookies)();
-    if (!RequestCookies)
-        return;
     // 1. Parse Set-Cookie header from the response
-    var setCookies = new ResponseCookies(res.headers);
+    var setCookies = new cookies_1.ResponseCookies(res.headers);
     // 2. Construct updated Cookie header for the request
     var newReqHeaders = new Headers(req.headers);
-    var newReqCookies = new RequestCookies(newReqHeaders);
+    var newReqCookies = new cookies_1.RequestCookies(newReqHeaders);
     setCookies.getAll().forEach(function (cookie) { return newReqCookies.set(cookie); });
     // 3. Set up the “request header overrides” (see https://github.com/vercel/next.js/pull/41380)
     //    on a dummy response
     // NextResponse.next will set x-middleware-override-headers / x-middleware-request-* headers
-    var dummyRes = NextResponse.next({ request: { headers: newReqHeaders } });
+    var dummyRes = server_1.NextResponse.next({ request: { headers: newReqHeaders } });
     // 4. Copy the “request header overrides” headers from our dummy response to the real response
     dummyRes.headers.forEach(function (value, key) {
         if (key === 'x-middleware-override-headers' || key.startsWith('x-middleware-request-')) {
@@ -51,17 +44,11 @@ function applyNewCookies(req, res) {
  * @param {NextRequest} req - The incoming request object.
  */
 function createNextMiddleware(_a) {
-    var _b = _a === void 0 ? { defaultLocale: 'en', localeRouting: true } : _a, _c = _b.defaultLocale, defaultLocale = _c === void 0 ? 'en' : _c, approvedLocales = _b.approvedLocales, _d = _b.localeRouting, localeRouting = _d === void 0 ? true : _d;
+    var _b = _a === void 0 ? { defaultLocale: 'en', localeRouting: true } : _a, _c = _b.defaultLocale, defaultLocale = _c === void 0 ? 'en' : _c, locales = _b.locales, _d = _b.localeRouting, localeRouting = _d === void 0 ? true : _d;
     return function (req) {
         var _a, _b, _c;
-        var NextResponse = (0, imports_1.getNextResponse)();
-        if (!NextResponse)
-            return;
-        var headers = (0, imports_1.getNextHeaders)();
-        if (!headers)
-            return;
-        var headerList = headers();
-        var res = NextResponse.next();
+        var headerList = (0, headers_1.headers)();
+        var res = server_1.NextResponse.next();
         var userLocale = defaultLocale;
         if (localeRouting) {
             // Check if there is any supported locale in the pathname
@@ -69,14 +56,11 @@ function createNextMiddleware(_a) {
             var locale = extractLocale(pathname);
             var pathnameHasLocale = false;
             if (locale && (0, generaltranslation_1.isValidLanguageCode)(locale)) {
-                if (approvedLocales) {
-                    for (var _i = 0, approvedLocales_1 = approvedLocales; _i < approvedLocales_1.length; _i++) {
-                        var approvedLocale = approvedLocales_1[_i];
-                        if ((0, generaltranslation_1.isSameLanguage)(approvedLocale, locale)) {
-                            userLocale = approvedLocale;
-                            pathnameHasLocale = true;
-                            break;
-                        }
+                if (locales) {
+                    var approvedLocale = (0, generaltranslation_1.determineLanguage)(locale, locales);
+                    if (approvedLocale) {
+                        userLocale = approvedLocale;
+                        pathnameHasLocale = true;
                     }
                 }
                 else {
@@ -85,7 +69,7 @@ function createNextMiddleware(_a) {
                 }
             }
             if (pathnameHasLocale) {
-                res.cookies.set(cookieSettings_1.localeCookieName, userLocale);
+                res.cookies.set(internal_1.primitives.localeCookieName, userLocale);
                 applyNewCookies(req, res);
                 return res;
             }
@@ -95,14 +79,11 @@ function createNextMiddleware(_a) {
                 var refererLocale = extractLocale((_a = (new URL(referer))) === null || _a === void 0 ? void 0 : _a.pathname);
                 if (refererLocale) {
                     var refererLocaleIsValid = false;
-                    if (approvedLocales) {
-                        for (var _d = 0, approvedLocales_2 = approvedLocales; _d < approvedLocales_2.length; _d++) {
-                            var approvedLocale = approvedLocales_2[_d];
-                            if ((0, generaltranslation_1.isSameLanguage)(approvedLocale, refererLocale)) {
-                                userLocale = approvedLocale;
-                                refererLocaleIsValid = true;
-                                break;
-                            }
+                    if (locales) {
+                        var approvedLocale = (0, generaltranslation_1.determineLanguage)(refererLocale, locales);
+                        if (approvedLocale) {
+                            userLocale = approvedLocale;
+                            refererLocaleIsValid = true;
                         }
                     }
                     else {
@@ -114,30 +95,24 @@ function createNextMiddleware(_a) {
                     if (refererLocaleIsValid) {
                         req.nextUrl.pathname = "/".concat(userLocale, "/").concat(pathname);
                         applyNewCookies(req, res);
-                        return NextResponse.redirect(req.nextUrl);
+                        return server_1.NextResponse.redirect(req.nextUrl);
                     }
                 }
             }
         }
         var acceptedLocales = (_c = (_b = headerList.get('accept-language')) === null || _b === void 0 ? void 0 : _b.split(',').map(function (item) { var _a; return (_a = item.split(';')) === null || _a === void 0 ? void 0 : _a[0].trim(); })) === null || _c === void 0 ? void 0 : _c.filter(function (code) { return (0, generaltranslation_1.isValidLanguageCode)(code); });
         if (acceptedLocales && acceptedLocales.length > 0) {
-            if (approvedLocales) {
-                outerLoop: for (var _e = 0, acceptedLocales_1 = acceptedLocales; _e < acceptedLocales_1.length; _e++) {
-                    var locale = acceptedLocales_1[_e];
-                    for (var _f = 0, approvedLocales_3 = approvedLocales; _f < approvedLocales_3.length; _f++) {
-                        var approvedLocale = approvedLocales_3[_f];
-                        if ((0, generaltranslation_1.isSameLanguage)(locale, approvedLocale)) {
-                            userLocale = approvedLocale;
-                            break outerLoop;
-                        }
-                    }
+            if (locales) {
+                var approvedLocale = (0, generaltranslation_1.determineLanguage)(acceptedLocales, locales);
+                if (approvedLocale) {
+                    userLocale = approvedLocale;
                 }
             }
             else {
                 userLocale = acceptedLocales[0];
             }
         }
-        res.cookies.set(cookieSettings_1.localeCookieName, userLocale);
+        res.cookies.set(internal_1.primitives.localeCookieName, userLocale);
         if (localeRouting) {
             var pathname = req.nextUrl.pathname;
             // Redirect if there is no locale
@@ -145,7 +120,7 @@ function createNextMiddleware(_a) {
             // e.g. incoming request is /products
             // The new URL is now /en-US/products
             applyNewCookies(req, res);
-            return NextResponse.redirect(req.nextUrl);
+            return server_1.NextResponse.redirect(req.nextUrl);
         }
         applyNewCookies(req, res);
         return res;

@@ -1,1 +1,0 @@
-{"version":3,"file":"createTComponent.d.ts","sourceRoot":"","sources":["../../../src/server/inline/createTComponent.tsx"],"names":[],"mappings":"AAEA,OAAO,iBAAiB,MAAM,gCAAgC,CAAC;AAE/D,MAAM,CAAC,OAAO,UAAU,gBAAgB,CAAC,UAAU,EAAE,iBAAiB;6BACtB;QAAE,QAAQ,CAAC,EAAE,GAAG,CAAC;QAAC,CAAC,GAAG,EAAE,MAAM,GAAG,GAAG,CAAA;KAAE;;EAOrF"}

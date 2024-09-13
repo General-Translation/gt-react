@@ -61,89 +61,136 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = T;
 var jsx_runtime_1 = require("react/jsx-runtime");
+var internal_1 = require("gt-react/internal");
+var getI18NConfig_1 = __importDefault(require("../../utils/getI18NConfig"));
+var getLocale_1 = __importDefault(require("../../request/getLocale"));
+var getMetadata_1 = __importDefault(require("../../request/getMetadata"));
 var react_1 = require("react");
-var addGTIdentifier_1 = __importDefault(require("../../internal/addGTIdentifier"));
-var internal_1 = require("../../internal");
-var renderChildren_1 = __importDefault(require("./renderChildren"));
 var Resolver_1 = __importDefault(require("./Resolver"));
-var calculateHash_1 = __importDefault(require("../../internal/calculateHash"));
-var ServerT = function (_a) { return __awaiter(void 0, void 0, void 0, function () {
-    var translationRequired, translationsPromise, defaultLocale, taggedChildren, childrenAsObjects, key, _b, id, translations, translation, translationExists, I18NChildren, I18NChildrenPromise, renderSettings, renderMethod, promise, loadingFallback, errorFallback;
-    var I18NConfig = _a.I18NConfig, children = _a.children, locale = _a.locale, props = __rest(_a, ["I18NConfig", "children", "locale"]);
-    return __generator(this, function (_c) {
-        switch (_c.label) {
-            case 0:
-                translationRequired = (children && I18NConfig.translationRequired(locale)) ? true : false;
-                if (!translationRequired) {
-                    return [2 /*return*/, ((0, jsx_runtime_1.jsx)(jsx_runtime_1.Fragment, { children: children }))];
-                }
-                translationsPromise = I18NConfig.getTranslations(locale, props.dictionaryName);
-                defaultLocale = I18NConfig.getDefaultLocale();
-                taggedChildren = (0, addGTIdentifier_1.default)(children);
-                childrenAsObjects = (0, internal_1.writeChildrenAsObjects)(taggedChildren);
-                if (!props.context) return [3 /*break*/, 2];
-                return [4 /*yield*/, (0, calculateHash_1.default)([childrenAsObjects, props.context])];
-            case 1:
-                _b = _c.sent();
-                return [3 /*break*/, 4];
-            case 2: return [4 /*yield*/, (0, calculateHash_1.default)(childrenAsObjects)];
-            case 3:
-                _b = _c.sent();
-                _c.label = 4;
-            case 4:
-                key = _b;
-                id = props.id ? props.id : key;
-                return [4 /*yield*/, translationsPromise];
-            case 5:
-                translations = _c.sent();
-                return [4 /*yield*/, I18NConfig.getTranslation(locale, key, id, props.dictionaryName || undefined, translations)
-                    // Check if a translation for this site already exists and return it if it does
-                ];
-            case 6:
-                translation = _c.sent();
-                translationExists = translation ? true : false;
-                if (translationExists) {
-                    I18NChildren = (0, renderChildren_1.default)({ source: taggedChildren, target: translation, locale: locale, defaultLocale: defaultLocale });
-                    return [2 /*return*/, ((0, jsx_runtime_1.jsx)(jsx_runtime_1.Fragment, { children: I18NChildren }))];
-                }
-                // Check if a new translation for this site can be created
-                if (!I18NConfig.automaticTranslationEnabled()) {
-                    return [2 /*return*/, ((0, jsx_runtime_1.jsx)(jsx_runtime_1.Fragment, { children: children }))];
-                }
-                I18NChildrenPromise = I18NConfig.translateChildren({ children: childrenAsObjects, targetLanguage: locale, metadata: __assign(__assign({}, props), { hash: key }) });
-                renderSettings = I18NConfig.getRenderSettings();
-                renderMethod = (props === null || props === void 0 ? void 0 : props.renderMethod) || renderSettings.method;
-                promise = I18NChildrenPromise.then(function (target) { return (0, renderChildren_1.default)({ source: taggedChildren, target: target, locale: locale, defaultLocale: defaultLocale }); });
-                loadingFallback = props.fallback;
-                errorFallback = children;
-                if (renderMethod === "skeleton") {
-                    if (!loadingFallback)
-                        loadingFallback = (0, jsx_runtime_1.jsx)(jsx_runtime_1.Fragment, {});
-                }
-                else if (renderMethod === "replace") {
-                    if (!loadingFallback)
-                        loadingFallback = children;
-                }
-                if (renderSettings.renderPrevious && translations.remote && translations.remote[id] && translations.remote[id].k) {
-                    // in case there's a previous translation on file
-                    loadingFallback = (0, renderChildren_1.default)({ source: taggedChildren, target: translations.remote[id].t, locale: locale, defaultLocale: defaultLocale });
-                    errorFallback = loadingFallback;
-                }
-                if (renderMethod === "hang") {
-                    // Wait until the site is translated to return
-                    return [2 /*return*/, ((0, jsx_runtime_1.jsx)(jsx_runtime_1.Fragment, { children: (0, jsx_runtime_1.jsx)(Resolver_1.default, { fallback: errorFallback, children: promise }) }))];
-                }
-                if (!["skeleton", "replace"].includes(renderMethod) && !id) {
-                    // If none of those, i.e. "subtle" 
-                    // return the children, with no special rendering
-                    // a translation may be available from a cached translation dictionary next time the component is loaded
-                    return [2 /*return*/, ((0, jsx_runtime_1.jsx)(jsx_runtime_1.Fragment, { children: errorFallback }))];
-                }
-                return [2 /*return*/, ((0, jsx_runtime_1.jsx)(react_1.Suspense, { fallback: loadingFallback, children: (0, jsx_runtime_1.jsx)(Resolver_1.default, { fallback: errorFallback, children: promise }) }))];
-        }
+var renderTranslatedChildren_1 = __importDefault(require("../rendering/renderTranslatedChildren"));
+var renderDefaultChildren_1 = __importDefault(require("../rendering/renderDefaultChildren"));
+function T(_a) {
+    return __awaiter(this, void 0, void 0, function () {
+        var I18NConfig, locale, defaultLocale, translationRequired, translationsPromise, taggedChildren, source, isPlural, childrenAsObjects, key, _b, translations, translation, target, translationPromise, promise, loadingFallback, errorFallback, target;
+        var children = _a.children, id = _a.id, variables = _a.variables, variablesOptions = _a.variablesOptions, n = _a.n, renderSettings = _a.renderSettings, props = __rest(_a, ["children", "id", "variables", "variablesOptions", "n", "renderSettings"]);
+        return __generator(this, function (_c) {
+            switch (_c.label) {
+                case 0:
+                    I18NConfig = (0, getI18NConfig_1.default)();
+                    locale = (0, getLocale_1.default)();
+                    defaultLocale = I18NConfig.getDefaultLocale();
+                    translationRequired = I18NConfig.translationRequired(locale);
+                    if (translationRequired) {
+                        translationsPromise = I18NConfig.getTranslations(locale, props.dictionaryName);
+                    }
+                    taggedChildren = (0, internal_1.addGTIdentifier)(children, props);
+                    source = taggedChildren;
+                    isPlural = props && internal_1.primitives.pluralBranchNames.some(function (branchName) { return branchName in props; });
+                    if (isPlural) {
+                        if (typeof n === 'number')
+                            (variables || (variables = {})).n = n;
+                        if (typeof (variables === null || variables === void 0 ? void 0 : variables.n) !== 'number') {
+                            throw new Error(id ?
+                                "ID \"".concat(id, "\": Plural requires \"n\" option.") :
+                                "<T> with props ".concat(JSON.stringify(props), ": Plural requires \"n\" option."));
+                        }
+                        source = (0, internal_1.getPluralBranch)(variables.n, [locale, defaultLocale], // not redundant, as locale could be a different dialect of the same language
+                        taggedChildren) || taggedChildren.t;
+                    }
+                    if (!translationRequired) {
+                        return [2 /*return*/, (0, renderDefaultChildren_1.default)({
+                                children: source,
+                                variables: variables,
+                                variablesOptions: variablesOptions
+                            })];
+                    }
+                    childrenAsObjects = (0, internal_1.writeChildrenAsObjects)(taggedChildren);
+                    if (!props.context) return [3 /*break*/, 2];
+                    return [4 /*yield*/, (0, internal_1.calculateHash)([childrenAsObjects, props.context])];
+                case 1:
+                    _b = _c.sent();
+                    return [3 /*break*/, 4];
+                case 2: return [4 /*yield*/, (0, internal_1.calculateHash)(childrenAsObjects)];
+                case 3:
+                    _b = _c.sent();
+                    _c.label = 4;
+                case 4:
+                    key = _b;
+                    return [4 /*yield*/, translationsPromise];
+                case 5:
+                    translations = _c.sent();
+                    translation = translations === null || translations === void 0 ? void 0 : translations[id || key];
+                    if ((translation === null || translation === void 0 ? void 0 : translation.k) === key) {
+                        target = translation.t;
+                        if (isPlural) {
+                            target = (0, internal_1.getPluralBranch)(variables === null || variables === void 0 ? void 0 : variables.n, [locale, defaultLocale], translation) || target;
+                        }
+                        return [2 /*return*/, (0, renderTranslatedChildren_1.default)({
+                                source: source,
+                                target: target,
+                                variables: variables,
+                                variablesOptions: variablesOptions
+                            })];
+                    }
+                    renderSettings || (renderSettings = I18NConfig.getRenderSettings());
+                    translationPromise = I18NConfig.translateChildren({
+                        children: childrenAsObjects,
+                        targetLanguage: locale,
+                        metadata: __assign(__assign(__assign(__assign(__assign({}, props), (id && { id: id })), { hash: key }), ((0, getMetadata_1.default)())), (renderSettings.timeout && { timeout: renderSettings.timeout }))
+                    });
+                    promise = translationPromise.then(function (translation) {
+                        var target = translation.t ? translation.t : translation;
+                        if (isPlural) {
+                            target = (0, internal_1.getPluralBranch)(variables === null || variables === void 0 ? void 0 : variables.n, [locale, defaultLocale], translation) || target;
+                        }
+                        return (0, renderTranslatedChildren_1.default)({
+                            source: source,
+                            target: target,
+                            variables: variables,
+                            variablesOptions: variablesOptions
+                        });
+                    });
+                    if (renderSettings.fallbackToPrevious && translation) {
+                        target = translation.t;
+                        if (isPlural) {
+                            target = (0, internal_1.getPluralBranch)(variables === null || variables === void 0 ? void 0 : variables.n, [locale, defaultLocale], translation) || target;
+                        }
+                        loadingFallback = (0, renderTranslatedChildren_1.default)({
+                            source: source,
+                            target: target,
+                            variables: variables,
+                            variablesOptions: variablesOptions
+                        });
+                        errorFallback = loadingFallback;
+                    }
+                    else {
+                        errorFallback = (0, renderDefaultChildren_1.default)({
+                            children: source,
+                            variables: variables,
+                            variablesOptions: variablesOptions
+                        });
+                        if (renderSettings.method === "skeleton") {
+                            loadingFallback = (0, jsx_runtime_1.jsx)(jsx_runtime_1.Fragment, {});
+                        }
+                        else if (renderSettings.method === "replace") {
+                            loadingFallback = errorFallback;
+                        }
+                    }
+                    if (renderSettings.method === "hang") {
+                        // Wait until the site is translated to return
+                        return [2 /*return*/, (0, jsx_runtime_1.jsx)(Resolver_1.default, { children: promise, fallback: errorFallback })];
+                    }
+                    if (!["skeleton", "replace"].includes(renderSettings.method) && !id) {
+                        // If none of those, i.e. "subtle" 
+                        // return the children, with no special rendering
+                        // a translation may be available from a cached translation dictionary next time the component is loaded
+                        return [2 /*return*/, errorFallback];
+                    }
+                    return [2 /*return*/, ((0, jsx_runtime_1.jsx)(react_1.Suspense, { fallback: loadingFallback, children: (0, jsx_runtime_1.jsx)(Resolver_1.default, { children: promise, fallback: errorFallback }) }))];
+            }
+        });
     });
-}); };
-ServerT.gtTransformation = "translate";
-exports.default = ServerT;
+}
 //# sourceMappingURL=T.js.map
