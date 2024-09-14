@@ -28,7 +28,7 @@ var useDefaultLocale_1 = __importDefault(require("../hooks/useDefaultLocale"));
  * @param {Intl.DateTimeFormatOptions} [options={}] - Optional formatting options for the date, following `Intl.DateTimeFormatOptions` specifications.
  * @returns {JSX.Element} The formatted date or time component.
  */
-var DateTime = function (_a) {
+function DateTime(_a) {
     var _b = _a === void 0 ? { name: "date" } : _a, children = _b.children, _c = _b.name, name = _c === void 0 ? "date" : _c, defaultValue = _b.defaultValue, _d = _b.options, options = _d === void 0 ? {} : _d;
     var locales = [(0, useLocale_1.default)(), (0, useDefaultLocale_1.default)()];
     var final;
@@ -48,7 +48,8 @@ var DateTime = function (_a) {
     }
     // Render the formatted date within a span element
     return ((0, jsx_runtime_1.jsx)("span", { "data-gt-variable-name": name, "data-gt-variable-type": "date", "data-gt-variable-options": options, children: final }));
-};
+}
+;
 // Static property for transformation type
 DateTime.gtTransformation = "variable-datetime";
 exports.default = DateTime;

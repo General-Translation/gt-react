@@ -18,14 +18,14 @@
  * @param {Intl.DateTimeFormatOptions} [options={}] - Optional formatting options for the date, following `Intl.DateTimeFormatOptions` specifications.
  * @returns {JSX.Element} The formatted date or time component.
  */
-declare const DateTime: {
-    ({ children, name, defaultValue, options }?: {
-        children?: any;
-        name?: string;
-        defaultValue?: any;
-        options?: Intl.DateTimeFormatOptions;
-    }): JSX.Element;
-    gtTransformation: string;
-};
+declare function DateTime({ children, name, defaultValue, options }?: {
+    children?: any;
+    name?: string;
+    defaultValue?: any;
+    options?: Intl.DateTimeFormatOptions;
+}): JSX.Element;
+declare namespace DateTime {
+    var gtTransformation: string;
+}
 export default DateTime;
 //# sourceMappingURL=DateTime.d.ts.map
