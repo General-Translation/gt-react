@@ -1,6 +1,5 @@
 'use client'
 
-import { ReactNode } from 'react';
 import { formatDateTime } from 'generaltranslation';
 import useLocale from '../hooks/useLocale';
 import useDefaultLocale from '../hooks/useDefaultLocale';
@@ -23,14 +22,14 @@ import useDefaultLocale from '../hooks/useDefaultLocale';
  * @param {string} [name="date"] - Optional name for the date field, used for metadata purposes.
  * @param {string|number|Date} [defaultValue] - The default value for the date. Can be a string, number (timestamp), or `Date` object.
  * @param {Intl.DateTimeFormatOptions} [options={}] - Optional formatting options for the date, following `Intl.DateTimeFormatOptions` specifications.
- * @returns {ReactNode} The formatted date or time component.
+ * @returns {JSX.Element} The formatted date or time component.
  */
-const DateTime = ({ children, name = "date", defaultValue, options = {} }: {
+function DateTime({ children, name = "date", defaultValue, options = {} }: {
     children?: any;
     name?: string;
     defaultValue?: any; // The default value which can be string, number or Date
     options?: Intl.DateTimeFormatOptions; // Optional formatting options for the date
-} = { name: "date" }): ReactNode => {
+} = { name: "date" }): JSX.Element {
 
     const locales = [useLocale(), useDefaultLocale()]
 
@@ -38,7 +37,6 @@ const DateTime = ({ children, name = "date", defaultValue, options = {} }: {
 
     let dateValue: Date | undefined;
     defaultValue = (typeof children !== 'undefined' && typeof defaultValue === 'undefined') ? children : defaultValue;
-    if (!defaultValue) return '';
     if (typeof defaultValue === 'number') {
         dateValue = new Date(defaultValue);
     } else if (typeof defaultValue === 'string') {

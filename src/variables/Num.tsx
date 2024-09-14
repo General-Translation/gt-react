@@ -1,6 +1,5 @@
 'use client'
 
-import { ReactNode } from 'react';
 import { formatNum } from 'generaltranslation';
 import useLocale from '../hooks/useLocale';
 import useDefaultLocale from '../hooks/useDefaultLocale';
@@ -24,14 +23,14 @@ import useDefaultLocale from '../hooks/useDefaultLocale';
  * @param {string} [name="n"] - Optional name for the number field, used for metadata purposes.
  * @param {string|number} [defaultValue] - The default value for the number. Can be a string or number. Strings will be parsed to numbers.
  * @param {Intl.NumberFormatOptions} [options={}] - Optional formatting options for the number, following `Intl.NumberFormatOptions` specifications.
- * @returns {ReactNode} The formatted number component.
+ * @returns {JSX.Element} The formatted number component.
  */
-const Num = ({ children, name = "n", defaultValue, options = {} }: {
+function Num({ children, name = "n", defaultValue, options = {} }: {
     children?: any;
     name?: string;
     defaultValue?: any; // Optional default value for the number
     options?: Intl.NumberFormatOptions // Optional options for the number formatting
-} = { name: "n" }): ReactNode => {
+} = { name: "n" }): JSX.Element {
     
     const locales = [useLocale(), useDefaultLocale()]
     

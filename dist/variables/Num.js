@@ -27,9 +27,9 @@ var useDefaultLocale_1 = __importDefault(require("../hooks/useDefaultLocale"));
  * @param {string} [name="n"] - Optional name for the number field, used for metadata purposes.
  * @param {string|number} [defaultValue] - The default value for the number. Can be a string or number. Strings will be parsed to numbers.
  * @param {Intl.NumberFormatOptions} [options={}] - Optional formatting options for the number, following `Intl.NumberFormatOptions` specifications.
- * @returns {ReactNode} The formatted number component.
+ * @returns {JSX.Element} The formatted number component.
  */
-var Num = function (_a) {
+function Num(_a) {
     var _b = _a === void 0 ? { name: "n" } : _a, children = _b.children, _c = _b.name, name = _c === void 0 ? "n" : _c, defaultValue = _b.defaultValue, _d = _b.options, options = _d === void 0 ? {} : _d;
     var locales = [(0, useLocale_1.default)(), (0, useDefaultLocale_1.default)()];
     var value = (typeof children !== 'undefined' && typeof defaultValue === 'undefined') ? children : defaultValue;
@@ -39,7 +39,8 @@ var Num = function (_a) {
         value = (0, generaltranslation_1.formatNum)({ value: value, languages: locales, options: options });
     }
     return ((0, jsx_runtime_1.jsx)("span", { "data-gt-variable-name": name, "data-gt-variable-type": "number", "data-gt-variable-options": JSON.stringify(options), children: value }));
-};
+}
+;
 Num.gtTransformation = "variable-number";
 exports.default = Num;
 //# sourceMappingURL=Num.js.map

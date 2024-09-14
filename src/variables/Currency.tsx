@@ -1,6 +1,5 @@
 'use client'
 
-import { ReactNode } from 'react';
 import { formatCurrency } from 'generaltranslation';
 import useLocale from '../hooks/useLocale';
 import useDefaultLocale from '../hooks/useDefaultLocale';
@@ -24,15 +23,15 @@ import useDefaultLocale from '../hooks/useDefaultLocale';
  * @param {any} [defaultValue] - The default value to be used.
  * @param {string} [currency] - The currency type (e.g., USD, EUR, etc.).
  * @param {Intl.NumberFormatOptions} [options] - Optional formatting options to customize how the currency is displayed.
- * @returns {ReactNode} The formatted currency component.
+ * @returns {JSX.Element} The formatted currency component.
  */
-const Currency = ({ children, name = "cost", defaultValue, currency = "USD", options = {} }: {
+function Currency({ children, name = "cost", defaultValue, currency = "USD", options = {} }: {
     children?: any;
     name?: string;
     defaultValue?: any;
     currency?: string;
     options?: Intl.NumberFormatOptions;
-} = { name: "cost" }): ReactNode => {
+} = { name: "cost" }): JSX.Element {
 
     const locales = [useLocale(), useDefaultLocale()]
 

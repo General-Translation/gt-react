@@ -26,7 +26,7 @@ var useDefaultLocale_1 = __importDefault(require("../hooks/useDefaultLocale"));
  * @param {string} [name="date"] - Optional name for the date field, used for metadata purposes.
  * @param {string|number|Date} [defaultValue] - The default value for the date. Can be a string, number (timestamp), or `Date` object.
  * @param {Intl.DateTimeFormatOptions} [options={}] - Optional formatting options for the date, following `Intl.DateTimeFormatOptions` specifications.
- * @returns {ReactNode} The formatted date or time component.
+ * @returns {JSX.Element} The formatted date or time component.
  */
 var DateTime = function (_a) {
     var _b = _a === void 0 ? { name: "date" } : _a, children = _b.children, _c = _b.name, name = _c === void 0 ? "date" : _c, defaultValue = _b.defaultValue, _d = _b.options, options = _d === void 0 ? {} : _d;
@@ -34,8 +34,6 @@ var DateTime = function (_a) {
     var final;
     var dateValue;
     defaultValue = (typeof children !== 'undefined' && typeof defaultValue === 'undefined') ? children : defaultValue;
-    if (!defaultValue)
-        return '';
     if (typeof defaultValue === 'number') {
         dateValue = new Date(defaultValue);
     }

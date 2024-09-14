@@ -1,4 +1,3 @@
-import { ReactNode } from 'react';
 /**
  * The `<Num>` component renders a formatted number string, allowing customization of the name, default value, and formatting options.
  * It formats the number according to the current locale and optionally passed formatting options.
@@ -18,16 +17,16 @@ import { ReactNode } from 'react';
  * @param {string} [name="n"] - Optional name for the number field, used for metadata purposes.
  * @param {string|number} [defaultValue] - The default value for the number. Can be a string or number. Strings will be parsed to numbers.
  * @param {Intl.NumberFormatOptions} [options={}] - Optional formatting options for the number, following `Intl.NumberFormatOptions` specifications.
- * @returns {ReactNode} The formatted number component.
+ * @returns {JSX.Element} The formatted number component.
  */
-declare const Num: {
-    ({ children, name, defaultValue, options }?: {
-        children?: any;
-        name?: string;
-        defaultValue?: any;
-        options?: Intl.NumberFormatOptions;
-    }): ReactNode;
-    gtTransformation: string;
-};
+declare function Num({ children, name, defaultValue, options }?: {
+    children?: any;
+    name?: string;
+    defaultValue?: any;
+    options?: Intl.NumberFormatOptions;
+}): JSX.Element;
+declare namespace Num {
+    var gtTransformation: string;
+}
 export default Num;
 //# sourceMappingURL=Num.d.ts.map

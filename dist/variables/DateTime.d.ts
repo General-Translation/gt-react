@@ -1,4 +1,3 @@
-import { ReactNode } from 'react';
 /**
  * The `<DateTime>` component renders a formatted date or time string, allowing customization of the name, default value, and formatting options.
  * It utilizes the current locale and optional format settings to display the date.
@@ -17,7 +16,7 @@ import { ReactNode } from 'react';
  * @param {string} [name="date"] - Optional name for the date field, used for metadata purposes.
  * @param {string|number|Date} [defaultValue] - The default value for the date. Can be a string, number (timestamp), or `Date` object.
  * @param {Intl.DateTimeFormatOptions} [options={}] - Optional formatting options for the date, following `Intl.DateTimeFormatOptions` specifications.
- * @returns {ReactNode} The formatted date or time component.
+ * @returns {JSX.Element} The formatted date or time component.
  */
 declare const DateTime: {
     ({ children, name, defaultValue, options }?: {
@@ -25,7 +24,7 @@ declare const DateTime: {
         name?: string;
         defaultValue?: any;
         options?: Intl.DateTimeFormatOptions;
-    }): ReactNode;
+    }): JSX.Element;
     gtTransformation: string;
 };
 export default DateTime;
