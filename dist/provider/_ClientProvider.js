@@ -31,8 +31,9 @@ function _ClientProvider(_a) {
         setHasMounted(true);
     }, []);
     var translate = (0, react_1.useCallback)(function (id, options, f) {
+        var _a, _b;
         if (options === void 0) { options = {}; }
-        var _a = (0, internal_1.extractEntryMetadata)(dictionary[id]), entry = _a.entry, metadata = _a.metadata;
+        var _c = (0, internal_1.extractEntryMetadata)(dictionary[id]), entry = _c.entry, metadata = _c.metadata;
         if (metadata && metadata.isFunction) {
             if (typeof f !== 'function') {
                 throw new Error("You're trying to call a function in the server dictionary on the client-side, but functions can't be passed directly from server to client. "
@@ -55,7 +56,7 @@ function _ClientProvider(_a) {
         if (isPlural) {
             if (typeof (variables === null || variables === void 0 ? void 0 : variables.n) !== 'number')
                 throw new Error("t(\"".concat(id, "\"): Plural requires \"n\" option."));
-            source = (0, internal_1.getPluralBranch)(variables.n, [locale, defaultLocale], source.props['data-generaltranslation'].branches) || source.props.children;
+            source = (0, internal_1.getPluralBranch)(variables.n, [locale, defaultLocale], (_b = (_a = source === null || source === void 0 ? void 0 : source.props) === null || _a === void 0 ? void 0 : _a['data-generaltranslation']) === null || _b === void 0 ? void 0 : _b.branches) || source.props.children;
         }
         if (!translationRequired) {
             return (0, client_1._renderDefaultChildren)({
@@ -66,9 +67,10 @@ function _ClientProvider(_a) {
         }
         if (translations[id]) {
             var renderTranslation = (function (translationEntry) {
+                var _a, _b;
                 var target = translationEntry;
                 if (isPlural) {
-                    target = (0, internal_1.getPluralBranch)(variables.n, [locale, defaultLocale], target.props['data-generaltranslation'].branches) || target.props.children;
+                    target = (0, internal_1.getPluralBranch)(variables.n, [locale, defaultLocale], (_a = target === null || target === void 0 ? void 0 : target.props['data-generaltranslation']) === null || _a === void 0 ? void 0 : _a.branches) || ((_b = target === null || target === void 0 ? void 0 : target.props) === null || _b === void 0 ? void 0 : _b.children);
                 }
                 return (0, client_1._renderTranslatedChildren)({
                     source: source,

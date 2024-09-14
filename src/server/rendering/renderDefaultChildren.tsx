@@ -15,7 +15,7 @@ export default function renderDefaultChildren({
 
     const handleSingleChild = (child: ReactNode) => {
         if (React.isValidElement(child)) {
-            const generaltranslation = getGTProp(child)
+            const generaltranslation = getGTProp(child);
             if (generaltranslation?.transformation === "variable") {
                 let { 
                     variableName,
