@@ -89,7 +89,8 @@ export default function renderTranslatedChildren({
 
         const sourceElements: ReactElement[] = source.filter(sourceChild => {
             if (React.isValidElement(sourceChild)) {
-                const generaltranslation = getGTProp(sourceChild.props as any)
+                const generaltranslation = getGTProp(sourceChild)
+                getVariableProps(sourceChild.props as any)
                 if (generaltranslation?.transformation === "variable") {
                     let {
                         variableName, 
