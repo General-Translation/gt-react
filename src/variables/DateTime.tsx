@@ -5,6 +5,26 @@ import { formatDateTime } from 'generaltranslation';
 import useLocale from '../hooks/useLocale';
 import useDefaultLocale from '../hooks/useDefaultLocale';
 
+/**
+ * The `<DateTime>` component renders a formatted date or time string, allowing customization of the name, default value, and formatting options.
+ * It utilizes the current locale and optional format settings to display the date.
+ * Must be used inside a `<GTProvider>`.
+ *
+ * @example
+ * ```jsx
+ * <DateTime
+ *    name="createdAt"
+ * >
+ *    {new Date()}
+ * </DateTime>
+ * ```
+ *
+ * @param {any} [children] - Optional content (typically a date) to render inside the component.
+ * @param {string} [name="date"] - Optional name for the date field, used for metadata purposes.
+ * @param {string|number|Date} [defaultValue] - The default value for the date. Can be a string, number (timestamp), or `Date` object.
+ * @param {Intl.DateTimeFormatOptions} [options={}] - Optional formatting options for the date, following `Intl.DateTimeFormatOptions` specifications.
+ * @returns {ReactNode} The formatted date or time component.
+ */
 const DateTime = ({ children, name = "date", defaultValue, options = {} }: {
     children?: any;
     name?: string;

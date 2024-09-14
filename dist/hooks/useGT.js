@@ -7,12 +7,17 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = useGT;
 var GTContext_1 = __importDefault(require("../provider/GTContext"));
 /**
- * Custom hook to provide a translation function using a given context.
- *
- * This hook allows for optional prefixing of translation keys with a provided `id`.
+ * Gets the translation function `t` provided by `<GTProvider>`.
  *
  * @param {string} [id] - Optional prefix to prepend to the translation keys.
  * @returns {Function} A translation function that accepts a key string and returns the translated value.
+ *
+ * @example
+ * const t = useGT('user');
+ * console.log(t('name')); // Translates item 'user.name'
+ *
+ * const t = useTranslation();
+ * console.log(t('hello')); // Translates item 'hello'
  */
 function useGT(id) {
     if (id === void 0) { id = ''; }

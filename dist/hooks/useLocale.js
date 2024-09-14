@@ -7,7 +7,13 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = useLocale;
 var GTContext_1 = __importDefault(require("../provider/GTContext"));
 /**
- * @returns {string} The user's locale.
+ * Retrieves the user's locale from the `<GTProvider>` context.
+ *
+ * @returns {string} The user's locale, e.g., 'en-US'.
+ *
+ * @example
+ * const locale = useLocale();
+ * console.log(locale); // 'en-US'
  */
 function useLocale() {
     return (0, GTContext_1.default)("useLocale(): Unable to access user's locale outside of a <GTProvider>").locale;

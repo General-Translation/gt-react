@@ -8,6 +8,26 @@ var jsx_runtime_1 = require("react/jsx-runtime");
 var generaltranslation_1 = require("generaltranslation");
 var useLocale_1 = __importDefault(require("../hooks/useLocale"));
 var useDefaultLocale_1 = __importDefault(require("../hooks/useDefaultLocale"));
+/**
+ * The `<DateTime>` component renders a formatted date or time string, allowing customization of the name, default value, and formatting options.
+ * It utilizes the current locale and optional format settings to display the date.
+ * Must be used inside a `<GTProvider>`.
+ *
+ * @example
+ * ```jsx
+ * <DateTime
+ *    name="createdAt"
+ * >
+ *    {new Date()}
+ * </DateTime>
+ * ```
+ *
+ * @param {any} [children] - Optional content (typically a date) to render inside the component.
+ * @param {string} [name="date"] - Optional name for the date field, used for metadata purposes.
+ * @param {string|number|Date} [defaultValue] - The default value for the date. Can be a string, number (timestamp), or `Date` object.
+ * @param {Intl.DateTimeFormatOptions} [options={}] - Optional formatting options for the date, following `Intl.DateTimeFormatOptions` specifications.
+ * @returns {ReactNode} The formatted date or time component.
+ */
 var DateTime = function (_a) {
     var _b = _a === void 0 ? { name: "date" } : _a, children = _b.children, _c = _b.name, name = _c === void 0 ? "date" : _c, defaultValue = _b.defaultValue, _d = _b.options, options = _d === void 0 ? {} : _d;
     var locales = [(0, useLocale_1.default)(), (0, useDefaultLocale_1.default)()];

@@ -1,1 +1,1 @@
-{"version":3,"file":"useBrowserLocale.d.ts","sourceRoot":"","sources":["../../src/hooks/useBrowserLocale.ts"],"names":[],"mappings":"AA+BA;;;;GAIG;AACH,MAAM,CAAC,OAAO,UAAU,gBAAgB,CAAC,aAAa,GAAE,MAA6B,GAAG,MAAM,CAQ7F"}
+{"version":3,"file":"useBrowserLocale.d.ts","sourceRoot":"","sources":["../../src/hooks/useBrowserLocale.ts"],"names":[],"mappings":"AAMA;;;;;;;;;;;;;;;;;;;GAmBG;AACH,MAAM,CAAC,OAAO,UAAU,gBAAgB,CAAC,aAAa,GAAE,MAA6B,EAAE,UAAU,GAAE,MAAyB,GAAG,MAAM,CAOpI"}

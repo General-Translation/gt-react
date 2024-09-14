@@ -1,1 +1,1 @@
-{"version":3,"file":"useDefaultLocale.js","sourceRoot":"","sources":["../../src/hooks/useDefaultLocale.ts"],"names":[],"mappings":";AAAA,YAAY,CAAA;;;;;AAOZ,mCAIC;AATD,oEAAiD;AAEjD;;GAEG;AACH,SAAwB,gBAAgB;IACpC,OAAO,IAAA,mBAAY,EACf,+EAA+E,CAClF,CAAC,aAAa,CAAC;AACpB,CAAC"}
+{"version":3,"file":"useDefaultLocale.js","sourceRoot":"","sources":["../../src/hooks/useDefaultLocale.ts"],"names":[],"mappings":";AAAA,YAAY,CAAA;;;;;AAeZ,mCAIC;AAjBD,oEAAiD;AAEjD;;;;;;;;;;GAUG;AACH,SAAwB,gBAAgB;IACpC,OAAO,IAAA,mBAAY,EACf,+EAA+E,CAClF,CAAC,aAAa,CAAC;AACpB,CAAC"}

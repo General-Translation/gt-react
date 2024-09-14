@@ -2,43 +2,32 @@
 
 import { useState, useEffect } from 'react';
 import { libraryDefaultLocale, localeCookieName } from '../primitives/primitives';
+import getLocaleCookie from '../cookies/getLocaleCookie';
 
 /**
- * Function to get the value of a specific cookie by its name.
- * 
- * @param {string} name - The name of the cookie to retrieve.
- * @returns {string|null} - The value of the cookie, or null if not found.
+ * Hook to retrieve the browser's default language, with support for a fallback and locale stored in a cookie.
+ *
+ * @param {string} [defaultLocale=libraryDefaultLocale] - The default locale to use if the browser locale is not available.
+ * @param {string} [cookieName=localeCookieName] - The name of the cookie to check for a stored locale. If omitted, no cookie is used.
+ * @returns {string} The resolved browser locale, either from the cookie, browser settings, or the default locale.
+ *
+ * @example
+ * const browserLocale = useBrowserLocale('en-US');
+ * console.log(browserLocale); // Outputs the browser's locale, or 'en-US' if unavailable
+ *
+ * @example
+ * const browserLocale = useBrowserLocale('fr', 'localeCookie');
+ * console.log(browserLocale); // Outputs locale from cookie 'localeCookie' if available, or browser's locale otherwise
+ *
+ * @description
+ * This hook attempts to determine the browser's preferred language. If a locale is stored in a cookie (specified by `cookieName`),
+ * it will take precedence. If not, it falls back to the `navigator.language` or `navigator.userLanguage`. If none of these are available,
+ * the provided `defaultLocale` is used.
  */
-function getCookieValue(name: string): string | null {
-    const cookieString = document.cookie;
-    
-    // Split the cookies string by "; " to get an array of "key=value" strings
-    const cookiesArray = cookieString.split("; ");
-    
-    // Loop through the array to find the cookie with the specified name
-    for (let cookie of cookiesArray) {
-      const [cookieName, cookieValue] = cookie.split("=");
-      
-      // Check if this cookie has the name we are looking for
-      if (cookieName === name) {
-        return decodeURIComponent(cookieValue);
-      }
-    }
-    
-    // If the cookie is not found, return null
-    return null;
-}
-
-/**
- * Custom hook to get the browser's default language.
- * @param {string} defaultLocale - The default locale to use if browser locale is not available.
- * @returns {string} The default language of the browser.
- */
-export default function useBrowserLocale(defaultLocale: string = libraryDefaultLocale): string {
+export default function useBrowserLocale(defaultLocale: string = libraryDefaultLocale, cookieName: string = localeCookieName): string {
     const [locale, setLocale] = useState<string>('');
     useEffect(() => {
-        const localeFromCookie = getCookieValue(localeCookieName);
-        const browserLocale = localeFromCookie || navigator.language || (navigator as any)?.userLanguage || defaultLocale;
+        const browserLocale = (cookieName ? getLocaleCookie(cookieName) : undefined) || navigator.language || (navigator as any)?.userLanguage || defaultLocale;
         setLocale(browserLocale);
     }, [defaultLocale]);
     return locale;
