@@ -7,6 +7,15 @@ exports.default = getLocale;
 var getI18NConfig_1 = __importDefault(require("../utils/getI18NConfig"));
 var getNextLocale_1 = require("../next/getNextLocale");
 var getLocaleFunction;
+/**
+ * Gets the user's current locale.
+ *
+ * @returns {string} The user's locale, e.g., 'en-US'.
+ *
+ * @example
+ * const locale = useLocale();
+ * console.log(locale); // 'en-US'
+*/
 function getLocale() {
     var _a;
     if (getLocaleFunction)

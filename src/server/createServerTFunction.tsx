@@ -18,7 +18,7 @@ export default function createServerTFunction(
         id: string, 
         options?: Record<string, any>,
         f?: Function
-    ): ReactNode => {
+    ): JSX.Element | string | Promise<JSX.Element | string> => {
 
         id = getID(id);
 
@@ -47,7 +47,7 @@ export default function createServerTFunction(
 
         if (!entry) {
             console.warn(`No entry found for id: ${id}`);
-            return;
+            return '';
         }
 
         if (typeof entry === 'string' && !isPlural) {

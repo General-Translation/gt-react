@@ -22,11 +22,11 @@ var client_1 = require("gt-react/client");
 var internal_1 = require("gt-react/internal");
 var generaltranslation_1 = require("generaltranslation");
 var ClientResolver_1 = __importDefault(require("./ClientResolver"));
-// meant to be used inside <GTServerProvider>
+// meant to be used inside the server-side <GTProvider>
 function _ClientProvider(_a) {
     var children = _a.children, dictionary = _a.dictionary, translations = _a.translations, locale = _a.locale, defaultLocale = _a.defaultLocale, translationRequired = _a.translationRequired;
     var _b = (0, react_1.useState)(false), hasMounted = _b[0], setHasMounted = _b[1];
-    (0, react_1.useLayoutEffect)(function () {
+    (0, react_1.useEffect)(function () {
         // prevent hydration errors + flickering when translations load
         setHasMounted(true);
     }, []);

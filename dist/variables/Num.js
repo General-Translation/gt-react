@@ -18,7 +18,27 @@ var jsx_runtime_1 = require("react/jsx-runtime");
 var generaltranslation_1 = require("generaltranslation");
 var getI18NConfig_1 = __importDefault(require("../utils/getI18NConfig"));
 var getLocale_1 = __importDefault(require("../request/getLocale"));
-var Num = function (_a) {
+/**
+ * The `<Num>` component renders a formatted number string, allowing customization of the name, default value, and formatting options.
+ * It formats the number according to the current locale and optionally passed formatting options.
+ *
+ * @example
+ * ```jsx
+ * <Num
+ *    name="quantity"
+ *    options={{ style: "decimal", maximumFractionDigits: 2 }}
+ * >
+ *    1000
+ * </Num>
+ * ```
+ *
+ * @param {any} [children] - Optional content (typically a number) to render inside the component.
+ * @param {string} [name="n"] - Optional name for the number field, used for metadata purposes.
+ * @param {string|number} [defaultValue] - The default value for the number. Can be a string or number. Strings will be parsed to numbers.
+ * @param {Intl.NumberFormatOptions} [options={}] - Optional formatting options for the number, following `Intl.NumberFormatOptions` specifications.
+ * @returns {JSX.Element} The formatted number component.
+ */
+function Num(_a) {
     var children = _a.children, _b = _a.name, name = _b === void 0 ? "n" : _b, defaultValue = _a.defaultValue, _c = _a.options, options = _c === void 0 ? {} : _c, props = __rest(_a, ["children", "name", "defaultValue", "options"]);
     var I18NConfig = (0, getI18NConfig_1.default)();
     var locales = [(0, getLocale_1.default)(), I18NConfig.getDefaultLocale()];
@@ -31,7 +51,8 @@ var Num = function (_a) {
         (0, generaltranslation_1.formatNum)({ value: value, languages: locales, options: options }) :
         defaultValue;
     return ((0, jsx_runtime_1.jsx)("span", { "data-generaltranslation": generaltranslation, "data-gt-variable-name": name, "data-gt-variable-type": "number", "data-gt-variable-options": options, "data-gt-unformatted-value": typeof value === 'number' && !isNaN(value) ? value : undefined, children: formattedValue }));
-};
+}
+;
 Num.gtTransformation = "variable-number";
 exports.default = Num;
 //# sourceMappingURL=Num.js.map

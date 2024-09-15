@@ -1,12 +1,12 @@
 'use client'
 
-import { useCallback, useLayoutEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { _GTContext, _renderDefaultChildren, _renderTranslatedChildren } from "gt-react/client";
 import { addGTIdentifier, extractEntryMetadata, getPluralBranch, primitives } from "gt-react/internal";
 import { renderContentToString } from "generaltranslation";
 import ClientResolver from "./ClientResolver";
 
-// meant to be used inside <GTServerProvider>
+// meant to be used inside the server-side <GTProvider>
 export default function _ClientProvider({
     children,
     dictionary, translations,
@@ -22,7 +22,7 @@ export default function _ClientProvider({
 }) {
 
     const [hasMounted, setHasMounted] = useState<boolean>(false);
-    useLayoutEffect(() => {
+    useEffect(() => {
         // prevent hydration errors + flickering when translations load
         setHasMounted(true);
     }, []);

@@ -84,6 +84,14 @@ var getLocale_1 = __importDefault(require("../request/getLocale"));
 var getMetadata_1 = __importDefault(require("../request/getMetadata"));
 var generaltranslation_1 = require("generaltranslation");
 var getDictionary_1 = __importStar(require("../dictionary/getDictionary"));
+/**
+ * Provides General Translation context to its children, which can then access `useGT`, `useLocale`, and `useDefaultLocale`.
+ *
+ * @param {React.ReactNode} children - The children components that will use the translation context.
+ * @param {string} id - ID of a nested dictionary, so that only a subset of a large dictionary needs to be sent to the client.
+ *
+ * @returns {JSX.Element} The provider component for General Translation context.
+*/
 function GTProvider(_a) {
     return __awaiter(this, arguments, void 0, function (_b) {
         var I18NConfig, rawDictionary, getID, locale, additionalMetadata, defaultLocale, renderSettings, dictionary, translations, existingTranslations, translationRequired;
@@ -179,4 +187,4 @@ function GTProvider(_a) {
         });
     });
 }
-//# sourceMappingURL=GTServerProvider.js.map
+//# sourceMappingURL=GTProvider.js.map

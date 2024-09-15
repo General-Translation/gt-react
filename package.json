@@ -2,8 +2,8 @@
   "name": "gt-next",
   "version": "0.0.19",
   "description": "",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "main": "dist/index.server.js",
+  "types": "dist/index.server.d.ts",
   "peerDependencies": {
     "next": ">=13.0.0",
     "react": "^16.8.0 || ^17.0.0 || ^18.0.0",
@@ -121,6 +121,6 @@
   ],
   "dependencies": {
     "generaltranslation": "^2.0.67",
-    "gt-react": "^4.0.11"
+    "gt-react": "^4.0.16"
   }
 }

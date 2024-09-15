@@ -29,7 +29,27 @@ var jsx_runtime_1 = require("react/jsx-runtime");
 var generaltranslation_1 = require("generaltranslation");
 var getI18NConfig_1 = __importDefault(require("../utils/getI18NConfig"));
 var getLocale_1 = __importDefault(require("../request/getLocale"));
-var Currency = function (_a) {
+/**
+ * The `<Currency>` component renders a formatted currency string, allowing customization of name, default value, currency type, and formatting options.
+ *
+ * @example
+ * ```jsx
+ * <Currency
+ *    name="price"
+ *    currency="USD"
+ * >
+ *    1000
+ * </Currency>
+ * ```
+ *
+ * @param {any} [children] - Optional content to render inside the currency component.
+ * @param {string} [name] - Optional name for the currency field.
+ * @param {any} [defaultValue] - The default value to be used.
+ * @param {string} [currency] - The currency type (e.g., USD, EUR, etc.).
+ * @param {Intl.NumberFormatOptions} [options] - Optional formatting options to customize how the currency is displayed.
+ * @returns {JSX.Element} The formatted currency component.
+ */
+function Currency(_a) {
     var children = _a.children, _b = _a.name, name = _b === void 0 ? "cost" : _b, defaultValue = _a.defaultValue, _c = _a.currency, currency = _c === void 0 ? "USD" : _c, _d = _a.options, options = _d === void 0 ? {} : _d, props = __rest(_a, ["children", "name", "defaultValue", "currency", "options"]);
     var I18NConfig = (0, getI18NConfig_1.default)();
     var locales = [(0, getLocale_1.default)(), I18NConfig.getDefaultLocale()];
@@ -42,7 +62,8 @@ var Currency = function (_a) {
         ? (0, generaltranslation_1.formatCurrency)({ value: value, currency: currency, languages: locales, options: options })
         : value;
     return ((0, jsx_runtime_1.jsx)("span", { "data-generaltranslation": generaltranslation, "data-gt-variable-name": name, "data-gt-variable-type": "currency", "data-gt-variable-options": __assign({ style: 'currency', currency: currency }, options), "data-gt-unformatted-value": typeof value === 'number' && !isNaN(value) ? value : undefined, children: typeof formattedValue === 'string' ? formattedValue : undefined }));
-};
+}
+;
 Currency.gtTransformation = "variable-currency";
 exports.default = Currency;
 //# sourceMappingURL=Currency.js.map

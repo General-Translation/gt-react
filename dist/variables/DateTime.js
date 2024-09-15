@@ -18,7 +18,26 @@ var jsx_runtime_1 = require("react/jsx-runtime");
 var generaltranslation_1 = require("generaltranslation");
 var getI18NConfig_1 = __importDefault(require("../utils/getI18NConfig"));
 var getLocale_1 = __importDefault(require("../request/getLocale"));
-var DateTime = function (_a) {
+/**
+ * The `<DateTime>` component renders a formatted date or time string, allowing customization of the name, default value, and formatting options.
+ * It utilizes the current locale and optional format settings to display the date.
+ *
+ * @example
+ * ```jsx
+ * <DateTime
+ *    name="createdAt"
+ * >
+ *    {new Date()}
+ * </DateTime>
+ * ```
+ *
+ * @param {any} [children] - Optional content (typically a date) to render inside the component.
+ * @param {string} [name="date"] - Optional name for the date field, used for metadata purposes.
+ * @param {string|number|Date} [defaultValue] - The default value for the date. Can be a string, number (timestamp), or `Date` object.
+ * @param {Intl.DateTimeFormatOptions} [options={}] - Optional formatting options for the date, following `Intl.DateTimeFormatOptions` specifications.
+ * @returns {JSX.Element} The formatted date or time component.
+ */
+function DateTime(_a) {
     var children = _a.children, _b = _a.name, name = _b === void 0 ? "date" : _b, defaultValue = _a.defaultValue, _c = _a.options, options = _c === void 0 ? {} : _c, props = __rest(_a, ["children", "name", "defaultValue", "options"]);
     var I18NConfig = (0, getI18NConfig_1.default)();
     var locales = [(0, getLocale_1.default)(), I18NConfig.getDefaultLocale()];
@@ -47,7 +66,8 @@ var DateTime = function (_a) {
     var formattedValue = dateString.replace(/[\u200F\u202B\u202E]/g, '');
     // Render the formatted date within a span element
     return ((0, jsx_runtime_1.jsx)("span", { "data-generaltranslation": generaltranslation, "data-gt-variable-name": name, "data-gt-variable-type": "date", "data-gt-variable-options": options, "data-gt-unformatted-value": isValidDate(dateValue) ? dateValue : undefined, children: formattedValue }));
-};
+}
+;
 DateTime.gtTransformation = "variable-datetime";
 exports.default = DateTime;
 /**
