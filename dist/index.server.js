@@ -30,7 +30,7 @@ exports.GTProvider = GTProvider_1.default;
  * @example
  * const locale = useDefaultLocale();
  * console.log(locale); // 'en-US'
- */
+*/
 function getDefaultLocale() {
     return (0, getI18NConfig_1.default)().getDefaultLocale();
 }

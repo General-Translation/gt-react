@@ -27,14 +27,3 @@ Main functions
 - Routing middleware for i18n routing and SEO
 
 */
-/*
-
-Main functions
-
-'config': initGT
-
-'middleware':
-    createMiddleware
-- Routing middleware for i18n routing and SEO
-
-*/

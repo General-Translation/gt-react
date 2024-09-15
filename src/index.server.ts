@@ -17,7 +17,7 @@ import GTProvider from './provider/GTProvider'
  * @example
  * const locale = useDefaultLocale();
  * console.log(locale); // 'en-US'
- */
+*/
 function getDefaultLocale() {
     return getI18NConfig().getDefaultLocale();
 }
