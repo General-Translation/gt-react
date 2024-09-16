@@ -44,8 +44,12 @@ export default async function GTProvider({
     let dictionary: Record<string, any> = {};
     let translations: Record<string, any> = {};
 
-    const existingTranslations = await I18NConfig.getTranslations(locale);
     const translationRequired = I18NConfig.translationRequired(locale)
+
+    let existingTranslations: Record<string, any>;
+    if (translationRequired) {
+        existingTranslations = await I18NConfig.getTranslations(locale);
+    }
 
     await Promise.all(Object.entries(rawDictionary).map(async ([id, dictionaryEntry]) => {
 

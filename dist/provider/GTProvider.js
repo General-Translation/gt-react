@@ -94,7 +94,7 @@ var getDictionary_1 = __importStar(require("../dictionary/getDictionary"));
 */
 function GTProvider(_a) {
     return __awaiter(this, arguments, void 0, function (_b) {
-        var I18NConfig, rawDictionary, getID, locale, additionalMetadata, defaultLocale, renderSettings, dictionary, translations, existingTranslations, translationRequired;
+        var I18NConfig, rawDictionary, getID, locale, additionalMetadata, defaultLocale, renderSettings, dictionary, translations, translationRequired, existingTranslations;
         var _this = this;
         var children = _b.children, id = _b.id;
         return __generator(this, function (_c) {
@@ -113,74 +113,76 @@ function GTProvider(_a) {
                     renderSettings = I18NConfig.getRenderSettings();
                     dictionary = {};
                     translations = {};
+                    translationRequired = I18NConfig.translationRequired(locale);
+                    if (!translationRequired) return [3 /*break*/, 2];
                     return [4 /*yield*/, I18NConfig.getTranslations(locale)];
                 case 1:
                     existingTranslations = _c.sent();
-                    translationRequired = I18NConfig.translationRequired(locale);
-                    return [4 /*yield*/, Promise.all(Object.entries(rawDictionary).map(function (_a) { return __awaiter(_this, [_a], void 0, function (_b) {
-                            var prefixedID, _c, entry, metadata, taggedEntry, entryAsObjects, key, _d, translation, translationPromise_1, _e, _f, translationPromise, loadingFallback, errorFallback;
-                            var id = _b[0], dictionaryEntry = _b[1];
-                            return __generator(this, function (_g) {
-                                switch (_g.label) {
-                                    case 0:
-                                        prefixedID = getID(id);
-                                        _c = (0, internal_1.extractEntryMetadata)(dictionaryEntry), entry = _c.entry, metadata = _c.metadata;
-                                        if (typeof entry === 'function') {
-                                            entry = entry({});
-                                            metadata = __assign(__assign({}, metadata), { isFunction: true });
-                                        }
-                                        taggedEntry = (0, internal_1.addGTIdentifier)(entry, metadata, prefixedID);
-                                        dictionary[id] = [taggedEntry, metadata];
-                                        if (!translationRequired || !entry)
-                                            return [2 /*return*/];
-                                        entryAsObjects = (0, internal_1.writeChildrenAsObjects)(taggedEntry);
-                                        if (!(metadata === null || metadata === void 0 ? void 0 : metadata.context)) return [3 /*break*/, 2];
-                                        return [4 /*yield*/, (0, internal_1.calculateHash)([entryAsObjects, metadata.context])];
-                                    case 1:
-                                        _d = _g.sent();
-                                        return [3 /*break*/, 4];
-                                    case 2: return [4 /*yield*/, (0, internal_1.calculateHash)(entryAsObjects)];
-                                    case 3:
-                                        _d = _g.sent();
-                                        _g.label = 4;
-                                    case 4:
-                                        key = _d;
-                                        translation = existingTranslations === null || existingTranslations === void 0 ? void 0 : existingTranslations[prefixedID];
-                                        if (translation) {
-                                            return [2 /*return*/, translations[id] = translation];
-                                        }
-                                        if (!I18NConfig.translationEnabled())
-                                            return [2 /*return*/];
-                                        if (!(typeof taggedEntry === 'string')) return [3 /*break*/, 8];
-                                        translationPromise_1 = I18NConfig.translate({ content: (0, generaltranslation_1.splitStringToContent)(taggedEntry), targetLanguage: locale, options: __assign({ id: prefixedID, hash: key }, additionalMetadata) });
-                                        if (!(renderSettings.method !== "subtle")) return [3 /*break*/, 6];
-                                        _f = translations[id];
-                                        return [4 /*yield*/, translationPromise_1];
-                                    case 5:
-                                        _e = _f === (_g.sent());
-                                        return [3 /*break*/, 7];
-                                    case 6:
-                                        _e = undefined;
-                                        _g.label = 7;
-                                    case 7: return [2 /*return*/, _e];
-                                    case 8:
-                                        translationPromise = I18NConfig.translateChildren({
-                                            children: entryAsObjects,
-                                            targetLanguage: locale,
-                                            metadata: __assign(__assign({ id: prefixedID, hash: key }, additionalMetadata), (renderSettings.timeout && { timeout: renderSettings.timeout }))
-                                        });
-                                        if (renderSettings.method === "skeleton") {
-                                            loadingFallback = (0, jsx_runtime_1.jsx)(react_1.default.Fragment, {}, "skeleton_".concat(id));
-                                        }
-                                        return [2 /*return*/, translations[id] = {
-                                                promise: translationPromise,
-                                                loadingFallback: loadingFallback,
-                                                errorFallback: errorFallback
-                                            }];
-                                }
-                            });
-                        }); }))];
-                case 2:
+                    _c.label = 2;
+                case 2: return [4 /*yield*/, Promise.all(Object.entries(rawDictionary).map(function (_a) { return __awaiter(_this, [_a], void 0, function (_b) {
+                        var prefixedID, _c, entry, metadata, taggedEntry, entryAsObjects, key, _d, translation, translationPromise_1, _e, _f, translationPromise, loadingFallback, errorFallback;
+                        var id = _b[0], dictionaryEntry = _b[1];
+                        return __generator(this, function (_g) {
+                            switch (_g.label) {
+                                case 0:
+                                    prefixedID = getID(id);
+                                    _c = (0, internal_1.extractEntryMetadata)(dictionaryEntry), entry = _c.entry, metadata = _c.metadata;
+                                    if (typeof entry === 'function') {
+                                        entry = entry({});
+                                        metadata = __assign(__assign({}, metadata), { isFunction: true });
+                                    }
+                                    taggedEntry = (0, internal_1.addGTIdentifier)(entry, metadata, prefixedID);
+                                    dictionary[id] = [taggedEntry, metadata];
+                                    if (!translationRequired || !entry)
+                                        return [2 /*return*/];
+                                    entryAsObjects = (0, internal_1.writeChildrenAsObjects)(taggedEntry);
+                                    if (!(metadata === null || metadata === void 0 ? void 0 : metadata.context)) return [3 /*break*/, 2];
+                                    return [4 /*yield*/, (0, internal_1.calculateHash)([entryAsObjects, metadata.context])];
+                                case 1:
+                                    _d = _g.sent();
+                                    return [3 /*break*/, 4];
+                                case 2: return [4 /*yield*/, (0, internal_1.calculateHash)(entryAsObjects)];
+                                case 3:
+                                    _d = _g.sent();
+                                    _g.label = 4;
+                                case 4:
+                                    key = _d;
+                                    translation = existingTranslations === null || existingTranslations === void 0 ? void 0 : existingTranslations[prefixedID];
+                                    if (translation) {
+                                        return [2 /*return*/, translations[id] = translation];
+                                    }
+                                    if (!I18NConfig.translationEnabled())
+                                        return [2 /*return*/];
+                                    if (!(typeof taggedEntry === 'string')) return [3 /*break*/, 8];
+                                    translationPromise_1 = I18NConfig.translate({ content: (0, generaltranslation_1.splitStringToContent)(taggedEntry), targetLanguage: locale, options: __assign({ id: prefixedID, hash: key }, additionalMetadata) });
+                                    if (!(renderSettings.method !== "subtle")) return [3 /*break*/, 6];
+                                    _f = translations[id];
+                                    return [4 /*yield*/, translationPromise_1];
+                                case 5:
+                                    _e = _f === (_g.sent());
+                                    return [3 /*break*/, 7];
+                                case 6:
+                                    _e = undefined;
+                                    _g.label = 7;
+                                case 7: return [2 /*return*/, _e];
+                                case 8:
+                                    translationPromise = I18NConfig.translateChildren({
+                                        children: entryAsObjects,
+                                        targetLanguage: locale,
+                                        metadata: __assign(__assign({ id: prefixedID, hash: key }, additionalMetadata), (renderSettings.timeout && { timeout: renderSettings.timeout }))
+                                    });
+                                    if (renderSettings.method === "skeleton") {
+                                        loadingFallback = (0, jsx_runtime_1.jsx)(react_1.default.Fragment, {}, "skeleton_".concat(id));
+                                    }
+                                    return [2 /*return*/, translations[id] = {
+                                            promise: translationPromise,
+                                            loadingFallback: loadingFallback,
+                                            errorFallback: errorFallback
+                                        }];
+                            }
+                        });
+                    }); }))];
+                case 3:
                     _c.sent();
                     return [2 /*return*/, ((0, jsx_runtime_1.jsx)(_ClientProvider_1.default, { dictionary: dictionary, translations: translations, locale: locale, defaultLocale: defaultLocale, translationRequired: translationRequired, children: children }))];
             }
