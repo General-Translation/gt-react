@@ -6,7 +6,7 @@ export default function getDictionary() {
     if (dictionary) return dictionary;
     try {
         dictionary = require('gt-next/_dictionary').default;
-    } catch {
+    } catch (error) {
         dictionary = {};
     }
     return dictionary;

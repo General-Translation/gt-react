@@ -72,12 +72,13 @@ function _ClientProvider(_a) {
                 if (isPlural) {
                     target = (0, internal_1.getPluralBranch)(variables.n, [locale, defaultLocale], (_a = target === null || target === void 0 ? void 0 : target.props['data-generaltranslation']) === null || _a === void 0 ? void 0 : _a.branches) || ((_b = target === null || target === void 0 ? void 0 : target.props) === null || _b === void 0 ? void 0 : _b.children);
                 }
-                return (0, client_1._renderTranslatedChildren)({
+                var r = (0, client_1._renderTranslatedChildren)({
                     source: source,
                     target: target,
                     variables: variables,
                     variablesOptions: variablesOptions
                 });
+                console.log(r);
             });
             var translation = translations[id];
             if (translation.promise) {

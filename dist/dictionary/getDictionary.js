@@ -10,7 +10,7 @@ function getDictionary() {
     try {
         dictionary = require('gt-next/_dictionary').default;
     }
-    catch (_a) {
+    catch (error) {
         dictionary = {};
     }
     return dictionary;
