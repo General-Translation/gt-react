@@ -4,13 +4,16 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = getI18NConfig;
-var config_1 = __importDefault(require("next/config"));
+var I18NConfiguration_1 = __importDefault(require("../config/I18NConfiguration"));
+var I18NConfig;
 function getI18NConfig() {
-    var _a, _b;
-    var I18NConfig = (_b = (_a = (0, config_1.default)()) === null || _a === void 0 ? void 0 : _a.serverRuntimeConfig) === null || _b === void 0 ? void 0 : _b.__GENERALTRANSLATION__;
-    if (!I18NConfig) {
-        throw new Error('Unable to access gt-next config. Ensure the plugin is installed correctly!');
+    if (I18NConfig)
+        return I18NConfig;
+    var I18NConfigParams = process.env._GENERALTRANSLATION_I18N_CONFIG_PARAMS;
+    if (!I18NConfigParams) {
+        throw new Error('Unable to access gt-next configuration.');
     }
+    I18NConfig = new I18NConfiguration_1.default(JSON.parse(I18NConfigParams));
     return I18NConfig;
 }
 //# sourceMappingURL=getI18NConfig.js.map

@@ -1,11 +1,13 @@
-import getConfig from 'next/config'
-
 import I18NConfiguration from "../config/I18NConfiguration";
 
+let I18NConfig: I18NConfiguration;
+
 export default function getI18NConfig(): I18NConfiguration {
-    const I18NConfig = getConfig()?.serverRuntimeConfig?.__GENERALTRANSLATION__;
-    if (!I18NConfig) {
-        throw new Error('Unable to access gt-next config. Ensure the plugin is installed correctly!')
+    if (I18NConfig) return I18NConfig;
+    const I18NConfigParams = process.env._GENERALTRANSLATION_I18N_CONFIG_PARAMS;
+    if (!I18NConfigParams) {
+        throw new Error('Unable to access gt-next configuration.')
     }
+    I18NConfig = new I18NConfiguration(JSON.parse(I18NConfigParams))
     return I18NConfig;
 }

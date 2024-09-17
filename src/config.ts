@@ -63,7 +63,7 @@ export function initGT({
         throw new Error("API key is required for automatic translation! Create an API key: www.generaltranslation.com/dashboard/api-keys. (Or, turn off automatic translation by setting baseURL to an empty string.)")
     }
 
-    const I18NConfig = new I18NConfiguration({
+    const I18NConfigParams = JSON.stringify({
         apiKey, projectID, baseURL, cacheURL, locales, defaultLocale,
         renderSettings, dictionaryName,
         maxConcurrentRequests: _maxConcurrentRequests,
@@ -77,9 +77,9 @@ export function initGT({
     return (config: NextConfig = {}): NextConfig => {
         return {
             ...config,
-            serverRuntimeConfig: {
-                ...config.serverRuntimeConfig,
-                __GENERALTRANSLATION__: I18NConfig
+            env: {
+                ...config.env,
+                _GENERALTRANSLATION_I18N_CONFIG_PARAMS: I18NConfigParams
             },
             webpack: function webpack(
                 ...[webpackConfig, options]: Parameters<NonNullable<NextConfig['webpack']>>
