@@ -1,6 +1,6 @@
 {
   "name": "gt-next",
-  "version": "0.0.29",
+  "version": "0.0.30",
   "description": "",
   "main": "dist/index.server.js",
   "types": "dist/index.server.d.ts",
