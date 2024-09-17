@@ -24,7 +24,7 @@ export default async function GTProvider({
     id?: string
 }) {
 
-    const I18NConfig = getI18NConfig();
+    const I18NConfig = getI18NConfig()
 
     const rawDictionary = flattenDictionary(
         id ?

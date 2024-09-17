@@ -16,6 +16,6 @@ import GTProvider from './provider/GTProvider';
  * const locale = useDefaultLocale();
  * console.log(locale); // 'en-US'
 */
-declare function getDefaultLocale(): string;
-export { getGT, GTProvider, getLocale, getDefaultLocale, Var, Num, Currency, DateTime };
+export declare function getDefaultLocale(): string;
+export { getGT, GTProvider, getLocale, Var, Num, Currency, DateTime };
 //# sourceMappingURL=index.server.d.ts.map

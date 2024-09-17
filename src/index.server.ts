@@ -18,13 +18,12 @@ import GTProvider from './provider/GTProvider'
  * const locale = useDefaultLocale();
  * console.log(locale); // 'en-US'
 */
-function getDefaultLocale() {
+export function getDefaultLocale() {
     return getI18NConfig().getDefaultLocale();
 }
 
 export {
     getGT, GTProvider,
     getLocale, 
-    getDefaultLocale,
     Var, Num, Currency, DateTime
 }
