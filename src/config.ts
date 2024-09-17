@@ -63,15 +63,12 @@ export function initGT({
         throw new Error("API key is required for automatic translation! Create an API key: www.generaltranslation.com/dashboard/api-keys. (Or, turn off automatic translation by setting baseURL to an empty string.)")
     }
 
-    // Save the I18N config object
-    if (!(globalThis as any).__GENERALTRANSLATION__) {
-        (globalThis as any).__GENERALTRANSLATION__ = new I18NConfiguration({
-            apiKey, projectID, baseURL, cacheURL, locales, defaultLocale,
-            renderSettings, dictionaryName,
-            maxConcurrentRequests: _maxConcurrentRequests,
-            batchInterval: _batchInterval, ...metadata
-        });
-    }
+    const I18NConfig = new I18NConfiguration({
+        apiKey, projectID, baseURL, cacheURL, locales, defaultLocale,
+        renderSettings, dictionaryName,
+        maxConcurrentRequests: _maxConcurrentRequests,
+        batchInterval: _batchInterval, ...metadata
+    });
 
     // Use i18n and dictionary values as file paths if they are provided as such
     const resolvedI18NFilePath = typeof i18n === 'string' ? i18n : resolveConfigFilepath('i18n');
@@ -80,6 +77,10 @@ export function initGT({
     return (config: NextConfig = {}): NextConfig => {
         return {
             ...config,
+            serverRuntimeConfig: {
+                ...config.serverRuntimeConfig,
+                __GENERALTRANSLATION__: I18NConfig
+            },
             webpack: function webpack(
                 ...[webpackConfig, options]: Parameters<NonNullable<NextConfig['webpack']>>
             ) {

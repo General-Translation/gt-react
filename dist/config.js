@@ -83,16 +83,13 @@ function initGT(_a) {
     if ((!apiKey || !projectID) && (baseURL === defaultInitGTProps_1.default.baseURL)) {
         throw new Error("API key is required for automatic translation! Create an API key: www.generaltranslation.com/dashboard/api-keys. (Or, turn off automatic translation by setting baseURL to an empty string.)");
     }
-    // Save the I18N config object
-    if (!globalThis.__GENERALTRANSLATION__) {
-        globalThis.__GENERALTRANSLATION__ = new I18NConfiguration_1.default(__assign({ apiKey: apiKey, projectID: projectID, baseURL: baseURL, cacheURL: cacheURL, locales: locales, defaultLocale: defaultLocale, renderSettings: renderSettings, dictionaryName: dictionaryName, maxConcurrentRequests: _maxConcurrentRequests, batchInterval: _batchInterval }, metadata));
-    }
+    var I18NConfig = new I18NConfiguration_1.default(__assign({ apiKey: apiKey, projectID: projectID, baseURL: baseURL, cacheURL: cacheURL, locales: locales, defaultLocale: defaultLocale, renderSettings: renderSettings, dictionaryName: dictionaryName, maxConcurrentRequests: _maxConcurrentRequests, batchInterval: _batchInterval }, metadata));
     // Use i18n and dictionary values as file paths if they are provided as such
     var resolvedI18NFilePath = typeof i18n === 'string' ? i18n : resolveConfigFilepath('i18n');
     var resolvedDictionaryFilePath = typeof dictionary === 'string' ? dictionary : resolveConfigFilepath('dictionary');
     return function (config) {
         if (config === void 0) { config = {}; }
-        return __assign(__assign({}, config), { webpack: function webpack() {
+        return __assign(__assign({}, config), { serverRuntimeConfig: __assign(__assign({}, config.serverRuntimeConfig), { __GENERALTRANSLATION__: I18NConfig }), webpack: function webpack() {
                 var _a = [];
                 for (var _i = 0; _i < arguments.length; _i++) {
                     _a[_i] = arguments[_i];
