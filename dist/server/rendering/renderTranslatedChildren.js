@@ -98,12 +98,12 @@ function renderTranslatedChildren(_a) {
             }
             var matchingSourceElement = findMatchingSourceElement_1(targetChild);
             if (matchingSourceElement)
-                return renderTranslatedElement({
-                    sourceElement: matchingSourceElement,
-                    targetElement: targetChild,
-                    variables: variables,
-                    variablesOptions: variablesOptions
-                });
+                return (0, jsx_runtime_1.jsx)(react_1.default.Fragment, { children: renderTranslatedElement({
+                        sourceElement: matchingSourceElement,
+                        targetElement: targetChild,
+                        variables: variables,
+                        variablesOptions: variablesOptions
+                    }) }, "element_".concat(index));
         });
     }
     if (typeof target === 'object' && !Array.isArray(target)) {

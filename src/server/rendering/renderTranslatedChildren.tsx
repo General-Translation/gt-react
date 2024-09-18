@@ -134,11 +134,11 @@ export default function renderTranslatedChildren({
                 })}</React.Fragment>);
             }
             const matchingSourceElement = findMatchingSourceElement(targetChild);
-            if (matchingSourceElement) return renderTranslatedElement({
+            if (matchingSourceElement) return <React.Fragment key={`element_${index}`}>{renderTranslatedElement({
                 sourceElement: matchingSourceElement,
                 targetElement: targetChild,
                 variables, variablesOptions
-            })
+            })}</React.Fragment>;
         })
 
 
