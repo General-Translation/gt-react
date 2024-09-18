@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.getBranchNameFromNumber = getBranchNameFromNumber;
 exports.default = getPluralBranch;
 /**
  * Helper function to get the branch name from a number based on provided options.
@@ -11,8 +12,6 @@ exports.default = getPluralBranch;
 function getBranchNameFromNumber(n, locales, options) {
     var pluralRules = new Intl.PluralRules(locales);
     var provisionalBranchName = pluralRules.select(n);
-    if (options[provisionalBranchName])
-        return provisionalBranchName;
     // aliases
     var absN = Math.abs(n);
     // 0
@@ -37,6 +36,8 @@ function getBranchNameFromNumber(n, locales, options) {
     if (provisionalBranchName === "two" && options["dual"])
         return "dual";
     // fallbacks
+    if (options[provisionalBranchName])
+        return provisionalBranchName;
     // two
     if (provisionalBranchName === "two" && options["dual"])
         return "dual";
