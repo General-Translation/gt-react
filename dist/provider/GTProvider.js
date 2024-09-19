@@ -60,7 +60,7 @@ var renderTranslatedChildren_1 = __importDefault(require("./rendering/renderTran
  * @param {string} [projectID] - The project ID required for General Translation cloud services.
  * @param {Dictionary} [dictionary=defaultDictionary] - The translation dictionary for the project.
  * @param {string} [dictionaryName=defaultDictionaryName] - The name of the translation dictionary.
- * @param {string[]} [approvedLocales] - The list of approved locales for the project.
+ * @param {string[]} [locales] - The list of approved locales for the project.
  * @param {string} [defaultLocale=libraryDefaultLocale] - The default locale to use if no other locale is found.
  * @param {string} [locale] - The current locale, if already set.
  * @param {string} [cacheURL='https://cache.gtx.dev'] - The URL of the cache service for fetching translations.
@@ -69,14 +69,14 @@ var renderTranslatedChildren_1 = __importDefault(require("./rendering/renderTran
  */
 function GTProvider(_a) {
     var _this = this;
-    var children = _a.children, projectID = _a.projectID, _b = _a.dictionary, dictionary = _b === void 0 ? primitives_1.defaultDictionary : _b, _c = _a.dictionaryName, dictionaryName = _c === void 0 ? primitives_1.defaultDictionaryName : _c, approvedLocales = _a.approvedLocales, _d = _a.defaultLocale, defaultLocale = _d === void 0 ? (approvedLocales === null || approvedLocales === void 0 ? void 0 : approvedLocales[0]) || primitives_1.libraryDefaultLocale : _d, locale = _a.locale, _e = _a.cacheURL, cacheURL = _e === void 0 ? 'https://cache.gtx.dev' : _e;
+    var children = _a.children, projectID = _a.projectID, _b = _a.dictionary, dictionary = _b === void 0 ? primitives_1.defaultDictionary : _b, _c = _a.dictionaryName, dictionaryName = _c === void 0 ? primitives_1.defaultDictionaryName : _c, locales = _a.locales, _d = _a.defaultLocale, defaultLocale = _d === void 0 ? (locales === null || locales === void 0 ? void 0 : locales[0]) || primitives_1.libraryDefaultLocale : _d, locale = _a.locale, _e = _a.cacheURL, cacheURL = _e === void 0 ? 'https://cache.gtx.dev' : _e;
     if (!projectID && cacheURL === 'https://cache.gtx.dev') {
         throw new Error("gt-react Error: General Translation cloud services require a project ID! Find yours at www.generaltranslation.com/dashboard.");
     }
     var browserLocale = (0, useBrowserLocale_1.default)(defaultLocale);
     locale = locale || browserLocale;
-    if (approvedLocales) {
-        locale = (0, generaltranslation_1.determineLanguage)([locale, browserLocale], approvedLocales) || locale;
+    if (locales) {
+        locale = (0, generaltranslation_1.determineLanguage)([locale, browserLocale], locales) || locale;
     }
     var translationRequired = (0, generaltranslation_1.isSameLanguage)(locale, defaultLocale) ? false : true;
     var _f = (0, react_1.useState)(cacheURL ? null : {}), translations = _f[0], setTranslations = _f[1];
