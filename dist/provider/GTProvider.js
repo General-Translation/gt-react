@@ -105,7 +105,7 @@ function GTProvider(_a) {
                         (0, getDictionary_1.getDictionaryEntry)(id) :
                         (0, getDictionary_1.default)());
                     getID = function (suffix) {
-                        return id ? "".concat(id, ".").concat(suffix) : suffix;
+                        return (id ? "".concat(id, ".").concat(suffix) : suffix).toLowerCase();
                     };
                     locale = (0, getLocale_1.default)();
                     additionalMetadata = (0, getMetadata_1.default)();

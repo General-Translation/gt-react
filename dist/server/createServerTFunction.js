@@ -22,7 +22,7 @@ var T_1 = __importDefault(require("./inline/T"));
 var getDictionary_1 = __importDefault(require("../dictionary/getDictionary"));
 function createServerTFunction(prefixID) {
     var getID = function (id) {
-        return prefixID ? "".concat(prefixID, ".").concat(id) : id;
+        return (prefixID ? "".concat(prefixID, ".").concat(id) : id).toLowerCase();
     };
     var dictionary = (0, getDictionary_1.default)();
     return function (id, options, f) {

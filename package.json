@@ -121,6 +121,6 @@
   ],
   "dependencies": {
     "generaltranslation": "^2.0.67",
-    "gt-react": "^4.0.18"
+    "gt-react": "^4.0.19"
   }
 }

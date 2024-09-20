@@ -9,7 +9,7 @@ export default function createServerTFunction(
 ) {
     
     const getID = (id: string) => {
-        return prefixID ? `${prefixID}.${id}` : id;
+        return (prefixID ? `${prefixID}.${id}` : id).toLowerCase();
     }
 
     const dictionary = getDictionary();
