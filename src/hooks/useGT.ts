@@ -25,8 +25,7 @@ export default function useGT(id: string = ''):
 {
     // Create a prefix for translation keys if an id is provided
     const getID = (suffix: string) => {
-        if (id && suffix) return `${id}.${suffix}`;
-        return id ? id : suffix;
+        return (id ? `${id}.${suffix}` : suffix).toLowerCase();
     }
 
     // Get the translation context
