@@ -109,6 +109,11 @@ function GTProvider(_a) {
         if (options === void 0) { options = {}; }
         // get the dictionary entry
         var _e = (0, extractEntryMetadata_1.default)((0, getDictionaryEntry_1.default)(dictionary, id)), entry = _e.entry, metadata = _e.metadata;
+        if (entry === undefined || entry === null) {
+            console.warn("Dictionary entry with id \"".concat(id, "\" is null or undefined"));
+            return;
+        }
+        ;
         // Get variables and variable options
         var variables;
         var variablesOptions;

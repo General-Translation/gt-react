@@ -88,6 +88,11 @@ export default function GTProvider({
             getDictionaryEntry(dictionary, id) as DictionaryEntry
         );
 
+        if (entry === undefined || entry === null) {
+            console.warn(`Dictionary entry with id "${id}" is null or undefined`)
+            return;
+        };
+        
         // Get variables and variable options
         let variables; let variablesOptions;
         if (options) {
