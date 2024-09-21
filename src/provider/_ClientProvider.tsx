@@ -31,6 +31,11 @@ export default function _ClientProvider({
 
         let { entry, metadata } = extractEntryMetadata(dictionary[id]);
 
+        if (entry === undefined || entry === null) {
+            console.warn(`Dictionary entry with id "${id}" is null or undefined`)
+            return;
+        };
+
         if (metadata && metadata.isFunction) {
             if (typeof f !== 'function') {
                 throw new Error(
@@ -50,7 +55,7 @@ export default function _ClientProvider({
 
         if (typeof entry === 'string') {
             return renderContentToString(
-                translationRequired ? translations[id] : entry, 
+                translationRequired ? translations[id].t : entry, 
                 [locale, defaultLocale],
                 variables, variablesOptions
             )

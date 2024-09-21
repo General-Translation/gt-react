@@ -34,6 +34,11 @@ function _ClientProvider(_a) {
         var _a, _b;
         if (options === void 0) { options = {}; }
         var _c = (0, internal_1.extractEntryMetadata)(dictionary[id]), entry = _c.entry, metadata = _c.metadata;
+        if (entry === undefined || entry === null) {
+            console.warn("Dictionary entry with id \"".concat(id, "\" is null or undefined"));
+            return;
+        }
+        ;
         if (metadata && metadata.isFunction) {
             if (typeof f !== 'function') {
                 throw new Error("You're trying to call a function in the server dictionary on the client-side, but functions can't be passed directly from server to client. "
@@ -48,7 +53,7 @@ function _ClientProvider(_a) {
         if (options.variablesOptions)
             variablesOptions = __assign(__assign({}, variablesOptions || {}), options.variablesOptions);
         if (typeof entry === 'string') {
-            return (0, generaltranslation_1.renderContentToString)(translationRequired ? translations[id] : entry, [locale, defaultLocale], variables, variablesOptions);
+            return (0, generaltranslation_1.renderContentToString)(translationRequired ? translations[id].t : entry, [locale, defaultLocale], variables, variablesOptions);
         }
         ;
         var source = entry;

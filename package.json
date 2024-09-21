@@ -120,7 +120,7 @@
     "i18n"
   ],
   "dependencies": {
-    "generaltranslation": "^2.0.67",
+    "generaltranslation": "^2.0.68",
     "gt-react": "^4.0.19"
   }
 }

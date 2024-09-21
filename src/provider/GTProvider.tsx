@@ -72,9 +72,9 @@ export default async function GTProvider({
 
         const key: string = metadata?.context ? await calculateHash([entryAsObjects, metadata.context]) : await calculateHash(entryAsObjects);
 
-        const translation = existingTranslations?.[prefixedID];
+        const translation = existingTranslations?.[prefixedID]
 
-        if (translation) {
+        if (translation && translation.k === key) {
             return translations[id] = translation;
         }
 

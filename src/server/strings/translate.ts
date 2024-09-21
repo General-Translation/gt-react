@@ -51,7 +51,7 @@ export default async function translate(
     variableOptions?: Record<string, Intl.NumberFormatOptions | Intl.DateTimeFormatOptions>
 ): Promise<string> {
 
-    if (!content) return '';
+    if (!content)  return '';
 
     const I18NConfig = getI18NConfig();
 
@@ -66,8 +66,8 @@ export default async function translate(
     if (options.id) {
         key = options.context ? await calculateHash([content, options.context]) : await calculateHash(content);
         const translations = await I18NConfig.getTranslations(options.language, options?.dictionaryName || undefined);
-        if (translations?.[options.id])
-            return renderContentToString(translations?.[options.id].t, [options.language, I18NConfig.getDefaultLocale()], variables, variableOptions);
+        if (translations?.[options.id] && translations[options.id].k === key)
+            return renderContentToString(translations[options.id].t, [options.language, I18NConfig.getDefaultLocale()], variables, variableOptions);
     }
 
     if (I18NConfig.translationEnabled()) {
