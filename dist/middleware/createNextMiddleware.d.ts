@@ -16,6 +16,6 @@ import { NextResponse } from "next/server";
 export default function createNextMiddleware({ defaultLocale, locales, localeRouting }?: {
     defaultLocale: string;
     locales?: string[];
-    localeRouting: boolean;
+    localeRouting?: boolean;
 }): (req: any) => NextResponse<unknown>;
 //# sourceMappingURL=createNextMiddleware.d.ts.map

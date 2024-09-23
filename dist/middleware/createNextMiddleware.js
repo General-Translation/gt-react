@@ -6,6 +6,7 @@ var headers_1 = require("next/headers");
 var server_1 = require("next/server");
 var internal_1 = require("gt-react/internal");
 var cookies_1 = require("next/dist/compiled/@edge-runtime/cookies");
+var primitives_1 = require("gt-react/dist/primitives/primitives");
 /**
  * Extracts the locale from the given pathname.
  *
@@ -54,7 +55,7 @@ function applyNewCookies(req, res) {
  * @returns {function} - A middleware function that processes the request and response.
  */
 function createNextMiddleware(_a) {
-    var _b = _a === void 0 ? { defaultLocale: 'en', localeRouting: true } : _a, _c = _b.defaultLocale, defaultLocale = _c === void 0 ? 'en' : _c, locales = _b.locales, _d = _b.localeRouting, localeRouting = _d === void 0 ? true : _d;
+    var _b = _a === void 0 ? { defaultLocale: primitives_1.libraryDefaultLocale, localeRouting: true } : _a, _c = _b.defaultLocale, defaultLocale = _c === void 0 ? primitives_1.libraryDefaultLocale : _c, locales = _b.locales, _d = _b.localeRouting, localeRouting = _d === void 0 ? true : _d;
     /**
     * Processes the incoming request to determine the user's locale and sets a locale cookie.
     * Optionally redirects the user based on the locale if locale-based routing is enabled.
