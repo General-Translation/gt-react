@@ -3,7 +3,6 @@ import { headers } from 'next/headers'
 import { NextResponse } from "next/server";
 import { primitives } from 'gt-react/internal'
 import { ResponseCookies, RequestCookies } from "next/dist/compiled/@edge-runtime/cookies";
-import { libraryDefaultLocale } from "gt-react/dist/primitives/primitives";
 
 /**
  * Extracts the locale from the given pathname.
@@ -59,9 +58,9 @@ function applyNewCookies(req: any, res: any) {
  * @returns {function} - A middleware function that processes the request and response.
  */
 export default function createNextMiddleware({
-    defaultLocale = libraryDefaultLocale, locales, localeRouting = true
+    defaultLocale = primitives.libraryDefaultLocale, locales, localeRouting = true
 }: { defaultLocale: string; locales?: string[]; localeRouting?: boolean } 
-= { defaultLocale: libraryDefaultLocale, localeRouting: true }) {
+= { defaultLocale: primitives.libraryDefaultLocale, localeRouting: true }) {
 
     /**
     * Processes the incoming request to determine the user's locale and sets a locale cookie.
