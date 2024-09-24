@@ -121,7 +121,7 @@ export default function _ClientProvider({
 
     return (
         <_GTContext.Provider value={{
-            translate, locale, defaultLocale
+            translate, locale, defaultLocale, translations
         }}>
             {
                 hasMounted ?

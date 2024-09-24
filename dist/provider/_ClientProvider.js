@@ -104,7 +104,8 @@ function _ClientProvider(_a) {
     return ((0, jsx_runtime_1.jsx)(client_1._GTContext.Provider, { value: {
             translate: translate,
             locale: locale,
-            defaultLocale: defaultLocale
+            defaultLocale: defaultLocale,
+            translations: translations
         }, children: hasMounted ?
             children :
             undefined }));

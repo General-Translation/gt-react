@@ -1,7 +1,7 @@
-import { useGT as getGT, useDefaultLocale as getDefaultLocale, useLocale as getLocale, Var, Num, Currency, DateTime } from "gt-react";
-declare function GTProvider({ children, id }: {
+import { useGT as getGT, useDefaultLocale as getDefaultLocale, useLocale as getLocale, Var, Num, Currency, DateTime, T } from "gt-react";
+declare function GTProvider(params: {
     children?: any;
     id?: string;
 }): JSX.Element;
-export { GTProvider, getGT, getDefaultLocale, getLocale, Var, Num, Currency, DateTime };
+export { GTProvider, T, getGT, getDefaultLocale, getLocale, Var, Num, Currency, DateTime };
 //# sourceMappingURL=index.client.d.ts.map

@@ -9,7 +9,27 @@ import renderDefaultChildren from "../rendering/renderDefaultChildren";
 
 /**
  * Translation component that handles rendering translated content, including plural forms, using specified translation configurations.
- * This component can handle asynchronous translations and provides several fallback rendering methods if translations are unavailable or in progress.
+ * 
+ * @example
+ * ```jsx
+ * // Basic usage:
+ * <T id="welcome_message" variables={{ name: "John" }}>
+ *  Hello, <Var name="name"/>!
+ * </T>
+ * ```
+ * 
+ * @example
+ * ```jsx
+ * // Using plural translations:
+ * <T id="item_count" variables={{ n: 3 }} singular={"You have one item"}>
+ *  You have <Num/> items
+ * </T>
+ * ```
+ * 
+ * Used as an alternative to `t()`. 
+ * 
+ * When used on the server-side, can create translations on demand.
+ * If you need to ensure server-side usage import from `'gt-next/server'`.
  *
  * By default, General Translation saves the translation in a remote cache if an `id` option is passed.
  * 
@@ -32,23 +52,6 @@ import renderDefaultChildren from "../rendering/renderDefaultChildren";
  * @returns {JSX.Element} The rendered translation or fallback content based on the provided configuration.
  * 
  * @throws {Error} If a plural translation is requested but the `n` option is not provided.
- * 
- * @example
- * ```jsx
- * // Basic usage:
- * <T id="welcome_message" variables={{ name: "John" }}>
- *  Hello, <Var name="name"/>!
- * </T>
- * ```
- * 
- * @example
- * ```jsx
- * // Using plural translations:
- * <T id="item_count" n={3} variables={{ count: 3 }}>
- *  You have {count} items
- * </T>
- * ```
- * 
  */
 export default async function T({
     children, id,

@@ -6,6 +6,7 @@ import getI18NConfig from './utils/getI18NConfig'
 import getLocale from './request/getLocale'
 import getGT from './server/getGT'
 import GTProvider from './provider/GTProvider'
+import T from './server/inline/T'
 
 /**
  * Gets the application's default locale. 
@@ -23,7 +24,7 @@ export function getDefaultLocale() {
 }
 
 export {
-    getGT, GTProvider,
+    getGT, GTProvider, T,
     getLocale, 
     Var, Num, Currency, DateTime
 }
