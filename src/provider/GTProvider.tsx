@@ -167,7 +167,7 @@ export default function GTProvider({
 
     return (
         <GTContext.Provider value={{
-            translate, locale, defaultLocale
+            translate, locale, defaultLocale, translations
         }}>
             {
                 translations ?

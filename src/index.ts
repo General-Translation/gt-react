@@ -1,3 +1,4 @@
+import T from "./inline/T";
 import useGT from "./hooks/useGT";
 import useDefaultLocale from "./hooks/useDefaultLocale";
 import useLocale from "./hooks/useLocale";
@@ -9,6 +10,6 @@ import DateTime from "./variables/DateTime";
 
 export {
     Var, Num, Currency, DateTime,
-    GTProvider,
+    T, GTProvider,
     useGT, useDefaultLocale, useLocale
 }

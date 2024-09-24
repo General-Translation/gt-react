@@ -174,7 +174,8 @@ function GTProvider(_a) {
     return ((0, jsx_runtime_1.jsx)(GTContext_1.GTContext.Provider, { value: {
             translate: translate,
             locale: locale,
-            defaultLocale: defaultLocale
+            defaultLocale: defaultLocale,
+            translations: translations
         }, children: translations ?
             children : undefined }));
 }
