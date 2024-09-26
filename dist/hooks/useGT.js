@@ -23,7 +23,7 @@ function useGT(id) {
     if (id === void 0) { id = ''; }
     // Create a prefix for translation keys if an id is provided
     var getID = function (suffix) {
-        return (id ? "".concat(id, ".").concat(suffix) : suffix).toLowerCase();
+        return id ? "".concat(id, ".").concat(suffix) : suffix;
     };
     // Get the translation context
     var translate = (0, GTContext_1.default)("useGT('".concat(id, "'): No context provided. You're trying to get the t() function on the client, which can only be done inside a <GTProvider>.")).translate;
