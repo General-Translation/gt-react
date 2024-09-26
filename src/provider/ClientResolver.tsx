@@ -1,29 +1,35 @@
 'use client'
 
-import { useEffect, useState } from "react"
+import { useEffect, useState } from "react";
 
 export default function ClientResolver({
-    promise, loadingFallback, errorFallback, renderTranslation
+  promise,
+  loadingFallback,
+  errorFallback,
+  renderTranslation,
 }: any) {
 
-    const [renderedChildren, setRenderedChildren] = useState(
-        loadingFallback 
-    );
-
-    const resolvePromise = async () => {
-        try {
-            const translation = renderTranslation(await promise);
-            setRenderedChildren(translation);
-        } catch (error) {
-            console.error(error);
-            setRenderedChildren(errorFallback)
-        }
-    }
+    const [translationData, setTranslationData] = useState(null);
+    const [hasError, setHasError] = useState(false);
 
     useEffect(() => {
-        resolvePromise()
-    }, [])
+        promise
+        .then((data: any) => {
+            setTranslationData(data);
+        })
+        .catch((error: any) => {
+            console.error(error);
+            setHasError(true);
+        });
+    }, [promise]);
 
-    return renderedChildren;
+    if (hasError) {
+        return errorFallback;
+    }
 
+    if (translationData) {
+        return renderTranslation(translationData);
+    }
+
+    return loadingFallback;
 }

@@ -53,7 +53,7 @@ export default async function GTProvider({
 
     await Promise.all(Object.entries(rawDictionary).map(async ([id, dictionaryEntry]) => {
 
-        const prefixedID = getID(id)
+        const prefixedID = getID(id);
 
         let { entry, metadata } = extractEntryMetadata(dictionaryEntry);
 
@@ -72,7 +72,7 @@ export default async function GTProvider({
 
         const key: string = metadata?.context ? await calculateHash([entryAsObjects, metadata.context]) : await calculateHash(entryAsObjects);
 
-        const translation = existingTranslations?.[prefixedID]
+        const translation = existingTranslations?.[prefixedID];
 
         if (translation && translation.k === key) {
             return translations[id] = translation;
