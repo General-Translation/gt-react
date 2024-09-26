@@ -33,7 +33,7 @@ export default async function GTProvider({
     );
 
     const getID = (suffix: string) => {
-        return (id ? `${id}.${suffix}` : suffix).toLowerCase();
+        return id ? `${id}.${suffix}` : suffix;
     }
 
     const locale = getLocale();
