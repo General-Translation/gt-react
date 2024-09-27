@@ -57,7 +57,6 @@ export default function createServerTFunction(
         }
 
         return (
-            /* @ts-expect-error Server Component */
             <T 
                 id={id}
                 variables={variables}

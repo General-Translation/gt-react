@@ -72,7 +72,7 @@ export default async function T({
         fallbackToPrevious: boolean
     }
     [key: string]: any
-}) {
+}): Promise<any> {
 
     if (!children) {
         return;

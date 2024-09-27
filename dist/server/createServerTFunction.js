@@ -55,9 +55,7 @@ function createServerTFunction(prefixID) {
                 id: id
             }, variables, variablesOptions);
         }
-        return (
-        /* @ts-expect-error Server Component */
-        (0, jsx_runtime_1.jsx)(T_1.default, __assign({ id: id, variables: variables, variablesOptions: variablesOptions }, metadata, { children: entry })));
+        return ((0, jsx_runtime_1.jsx)(T_1.default, __assign({ id: id, variables: variables, variablesOptions: variablesOptions }, metadata, { children: entry })));
     };
 }
 //# sourceMappingURL=createServerTFunction.js.map

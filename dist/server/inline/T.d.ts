@@ -58,5 +58,5 @@ export default function T({ children, id, variables, variablesOptions, n, render
         fallbackToPrevious: boolean;
     };
     [key: string]: any;
-}): Promise<string | number | bigint | boolean | import("react/jsx-runtime").JSX.Element | Iterable<import("react").ReactNode> | null | undefined>;
+}): Promise<any>;
 //# sourceMappingURL=T.d.ts.map
