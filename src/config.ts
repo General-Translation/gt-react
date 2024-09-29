@@ -1,4 +1,3 @@
-import I18NConfiguration from "./config/I18NConfiguration";
 import defaultInitGTProps from "./primitives/defaultInitGTProps";
 import InitGTProps from "./primitives/InitGTProps";
 import path from 'path';

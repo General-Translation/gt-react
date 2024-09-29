@@ -46,7 +46,6 @@
       "default": "./dist/client.js"
     },
     "./server": {
-      "node": "./dist/server.js",
       "types": "./dist/server.d.ts",
       "default": "./dist/server.js"
     },
@@ -64,38 +63,50 @@
   "typesVersions": {
     "*": {
       "config": [
-        "/dist/config.d.ts"
+        "./dist/config.d.ts"
       ],
       "client": [
-        "/dist/client.d.ts"
+        "./dist/client.d.ts"
       ],
       "server": [
-        "/dist/server.d.ts"
+        "./dist/server.d.ts"
       ],
       "middleware": [
-        "/dist/middleware.d.ts"
+        "./dist/middleware.d.ts"
+      ],
+      "_request": [
+        "./dist/_request.d.ts"
+      ],
+      "_dictionary": [
+        "./dist/_request.d.ts"
       ]
     }
   },
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "gt-next/config": [
+      "gt-react/config": [
+        "/dist/config",
         "/dist/config"
       ],
-      "gt-next/client": [
+      "gt-react/client": [
+        "/dist/client",
         "/dist/client"
       ],
-      "gt-next/server": [
+      "gt-react/server": [
+        "/dist/server",
         "/dist/server"
       ],
-      "gt-next/middleware": [
+      "gt-react/middleware": [
+        "/dist/middleware",
         "/dist/middleware"
       ],
-      "gt-next/_request": [
+      "gt-react/_request": [
+        "/dist/_request",
         "/dist/_request"
       ],
-      "gt-next/_dictionary": [
+      "gt-react/_dictionary": [
+        "/dist/_dictionary",
         "/dist/_dictionary"
       ]
     }
