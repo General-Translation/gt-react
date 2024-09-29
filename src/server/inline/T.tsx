@@ -7,6 +7,12 @@ import Resolver from "./Resolver";
 import renderTranslatedChildren from "../rendering/renderTranslatedChildren";
 import renderDefaultChildren from "../rendering/renderDefaultChildren";
 
+type RenderSettings = {
+    method: "skeleton" | "replace" | "hang" | "subtle",
+    timeout: number | null;
+    fallbackToPrevious: boolean
+}
+
 /**
  * Translation component that handles rendering translated content, including plural forms, using specified translation configurations.
  * 
@@ -66,11 +72,7 @@ export default async function T({
     variablesOptions?: {
        [key: string]: Intl.NumberFormatOptions | Intl.DateTimeFormatOptions
     },
-    renderSettings?: {
-        method: "skeleton" | "replace" | "hang" | "subtle",
-        timeout: number | null;
-        fallbackToPrevious: boolean
-    }
+    renderSettings?: RenderSettings
     [key: string]: any
 }): Promise<any> {
 

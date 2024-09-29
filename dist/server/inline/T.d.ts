@@ -1,3 +1,8 @@
+type RenderSettings = {
+    method: "skeleton" | "replace" | "hang" | "subtle";
+    timeout: number | null;
+    fallbackToPrevious: boolean;
+};
 /**
  * Translation component that handles rendering translated content, including plural forms, using specified translation configurations.
  *
@@ -52,11 +57,8 @@ export default function T({ children, id, variables, variablesOptions, n, render
     variablesOptions?: {
         [key: string]: Intl.NumberFormatOptions | Intl.DateTimeFormatOptions;
     };
-    renderSettings?: {
-        method: "skeleton" | "replace" | "hang" | "subtle";
-        timeout: number | null;
-        fallbackToPrevious: boolean;
-    };
+    renderSettings?: RenderSettings;
     [key: string]: any;
 }): Promise<any>;
+export {};
 //# sourceMappingURL=T.d.ts.map
