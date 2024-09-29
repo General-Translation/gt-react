@@ -118,8 +118,7 @@ export default function T({
     const translation = translations[id];
 
     if (!translation || !translation.t) {
-        console.warn(`<T id="${id}"> with children "${children}" has no existing translation!`)
-        return;
+        throw new Error(`<T id="${id}"> with children "${children}" is used in a client component without a corresponding translation.`)
     }
 
     let target = translation.t;

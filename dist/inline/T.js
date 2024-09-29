@@ -117,8 +117,7 @@ function T(_a) {
     // Do translation
     var translation = translations[id];
     if (!translation || !translation.t) {
-        console.warn("<T id=\"".concat(id, "\"> with children \"").concat(children, "\" has no existing translation!"));
-        return;
+        throw new Error("<T id=\"".concat(id, "\"> with children \"").concat(children, "\" is used in a client component without a corresponding translation."));
     }
     var target = translation.t;
     if (isPlural) {

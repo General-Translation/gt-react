@@ -78,7 +78,7 @@ function GTProvider(_a) {
     if (locales) {
         locale = (0, generaltranslation_1.determineLanguage)([locale, browserLocale], locales) || locale;
     }
-    var translationRequired = (0, generaltranslation_1.isSameLanguage)(locale, defaultLocale) ? false : true;
+    var translationRequired = locale && (0, generaltranslation_1.isSameLanguage)(locale, defaultLocale) ? false : true;
     var _f = (0, react_1.useState)(cacheURL ? null : {}), translations = _f[0], setTranslations = _f[1];
     (0, react_1.useEffect)(function () {
         if (!translations) {

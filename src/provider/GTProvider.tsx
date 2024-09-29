@@ -57,7 +57,7 @@ export default function GTProvider({
         locale = determineLanguage([locale, browserLocale], locales) || locale;
     }
 
-    const translationRequired = isSameLanguage(locale, defaultLocale) ? false : true;
+    const translationRequired = locale && isSameLanguage(locale, defaultLocale) ? false : true;
 
     const [translations, setTranslations] = useState<Record<string, Translation> | null>(
         cacheURL ? null : {}
