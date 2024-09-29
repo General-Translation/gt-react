@@ -1,6 +1,6 @@
 {
   "name": "gt-next",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "",
   "main": "dist/index.server.js",
   "peerDependencies": {
@@ -63,10 +63,18 @@
   },
   "typesVersions": {
     "*": {
-      "config": ["/dist/config.d.ts"],
-      "client": ["/dist/client.d.ts"],
-      "server": ["/dist/server.d.ts"],
-      "middleware": ["/dist/middleware.d.ts"]
+      "config": [
+        "/dist/config.d.ts"
+      ],
+      "client": [
+        "/dist/client.d.ts"
+      ],
+      "server": [
+        "/dist/server.d.ts"
+      ],
+      "middleware": [
+        "/dist/middleware.d.ts"
+      ]
     }
   },
   "compilerOptions": {
