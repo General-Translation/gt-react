@@ -10,8 +10,8 @@ export default function getI18NConfig(): I18NConfiguration {
     if (I18NConfigParams) {
         I18NConfig = new I18NConfiguration(JSON.parse(I18NConfigParams))
     } 
+    
     else {
-        
         console.warn('Unable to access gt-next configuration. Using defaults.')
 
         // Defaults and checks
@@ -29,9 +29,7 @@ export default function getI18NConfig(): I18NConfiguration {
             batchInterval: defaultInitGTProps._batchInterval,
             apiKey, projectID
         })  
-        
     }
-    
     
     return I18NConfig;
 }
