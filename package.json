@@ -76,7 +76,7 @@
     "i18n"
   ],
   "dependencies": {
-    "generaltranslation": "^2.0.69",
+    "generaltranslation": "^2.0.70",
     "xxhashjs": "^0.2.2"
   }
 }
