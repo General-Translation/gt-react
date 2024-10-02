@@ -33,6 +33,17 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
+var __rest = (this && this.__rest) || function (s, e) {
+    var t = {};
+    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
+        t[p] = s[p];
+    if (s != null && typeof Object.getOwnPropertySymbols === "function")
+        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
+            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))
+                t[p[i]] = s[p[i]];
+        }
+    return t;
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = addGTIdentifier;
 var react_1 = __importStar(require("react"));
@@ -40,16 +51,17 @@ var acceptedPluralProps = {
     "singular": true, "dual": true, "plural": true,
     "zero": true, "one": true, "two": true, "few": true, "many": true, "other": true
 };
-function addIdentifierRecursively(children, dictionaryID) {
+function addGTIdentifier(children, outerID, startingIndex) {
+    if (startingIndex === void 0) { startingIndex = 0; }
     // Object to keep track of the current index for GT IDs
-    var indexObject = { index: 0 };
+    var indexObject = { index: startingIndex };
     /**
      * Function to create a GTProp object for a ReactElement
      * @param child - The ReactElement for which the GTProp is created
      * @returns - The GTProp object
      */
     var createGTProp = function (child) {
-        var type = child.type;
+        var type = child.type, props = child.props;
         indexObject.index += 1;
         var result = { id: indexObject.index };
         var transformation = typeof type === 'function' ? (type.gtTransformation || '') : '';
@@ -57,6 +69,27 @@ function addIdentifierRecursively(children, dictionaryID) {
             var transformationParts = transformation.split('-');
             if (transformationParts[0] === "variable") {
                 result.variableType = (transformationParts === null || transformationParts === void 0 ? void 0 : transformationParts[1]) || "variable";
+            }
+            if (transformationParts[0] === "plural") {
+                var pluralBranches = Object.entries(props).reduce(function (acc, _a) {
+                    var branchName = _a[0], branch = _a[1];
+                    if (acceptedPluralProps[branchName]) {
+                        acc[branchName] = addGTIdentifier(branch, undefined, indexObject.index);
+                    }
+                    return acc;
+                }, {});
+                if (Object.keys(pluralBranches).length)
+                    result.branches = pluralBranches;
+            }
+            if (transformationParts[0] === "branch") {
+                var children_1 = props.children, branch = props.branch, branches = __rest(props, ["children", "branch"]);
+                var resultBranches = Object.entries(branches).reduce(function (acc, _a) {
+                    var branchName = _a[0], branch = _a[1];
+                    acc[branchName] = addGTIdentifier(branch, undefined, indexObject.index);
+                    return acc;
+                }, {});
+                if (Object.keys(resultBranches).length)
+                    result.branches = resultBranches;
             }
             result.transformation = transformationParts[0];
         }
@@ -68,9 +101,9 @@ function addIdentifierRecursively(children, dictionaryID) {
             // Create new props for the element, including the GT identifier and a key
             var generaltranslation = createGTProp(child);
             var newProps = __assign(__assign({}, props), { 'data-generaltranslation': generaltranslation });
-            if (dictionaryID) {
-                newProps.key = dictionaryID;
-                dictionaryID = undefined;
+            if (outerID) {
+                newProps.key = outerID;
+                outerID = undefined;
             }
             // Recursively add IDs to children
             if (props.children) {
@@ -82,7 +115,7 @@ function addIdentifierRecursively(children, dictionaryID) {
     }
     function handleChildren(children) {
         if (Array.isArray(children)) {
-            dictionaryID = undefined;
+            outerID = undefined;
             return react_1.default.Children.map(children, handleSingleChild);
         }
         else {
@@ -90,23 +123,5 @@ function addIdentifierRecursively(children, dictionaryID) {
         }
     }
     return handleChildren(children);
-}
-function addGTIdentifier(children, branches, dictionaryID) {
-    var taggedChildren = addIdentifierRecursively(children, dictionaryID);
-    if (typeof branches === 'undefined') {
-        return taggedChildren;
-    }
-    var pluralBranches = Object.entries(branches).reduce(function (acc, _a) {
-        var key = _a[0], value = _a[1];
-        if (acceptedPluralProps[key]) {
-            acc[key] = addIdentifierRecursively(value, dictionaryID); // process!
-        }
-        return acc;
-    }, {});
-    // check that work has actually been done, if not just return the default children
-    if (!Object.keys(pluralBranches).length)
-        return taggedChildren;
-    return react_1.default.createElement('span', { 'data-generaltranslation': { id: 0, branches: pluralBranches, transformation: 'plural' }, children: taggedChildren });
-    ;
 }
 //# sourceMappingURL=addGTIdentifier.js.map

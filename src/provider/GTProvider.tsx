@@ -10,7 +10,6 @@ import getDictionaryEntry from "./helpers/getDictionaryEntry";
 import { addGTIdentifier } from "../internal";
 import extractEntryMetadata from "./helpers/extractEntryMetadata";
 import renderDefaultChildren from "./rendering/renderDefaultChildren";
-import getPluralBranch from "../plurals/getPluralBranch";
 import renderTranslatedChildren from "./rendering/renderTranslatedChildren";
 
 /**
@@ -109,34 +108,18 @@ export default function GTProvider({
             entry = entry(options) as ReactElement;
         }
 
-        const taggedEntry = addGTIdentifier(entry, metadata);
-
-        let source;
-
-        // Get a plural if appropriate (check type, if type, get branch, entry =)
-        const isPlural = metadata && pluralBranchNames.some(branchName => branchName in metadata);
-        if (isPlural) {
-            if (typeof variables?.n !== 'number')
-                throw new Error(`t("${id}"): Plural requires "n" option.`)
-            source = getPluralBranch(
-                variables.n, 
-                [locale, defaultLocale],
-                taggedEntry.props?.['data-generaltranslation'].branches
-            ) || taggedEntry.props.children; // we know t exists because isPlural
-        } else {
-            source = taggedEntry;
-        }
+        const taggedEntry = addGTIdentifier(entry, id);
 
         // If no translations are required
         if (!translationRequired) {
             if (typeof taggedEntry === 'string') {
                 return renderContentToString(
-                    source, defaultLocale, 
+                    taggedEntry, defaultLocale, 
                     variables, variablesOptions
                 )
             }
             return renderDefaultChildren({
-                entry: source, variables, variablesOptions
+                entry: taggedEntry, variables, variablesOptions
             })
         }
 
@@ -149,18 +132,11 @@ export default function GTProvider({
                     variables, variablesOptions
                 )
             }
-            let target = translation.t;
-            if (isPlural) {
-                target = getPluralBranch(
-                    variables?.n as number,
-                    [locale, defaultLocale],
-                    (target as any).props?.['data-generaltranslation']?.branches
-                ) || (target as any)?.props?.children;
-            }
             return renderTranslatedChildren({
-                source,
-                target,
-                variables, variablesOptions
+                source: taggedEntry,
+                target: translation.t,
+                variables, variablesOptions,
+                locales: [locale, defaultLocale]
             });
         }
     }, [dictionary, translations, translationRequired]);
@@ -170,7 +146,7 @@ export default function GTProvider({
             translate, locale, defaultLocale, translations
         }}>
             {
-                translations ?
+                (translations && browserLocale) ?
                 children : undefined
             }
         </GTContext.Provider>

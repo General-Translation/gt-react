@@ -51,7 +51,6 @@ var getDictionaryEntry_1 = __importDefault(require("./helpers/getDictionaryEntry
 var internal_1 = require("../internal");
 var extractEntryMetadata_1 = __importDefault(require("./helpers/extractEntryMetadata"));
 var renderDefaultChildren_1 = __importDefault(require("./rendering/renderDefaultChildren"));
-var getPluralBranch_1 = __importDefault(require("../plurals/getPluralBranch"));
 var renderTranslatedChildren_1 = __importDefault(require("./rendering/renderTranslatedChildren"));
 /**
  * Provides General Translation context to its children, which can then access `useGT`, `useLocale`, and `useDefaultLocale`.
@@ -105,10 +104,9 @@ function GTProvider(_a) {
         }
     }, [translations, translationRequired]);
     var translate = (0, react_1.useCallback)(function (id, options, f) {
-        var _a, _b, _c, _d;
         if (options === void 0) { options = {}; }
         // get the dictionary entry
-        var _e = (0, extractEntryMetadata_1.default)((0, getDictionaryEntry_1.default)(dictionary, id)), entry = _e.entry, metadata = _e.metadata;
+        var _a = (0, extractEntryMetadata_1.default)((0, getDictionaryEntry_1.default)(dictionary, id)), entry = _a.entry, metadata = _a.metadata;
         if (entry === undefined || entry === null) {
             console.warn("Dictionary entry with id \"".concat(id, "\" is null or undefined"));
             return;
@@ -130,25 +128,14 @@ function GTProvider(_a) {
         else if (typeof entry === 'function') {
             entry = entry(options);
         }
-        var taggedEntry = (0, internal_1.addGTIdentifier)(entry, metadata);
-        var source;
-        // Get a plural if appropriate (check type, if type, get branch, entry =)
-        var isPlural = metadata && primitives_1.pluralBranchNames.some(function (branchName) { return branchName in metadata; });
-        if (isPlural) {
-            if (typeof (variables === null || variables === void 0 ? void 0 : variables.n) !== 'number')
-                throw new Error("t(\"".concat(id, "\"): Plural requires \"n\" option."));
-            source = (0, getPluralBranch_1.default)(variables.n, [locale, defaultLocale], (_a = taggedEntry.props) === null || _a === void 0 ? void 0 : _a['data-generaltranslation'].branches) || taggedEntry.props.children; // we know t exists because isPlural
-        }
-        else {
-            source = taggedEntry;
-        }
+        var taggedEntry = (0, internal_1.addGTIdentifier)(entry, id);
         // If no translations are required
         if (!translationRequired) {
             if (typeof taggedEntry === 'string') {
-                return (0, generaltranslation_1.renderContentToString)(source, defaultLocale, variables, variablesOptions);
+                return (0, generaltranslation_1.renderContentToString)(taggedEntry, defaultLocale, variables, variablesOptions);
             }
             return (0, renderDefaultChildren_1.default)({
-                entry: source,
+                entry: taggedEntry,
                 variables: variables,
                 variablesOptions: variablesOptions
             });
@@ -159,15 +146,12 @@ function GTProvider(_a) {
             if (typeof taggedEntry === 'string') {
                 return (0, generaltranslation_1.renderContentToString)(translation.t, [locale, defaultLocale], variables, variablesOptions);
             }
-            var target = translation.t;
-            if (isPlural) {
-                target = (0, getPluralBranch_1.default)(variables === null || variables === void 0 ? void 0 : variables.n, [locale, defaultLocale], (_c = (_b = target.props) === null || _b === void 0 ? void 0 : _b['data-generaltranslation']) === null || _c === void 0 ? void 0 : _c.branches) || ((_d = target === null || target === void 0 ? void 0 : target.props) === null || _d === void 0 ? void 0 : _d.children);
-            }
             return (0, renderTranslatedChildren_1.default)({
-                source: source,
-                target: target,
+                source: taggedEntry,
+                target: translation.t,
                 variables: variables,
-                variablesOptions: variablesOptions
+                variablesOptions: variablesOptions,
+                locales: [locale, defaultLocale]
             });
         }
     }, [dictionary, translations, translationRequired]);
@@ -176,7 +160,7 @@ function GTProvider(_a) {
             locale: locale,
             defaultLocale: defaultLocale,
             translations: translations
-        }, children: translations ?
+        }, children: (translations && browserLocale) ?
             children : undefined }));
 }
 //# sourceMappingURL=GTProvider.js.map

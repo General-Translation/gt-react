@@ -13,10 +13,10 @@ const acceptedPluralProps: Record<string, boolean> = {
     "zero": true, "one": true, "two": true, "few": true, "many": true, "other": true
 }
 
-function addIdentifierRecursively(children: Children, dictionaryID?: string | undefined) {
-    
+export default function addGTIdentifier(children: Children, outerID?: string | undefined, startingIndex: number = 0): any {
+
     // Object to keep track of the current index for GT IDs
-    let indexObject: { index: number } = { index: 0 };
+    let indexObject: { index: number } = { index: startingIndex };
 
     /**
      * Function to create a GTProp object for a ReactElement
@@ -24,7 +24,7 @@ function addIdentifierRecursively(children: Children, dictionaryID?: string | un
      * @returns - The GTProp object
      */
     const createGTProp = (child: ReactElement): GTProp => {
-        const { type } = child;
+        const { type, props } = child;
         indexObject.index += 1;
         let result: GTProp = { id: indexObject.index };
         const transformation: string = typeof type === 'function' ? ((type as any).gtTransformation || '') : '';
@@ -33,6 +33,23 @@ function addIdentifierRecursively(children: Children, dictionaryID?: string | un
             if (transformationParts[0] === "variable") {
                 result.variableType = transformationParts?.[1] || "variable";
             } 
+            if (transformationParts[0] === "plural") {
+                const pluralBranches = Object.entries(props).reduce((acc, [branchName, branch]) => {
+                    if (acceptedPluralProps[branchName]) {
+                        (acc as Record<string, any>)[branchName] = addGTIdentifier(branch as any, undefined, indexObject.index);
+                    }
+                    return acc;
+                }, {});
+                if (Object.keys(pluralBranches).length) result.branches = pluralBranches;
+            }
+            if (transformationParts[0] === "branch") {
+                const { children, branch, ...branches } = props;
+                const resultBranches = Object.entries(branches).reduce((acc, [branchName, branch]) => {
+                    (acc as Record<string, any>)[branchName] = addGTIdentifier(branch as any, undefined, indexObject.index);
+                    return acc;
+                }, {})
+                if (Object.keys(resultBranches).length) result.branches = resultBranches;
+            }
             result.transformation = transformationParts[0];
         }
         return result;
@@ -47,9 +64,9 @@ function addIdentifierRecursively(children: Children, dictionaryID?: string | un
                 ...props,
                 'data-generaltranslation': generaltranslation
             };
-            if (dictionaryID) {
-                newProps.key = dictionaryID;
-                dictionaryID = undefined;
+            if (outerID) {
+                newProps.key = outerID;
+                outerID = undefined;
             }
             // Recursively add IDs to children
             if (props.children) {
@@ -62,7 +79,7 @@ function addIdentifierRecursively(children: Children, dictionaryID?: string | un
     
     function handleChildren(children: Children) {
         if (Array.isArray(children)) {
-            dictionaryID = undefined;
+            outerID = undefined;
             return React.Children.map(children, handleSingleChild)
         } else {
             return handleSingleChild(children);
@@ -70,26 +87,4 @@ function addIdentifierRecursively(children: Children, dictionaryID?: string | un
     }
 
     return handleChildren(children);
-}
-  
-export default function addGTIdentifier(children: Children, branches?: Record<string, any>, dictionaryID?: string | undefined): any {
-
-    const taggedChildren = addIdentifierRecursively(children, dictionaryID);
-    
-    if (typeof branches === 'undefined') {
-        return taggedChildren;
-    }
-
-    const pluralBranches = Object.entries(branches).reduce<Record<string, any>>((acc, [key, value]) => {
-        if (acceptedPluralProps[key]) {
-            acc[key] = addIdentifierRecursively(value, dictionaryID); // process!
-        }
-        return acc;
-    }, {});
-
-    // check that work has actually been done, if not just return the default children
-    if (!Object.keys(pluralBranches).length) return taggedChildren;
-
-    return React.createElement('span', { 'data-generaltranslation': { id: 0, branches: pluralBranches, transformation: 'plural' }, children: taggedChildren });;
-
 }

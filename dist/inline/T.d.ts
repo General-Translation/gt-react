@@ -4,7 +4,6 @@
  *
  * @param {string} [id] - Required identifier for the translation string.
  * @param {React.ReactNode} children - The content to be translated or displayed.
- * @param {number} [n] - Optional number to determine plural forms.
  * @param {Object} [variables] - Variables for interpolation in the translation string.
  * @param {Object} [variablesOptions] - Optional formatting options for numeric or date variables.
  * @param {any} [context] - Additional context for translation key generation.
@@ -30,15 +29,14 @@
  * ```
  *
  */
-export default function T({ children, id, variables, n, variablesOptions, context, ...props }: {
+export default function T({ children, id, variables, variablesOptions, context }: {
     children?: any;
     id: string;
-    n?: number;
     variables?: Record<string, any>;
     variablesOptions?: {
         [key: string]: Intl.NumberFormatOptions | Intl.DateTimeFormatOptions;
     };
     context?: string;
     [key: string]: any;
-}): import("react").ReactNode;
+}): JSX.Element;
 //# sourceMappingURL=T.d.ts.map
