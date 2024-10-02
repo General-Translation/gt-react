@@ -31,7 +31,6 @@ type RenderSettings = {
  *
  * @param {React.ReactNode} children - The content to be translated or displayed.
  * @param {string} [id] - Optional identifier for the translation string. If not provided, a hash will be generated from the content.
- * @param {number} [n] - Optional number to determine plural forms.
  * @param {Object} [variables] - Variables for interpolation in the translation string.
  * @param {Object} [variablesOptions] - Optional formatting options for numeric or date variables.
  * @param {Object} [renderSettings] - Optional settings controlling how fallback content is rendered during translation.
@@ -49,10 +48,9 @@ type RenderSettings = {
  *
  * @throws {Error} If a plural translation is requested but the `n` option is not provided.
  */
-export default function T({ children, id, variables, variablesOptions, n, renderSettings, ...props }: {
+export default function T({ children, id, variables, variablesOptions, renderSettings, ...props }: {
     children: any;
     id?: string;
-    n?: number;
     variables?: Record<string, any>;
     variablesOptions?: {
         [key: string]: Intl.NumberFormatOptions | Intl.DateTimeFormatOptions;

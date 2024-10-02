@@ -1,6 +1,6 @@
 {
   "name": "gt-next",
-  "version": "0.1.8",
+  "version": "0.2.0",
   "description": "",
   "main": "dist/index.server.js",
   "peerDependencies": {
@@ -120,6 +120,6 @@
   ],
   "dependencies": {
     "generaltranslation": "^2.0.70",
-    "gt-react": "^4.1.4"
+    "gt-react": "^4.2.0"
   }
 }

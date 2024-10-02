@@ -31,9 +31,8 @@ function _ClientProvider(_a) {
         setHasMounted(true);
     }, []);
     var translate = (0, react_1.useCallback)(function (id, options, f) {
-        var _a, _b;
         if (options === void 0) { options = {}; }
-        var _c = (0, internal_1.extractEntryMetadata)(dictionary[id]), entry = _c.entry, metadata = _c.metadata;
+        var _a = (0, internal_1.extractEntryMetadata)(dictionary[id]), entry = _a.entry, metadata = _a.metadata;
         if (entry === undefined || entry === null) {
             console.warn("Dictionary entry with id \"".concat(id, "\" is null or undefined"));
             return;
@@ -56,39 +55,27 @@ function _ClientProvider(_a) {
             return (0, generaltranslation_1.renderContentToString)(translationRequired ? translations[id].t : entry, [locale, defaultLocale], variables, variablesOptions);
         }
         ;
-        var source = entry;
-        var isPlural = entry && typeof entry === 'object' && internal_1.primitives.pluralBranchNames.some(function (branchName) { var _a, _b; return branchName in (((_b = (_a = entry === null || entry === void 0 ? void 0 : entry.props) === null || _a === void 0 ? void 0 : _a['data-generaltranslation']) === null || _b === void 0 ? void 0 : _b.branches) || {}); });
-        if (isPlural) {
-            if (typeof (variables === null || variables === void 0 ? void 0 : variables.n) !== 'number')
-                throw new Error("t(\"".concat(id, "\"): Plural requires \"n\" option."));
-            source = (0, internal_1.getPluralBranch)(variables.n, [locale, defaultLocale], (_b = (_a = source === null || source === void 0 ? void 0 : source.props) === null || _a === void 0 ? void 0 : _a['data-generaltranslation']) === null || _b === void 0 ? void 0 : _b.branches) || source.props.children;
-        }
         if (!translationRequired) {
             return (0, client_1._renderDefaultChildren)({
-                entry: source,
+                entry: entry,
                 variables: variables,
                 variablesOptions: variablesOptions
             });
         }
         if (translations[id]) {
             var renderTranslation = (function (translationEntry) {
-                var _a, _b;
-                var target = translationEntry;
-                if (isPlural) {
-                    target = (0, internal_1.getPluralBranch)(variables.n, [locale, defaultLocale], (_a = target === null || target === void 0 ? void 0 : target.props['data-generaltranslation']) === null || _a === void 0 ? void 0 : _a.branches) || ((_b = target === null || target === void 0 ? void 0 : target.props) === null || _b === void 0 ? void 0 : _b.children);
-                }
                 return (0, client_1._renderTranslatedChildren)({
-                    source: source,
-                    target: target,
+                    source: entry, target: translationEntry,
                     variables: variables,
-                    variablesOptions: variablesOptions
+                    variablesOptions: variablesOptions,
+                    locales: [locale, defaultLocale]
                 });
             });
             var translation = translations[id];
             if (translation.promise) {
                 if (!translation.errorFallback) {
                     translation.errorFallback = (0, client_1._renderDefaultChildren)({
-                        entry: source,
+                        entry: entry,
                         variables: variables,
                         variablesOptions: variablesOptions
                     });

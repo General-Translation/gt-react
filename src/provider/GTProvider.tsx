@@ -46,10 +46,8 @@ export default async function GTProvider({
 
     const translationRequired = I18NConfig.translationRequired(locale)
 
-    let existingTranslations: Record<string, any>;
-    if (translationRequired) {
-        existingTranslations = await I18NConfig.getTranslations(locale);
-    }
+    let existingTranslations: Record<string, any> = 
+        translationRequired ? await I18NConfig.getTranslations(locale) : {}
 
     await Promise.all(Object.entries(rawDictionary).map(async ([id, dictionaryEntry]) => {
 
@@ -62,7 +60,7 @@ export default async function GTProvider({
             metadata = { ...metadata, isFunction: true };
         }
 
-        const taggedEntry = addGTIdentifier(entry, metadata, prefixedID);
+        const taggedEntry = addGTIdentifier(entry, prefixedID);
 
         dictionary[id] = [taggedEntry, metadata];
         
@@ -111,7 +109,7 @@ export default async function GTProvider({
     return (
         <_ClientProvider
             dictionary={dictionary}
-            translations={translations}
+            translations={{...existingTranslations, ...translations}}
             locale={locale}
             defaultLocale={defaultLocale}
             translationRequired={translationRequired}

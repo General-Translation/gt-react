@@ -41,7 +41,6 @@ type RenderSettings = {
  * 
  * @param {React.ReactNode} children - The content to be translated or displayed.
  * @param {string} [id] - Optional identifier for the translation string. If not provided, a hash will be generated from the content.
- * @param {number} [n] - Optional number to determine plural forms.
  * @param {Object} [variables] - Variables for interpolation in the translation string.
  * @param {Object} [variablesOptions] - Optional formatting options for numeric or date variables.
  * @param {Object} [renderSettings] - Optional settings controlling how fallback content is rendered during translation.
@@ -62,12 +61,11 @@ type RenderSettings = {
 export default async function T({
     children, id,
     variables, variablesOptions,
-    n, renderSettings,
+    renderSettings,
     ...props
 }: {
     children: any,
     id?: string
-    n?: number,
     variables?: Record<string, any>,
     variablesOptions?: {
        [key: string]: Intl.NumberFormatOptions | Intl.DateTimeFormatOptions
@@ -90,34 +88,12 @@ export default async function T({
         translationsPromise = I18NConfig.getTranslations(locale, props.dictionaryName);
     }
 
-    const taggedChildren = addGTIdentifier(children, props);
+    const taggedChildren = addGTIdentifier(children);
     const childrenAsObjects = writeChildrenAsObjects(taggedChildren);
-    
-    let source;
-    
-    // Get a plural if appropriate (check type, if type, get branch, entry =)
-    const isPlural = props && primitives.pluralBranchNames.some(branchName => branchName in props);
-    if (isPlural) {
-        if (typeof n === 'number') (variables ||= {} as any).n = n;
-        if (typeof variables?.n !== 'number') {
-            throw new Error(
-                id ? 
-                `ID "${id}": Plural requires "n" option.` :
-                `<T> with props ${JSON.stringify(props)}: Plural requires "n" option.` 
-            );
-        }
-        source = getPluralBranch(
-            (variables as any).n, 
-            [locale, defaultLocale], // not redundant, as locale could be a different dialect of the same language
-            taggedChildren.props['data-generaltranslation'].branches
-        ) || taggedChildren.props.children;
-    } else {
-        source = taggedChildren;
-    }
 
     if (!translationRequired) {
         return renderDefaultChildren({ 
-            children: source, variables, variablesOptions
+            children: taggedChildren, variables, variablesOptions
         });
     }
 
@@ -129,16 +105,9 @@ export default async function T({
     if (translation?.k === key) {
         // a translation exists!
         let target = translation.t;
-        if (isPlural) {
-            target = getPluralBranch(
-                variables?.n as number,
-                [locale, defaultLocale],
-                target.props['data-generaltranslation'].branches
-            ) || target.props.children;
-        }
         return renderTranslatedChildren({
-            source, target,
-            variables, variablesOptions
+            source: taggedChildren, target,
+            variables, variablesOptions, locales: [locale, defaultLocale]
         });
     }
 
@@ -151,17 +120,11 @@ export default async function T({
     });
     let promise = translationPromise.then(translation => {
         let target = translation;
-        if (isPlural) {
-            target = getPluralBranch(
-                variables?.n as number,
-                [locale, defaultLocale],
-                target.props['data-generaltranslation'].branches
-            ) || target.props.children;
-        }
         return renderTranslatedChildren({
-            source, target, 
+            source: taggedChildren, target, 
             variables,
-            variablesOptions
+            variablesOptions,
+            locales: [locale, defaultLocale]
         });
     });
 
@@ -170,21 +133,14 @@ export default async function T({
 
     if (renderSettings.fallbackToPrevious && translation) {
         // in case there's a previous translation on file
-        let target = translation.t;
-        if (isPlural) {
-            target = getPluralBranch(
-                variables?.n as number,
-                [locale, defaultLocale],
-                target?.props?.['data-generaltranslation']?.branches
-            ) || target?.props?.children;
-        }
         loadingFallback = renderTranslatedChildren({
-            source, target, variables, variablesOptions
+            source: taggedChildren, target: translation.t, variables, variablesOptions,
+            locales: [locale, defaultLocale]
         });
         errorFallback = loadingFallback;
     } else {
         errorFallback = renderDefaultChildren({
-            children: source, variables, variablesOptions
+            children: taggedChildren, variables, variablesOptions
         });
         if (renderSettings.method === "skeleton") {
             loadingFallback = <></>

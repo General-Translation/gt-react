@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.DateTime = exports.Currency = exports.Num = exports.Var = exports.getLocale = exports.getDefaultLocale = exports.getGT = exports.T = void 0;
+exports.Plural = exports.Branch = exports.DateTime = exports.Currency = exports.Num = exports.Var = exports.getLocale = exports.getDefaultLocale = exports.getGT = exports.T = void 0;
 exports.GTProvider = GTProvider;
 var gt_react_1 = require("gt-react");
 Object.defineProperty(exports, "getGT", { enumerable: true, get: function () { return gt_react_1.useGT; } });
@@ -11,6 +11,8 @@ Object.defineProperty(exports, "Num", { enumerable: true, get: function () { ret
 Object.defineProperty(exports, "Currency", { enumerable: true, get: function () { return gt_react_1.Currency; } });
 Object.defineProperty(exports, "DateTime", { enumerable: true, get: function () { return gt_react_1.DateTime; } });
 Object.defineProperty(exports, "T", { enumerable: true, get: function () { return gt_react_1.T; } });
+Object.defineProperty(exports, "Branch", { enumerable: true, get: function () { return gt_react_1.Branch; } });
+Object.defineProperty(exports, "Plural", { enumerable: true, get: function () { return gt_react_1.Plural; } });
 function GTProvider(params) {
     throw new Error("You're attempting to import <GTProvider> on the client. "
         + "Are you sure you want to do this? It's better to import <GTProvider> in a file not marked 'use client' so that it can fetch translations on the server. "

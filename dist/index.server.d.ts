@@ -6,6 +6,8 @@ import getLocale from './request/getLocale';
 import getGT from './server/getGT';
 import GTProvider from './provider/GTProvider';
 import T from './server/inline/T';
+import Branch from './branches/Branch';
+import Plural from './branches/Plural';
 /**
  * Gets the application's default locale.
  *
@@ -18,5 +20,5 @@ import T from './server/inline/T';
  * console.log(locale); // 'en-US'
 */
 export declare function getDefaultLocale(): string;
-export { getGT, GTProvider, T, getLocale, Var, Num, Currency, DateTime };
+export { getGT, GTProvider, T, getLocale, Var, Num, Currency, DateTime, Branch, Plural };
 //# sourceMappingURL=index.server.d.ts.map

@@ -61,45 +61,24 @@ export default function _ClientProvider({
             )
         };
 
-        let source = entry;
-
-        const isPlural = entry && typeof entry === 'object' && primitives.pluralBranchNames.some(branchName => branchName in (entry?.props?.['data-generaltranslation']?.branches || {}));
-        if (isPlural) {
-            if (typeof variables?.n !== 'number')
-                throw new Error(`t("${id}"): Plural requires "n" option.`)
-            source = getPluralBranch(
-                variables.n,
-                [locale, defaultLocale],
-                source?.props?.['data-generaltranslation']?.branches
-            ) || source.props.children;
-        }
-
         if (!translationRequired) {
             return _renderDefaultChildren({
-                entry: source, variables, variablesOptions
+                entry, variables, variablesOptions
             })
         }
 
         if (translations[id]) {
             const renderTranslation = ((translationEntry: any) => {
-                let target = translationEntry;
-                if (isPlural) {
-                    target = getPluralBranch(
-                        variables.n,
-                        [locale, defaultLocale],
-                        target?.props['data-generaltranslation']?.branches
-                    ) || target?.props?.children;
-                }
                 return _renderTranslatedChildren({
-                    source, target, variables,
-                    variablesOptions
+                    source: entry, target: translationEntry, variables,
+                    variablesOptions, locales: [locale, defaultLocale]
                 });
             });
             const translation = translations[id];
             if (translation.promise) {
                 if (!translation.errorFallback) {
                     translation.errorFallback = _renderDefaultChildren({
-                        entry: source, variables, variablesOptions
+                        entry, variables, variablesOptions
                     })
                 }
                 if (!translation.loadingFallback) {

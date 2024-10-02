@@ -99,7 +99,6 @@ var renderDefaultChildren_1 = __importDefault(require("../rendering/renderDefaul
  *
  * @param {React.ReactNode} children - The content to be translated or displayed.
  * @param {string} [id] - Optional identifier for the translation string. If not provided, a hash will be generated from the content.
- * @param {number} [n] - Optional number to determine plural forms.
  * @param {Object} [variables] - Variables for interpolation in the translation string.
  * @param {Object} [variablesOptions] - Optional formatting options for numeric or date variables.
  * @param {Object} [renderSettings] - Optional settings controlling how fallback content is rendered during translation.
@@ -119,11 +118,10 @@ var renderDefaultChildren_1 = __importDefault(require("../rendering/renderDefaul
  */
 function T(_a) {
     return __awaiter(this, void 0, void 0, function () {
-        var I18NConfig, locale, defaultLocale, translationRequired, translationsPromise, taggedChildren, childrenAsObjects, source, isPlural, key, _b, translations, translation, target, translationPromise, promise, loadingFallback, errorFallback, target;
-        var _c, _d, _e;
-        var children = _a.children, id = _a.id, variables = _a.variables, variablesOptions = _a.variablesOptions, n = _a.n, renderSettings = _a.renderSettings, props = __rest(_a, ["children", "id", "variables", "variablesOptions", "n", "renderSettings"]);
-        return __generator(this, function (_f) {
-            switch (_f.label) {
+        var I18NConfig, locale, defaultLocale, translationRequired, translationsPromise, taggedChildren, childrenAsObjects, key, _b, translations, translation, target, translationPromise, promise, loadingFallback, errorFallback;
+        var children = _a.children, id = _a.id, variables = _a.variables, variablesOptions = _a.variablesOptions, renderSettings = _a.renderSettings, props = __rest(_a, ["children", "id", "variables", "variablesOptions", "renderSettings"]);
+        return __generator(this, function (_c) {
+            switch (_c.label) {
                 case 0:
                     if (!children) {
                         return [2 /*return*/];
@@ -135,26 +133,11 @@ function T(_a) {
                     if (translationRequired) {
                         translationsPromise = I18NConfig.getTranslations(locale, props.dictionaryName);
                     }
-                    taggedChildren = (0, internal_1.addGTIdentifier)(children, props);
+                    taggedChildren = (0, internal_1.addGTIdentifier)(children);
                     childrenAsObjects = (0, internal_1.writeChildrenAsObjects)(taggedChildren);
-                    isPlural = props && internal_1.primitives.pluralBranchNames.some(function (branchName) { return branchName in props; });
-                    if (isPlural) {
-                        if (typeof n === 'number')
-                            (variables || (variables = {})).n = n;
-                        if (typeof (variables === null || variables === void 0 ? void 0 : variables.n) !== 'number') {
-                            throw new Error(id ?
-                                "ID \"".concat(id, "\": Plural requires \"n\" option.") :
-                                "<T> with props ".concat(JSON.stringify(props), ": Plural requires \"n\" option."));
-                        }
-                        source = (0, internal_1.getPluralBranch)(variables.n, [locale, defaultLocale], // not redundant, as locale could be a different dialect of the same language
-                        taggedChildren.props['data-generaltranslation'].branches) || taggedChildren.props.children;
-                    }
-                    else {
-                        source = taggedChildren;
-                    }
                     if (!translationRequired) {
                         return [2 /*return*/, (0, renderDefaultChildren_1.default)({
-                                children: source,
+                                children: taggedChildren,
                                 variables: variables,
                                 variablesOptions: variablesOptions
                             })];
@@ -162,28 +145,26 @@ function T(_a) {
                     if (!props.context) return [3 /*break*/, 2];
                     return [4 /*yield*/, (0, internal_1.calculateHash)([childrenAsObjects, props.context])];
                 case 1:
-                    _b = _f.sent();
+                    _b = _c.sent();
                     return [3 /*break*/, 4];
                 case 2: return [4 /*yield*/, (0, internal_1.calculateHash)(childrenAsObjects)];
                 case 3:
-                    _b = _f.sent();
-                    _f.label = 4;
+                    _b = _c.sent();
+                    _c.label = 4;
                 case 4:
                     key = _b;
                     return [4 /*yield*/, translationsPromise];
                 case 5:
-                    translations = _f.sent();
+                    translations = _c.sent();
                     translation = translations === null || translations === void 0 ? void 0 : translations[id || key];
                     if ((translation === null || translation === void 0 ? void 0 : translation.k) === key) {
                         target = translation.t;
-                        if (isPlural) {
-                            target = (0, internal_1.getPluralBranch)(variables === null || variables === void 0 ? void 0 : variables.n, [locale, defaultLocale], target.props['data-generaltranslation'].branches) || target.props.children;
-                        }
                         return [2 /*return*/, (0, renderTranslatedChildren_1.default)({
-                                source: source,
+                                source: taggedChildren,
                                 target: target,
                                 variables: variables,
-                                variablesOptions: variablesOptions
+                                variablesOptions: variablesOptions,
+                                locales: [locale, defaultLocale]
                             })];
                     }
                     renderSettings || (renderSettings = I18NConfig.getRenderSettings());
@@ -194,32 +175,27 @@ function T(_a) {
                     });
                     promise = translationPromise.then(function (translation) {
                         var target = translation;
-                        if (isPlural) {
-                            target = (0, internal_1.getPluralBranch)(variables === null || variables === void 0 ? void 0 : variables.n, [locale, defaultLocale], target.props['data-generaltranslation'].branches) || target.props.children;
-                        }
                         return (0, renderTranslatedChildren_1.default)({
-                            source: source,
+                            source: taggedChildren,
                             target: target,
                             variables: variables,
-                            variablesOptions: variablesOptions
+                            variablesOptions: variablesOptions,
+                            locales: [locale, defaultLocale]
                         });
                     });
                     if (renderSettings.fallbackToPrevious && translation) {
-                        target = translation.t;
-                        if (isPlural) {
-                            target = (0, internal_1.getPluralBranch)(variables === null || variables === void 0 ? void 0 : variables.n, [locale, defaultLocale], (_d = (_c = target === null || target === void 0 ? void 0 : target.props) === null || _c === void 0 ? void 0 : _c['data-generaltranslation']) === null || _d === void 0 ? void 0 : _d.branches) || ((_e = target === null || target === void 0 ? void 0 : target.props) === null || _e === void 0 ? void 0 : _e.children);
-                        }
+                        // in case there's a previous translation on file
                         loadingFallback = (0, renderTranslatedChildren_1.default)({
-                            source: source,
-                            target: target,
+                            source: taggedChildren, target: translation.t,
                             variables: variables,
-                            variablesOptions: variablesOptions
+                            variablesOptions: variablesOptions,
+                            locales: [locale, defaultLocale]
                         });
                         errorFallback = loadingFallback;
                     }
                     else {
                         errorFallback = (0, renderDefaultChildren_1.default)({
-                            children: source,
+                            children: taggedChildren,
                             variables: variables,
                             variablesOptions: variablesOptions
                         });
