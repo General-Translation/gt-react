@@ -27,15 +27,15 @@ var getGTProp_1 = __importDefault(require("../../utils/getGTProp"));
 function renderVariable(_a) {
     var variableType = _a.variableType, variableName = _a.variableName, variableValue = _a.variableValue, variableOptions = _a.variableOptions;
     if (variableType === "number") {
-        return ((0, jsx_runtime_1.jsx)(Num_1.default, { name: variableName, defaultValue: variableValue, options: variableOptions }));
+        return ((0, jsx_runtime_1.jsx)(Num_1.default, { name: variableName, value: variableValue, options: variableOptions }));
     }
     else if (variableType === "datetime") {
-        return ((0, jsx_runtime_1.jsx)(DateTime_1.default, { name: variableName, defaultValue: variableValue, options: variableOptions }));
+        return ((0, jsx_runtime_1.jsx)(DateTime_1.default, { name: variableName, value: variableValue, options: variableOptions }));
     }
     else if (variableType === "currency") {
-        return ((0, jsx_runtime_1.jsx)(Currency_1.default, { name: variableName, defaultValue: variableValue, options: variableOptions }));
+        return ((0, jsx_runtime_1.jsx)(Currency_1.default, { name: variableName, value: variableValue, options: variableOptions }));
     }
-    return ((0, jsx_runtime_1.jsx)(Var_1.default, { name: variableName, defaultValue: variableValue }));
+    return ((0, jsx_runtime_1.jsx)(Var_1.default, { name: variableName, value: variableValue }));
 }
 function renderTranslatedElement(_a) {
     var sourceElement = _a.sourceElement, targetElement = _a.targetElement, _b = _a.variables, variables = _b === void 0 ? {} : _b, _c = _a.variablesOptions, variablesOptions = _c === void 0 ? {} : _c, _d = _a.locales, locales = _d === void 0 ? [internal_1.primitives.libraryDefaultLocale] : _d;

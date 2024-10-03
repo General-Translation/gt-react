@@ -17,20 +17,20 @@ import getLocale from '../request/getLocale';
  *
  * @param {any} [children] - Optional content to render inside the currency component.
  * @param {string} [name] - Optional name for the currency field.
- * @param {any} [defaultValue] - The default value to be used.
+ * @param {any} [value] - The default value to be used.
  * @param {string} [currency] - The currency type (e.g., USD, EUR, etc.).
  * @param {Intl.NumberFormatOptions} [options] - Optional formatting options to customize how the currency is displayed.
  * @returns {JSX.Element} The formatted currency component.
  */
 function Currency({ 
-    children, name = "cost", defaultValue, currency = "USD", options = {}, ...props 
+    children, name = "cost", value, currency = "USD", options = {}, ...props 
 }: {
     children?: any;
     name?: string;
-    defaultValue?: any;
+    value?: any;
     currency?: string;
     options?: Intl.NumberFormatOptions;
-    [key: string]: any
+    'data-generaltranslation'?: any
 }): JSX.Element {
     
     const I18NConfig = getI18NConfig();
@@ -39,13 +39,13 @@ function Currency({
     const { "data-generaltranslation": generaltranslation } = props;
 
     // Determine the value to be formatted
-    let value = (typeof children !== 'undefined' && typeof defaultValue === 'undefined') ? children : defaultValue;
-    value = (typeof value === 'string') ? parseFloat(value) : value;
+    let renderedValue = (typeof children !== 'undefined' && typeof value === 'undefined') ? children : value;
+    renderedValue = (typeof renderedValue === 'string') ? parseFloat(renderedValue) : renderedValue;
 
     // Format the number as currency according to the locale
-    const formattedValue = (typeof value === 'number') 
-        ? formatCurrency({ value, currency, languages: locales, options })
-        : value;
+    const formattedValue = (typeof renderedValue === 'number') 
+        ? formatCurrency({ value: renderedValue, currency, languages: locales, options })
+        : renderedValue;
 
     return (
         <span 

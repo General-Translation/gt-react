@@ -1,6 +1,6 @@
 /**
- * The `<Var>` component renders a variable value, which can either be passed as `children` or a `defaultValue`.
- * If `children` is provided, it will be used; otherwise, the `defaultValue` is rendered.
+ * The `<Var>` component renders a variable value, which can either be passed as `children` or a `value`.
+ * If `children` is provided, it will be used; otherwise, the `value` is rendered.
  *
  * @example
  * ```jsx
@@ -11,31 +11,30 @@
  * </Var>
  * ```
  *
- * @param {any} [children] - The content to render inside the component. If provided, it will take precedence over `defaultValue`.
+ * @param {any} [children] - The content to render inside the component. If provided, it will take precedence over `value`.
  * @param {string} [name] - Optional name for the variable, used for metadata purposes.
- * @param {any} [defaultValue] - The default value to be displayed if `children` is not provided.
- * @returns {JSX.Element} The rendered variable component with either `children` or `defaultValue`.
+ * @param {any} [value] - The default value to be displayed if `children` is not provided.
+ * @returns {JSX.Element} The rendered variable component with either `children` or `value`.
  */
-function Var({ children, name = "value", defaultValue, ...props }: {
+function Var({ children, name = "value", value, ...props }: {
     children?: any;
     name?: string;
-    defaultValue?: any;
-
-    [key: string]: any
+    value?: any;
+    'data-generaltranslation'?: any
 }): JSX.Element {
     
     const { "data-generaltranslation": generaltranslation } = props;
     
-    if (typeof children !== 'undefined' && typeof defaultValue === 'undefined') defaultValue = children;
+    if (typeof children !== 'undefined' && typeof value === 'undefined') value = children;
 
     return (
         <span 
             data-generaltranslation={generaltranslation} 
             data-gt-variable-name={name} 
             data-gt-variable-type={"variable"}
-            data-gt-unformatted-value={defaultValue ?? undefined}
+            data-gt-unformatted-value={value ?? undefined}
         >
-            {defaultValue}
+            {value}
         </span>
     );
 

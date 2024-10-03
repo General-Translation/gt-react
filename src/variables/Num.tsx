@@ -18,18 +18,18 @@ import getLocale from '../request/getLocale';
  *
  * @param {any} [children] - Optional content (typically a number) to render inside the component.
  * @param {string} [name="n"] - Optional name for the number field, used for metadata purposes.
- * @param {string|number} [defaultValue] - The default value for the number. Can be a string or number. Strings will be parsed to numbers.
+ * @param {string|number} [value] - The default value for the number. Can be a string or number. Strings will be parsed to numbers.
  * @param {Intl.NumberFormatOptions} [options={}] - Optional formatting options for the number, following `Intl.NumberFormatOptions` specifications.
  * @returns {JSX.Element} The formatted number component.
  */
 function Num({ 
-    children, name = "n", defaultValue, options = {}, ...props 
+    children, name = "n", value, options = {}, ...props 
 }: {
     children?: any;
     name?: string;
-    defaultValue?: any;
+    value?: any;
     options?: Intl.NumberFormatOptions
-    [key: string]: any
+    'data-generaltranslation'?: any
 }): JSX.Element {
 
     const I18NConfig = getI18NConfig();
@@ -38,13 +38,13 @@ function Num({
     const { "data-generaltranslation": generaltranslation } = props;
 
     // Determine the value to be used
-    let value = (typeof children !== 'undefined' && typeof defaultValue === 'undefined') ? children : defaultValue;
-    value = (typeof value === 'string') ? parseFloat(value) : value;
+    let renderedValue = (typeof children !== 'undefined' && typeof value === 'undefined') ? children : value;
+    renderedValue = (typeof renderedValue === 'string') ? parseFloat(renderedValue) : renderedValue;
 
     // Format the number according to the locale
-    const formattedValue = (typeof value === 'number') ? 
-        formatNum({ value, languages: locales, options }) : 
-            defaultValue;
+    const formattedValue = (typeof renderedValue === 'number') ? 
+        formatNum({ value: renderedValue, languages: locales, options }) : 
+            renderedValue;
 
     return (
         <span 

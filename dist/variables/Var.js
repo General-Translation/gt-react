@@ -13,8 +13,8 @@ var __rest = (this && this.__rest) || function (s, e) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var jsx_runtime_1 = require("react/jsx-runtime");
 /**
- * The `<Var>` component renders a variable value, which can either be passed as `children` or a `defaultValue`.
- * If `children` is provided, it will be used; otherwise, the `defaultValue` is rendered.
+ * The `<Var>` component renders a variable value, which can either be passed as `children` or a `value`.
+ * If `children` is provided, it will be used; otherwise, the `value` is rendered.
  *
  * @example
  * ```jsx
@@ -25,17 +25,17 @@ var jsx_runtime_1 = require("react/jsx-runtime");
  * </Var>
  * ```
  *
- * @param {any} [children] - The content to render inside the component. If provided, it will take precedence over `defaultValue`.
+ * @param {any} [children] - The content to render inside the component. If provided, it will take precedence over `value`.
  * @param {string} [name] - Optional name for the variable, used for metadata purposes.
- * @param {any} [defaultValue] - The default value to be displayed if `children` is not provided.
- * @returns {JSX.Element} The rendered variable component with either `children` or `defaultValue`.
+ * @param {any} [value] - The default value to be displayed if `children` is not provided.
+ * @returns {JSX.Element} The rendered variable component with either `children` or `value`.
  */
 function Var(_a) {
-    var children = _a.children, _b = _a.name, name = _b === void 0 ? "value" : _b, defaultValue = _a.defaultValue, props = __rest(_a, ["children", "name", "defaultValue"]);
+    var children = _a.children, _b = _a.name, name = _b === void 0 ? "value" : _b, value = _a.value, props = __rest(_a, ["children", "name", "value"]);
     var generaltranslation = props["data-generaltranslation"];
-    if (typeof children !== 'undefined' && typeof defaultValue === 'undefined')
-        defaultValue = children;
-    return ((0, jsx_runtime_1.jsx)("span", { "data-generaltranslation": generaltranslation, "data-gt-variable-name": name, "data-gt-variable-type": "variable", "data-gt-unformatted-value": defaultValue !== null && defaultValue !== void 0 ? defaultValue : undefined, children: defaultValue }));
+    if (typeof children !== 'undefined' && typeof value === 'undefined')
+        value = children;
+    return ((0, jsx_runtime_1.jsx)("span", { "data-generaltranslation": generaltranslation, "data-gt-variable-name": name, "data-gt-variable-type": "variable", "data-gt-unformatted-value": value !== null && value !== void 0 ? value : undefined, children: value }));
 }
 ;
 Var.gtTransformation = "variable-variable"; // keep this because Var is imported in other functions

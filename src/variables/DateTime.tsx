@@ -17,16 +17,16 @@ import getLocale from '../request/getLocale';
  *
  * @param {any} [children] - Optional content (typically a date) to render inside the component.
  * @param {string} [name="date"] - Optional name for the date field, used for metadata purposes.
- * @param {string|number|Date} [defaultValue] - The default value for the date. Can be a string, number (timestamp), or `Date` object.
+ * @param {string|number|Date} [value] - The default value for the date. Can be a string, number (timestamp), or `Date` object.
  * @param {Intl.DateTimeFormatOptions} [options={}] - Optional formatting options for the date, following `Intl.DateTimeFormatOptions` specifications.
  * @returns {JSX.Element} The formatted date or time component.
  */
-function DateTime({ children, name = "date", defaultValue, options = {}, ...props }: {
+function DateTime({ children, name = "date", value, options = {}, ...props }: {
     children?: any;
     name?: string;
-    defaultValue?: any; // The default value which can be number, string, or Date
+    value?: any; // The default value which can be number, string, or Date
     options?: Intl.DateTimeFormatOptions; // Optional formatting options for the date
-    [key: string]: any
+    'data-generaltranslation'?: any
 }): JSX.Element {
 
     const I18NConfig = getI18NConfig();
@@ -36,10 +36,10 @@ function DateTime({ children, name = "date", defaultValue, options = {}, ...prop
     const { "data-generaltranslation": generaltranslation } = props;
 
     // Determine the default value to use
-    if (typeof children !== 'undefined' && typeof defaultValue === 'undefined') {
-        defaultValue = children;
+    if (typeof children !== 'undefined' && typeof value === 'undefined') {
+        value = children;
     }
-    if (!defaultValue) {
+    if (!value) {
         return (
             <span 
                 data-generaltranslation={generaltranslation} 
@@ -50,15 +50,15 @@ function DateTime({ children, name = "date", defaultValue, options = {}, ...prop
         )
     }
 
-    // Convert defaultValue to a Date object if it's a Unix time, string, or Date object
+    // Convert value to a Date object if it's a Unix time, string, or Date object
     let dateValue: Date | undefined;
     
-    if (typeof defaultValue === 'number') {
-        dateValue = new Date(defaultValue * 1000); // Assuming Unix time is in seconds
-    } else if (typeof defaultValue === 'string') {
-        dateValue = new Date(defaultValue);
-    } else if (defaultValue instanceof Date) {
-        dateValue = defaultValue;
+    if (typeof value === 'number') {
+        dateValue = new Date(value * 1000); // Assuming Unix time is in seconds
+    } else if (typeof value === 'string') {
+        dateValue = new Date(value);
+    } else if (value instanceof Date) {
+        dateValue = value;
     }
 
     // Format the date according to the locale and options

@@ -44,23 +44,23 @@ var getLocale_1 = __importDefault(require("../request/getLocale"));
  *
  * @param {any} [children] - Optional content to render inside the currency component.
  * @param {string} [name] - Optional name for the currency field.
- * @param {any} [defaultValue] - The default value to be used.
+ * @param {any} [value] - The default value to be used.
  * @param {string} [currency] - The currency type (e.g., USD, EUR, etc.).
  * @param {Intl.NumberFormatOptions} [options] - Optional formatting options to customize how the currency is displayed.
  * @returns {JSX.Element} The formatted currency component.
  */
 function Currency(_a) {
-    var children = _a.children, _b = _a.name, name = _b === void 0 ? "cost" : _b, defaultValue = _a.defaultValue, _c = _a.currency, currency = _c === void 0 ? "USD" : _c, _d = _a.options, options = _d === void 0 ? {} : _d, props = __rest(_a, ["children", "name", "defaultValue", "currency", "options"]);
+    var children = _a.children, _b = _a.name, name = _b === void 0 ? "cost" : _b, value = _a.value, _c = _a.currency, currency = _c === void 0 ? "USD" : _c, _d = _a.options, options = _d === void 0 ? {} : _d, props = __rest(_a, ["children", "name", "value", "currency", "options"]);
     var I18NConfig = (0, getI18NConfig_1.default)();
     var locales = [(0, getLocale_1.default)(), I18NConfig.getDefaultLocale()];
     var generaltranslation = props["data-generaltranslation"];
     // Determine the value to be formatted
-    var value = (typeof children !== 'undefined' && typeof defaultValue === 'undefined') ? children : defaultValue;
-    value = (typeof value === 'string') ? parseFloat(value) : value;
+    var renderedValue = (typeof children !== 'undefined' && typeof value === 'undefined') ? children : value;
+    renderedValue = (typeof renderedValue === 'string') ? parseFloat(renderedValue) : renderedValue;
     // Format the number as currency according to the locale
-    var formattedValue = (typeof value === 'number')
-        ? (0, generaltranslation_1.formatCurrency)({ value: value, currency: currency, languages: locales, options: options })
-        : value;
+    var formattedValue = (typeof renderedValue === 'number')
+        ? (0, generaltranslation_1.formatCurrency)({ value: renderedValue, currency: currency, languages: locales, options: options })
+        : renderedValue;
     return ((0, jsx_runtime_1.jsx)("span", { "data-generaltranslation": generaltranslation, "data-gt-variable-name": name, "data-gt-variable-type": "currency", "data-gt-variable-options": __assign({ style: 'currency', currency: currency }, options), "data-gt-unformatted-value": typeof value === 'number' && !isNaN(value) ? value : undefined, children: typeof formattedValue === 'string' ? formattedValue : undefined }));
 }
 ;

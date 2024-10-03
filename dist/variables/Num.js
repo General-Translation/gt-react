@@ -34,22 +34,22 @@ var getLocale_1 = __importDefault(require("../request/getLocale"));
  *
  * @param {any} [children] - Optional content (typically a number) to render inside the component.
  * @param {string} [name="n"] - Optional name for the number field, used for metadata purposes.
- * @param {string|number} [defaultValue] - The default value for the number. Can be a string or number. Strings will be parsed to numbers.
+ * @param {string|number} [value] - The default value for the number. Can be a string or number. Strings will be parsed to numbers.
  * @param {Intl.NumberFormatOptions} [options={}] - Optional formatting options for the number, following `Intl.NumberFormatOptions` specifications.
  * @returns {JSX.Element} The formatted number component.
  */
 function Num(_a) {
-    var children = _a.children, _b = _a.name, name = _b === void 0 ? "n" : _b, defaultValue = _a.defaultValue, _c = _a.options, options = _c === void 0 ? {} : _c, props = __rest(_a, ["children", "name", "defaultValue", "options"]);
+    var children = _a.children, _b = _a.name, name = _b === void 0 ? "n" : _b, value = _a.value, _c = _a.options, options = _c === void 0 ? {} : _c, props = __rest(_a, ["children", "name", "value", "options"]);
     var I18NConfig = (0, getI18NConfig_1.default)();
     var locales = [(0, getLocale_1.default)(), I18NConfig.getDefaultLocale()];
     var generaltranslation = props["data-generaltranslation"];
     // Determine the value to be used
-    var value = (typeof children !== 'undefined' && typeof defaultValue === 'undefined') ? children : defaultValue;
-    value = (typeof value === 'string') ? parseFloat(value) : value;
+    var renderedValue = (typeof children !== 'undefined' && typeof value === 'undefined') ? children : value;
+    renderedValue = (typeof renderedValue === 'string') ? parseFloat(renderedValue) : renderedValue;
     // Format the number according to the locale
-    var formattedValue = (typeof value === 'number') ?
-        (0, generaltranslation_1.formatNum)({ value: value, languages: locales, options: options }) :
-        defaultValue;
+    var formattedValue = (typeof renderedValue === 'number') ?
+        (0, generaltranslation_1.formatNum)({ value: renderedValue, languages: locales, options: options }) :
+        renderedValue;
     return ((0, jsx_runtime_1.jsx)("span", { "data-generaltranslation": generaltranslation, "data-gt-variable-name": name, "data-gt-variable-type": "number", "data-gt-variable-options": options, "data-gt-unformatted-value": typeof value === 'number' && !isNaN(value) ? value : undefined, children: formattedValue }));
 }
 ;
