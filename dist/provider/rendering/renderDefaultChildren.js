@@ -52,7 +52,7 @@ function renderDefaultChildren(_a) {
                 var n = typeof variables.n === 'number' ? variables.n :
                     typeof child.props.n === 'number' ? child.props.n :
                         child.props['data-gt-n'];
-                var branches = generaltranslation.branches;
+                var branches = generaltranslation.branches || {};
                 return react_1.default.createElement('span', __assign(__assign({}, child.props), { children: handleChildren((0, internal_1.getPluralBranch)(n, [defaultLocale], branches) || child.props.children) }));
             }
             if ((generaltranslation === null || generaltranslation === void 0 ? void 0 : generaltranslation.transformation) === "branch") {

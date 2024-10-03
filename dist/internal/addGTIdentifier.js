@@ -74,7 +74,7 @@ function addGTIdentifier(children, outerID, startingIndex) {
                 var pluralBranches = Object.entries(props).reduce(function (acc, _a) {
                     var branchName = _a[0], branch = _a[1];
                     if (acceptedPluralProps[branchName]) {
-                        acc[branchName] = addGTIdentifier(branch, undefined, indexObject.index);
+                        acc[branchName] = addGTIdentifier(branch, branchName, indexObject.index);
                     }
                     return acc;
                 }, {});
@@ -85,7 +85,7 @@ function addGTIdentifier(children, outerID, startingIndex) {
                 var children_1 = props.children, branch = props.branch, branches = __rest(props, ["children", "branch"]);
                 var resultBranches = Object.entries(branches).reduce(function (acc, _a) {
                     var branchName = _a[0], branch = _a[1];
-                    acc[branchName] = addGTIdentifier(branch, undefined, indexObject.index);
+                    acc[branchName] = addGTIdentifier(branch, branchName, indexObject.index);
                     return acc;
                 }, {});
                 if (Object.keys(resultBranches).length)

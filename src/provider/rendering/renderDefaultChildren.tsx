@@ -40,7 +40,7 @@ export default function renderDefaultChildren({
                 const n = typeof variables.n === 'number' ? variables.n :
                             typeof child.props.n === 'number' ?  child.props.n :
                                 child.props['data-gt-n'];
-                const branches = generaltranslation.branches;
+                const branches = generaltranslation.branches || {};
                 return React.createElement('span', {
                     ...child.props,
                     children: handleChildren(getPluralBranch(n, [defaultLocale], branches) || child.props.children)

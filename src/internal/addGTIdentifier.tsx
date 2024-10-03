@@ -36,7 +36,7 @@ export default function addGTIdentifier(children: Children, outerID?: string | u
             if (transformationParts[0] === "plural") {
                 const pluralBranches = Object.entries(props).reduce((acc, [branchName, branch]) => {
                     if (acceptedPluralProps[branchName]) {
-                        (acc as Record<string, any>)[branchName] = addGTIdentifier(branch as any, undefined, indexObject.index);
+                        (acc as Record<string, any>)[branchName] = addGTIdentifier(branch as any, branchName, indexObject.index);
                     }
                     return acc;
                 }, {});
@@ -45,7 +45,7 @@ export default function addGTIdentifier(children: Children, outerID?: string | u
             if (transformationParts[0] === "branch") {
                 const { children, branch, ...branches } = props;
                 const resultBranches = Object.entries(branches).reduce((acc, [branchName, branch]) => {
-                    (acc as Record<string, any>)[branchName] = addGTIdentifier(branch as any, undefined, indexObject.index);
+                    (acc as Record<string, any>)[branchName] = addGTIdentifier(branch as any, branchName, indexObject.index);
                     return acc;
                 }, {})
                 if (Object.keys(resultBranches).length) result.branches = resultBranches;
