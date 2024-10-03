@@ -46,8 +46,8 @@ function Currency(_a) {
     var renderedValue = (typeof children !== 'undefined' && typeof value === 'undefined') ? children : value;
     renderedValue = (typeof renderedValue === 'string') ? parseFloat(renderedValue) : renderedValue;
     // Format the value using Intl.NumberFormat
-    if (typeof value === 'number') {
-        renderedValue = (0, generaltranslation_1.formatCurrency)({ value: value, languages: locales, currency: currency, options: options });
+    if (typeof renderedValue === 'number') {
+        renderedValue = (0, generaltranslation_1.formatCurrency)({ value: renderedValue, languages: locales, currency: currency, options: options });
     }
     return ((0, jsx_runtime_1.jsx)("span", { "data-gt-variable-name": name, "data-gt-variable-type": "currency", "data-gt-variable-options": __assign({ style: 'currency', currency: currency }, options), children: renderedValue }));
 }

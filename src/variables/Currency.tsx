@@ -38,8 +38,8 @@ function Currency({ children, name = "cost", value, currency = "USD", options = 
     let renderedValue = (typeof children !== 'undefined' && typeof value === 'undefined') ? children : value;
     renderedValue = (typeof renderedValue === 'string') ? parseFloat(renderedValue) : renderedValue;
     // Format the value using Intl.NumberFormat
-    if (typeof value === 'number') {
-        renderedValue = formatCurrency({ value, languages: locales, currency, options });
+    if (typeof renderedValue === 'number') {
+        renderedValue = formatCurrency({ value: renderedValue, languages: locales, currency, options });
     }
 
     return (
