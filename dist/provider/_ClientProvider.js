@@ -57,9 +57,10 @@ function _ClientProvider(_a) {
         ;
         if (!translationRequired) {
             return (0, client_1._renderDefaultChildren)({
-                entry: entry,
+                children: entry,
                 variables: variables,
-                variablesOptions: variablesOptions
+                variablesOptions: variablesOptions,
+                defaultLocale: defaultLocale
             });
         }
         if (translations[id]) {
@@ -75,9 +76,10 @@ function _ClientProvider(_a) {
             if (translation.promise) {
                 if (!translation.errorFallback) {
                     translation.errorFallback = (0, client_1._renderDefaultChildren)({
-                        entry: entry,
+                        children: entry,
                         variables: variables,
-                        variablesOptions: variablesOptions
+                        variablesOptions: variablesOptions,
+                        defaultLocale: defaultLocale
                     });
                 }
                 if (!translation.loadingFallback) {

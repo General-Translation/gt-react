@@ -26,15 +26,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = renderDefaultChildren;
-var jsx_runtime_1 = require("react/jsx-runtime");
 var react_1 = __importDefault(require("react"));
 var getGTProp_1 = __importDefault(require("../../utils/getGTProp"));
 var renderTranslatedChildren_1 = require("./renderTranslatedChildren");
 var internal_1 = require("gt-react/internal");
-var Plural_1 = __importDefault(require("../../branches/Plural"));
-var Branch_1 = __importDefault(require("../../branches/Branch"));
+var internal_2 = require("gt-react/internal");
 function renderDefaultChildren(_a) {
-    var children = _a.children, _b = _a.variables, variables = _b === void 0 ? {} : _b, _c = _a.variablesOptions, variablesOptions = _c === void 0 ? {} : _c;
+    var children = _a.children, _b = _a.variables, variables = _b === void 0 ? {} : _b, _c = _a.variablesOptions, variablesOptions = _c === void 0 ? {} : _c, _d = _a.defaultLocale, defaultLocale = _d === void 0 ? internal_2.primitives.libraryDefaultLocale : _d;
     var handleSingleChild = function (child) {
         if (react_1.default.isValidElement(child)) {
             var generaltranslation = (0, getGTProp_1.default)(child);
@@ -53,15 +51,15 @@ function renderDefaultChildren(_a) {
                 var n = typeof variables.n === 'number' ? variables.n :
                     typeof child.props.n === 'number' ? child.props.n :
                         child.props['data-gt-n'];
-                var branches = generaltranslation.branches;
-                return ((0, jsx_runtime_1.jsx)(Plural_1.default, __assign({ n: n }, branches, { children: child.props.children })));
+                var branches = generaltranslation.branches || {};
+                return react_1.default.createElement('span', __assign(__assign({}, child.props), { children: handleChildren((0, internal_1.getPluralBranch)(n, [defaultLocale], branches) || child.props.children) }));
             }
             if ((generaltranslation === null || generaltranslation === void 0 ? void 0 : generaltranslation.transformation) === "branch") {
                 var _b = child.props, children_1 = _b.children, name_1 = _b.name, branch = _b.branch, branches = __rest(_b, ["children", "name", "branch"]);
                 name_1 = name_1 || child.props['data-gt-name'] || "branch";
                 branch = variables[name_1] || branch || child.props['data-gt-branch-name'];
-                branches = generaltranslation.branches;
-                return ((0, jsx_runtime_1.jsx)(Branch_1.default, __assign({ name: name_1, branch: branch }, branches, { children: child.props.children })));
+                branches = generaltranslation.branches || {};
+                return react_1.default.createElement('span', __assign(__assign({}, child.props), { children: handleChildren(branches[branch]) }));
             }
             if (child.props.children) {
                 return react_1.default.cloneElement(child, __assign(__assign({}, child.props), { children: handleChildren(child.props.children) }));

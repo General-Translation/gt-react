@@ -1,4 +1,4 @@
-import { primitives, getPluralBranch, addGTIdentifier, writeChildrenAsObjects, calculateHash } from "gt-react/internal";
+import { addGTIdentifier, writeChildrenAsObjects, calculateHash } from "gt-react/internal";
 import getI18NConfig from "../../utils/getI18NConfig";
 import getLocale from "../../request/getLocale";
 import getMetadata from "../../request/getMetadata";
@@ -93,7 +93,7 @@ export default async function T({
 
     if (!translationRequired) {
         return renderDefaultChildren({ 
-            children: taggedChildren, variables, variablesOptions
+            children: taggedChildren, variables, variablesOptions, defaultLocale
         });
     }
 
@@ -140,7 +140,7 @@ export default async function T({
         errorFallback = loadingFallback;
     } else {
         errorFallback = renderDefaultChildren({
-            children: taggedChildren, variables, variablesOptions
+            children: taggedChildren, variables, variablesOptions, defaultLocale
         });
         if (renderSettings.method === "skeleton") {
             loadingFallback = <></>

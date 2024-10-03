@@ -139,7 +139,8 @@ function T(_a) {
                         return [2 /*return*/, (0, renderDefaultChildren_1.default)({
                                 children: taggedChildren,
                                 variables: variables,
-                                variablesOptions: variablesOptions
+                                variablesOptions: variablesOptions,
+                                defaultLocale: defaultLocale
                             })];
                     }
                     if (!props.context) return [3 /*break*/, 2];
@@ -197,7 +198,8 @@ function T(_a) {
                         errorFallback = (0, renderDefaultChildren_1.default)({
                             children: taggedChildren,
                             variables: variables,
-                            variablesOptions: variablesOptions
+                            variablesOptions: variablesOptions,
+                            defaultLocale: defaultLocale
                         });
                         if (renderSettings.method === "skeleton") {
                             loadingFallback = (0, jsx_runtime_1.jsx)(jsx_runtime_1.Fragment, {});

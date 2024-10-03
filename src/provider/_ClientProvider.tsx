@@ -63,7 +63,7 @@ export default function _ClientProvider({
 
         if (!translationRequired) {
             return _renderDefaultChildren({
-                entry, variables, variablesOptions
+                children: entry, variables, variablesOptions, defaultLocale
             })
         }
 
@@ -78,7 +78,7 @@ export default function _ClientProvider({
             if (translation.promise) {
                 if (!translation.errorFallback) {
                     translation.errorFallback = _renderDefaultChildren({
-                        entry, variables, variablesOptions
+                        children: entry, variables, variablesOptions, defaultLocale
                     })
                 }
                 if (!translation.loadingFallback) {

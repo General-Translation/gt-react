@@ -29,12 +29,13 @@ function Plural({
 }: {
     children?: any;
     n?: number;
-    [key: string]: any;
+    'data-generaltranslation'?: any
+    [key: string]: any
 }) {
     const { 'data-generaltranslation': generaltranslation, ...branches } = props;
     const locale = getLocale();
     const defaultLocale = getI18NConfig().getDefaultLocale();
-    const branch = typeof n === 'number' ? getPluralBranch(n, [locale, defaultLocale], branches) : children || children;
+    const branch = (typeof n === 'number' ? getPluralBranch(n, [locale, defaultLocale], branches) : children) || children;
     return (
         <span data-generaltranslation={generaltranslation} data-gt-n={n} data-gt-branches={branches}>
             {branch}

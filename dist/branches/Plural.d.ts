@@ -23,6 +23,7 @@
 declare function Plural({ children, n, ...props }: {
     children?: any;
     n?: number;
+    'data-generaltranslation'?: any;
     [key: string]: any;
 }): import("react/jsx-runtime").JSX.Element;
 declare namespace Plural {

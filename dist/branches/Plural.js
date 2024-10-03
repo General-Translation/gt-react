@@ -45,7 +45,7 @@ function Plural(_a) {
     var generaltranslation = props["data-generaltranslation"], branches = __rest(props, ['data-generaltranslation']);
     var locale = (0, getLocale_1.default)();
     var defaultLocale = (0, getI18NConfig_1.default)().getDefaultLocale();
-    var branch = typeof n === 'number' ? (0, internal_1.getPluralBranch)(n, [locale, defaultLocale], branches) : children || children;
+    var branch = (typeof n === 'number' ? (0, internal_1.getPluralBranch)(n, [locale, defaultLocale], branches) : children) || children;
     return ((0, jsx_runtime_1.jsx)("span", { "data-generaltranslation": generaltranslation, "data-gt-n": n, "data-gt-branches": branches, children: branch }));
 }
 Plural.gtTransformation = "plural";
