@@ -20,14 +20,14 @@ import useDefaultLocale from '../hooks/useDefaultLocale';
  *
  * @param {any} [children] - Optional content (typically a date) to render inside the component.
  * @param {string} [name="date"] - Optional name for the date field, used for metadata purposes.
- * @param {string|number|Date} [defaultValue] - The default value for the date. Can be a string, number (timestamp), or `Date` object.
+ * @param {string|number|Date} [value] - The default value for the date. Can be a string, number (timestamp), or `Date` object.
  * @param {Intl.DateTimeFormatOptions} [options={}] - Optional formatting options for the date, following `Intl.DateTimeFormatOptions` specifications.
  * @returns {JSX.Element} The formatted date or time component.
  */
-function DateTime({ children, name = "date", defaultValue, options = {} }: {
+function DateTime({ children, name = "date", value, options = {} }: {
     children?: any;
     name?: string;
-    defaultValue?: any; // The default value which can be string, number or Date
+    value?: any; // The default value which can be string, number or Date
     options?: Intl.DateTimeFormatOptions; // Optional formatting options for the date
 } = { name: "date" }): JSX.Element {
 
@@ -36,7 +36,7 @@ function DateTime({ children, name = "date", defaultValue, options = {} }: {
     let final;
 
     let dateValue: Date | undefined;
-    defaultValue = (typeof children !== 'undefined' && typeof defaultValue === 'undefined') ? children : defaultValue;
+    let defaultValue = (typeof children !== 'undefined' && typeof value === 'undefined') ? children : value;
     if (typeof defaultValue === 'number') {
         dateValue = new Date(defaultValue);
     } else if (typeof defaultValue === 'string') {

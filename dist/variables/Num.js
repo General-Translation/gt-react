@@ -25,18 +25,18 @@ var useDefaultLocale_1 = __importDefault(require("../hooks/useDefaultLocale"));
  *
  * @param {any} [children] - Optional content (typically a number) to render inside the component.
  * @param {string} [name="n"] - Optional name for the number field, used for metadata purposes.
- * @param {string|number} [defaultValue] - The default value for the number. Can be a string or number. Strings will be parsed to numbers.
+ * @param {string|number} [value] - The default value for the number. Can be a string or number. Strings will be parsed to numbers.
  * @param {Intl.NumberFormatOptions} [options={}] - Optional formatting options for the number, following `Intl.NumberFormatOptions` specifications.
  * @returns {JSX.Element} The formatted number component.
  */
 function Num(_a) {
-    var _b = _a === void 0 ? { name: "n" } : _a, children = _b.children, _c = _b.name, name = _c === void 0 ? "n" : _c, defaultValue = _b.defaultValue, _d = _b.options, options = _d === void 0 ? {} : _d;
+    var _b = _a === void 0 ? { name: "n" } : _a, children = _b.children, _c = _b.name, name = _c === void 0 ? "n" : _c, value = _b.value, _d = _b.options, options = _d === void 0 ? {} : _d;
     var locales = [(0, useLocale_1.default)(), (0, useDefaultLocale_1.default)()];
-    var value = (typeof children !== 'undefined' && typeof defaultValue === 'undefined') ? children : defaultValue;
-    value = (typeof value === 'string') ? parseFloat(value) : value;
-    if (typeof value === 'number') {
+    var renderedValue = (typeof children !== 'undefined' && typeof value === 'undefined') ? children : value;
+    renderedValue = (typeof renderedValue === 'string') ? parseFloat(renderedValue) : renderedValue;
+    if (typeof renderedValue === 'number') {
         // Using Intl.NumberFormat for consistent number formatting
-        value = (0, generaltranslation_1.formatNum)({ value: value, languages: locales, options: options });
+        renderedValue = (0, generaltranslation_1.formatNum)({ value: renderedValue, languages: locales, options: options });
     }
     return ((0, jsx_runtime_1.jsx)("span", { "data-gt-variable-name": name, "data-gt-variable-type": "number", "data-gt-variable-options": JSON.stringify(options), children: value }));
 }

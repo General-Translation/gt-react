@@ -21,24 +21,24 @@ import useDefaultLocale from '../hooks/useDefaultLocale';
  *
  * @param {any} [children] - Optional content (typically a number) to render inside the component.
  * @param {string} [name="n"] - Optional name for the number field, used for metadata purposes.
- * @param {string|number} [defaultValue] - The default value for the number. Can be a string or number. Strings will be parsed to numbers.
+ * @param {string|number} [value] - The default value for the number. Can be a string or number. Strings will be parsed to numbers.
  * @param {Intl.NumberFormatOptions} [options={}] - Optional formatting options for the number, following `Intl.NumberFormatOptions` specifications.
  * @returns {JSX.Element} The formatted number component.
  */
-function Num({ children, name = "n", defaultValue, options = {} }: {
+function Num({ children, name = "n", value, options = {} }: {
     children?: any;
     name?: string;
-    defaultValue?: any; // Optional default value for the number
+    value?: any; // Optional default value for the number
     options?: Intl.NumberFormatOptions // Optional options for the number formatting
 } = { name: "n" }): JSX.Element {
     
     const locales = [useLocale(), useDefaultLocale()]
     
-    let value = (typeof children !== 'undefined' && typeof defaultValue === 'undefined') ? children : defaultValue;
-    value = (typeof value === 'string') ? parseFloat(value) : value;
-    if (typeof value === 'number') {
+    let renderedValue = (typeof children !== 'undefined' && typeof value === 'undefined') ? children : value;
+    renderedValue = (typeof renderedValue === 'string') ? parseFloat(renderedValue) : renderedValue;
+    if (typeof renderedValue === 'number') {
         // Using Intl.NumberFormat for consistent number formatting
-        value = formatNum({ value, languages: locales, options });
+        renderedValue = formatNum({ value: renderedValue, languages: locales, options });
     }
 
     return (

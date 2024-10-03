@@ -14,14 +14,14 @@
  *
  * @param {any} [children] - Optional content (typically a date) to render inside the component.
  * @param {string} [name="date"] - Optional name for the date field, used for metadata purposes.
- * @param {string|number|Date} [defaultValue] - The default value for the date. Can be a string, number (timestamp), or `Date` object.
+ * @param {string|number|Date} [value] - The default value for the date. Can be a string, number (timestamp), or `Date` object.
  * @param {Intl.DateTimeFormatOptions} [options={}] - Optional formatting options for the date, following `Intl.DateTimeFormatOptions` specifications.
  * @returns {JSX.Element} The formatted date or time component.
  */
-declare function DateTime({ children, name, defaultValue, options }?: {
+declare function DateTime({ children, name, value, options }?: {
     children?: any;
     name?: string;
-    defaultValue?: any;
+    value?: any;
     options?: Intl.DateTimeFormatOptions;
 }): JSX.Element;
 declare namespace DateTime {

@@ -12,8 +12,8 @@ function getVariableProps(props) {
         variableType: variableType,
         variableName: props.name || props['data-gt-variable-name'] || _defaultVariableNames_1.default[variableType],
         variableValue: (function () {
-            if (typeof props.defaultValue !== 'undefined')
-                return props.defaultValue;
+            if (typeof props.value !== 'undefined')
+                return props.value;
             if (typeof props['data-gt-unformatted-value'] !== 'undefined')
                 return props['data-gt-unformatted-value'];
             if (typeof props.children !== 'undefined')

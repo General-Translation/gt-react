@@ -23,7 +23,7 @@ export function renderVariable({
         return (
             <Num 
                 name={variableName} 
-                defaultValue={variableValue}
+                value={variableValue}
                 options={variableOptions}
             />
         )
@@ -31,7 +31,7 @@ export function renderVariable({
         return (
             <DateTime
                 name={variableName} 
-                defaultValue={variableValue}
+                value={variableValue}
                 options={variableOptions}
             />
         )
@@ -39,13 +39,13 @@ export function renderVariable({
         return (
             <Currency
                 name={variableName} 
-                defaultValue={variableValue}
+                value={variableValue}
                 options={variableOptions}
             />
         )
     }
     return (
-        <Var name={variableName} defaultValue={variableValue} />
+        <Var name={variableName} value={variableValue} />
     );
 }
 
