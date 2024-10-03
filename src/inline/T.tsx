@@ -82,8 +82,8 @@ export default function T({
 
     if (!translationRequired) {
         return renderDefaultChildren({
-            entry: taggedChildren,
-            variables, variablesOptions
+            children: taggedChildren,
+            variables, variablesOptions, defaultLocale
         }) as JSX.Element;
     }
 

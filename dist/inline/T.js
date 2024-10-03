@@ -79,9 +79,10 @@ function T(_a) {
     })();
     if (!translationRequired) {
         return (0, renderDefaultChildren_1.default)({
-            entry: taggedChildren,
+            children: taggedChildren,
             variables: variables,
-            variablesOptions: variablesOptions
+            variablesOptions: variablesOptions,
+            defaultLocale: defaultLocale
         });
     }
     // Do translation

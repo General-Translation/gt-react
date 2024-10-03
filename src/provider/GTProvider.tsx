@@ -119,7 +119,7 @@ export default function GTProvider({
                 )
             }
             return renderDefaultChildren({
-                entry: taggedEntry, variables, variablesOptions
+                children: taggedEntry, variables, variablesOptions, defaultLocale
             })
         }
 
@@ -139,7 +139,7 @@ export default function GTProvider({
                 locales: [locale, defaultLocale]
             });
         }
-    }, [dictionary, translations, translationRequired]);
+    }, [dictionary, translations, translationRequired, defaultLocale]);
 
     return (
         <GTContext.Provider value={{

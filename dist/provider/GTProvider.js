@@ -135,9 +135,10 @@ function GTProvider(_a) {
                 return (0, generaltranslation_1.renderContentToString)(taggedEntry, defaultLocale, variables, variablesOptions);
             }
             return (0, renderDefaultChildren_1.default)({
-                entry: taggedEntry,
+                children: taggedEntry,
                 variables: variables,
-                variablesOptions: variablesOptions
+                variablesOptions: variablesOptions,
+                defaultLocale: defaultLocale
             });
         }
         // If a translation is required
@@ -154,7 +155,7 @@ function GTProvider(_a) {
                 locales: [locale, defaultLocale]
             });
         }
-    }, [dictionary, translations, translationRequired]);
+    }, [dictionary, translations, translationRequired, defaultLocale]);
     return ((0, jsx_runtime_1.jsx)(GTContext_1.GTContext.Provider, { value: {
             translate: translate,
             locale: locale,
