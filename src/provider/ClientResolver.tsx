@@ -13,14 +13,15 @@ export default function ClientResolver({
     const [hasError, setHasError] = useState(false);
 
     useEffect(() => {
-        promise
-        .then((data: any) => {
-            setTranslationData(data);
-        })
-        .catch((error: any) => {
-            console.error(error);
-            setHasError(true);
-        });
+        (async () => {
+            try {
+                const resolvedPromise = await promise;
+                setTranslationData(resolvedPromise);
+            } catch (error) {
+                console.error(error);
+                setHasError(true);
+            }
+        })();
     }, [promise]);
 
     if (hasError) {
