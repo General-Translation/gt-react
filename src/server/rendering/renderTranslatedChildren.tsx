@@ -97,7 +97,7 @@ function renderTranslatedElement({
         });
     }
 
-    if (props.children && targetElement.props.children) {
+    if (props?.children && targetElement.props?.children) {
         return React.cloneElement(sourceElement, {
             ...props,
             children: renderTranslatedChildren({ 
@@ -185,7 +185,7 @@ export default function renderTranslatedChildren({
 
     }
 
-    if (typeof target === 'object' && !Array.isArray(target)) {
+    if (target && typeof target === 'object' && !Array.isArray(target)) {
         
         const targetType: "variable" | "element" = isVariableObject(target) ? "variable" : "element";
     

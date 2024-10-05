@@ -38,7 +38,8 @@ function renderVariable(_a) {
     return ((0, jsx_runtime_1.jsx)(Var_1.default, { name: variableName, value: variableValue }));
 }
 function renderTranslatedElement(_a) {
-    var sourceElement = _a.sourceElement, targetElement = _a.targetElement, _b = _a.variables, variables = _b === void 0 ? {} : _b, _c = _a.variablesOptions, variablesOptions = _c === void 0 ? {} : _c, _d = _a.locales, locales = _d === void 0 ? [internal_1.primitives.libraryDefaultLocale] : _d;
+    var _b;
+    var sourceElement = _a.sourceElement, targetElement = _a.targetElement, _c = _a.variables, variables = _c === void 0 ? {} : _c, _d = _a.variablesOptions, variablesOptions = _d === void 0 ? {} : _d, _e = _a.locales, locales = _e === void 0 ? [internal_1.primitives.libraryDefaultLocale] : _e;
     var props = sourceElement.props;
     var generaltranslation = props["data-generaltranslation"];
     var transformation = generaltranslation === null || generaltranslation === void 0 ? void 0 : generaltranslation["transformation"];
@@ -72,7 +73,7 @@ function renderTranslatedElement(_a) {
                 locales: locales
             }) }));
     }
-    if (props.children && targetElement.props.children) {
+    if ((props === null || props === void 0 ? void 0 : props.children) && ((_b = targetElement.props) === null || _b === void 0 ? void 0 : _b.children)) {
         return react_1.default.cloneElement(sourceElement, __assign(__assign({}, props), { children: renderTranslatedChildren({
                 source: props.children,
                 target: targetElement.props.children,
@@ -140,7 +141,7 @@ function renderTranslatedChildren(_a) {
                     }) }, "element_".concat(index));
         });
     }
-    if (typeof target === 'object' && !Array.isArray(target)) {
+    if (target && typeof target === 'object' && !Array.isArray(target)) {
         var targetType = (0, internal_1.isVariableObject)(target) ? "variable" : "element";
         if (react_1.default.isValidElement(source)) {
             if (targetType === "element") {
