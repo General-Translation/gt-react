@@ -52,7 +52,7 @@ function Num({
             data-gt-variable-name={name} 
             data-gt-variable-type={"number"} 
             data-gt-variable-options={options}
-            data-gt-unformatted-value={typeof value === 'number' && !isNaN(value) ? value : undefined}
+            data-gt-unformatted-value={typeof renderedValue === 'number' && !isNaN(renderedValue) ? renderedValue : undefined}
         >
             {formattedValue}
         </span>
