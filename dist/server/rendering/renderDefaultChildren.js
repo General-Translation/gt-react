@@ -27,7 +27,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = renderDefaultChildren;
 var react_1 = __importDefault(require("react"));
-var getGTProp_1 = __importDefault(require("../../utils/getGTProp"));
 var renderTranslatedChildren_1 = require("./renderTranslatedChildren");
 var internal_1 = require("gt-react/internal");
 var internal_2 = require("gt-react/internal");
@@ -35,9 +34,10 @@ function renderDefaultChildren(_a) {
     var children = _a.children, _b = _a.variables, variables = _b === void 0 ? {} : _b, _c = _a.variablesOptions, variablesOptions = _c === void 0 ? {} : _c, _d = _a.defaultLocale, defaultLocale = _d === void 0 ? internal_2.primitives.libraryDefaultLocale : _d;
     var handleSingleChild = function (child) {
         if (react_1.default.isValidElement(child)) {
-            var generaltranslation = (0, getGTProp_1.default)(child);
+            var _a = child.props, generaltranslation = _a["data-generaltranslation"], props = __rest(_a, ['data-generaltranslation']);
+            console.log(props);
             if ((generaltranslation === null || generaltranslation === void 0 ? void 0 : generaltranslation.transformation) === "variable") {
-                var _a = (0, internal_1.getVariableProps)(child.props), variableName = _a.variableName, variableType = _a.variableType, variableValue = _a.variableValue, variableOptions = _a.variableOptions;
+                var _b = (0, internal_1.getVariableProps)(props), variableName = _b.variableName, variableType = _b.variableType, variableValue = _b.variableValue, variableOptions = _b.variableOptions;
                 variableValue = (typeof variables[variableName] !== 'undefined') ?
                     variables[variableName] : variableValue;
                 return (0, renderTranslatedChildren_1.renderVariable)({
@@ -49,20 +49,20 @@ function renderDefaultChildren(_a) {
             }
             if ((generaltranslation === null || generaltranslation === void 0 ? void 0 : generaltranslation.transformation) === "plural") {
                 var n = typeof variables.n === 'number' ? variables.n :
-                    typeof child.props.n === 'number' ? child.props.n :
-                        child.props['data-gt-n'];
+                    typeof props.n === 'number' ? props.n :
+                        props['data-gt-n'];
                 var branches = generaltranslation.branches || {};
-                return react_1.default.createElement('span', __assign(__assign({}, child.props), { children: handleChildren((0, internal_1.getPluralBranch)(n, [defaultLocale], branches) || child.props.children) }));
+                return react_1.default.createElement('span', __assign(__assign({}, props), { 'data-generaltranslation': undefined, children: handleChildren((0, internal_1.getPluralBranch)(n, [defaultLocale], branches) || child.props.children) }));
             }
             if ((generaltranslation === null || generaltranslation === void 0 ? void 0 : generaltranslation.transformation) === "branch") {
-                var _b = child.props, children_1 = _b.children, name_1 = _b.name, branch = _b.branch, branches = __rest(_b, ["children", "name", "branch"]);
-                name_1 = name_1 || child.props['data-gt-name'] || "branch";
+                var children_1 = props.children, name_1 = props.name, branch = props.branch, branches = __rest(props, ["children", "name", "branch"]);
+                name_1 = name_1 || props['data-gt-name'] || "branch";
                 branch = variables[name_1] || branch || child.props['data-gt-branch-name'];
                 branches = generaltranslation.branches || {};
-                return react_1.default.createElement('span', __assign(__assign({}, child.props), { children: handleChildren(branches[branch]) }));
+                return react_1.default.createElement('span', __assign(__assign({}, props), { 'data-generaltranslation': undefined, children: handleChildren(branches[branch]) }));
             }
             if (child.props.children) {
-                return react_1.default.cloneElement(child, __assign(__assign({}, child.props), { children: handleChildren(child.props.children) }));
+                return react_1.default.cloneElement(child, __assign(__assign({}, props), { 'data-generaltranslation': undefined, children: handleChildren(child.props.children) }));
             }
         }
         return child;

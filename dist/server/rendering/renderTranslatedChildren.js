@@ -10,6 +10,17 @@ var __assign = (this && this.__assign) || function () {
     };
     return __assign.apply(this, arguments);
 };
+var __rest = (this && this.__rest) || function (s, e) {
+    var t = {};
+    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
+        t[p] = s[p];
+    if (s != null && typeof Object.getOwnPropertySymbols === "function")
+        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
+            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))
+                t[p[i]] = s[p[i]];
+        }
+    return t;
+};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -40,8 +51,7 @@ function renderVariable(_a) {
 function renderTranslatedElement(_a) {
     var _b;
     var sourceElement = _a.sourceElement, targetElement = _a.targetElement, _c = _a.variables, variables = _c === void 0 ? {} : _c, _d = _a.variablesOptions, variablesOptions = _d === void 0 ? {} : _d, _e = _a.locales, locales = _e === void 0 ? [internal_1.primitives.libraryDefaultLocale] : _e;
-    var props = sourceElement.props;
-    var generaltranslation = props["data-generaltranslation"];
+    var _f = sourceElement.props, generaltranslation = _f["data-generaltranslation"], props = __rest(_f, ['data-generaltranslation']);
     var transformation = generaltranslation === null || generaltranslation === void 0 ? void 0 : generaltranslation["transformation"];
     if (transformation === "plural") {
         var n = typeof variables.n === 'number' ? variables.n :
@@ -51,7 +61,7 @@ function renderTranslatedElement(_a) {
         var sourceBranch = (0, internal_1.getPluralBranch)(n, locales, sourceBranches) || sourceElement.props.children;
         var targetBranches = targetElement.props["data-generaltranslation"].branches || {};
         var targetBranch = (0, internal_1.getPluralBranch)(n, locales, targetBranches) || targetElement.props.children;
-        return react_1.default.createElement('span', __assign(__assign({}, props), { children: renderTranslatedChildren({
+        return react_1.default.createElement('span', __assign(__assign({}, props), { 'data-generaltranslation': undefined, children: renderTranslatedChildren({
                 source: sourceBranch,
                 target: targetBranch,
                 variables: variables,
@@ -65,7 +75,7 @@ function renderTranslatedElement(_a) {
         branch = variables[name_1] || branch || sourceElement.props['data-gt-branch-name'];
         var sourceBranch = (generaltranslation.branches || {})[branch] || children;
         var targetBranch = (targetElement.props["data-generaltranslation"].branches || {})[branch] || targetElement.props.children;
-        return react_1.default.createElement('span', __assign(__assign({}, props), { children: renderTranslatedChildren({
+        return react_1.default.createElement('span', __assign(__assign({}, props), { 'data-generaltranslation': undefined, children: renderTranslatedChildren({
                 source: sourceBranch,
                 target: targetBranch,
                 variables: variables,
@@ -74,7 +84,7 @@ function renderTranslatedElement(_a) {
             }) }));
     }
     if ((props === null || props === void 0 ? void 0 : props.children) && ((_b = targetElement.props) === null || _b === void 0 ? void 0 : _b.children)) {
-        return react_1.default.cloneElement(sourceElement, __assign(__assign({}, props), { children: renderTranslatedChildren({
+        return react_1.default.cloneElement(sourceElement, __assign(__assign({}, props), { 'data-generaltranslation': undefined, children: renderTranslatedChildren({
                 source: props.children,
                 target: targetElement.props.children,
                 variables: variables,
