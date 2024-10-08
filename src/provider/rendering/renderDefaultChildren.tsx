@@ -43,6 +43,7 @@ export default function renderDefaultChildren({
                 const branches = generaltranslation.branches || {};
                 return React.createElement('span', {
                     ...child.props,
+                    'data-generaltranslation': undefined,
                     children: handleChildren(getPluralBranch(n, [defaultLocale], branches) || child.props.children)
                 });
             }
@@ -53,12 +54,14 @@ export default function renderDefaultChildren({
                 branches = generaltranslation.branches || {};
                 return React.createElement('span', {
                     ...child.props,
+                    'data-generaltranslation': undefined,
                     children: handleChildren(branches[branch])
                 });
             }
             if (child.props.children) {
                 return React.cloneElement(child, {
                     ...child.props,
+                    'data-generaltranslation': undefined,
                     children: handleChildren(child.props.children)
                 });
             }
