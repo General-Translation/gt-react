@@ -35,7 +35,6 @@ function renderDefaultChildren(_a) {
     var handleSingleChild = function (child) {
         if (react_1.default.isValidElement(child)) {
             var _a = child.props, generaltranslation = _a["data-generaltranslation"], props = __rest(_a, ['data-generaltranslation']);
-            console.log(props);
             if ((generaltranslation === null || generaltranslation === void 0 ? void 0 : generaltranslation.transformation) === "variable") {
                 var _b = (0, internal_1.getVariableProps)(props), variableName = _b.variableName, variableType = _b.variableType, variableValue = _b.variableValue, variableOptions = _b.variableOptions;
                 variableValue = (typeof variables[variableName] !== 'undefined') ?

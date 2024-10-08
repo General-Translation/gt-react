@@ -20,7 +20,6 @@ export default function renderDefaultChildren({
                 'data-generaltranslation': generaltranslation,
                 ...props
             } = child.props;
-            console.log(props);
             if (generaltranslation?.transformation === "variable") {
                 let { 
                     variableName,
