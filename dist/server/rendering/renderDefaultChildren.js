@@ -36,7 +36,7 @@ function renderDefaultChildren(_a) {
         if (react_1.default.isValidElement(child)) {
             var _a = child.props, generaltranslation = _a["data-generaltranslation"], props = __rest(_a, ['data-generaltranslation']);
             if ((generaltranslation === null || generaltranslation === void 0 ? void 0 : generaltranslation.transformation) === "variable") {
-                var _b = (0, internal_1.getVariableProps)(props), variableName = _b.variableName, variableType = _b.variableType, variableValue = _b.variableValue, variableOptions = _b.variableOptions;
+                var _b = (0, internal_1.getVariableProps)(child.props), variableName = _b.variableName, variableType = _b.variableType, variableValue = _b.variableValue, variableOptions = _b.variableOptions; // needs both regular props and data-generaltranslation
                 variableValue = (typeof variables[variableName] !== 'undefined') ?
                     variables[variableName] : variableValue;
                 return (0, renderTranslatedChildren_1.renderVariable)({

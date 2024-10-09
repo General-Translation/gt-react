@@ -26,7 +26,7 @@ export default function renderDefaultChildren({
                     variableType,
                     variableValue,
                     variableOptions
-                } = getVariableProps(props);
+                } = getVariableProps(child.props); // needs both regular props and data-generaltranslation
                 variableValue = (typeof variables[variableName] !== 'undefined') ?
                     variables[variableName] : variableValue;
                 return renderVariable({
