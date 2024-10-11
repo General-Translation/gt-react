@@ -14,35 +14,35 @@ type RenderSettings = {
 }
 
 /**
- * Translation component that handles rendering translated content, including plural forms, using specified translation configurations.
+ * Translation component that renders its children translated into the user's language.
  * 
  * @example
  * ```jsx
  * // Basic usage:
- * <T id="welcome_message" variables={{ name: "John" }}>
- *  Hello, <Var name="name"/>!
+ * <T id="welcome_message">
+ *  Hello, <Var name="name" value={firstname}>!
  * </T>
  * ```
  * 
  * @example
  * ```jsx
- * // Using plural translations:
- * <T id="item_count" variables={{ n: 3 }} singular={"You have one item"}>
- *  You have <Num/> items
+ * // Translating a plural
+ * <T id="item_count">
+ *  <Plural n={3} singular={<>You have <Num value={n}/> item.}>
+ *      You have <Num value={n}/> items.
+ *  </Plural>
  * </T>
  * ```
  * 
- * Used as an alternative to `t()`. 
- * 
  * When used on the server-side, can create translations on demand.
  * If you need to ensure server-side usage import from `'gt-next/server'`.
+ * 
+ * When used on the client-side, will throw an error if no `id` prop is provided.
  *
  * By default, General Translation saves the translation in a remote cache if an `id` option is passed.
  * 
  * @param {React.ReactNode} children - The content to be translated or displayed.
  * @param {string} [id] - Optional identifier for the translation string. If not provided, a hash will be generated from the content.
- * @param {Object} [variables] - Variables for interpolation in the translation string.
- * @param {Object} [variablesOptions] - Optional formatting options for numeric or date variables.
  * @param {Object} [renderSettings] - Optional settings controlling how fallback content is rendered during translation.
  * @param {"skeleton" | "replace" | "hang" | "subtle"} [renderSettings.method] - Specifies the rendering method:
  *  - "skeleton": show a placeholder while translation is loading.
@@ -51,7 +51,6 @@ type RenderSettings = {
  *  - "subtle": display children without a translation initially, with translations being applied later if available.
  * @param {number | null} [renderSettings.timeout] - Optional timeout for translation loading.
  * @param {boolean} [renderSettings.fallbackToPrevious] - Whether to fallback to the last known translation if no translation is found for the current content.
- * @param {string} [dictionaryName] - Optional name of the translation dictionary to use.
  * @param {any} [context] - Additional context for translation key generation.
  * @param {Object} [props] - Additional props for the component.
  * @returns {JSX.Element} The rendered translation or fallback content based on the provided configuration.
@@ -60,17 +59,13 @@ type RenderSettings = {
  */
 export default async function T({
     children, id,
-    variables, variablesOptions,
+    context,
     renderSettings,
     ...props
 }: {
     children: any,
     id?: string
-    variables?: Record<string, any>,
-    variablesOptions?: {
-       [key: string]: Intl.NumberFormatOptions | Intl.DateTimeFormatOptions
-    },
-    renderSettings?: RenderSettings
+    context?: RenderSettings
     [key: string]: any
 }): Promise<any> {
 
@@ -82,6 +77,8 @@ export default async function T({
     const locale = getLocale();
     const defaultLocale = I18NConfig.getDefaultLocale();
     const translationRequired = I18NConfig.translationRequired(locale);
+
+    const { variables, variablesOptions } = props;
 
     let translationsPromise;
     if (translationRequired) {
@@ -97,7 +94,7 @@ export default async function T({
         });
     }
 
-    const key: string = props.context ? await calculateHash([childrenAsObjects, props.context]) : await calculateHash(childrenAsObjects);
+    const key: string = context ? await calculateHash([childrenAsObjects, context]) : await calculateHash(childrenAsObjects);
 
     const translations = await translationsPromise;
     const translation = translations?.[id || key];
@@ -122,8 +119,7 @@ export default async function T({
         let target = translation;
         return renderTranslatedChildren({
             source: taggedChildren, target, 
-            variables,
-            variablesOptions,
+            variables, variablesOptions,
             locales: [locale, defaultLocale]
         });
     });

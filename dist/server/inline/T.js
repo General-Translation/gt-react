@@ -72,35 +72,35 @@ var Resolver_1 = __importDefault(require("./Resolver"));
 var renderTranslatedChildren_1 = __importDefault(require("../rendering/renderTranslatedChildren"));
 var renderDefaultChildren_1 = __importDefault(require("../rendering/renderDefaultChildren"));
 /**
- * Translation component that handles rendering translated content, including plural forms, using specified translation configurations.
+ * Translation component that renders its children translated into the user's language.
  *
  * @example
  * ```jsx
  * // Basic usage:
- * <T id="welcome_message" variables={{ name: "John" }}>
- *  Hello, <Var name="name"/>!
+ * <T id="welcome_message">
+ *  Hello, <Var name="name" value={firstname}>!
  * </T>
  * ```
  *
  * @example
  * ```jsx
- * // Using plural translations:
- * <T id="item_count" variables={{ n: 3 }} singular={"You have one item"}>
- *  You have <Num/> items
+ * // Translating a plural
+ * <T id="item_count">
+ *  <Plural n={3} singular={<>You have <Num value={n}/> item.}>
+ *      You have <Num value={n}/> items.
+ *  </Plural>
  * </T>
  * ```
  *
- * Used as an alternative to `t()`.
- *
  * When used on the server-side, can create translations on demand.
  * If you need to ensure server-side usage import from `'gt-next/server'`.
+ *
+ * When used on the client-side, will throw an error if no `id` prop is provided.
  *
  * By default, General Translation saves the translation in a remote cache if an `id` option is passed.
  *
  * @param {React.ReactNode} children - The content to be translated or displayed.
  * @param {string} [id] - Optional identifier for the translation string. If not provided, a hash will be generated from the content.
- * @param {Object} [variables] - Variables for interpolation in the translation string.
- * @param {Object} [variablesOptions] - Optional formatting options for numeric or date variables.
  * @param {Object} [renderSettings] - Optional settings controlling how fallback content is rendered during translation.
  * @param {"skeleton" | "replace" | "hang" | "subtle"} [renderSettings.method] - Specifies the rendering method:
  *  - "skeleton": show a placeholder while translation is loading.
@@ -109,7 +109,6 @@ var renderDefaultChildren_1 = __importDefault(require("../rendering/renderDefaul
  *  - "subtle": display children without a translation initially, with translations being applied later if available.
  * @param {number | null} [renderSettings.timeout] - Optional timeout for translation loading.
  * @param {boolean} [renderSettings.fallbackToPrevious] - Whether to fallback to the last known translation if no translation is found for the current content.
- * @param {string} [dictionaryName] - Optional name of the translation dictionary to use.
  * @param {any} [context] - Additional context for translation key generation.
  * @param {Object} [props] - Additional props for the component.
  * @returns {JSX.Element} The rendered translation or fallback content based on the provided configuration.
@@ -118,8 +117,8 @@ var renderDefaultChildren_1 = __importDefault(require("../rendering/renderDefaul
  */
 function T(_a) {
     return __awaiter(this, void 0, void 0, function () {
-        var I18NConfig, locale, defaultLocale, translationRequired, translationsPromise, taggedChildren, childrenAsObjects, key, _b, translations, translation, target, translationPromise, promise, loadingFallback, errorFallback;
-        var children = _a.children, id = _a.id, variables = _a.variables, variablesOptions = _a.variablesOptions, renderSettings = _a.renderSettings, props = __rest(_a, ["children", "id", "variables", "variablesOptions", "renderSettings"]);
+        var I18NConfig, locale, defaultLocale, translationRequired, variables, variablesOptions, translationsPromise, taggedChildren, childrenAsObjects, key, _b, translations, translation, target, translationPromise, promise, loadingFallback, errorFallback;
+        var children = _a.children, id = _a.id, context = _a.context, renderSettings = _a.renderSettings, props = __rest(_a, ["children", "id", "context", "renderSettings"]);
         return __generator(this, function (_c) {
             switch (_c.label) {
                 case 0:
@@ -130,6 +129,7 @@ function T(_a) {
                     locale = (0, getLocale_1.default)();
                     defaultLocale = I18NConfig.getDefaultLocale();
                     translationRequired = I18NConfig.translationRequired(locale);
+                    variables = props.variables, variablesOptions = props.variablesOptions;
                     if (translationRequired) {
                         translationsPromise = I18NConfig.getTranslations(locale, props.dictionaryName);
                     }
@@ -143,8 +143,8 @@ function T(_a) {
                                 defaultLocale: defaultLocale
                             })];
                     }
-                    if (!props.context) return [3 /*break*/, 2];
-                    return [4 /*yield*/, (0, internal_1.calculateHash)([childrenAsObjects, props.context])];
+                    if (!context) return [3 /*break*/, 2];
+                    return [4 /*yield*/, (0, internal_1.calculateHash)([childrenAsObjects, context])];
                 case 1:
                     _b = _c.sent();
                     return [3 /*break*/, 4];
