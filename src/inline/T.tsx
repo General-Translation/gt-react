@@ -15,9 +15,7 @@ import { useMemo } from "react";
  * 
  * @param {string} [id] - Required identifier for the translation string.
  * @param {React.ReactNode} children - The content to be translated or displayed.
- * @param {Object} [variables] - Variables for interpolation in the translation string.
- * @param {Object} [variablesOptions] - Optional formatting options for numeric or date variables.
- * @param {any} [context] - Additional context for translation key generation.
+ * @param {any} [context] - Additional context used for translation.
  * @param {Object} [props] - Additional props for the component.
  * @returns {JSX.Element} The rendered translation or fallback content based on the provided configuration.
  * 
@@ -41,16 +39,10 @@ import { useMemo } from "react";
  * 
  */
 export default function T({
-    children, id,
-    variables,
-    variablesOptions, context
+    children, id, ...props
 }: {
     children?: any,
     id: string
-    variables?: Record<string, any>,
-    variablesOptions?: {
-       [key: string]: Intl.NumberFormatOptions | Intl.DateTimeFormatOptions
-    },
     context?: string,
     [key: string]: any
 }): JSX.Element {
@@ -58,6 +50,8 @@ export default function T({
     if (!id) {
         throw new Error(`Client-side <T> with no provided 'id' prop. Children: ${children}`)
     }
+
+    const { variables, variablesOptions } = props;
 
     const { translations } = useGTContext(
         `<T id="${id}"> used on the client-side outside of <GTProvider>`
