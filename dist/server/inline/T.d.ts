@@ -50,7 +50,8 @@ type RenderSettings = {
 export default function T({ children, id, context, renderSettings, ...props }: {
     children: any;
     id?: string;
-    context?: RenderSettings;
+    context?: string;
+    renderSettings?: RenderSettings;
     [key: string]: any;
 }): Promise<any>;
 export {};

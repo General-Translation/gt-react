@@ -65,7 +65,8 @@ export default async function T({
 }: {
     children: any,
     id?: string
-    context?: RenderSettings
+    context?: string,
+    renderSettings?: RenderSettings
     [key: string]: any
 }): Promise<any> {
 

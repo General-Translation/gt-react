@@ -6,8 +6,8 @@
  *
  * @example
  * ```jsx
- * <Plural n={1} one="There is 1 item">
- *   There are {n} items
+ * <Plural n={n} one={<>There is <Num value={n}/> item.</>}>
+ *   There are <Num value={n}/> items.
  * </Plural>
  * ```
  * In this example, if `n` is 1, it renders `"There is 1 item"`. If `n` is a different number, it renders
