@@ -65,6 +65,15 @@ var handleSingleChild = function (child) {
                 });
                 newGTProp = __assign(__assign({}, newGTProp), { branches: newBranches_1 });
             }
+            if (transformation === "branch" && generaltranslation.branches) {
+                objectElement.type = 'Branch';
+                var newBranches_2 = {};
+                Object.entries(generaltranslation.branches).forEach(function (_a) {
+                    var key = _a[0], value = _a[1];
+                    newBranches_2[key] = writeChildrenAsObjects(value);
+                });
+                newGTProp = __assign(__assign({}, newGTProp), { branches: newBranches_2 });
+            }
             objectElement.props['data-generaltranslation'] = newGTProp;
         }
         if (props.children) {

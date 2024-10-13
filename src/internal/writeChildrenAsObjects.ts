@@ -46,6 +46,14 @@ const handleSingleChild = (child: any): any => {
                 });
                 newGTProp = { ...newGTProp, branches: newBranches }
             }
+            if (transformation === "branch" && generaltranslation.branches) {
+                objectElement.type = 'Branch';
+                let newBranches: Record<string, any> = {};
+                Object.entries(generaltranslation.branches).forEach(([key, value]: any) => {
+                    newBranches[key] = writeChildrenAsObjects(value);
+                });
+                newGTProp = { ...newGTProp, branches: newBranches }
+            }
             
             objectElement.props['data-generaltranslation'] = newGTProp;
         }

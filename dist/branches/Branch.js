@@ -37,7 +37,7 @@ function Branch(_a) {
     var children = _a.children, _b = _a.name, name = _b === void 0 ? "branch" : _b, branch = _a.branch, props = __rest(_a, ["children", "name", "branch"]);
     var generaltranslation = props["data-generaltranslation"], branches = __rest(props, ['data-generaltranslation']);
     var renderedBranch = (branch && typeof branches[branch] !== 'undefined') ? branches[branch] : children;
-    return ((0, jsx_runtime_1.jsx)("span", { "data-generaltranslation": generaltranslation, "data-gt-name": name || "branch", "data-gt-branch-name": branch, "data-gt-branches": branches, children: renderedBranch }));
+    return ((0, jsx_runtime_1.jsx)("span", { "data-generaltranslation": generaltranslation, "data-gt-name": name || "branch", "data-gt-branch-name": branch, children: renderedBranch }));
 }
 Branch.gtTransformation = "branch";
 exports.default = Branch;

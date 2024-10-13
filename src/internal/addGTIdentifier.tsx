@@ -1,4 +1,5 @@
 import React, { ReactNode, ReactElement, isValidElement } from 'react'
+import { isAcceptedPluralForm } from '../primitives/primitives';
 
 type Child = ReactNode;
 type Children = Child[] | Child;
@@ -8,15 +9,10 @@ type GTProp = {
     [key: string]: any;
 }
 
-const acceptedPluralProps: Record<string, boolean> = {
-    "singular": true, "dual": true, "plural": true,
-    "zero": true, "one": true, "two": true, "few": true, "many": true, "other": true
-}
-
 export default function addGTIdentifier(children: Children, outerID?: string | undefined, startingIndex: number = 0): any {
 
     // Object to keep track of the current index for GT IDs
-    let indexObject: { index: number } = { index: startingIndex };
+    let index = startingIndex;
 
     /**
      * Function to create a GTProp object for a ReactElement
@@ -25,8 +21,8 @@ export default function addGTIdentifier(children: Children, outerID?: string | u
      */
     const createGTProp = (child: ReactElement): GTProp => {
         const { type, props } = child;
-        indexObject.index += 1;
-        let result: GTProp = { id: indexObject.index };
+        index += 1;
+        let result: GTProp = { id: index };
         const transformation: string = typeof type === 'function' ? ((type as any).gtTransformation || '') : '';
         if (transformation) {
             const transformationParts = transformation.split('-');
@@ -35,8 +31,8 @@ export default function addGTIdentifier(children: Children, outerID?: string | u
             } 
             if (transformationParts[0] === "plural") {
                 const pluralBranches = Object.entries(props).reduce((acc, [branchName, branch]) => {
-                    if (acceptedPluralProps[branchName]) {
-                        (acc as Record<string, any>)[branchName] = addGTIdentifier(branch as any, branchName, indexObject.index);
+                    if (isAcceptedPluralForm(branchName)) {
+                        (acc as Record<string, any>)[branchName] = addGTIdentifier(branch as any, branchName, index);
                     }
                     return acc;
                 }, {});
@@ -45,7 +41,7 @@ export default function addGTIdentifier(children: Children, outerID?: string | u
             if (transformationParts[0] === "branch") {
                 const { children, branch, ...branches } = props;
                 const resultBranches = Object.entries(branches).reduce((acc, [branchName, branch]) => {
-                    (acc as Record<string, any>)[branchName] = addGTIdentifier(branch as any, branchName, indexObject.index);
+                    (acc as Record<string, any>)[branchName] = addGTIdentifier(branch as any, branchName, index);
                     return acc;
                 }, {})
                 if (Object.keys(resultBranches).length) result.branches = resultBranches;
@@ -87,4 +83,4 @@ export default function addGTIdentifier(children: Children, outerID?: string | u
     }
 
     return handleChildren(children);
-}
+};

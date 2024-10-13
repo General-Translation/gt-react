@@ -47,14 +47,11 @@ var __rest = (this && this.__rest) || function (s, e) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = addGTIdentifier;
 var react_1 = __importStar(require("react"));
-var acceptedPluralProps = {
-    "singular": true, "dual": true, "plural": true,
-    "zero": true, "one": true, "two": true, "few": true, "many": true, "other": true
-};
+var primitives_1 = require("../primitives/primitives");
 function addGTIdentifier(children, outerID, startingIndex) {
     if (startingIndex === void 0) { startingIndex = 0; }
     // Object to keep track of the current index for GT IDs
-    var indexObject = { index: startingIndex };
+    var index = startingIndex;
     /**
      * Function to create a GTProp object for a ReactElement
      * @param child - The ReactElement for which the GTProp is created
@@ -62,8 +59,8 @@ function addGTIdentifier(children, outerID, startingIndex) {
      */
     var createGTProp = function (child) {
         var type = child.type, props = child.props;
-        indexObject.index += 1;
-        var result = { id: indexObject.index };
+        index += 1;
+        var result = { id: index };
         var transformation = typeof type === 'function' ? (type.gtTransformation || '') : '';
         if (transformation) {
             var transformationParts = transformation.split('-');
@@ -73,8 +70,8 @@ function addGTIdentifier(children, outerID, startingIndex) {
             if (transformationParts[0] === "plural") {
                 var pluralBranches = Object.entries(props).reduce(function (acc, _a) {
                     var branchName = _a[0], branch = _a[1];
-                    if (acceptedPluralProps[branchName]) {
-                        acc[branchName] = addGTIdentifier(branch, branchName, indexObject.index);
+                    if ((0, primitives_1.isAcceptedPluralForm)(branchName)) {
+                        acc[branchName] = addGTIdentifier(branch, branchName, index);
                     }
                     return acc;
                 }, {});
@@ -85,7 +82,7 @@ function addGTIdentifier(children, outerID, startingIndex) {
                 var children_1 = props.children, branch = props.branch, branches = __rest(props, ["children", "branch"]);
                 var resultBranches = Object.entries(branches).reduce(function (acc, _a) {
                     var branchName = _a[0], branch = _a[1];
-                    acc[branchName] = addGTIdentifier(branch, branchName, indexObject.index);
+                    acc[branchName] = addGTIdentifier(branch, branchName, index);
                     return acc;
                 }, {});
                 if (Object.keys(resultBranches).length)
@@ -124,4 +121,5 @@ function addGTIdentifier(children, outerID, startingIndex) {
     }
     return handleChildren(children);
 }
+;
 //# sourceMappingURL=addGTIdentifier.js.map

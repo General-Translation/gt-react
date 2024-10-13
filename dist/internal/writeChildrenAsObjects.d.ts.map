@@ -1,1 +1,1 @@
-{"version":3,"file":"writeChildrenAsObjects.d.ts","sourceRoot":"","sources":["../../src/internal/writeChildrenAsObjects.ts"],"names":[],"mappings":"AA2DA;;;;EAIE;AACF,MAAM,CAAC,OAAO,UAAU,sBAAsB,CAAC,QAAQ,EAAE,GAAG,GAAG,GAAG,CAEjE"}
+{"version":3,"file":"writeChildrenAsObjects.d.ts","sourceRoot":"","sources":["../../src/internal/writeChildrenAsObjects.ts"],"names":[],"mappings":"AAmEA;;;;EAIE;AACF,MAAM,CAAC,OAAO,UAAU,sBAAsB,CAAC,QAAQ,EAAE,GAAG,GAAG,GAAG,CAEjE"}

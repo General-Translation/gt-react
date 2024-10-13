@@ -3,7 +3,7 @@
 import { determineLanguage, isSameLanguage, renderContentToString } from "generaltranslation";
 import { ReactElement, useCallback, useEffect, useState } from "react";
 import useBrowserLocale from "../hooks/useBrowserLocale";
-import { defaultDictionary, defaultDictionaryName, libraryDefaultLocale, pluralBranchNames } from "../primitives/primitives";
+import { defaultDictionary, defaultDictionaryName, libraryDefaultLocale, pluralForms } from "../primitives/primitives";
 import { GTContext } from "./GTContext";
 import { Dictionary, DictionaryEntry, Translation } from "../primitives/types";
 import getDictionaryEntry from "./helpers/getDictionaryEntry";
