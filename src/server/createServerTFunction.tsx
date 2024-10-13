@@ -1,5 +1,4 @@
-import { ReactNode } from "react";
-import { extractEntryMetadata, getDictionaryEntry, primitives } from "gt-react/internal";
+import { extractEntryMetadata, getDictionaryEntry } from "gt-react/internal";
 import translate from "./strings/translate";
 import T from "./inline/T";
 import getDictionary from "../dictionary/getDictionary";
@@ -43,14 +42,12 @@ export default function createServerTFunction(
             entry = entry(options);
         }
 
-        const isPlural = metadata && primitives.pluralBranchNames.some(branchName => branchName in metadata);
-
         if (!entry) {
             console.warn(`No entry found for id: ${id}`);
             return '';
         }
 
-        if (typeof entry === 'string' && !isPlural) {
+        if (typeof entry === 'string') {
             return translate(entry, { 
                 id 
             }, variables, variablesOptions);

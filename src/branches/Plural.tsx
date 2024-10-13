@@ -37,7 +37,10 @@ function Plural({
     const defaultLocale = getI18NConfig().getDefaultLocale();
     const branch = (typeof n === 'number' ? getPluralBranch(n, [locale, defaultLocale], branches) : children) || children;
     return (
-        <span data-generaltranslation={generaltranslation} data-gt-n={n} data-gt-branches={branches}>
+        <span 
+            data-generaltranslation={generaltranslation} 
+            data-gt-n={n}
+        >
             {branch}
         </span>
     );
