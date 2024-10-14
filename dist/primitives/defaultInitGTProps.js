@@ -19,6 +19,7 @@ exports.default = {
     },
     dictionaryName: internal_1.primitives.defaultDictionaryName,
     getMetadata: function () { return ({}); },
+    env: (0, getDefaultFromEnv_1.default)('NODE_ENV'),
     _maxConcurrectRequests: 2,
     _batchInterval: 1000
 };

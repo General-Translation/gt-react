@@ -15,6 +15,7 @@ export default {
     },
     dictionaryName: primitives.defaultDictionaryName,
     getMetadata: () => ({}),
+    env: getDefaultFromEnv('NODE_ENV'), 
     _maxConcurrectRequests: 2,
     _batchInterval: 1000
 } as const;

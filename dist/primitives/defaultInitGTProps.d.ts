@@ -12,6 +12,7 @@ declare const _default: {
     };
     readonly dictionaryName: "default";
     readonly getMetadata: () => {};
+    readonly env: string;
     readonly _maxConcurrectRequests: 2;
     readonly _batchInterval: 1000;
 };
