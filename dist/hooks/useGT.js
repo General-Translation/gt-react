@@ -5,6 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = useGT;
+var react_1 = require("react");
 var GTContext_1 = __importDefault(require("../provider/GTContext"));
 /**
  * Gets the translation function `t` provided by `<GTProvider>`.
@@ -36,16 +37,15 @@ function useGT(id) {
     *
     * @returns {string | JSX.Element}
     */
-    function t(id, options, f) {
+    var t = (0, react_1.useCallback)(function (id, options, f) {
         if (id === void 0) { id = ''; }
         if (options === void 0) { options = {}; }
         var prefixedID = getID(id);
-        var translation = translate(prefixedID, options, f);
+        var translation = translate === null || translate === void 0 ? void 0 : translate(prefixedID, options, f);
         if (!translation)
             console.warn("t('".concat(id, "') finding no translation for dictionary item ").concat(prefixedID, " !"));
         return translation;
-    }
-    ;
+    }, [id, translate]);
     return t;
 }
 //# sourceMappingURL=useGT.js.map

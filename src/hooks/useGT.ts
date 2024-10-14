@@ -32,7 +32,6 @@ export default function useGT(id: string = ''):
     const { translate } = useGTContext(
         `useGT('${id}'): No context provided. You're trying to get the t() function on the client, which can only be done inside a <GTProvider>.`
     );
-
    
     /**
     * Translates a dictionary item based on its `id` and options.
@@ -43,16 +42,16 @@ export default function useGT(id: string = ''):
     * 
     * @returns {string | JSX.Element}
     */
-    function t(
+    const t = useCallback((
         id: string = '', 
         options: Record<string, any> = {}, 
         f?: Function
-    ): string | JSX.Element {
+    ): string | JSX.Element => {
         const prefixedID = getID(id);
-        const translation = translate(prefixedID, options, f);
+        const translation = translate?.(prefixedID, options, f);
         if (!translation) console.warn(`t('${id}') finding no translation for dictionary item ${prefixedID} !`)
         return translation;
-    };
+    }, [id, translate]);
 
     return t;
 }
