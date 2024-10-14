@@ -27,7 +27,7 @@ function _ClientProvider(_a) {
     var children = _a.children, dictionary = _a.dictionary, translations = _a.translations, locale = _a.locale, defaultLocale = _a.defaultLocale, translationRequired = _a.translationRequired;
     var _b = (0, react_1.useState)(false), hasMounted = _b[0], setHasMounted = _b[1];
     (0, react_1.useEffect)(function () {
-        // prevent hydration errors + flickering when translations load
+        // prevent hydration errors when translations load
         setHasMounted(true);
     }, []);
     var translate = (0, react_1.useCallback)(function (id, options, f) {

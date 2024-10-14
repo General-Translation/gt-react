@@ -23,7 +23,7 @@ export default function _ClientProvider({
 
     const [hasMounted, setHasMounted] = useState<boolean>(false);
     useEffect(() => {
-        // prevent hydration errors + flickering when translations load
+        // prevent hydration errors when translations load
         setHasMounted(true);
     }, []);
 
