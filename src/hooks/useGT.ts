@@ -42,16 +42,16 @@ export default function useGT(id: string = ''):
     * 
     * @returns {string | JSX.Element}
     */
-    const t = useCallback((
+    function t(
         id: string = '', 
         options: Record<string, any> = {}, 
         f?: Function
-    ): string | JSX.Element => {
+    ): string | JSX.Element {
         const prefixedID = getID(id);
-        const translation = translate?.(prefixedID, options, f);
+        const translation = translate ? translate(prefixedID, options, f) : undefined;
         if (!translation) console.warn(`t('${id}') finding no translation for dictionary item ${prefixedID} !`)
         return translation;
-    }, [id, translate]);
+    };
 
     return t;
 }
