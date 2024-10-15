@@ -11,5 +11,5 @@
  * const t = getGT();
  * console.log(t('hello')); // Translates item 'hello'
  */
-export default function getGT(id?: string): Function;
+export default function getGT(id?: string): (id: string, options?: Record<string, any>, f?: Function) => string | JSX.Element | Promise<string | JSX.Element>;
 //# sourceMappingURL=getGT.d.ts.map
