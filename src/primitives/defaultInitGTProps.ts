@@ -9,7 +9,6 @@ export default {
     defaultLocale: primitives.libraryDefaultLocale,
     getLocale: () => primitives.libraryDefaultLocale,
     renderSettings: {
-        fallbackToPrevious: true,
         method: "skeleton",
         timeout: null
     },

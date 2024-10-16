@@ -108,7 +108,6 @@ var renderDefaultChildren_1 = __importDefault(require("../rendering/renderDefaul
  *  - "hang": wait until the translation is fully loaded before rendering anything.
  *  - "subtle": display children without a translation initially, with translations being applied later if available.
  * @param {number | null} [renderSettings.timeout] - Optional timeout for translation loading.
- * @param {boolean} [renderSettings.fallbackToPrevious] - Whether to fallback to the last known translation if no translation is found for the current content.
  * @param {any} [context] - Additional context for translation key generation.
  * @param {Object} [props] - Additional props for the component.
  * @returns {JSX.Element} The rendered translation or fallback content based on the provided configuration.
@@ -184,17 +183,7 @@ function T(_a) {
                             locales: [locale, defaultLocale]
                         });
                     });
-                    if (renderSettings.fallbackToPrevious && translation) {
-                        // in case there's a previous translation on file
-                        loadingFallback = (0, renderTranslatedChildren_1.default)({
-                            source: taggedChildren, target: translation.t,
-                            variables: variables,
-                            variablesOptions: variablesOptions,
-                            locales: [locale, defaultLocale]
-                        });
-                        errorFallback = loadingFallback;
-                    }
-                    else {
+                    if (translation) {
                         errorFallback = (0, renderDefaultChildren_1.default)({
                             children: taggedChildren,
                             variables: variables,

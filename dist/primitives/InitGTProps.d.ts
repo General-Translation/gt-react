@@ -9,7 +9,6 @@ type InitGTProps = {
     defaultLocale?: string;
     getLocale?: () => string;
     renderSettings?: {
-        fallbackToPrevious: boolean;
         method: "skeleton" | "replace" | "hang" | "subtle";
         timeout: number | null;
     };

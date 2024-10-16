@@ -13,7 +13,6 @@ exports.default = {
     defaultLocale: internal_1.primitives.libraryDefaultLocale,
     getLocale: function () { return internal_1.primitives.libraryDefaultLocale; },
     renderSettings: {
-        fallbackToPrevious: true,
         method: "skeleton",
         timeout: null
     },

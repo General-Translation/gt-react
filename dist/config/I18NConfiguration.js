@@ -163,7 +163,6 @@ var I18NConfiguration = /** @class */ (function () {
      * @returns An object containing the current method and timeout.
      * As of 7/31/24: method is "skeleton", "replace", "hang", "subtle".
      * Timeout is a number or null, representing no assigned timeout.
-     * fallbackToPrevious determines whether a non-matching previous entry should be rendered while the new translation loads.
     */
     I18NConfiguration.prototype.getRenderSettings = function () {
         return this.renderSettings;

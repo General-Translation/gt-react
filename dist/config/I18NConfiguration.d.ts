@@ -7,7 +7,6 @@ type I18NConfigurationParams = {
     defaultLocale: string;
     locales?: string[];
     renderSettings: {
-        fallbackToPrevious: boolean;
         method: "skeleton" | "replace" | "hang" | "subtle";
         timeout: number | null;
     };
@@ -23,7 +22,6 @@ export default class I18NConfiguration {
     defaultLocale: string;
     locales: string[] | undefined;
     renderSettings: {
-        fallbackToPrevious: boolean;
         method: "skeleton" | "replace" | "hang" | "subtle";
         timeout: number | null;
     };
@@ -61,12 +59,10 @@ export default class I18NConfiguration {
      * @returns An object containing the current method and timeout.
      * As of 7/31/24: method is "skeleton", "replace", "hang", "subtle".
      * Timeout is a number or null, representing no assigned timeout.
-     * fallbackToPrevious determines whether a non-matching previous entry should be rendered while the new translation loads.
     */
     getRenderSettings(): {
         method: "skeleton" | "replace" | "hang" | "subtle";
         timeout: number | null;
-        fallbackToPrevious: boolean;
     };
     /**
      * Check if translation is required based on the user's locale

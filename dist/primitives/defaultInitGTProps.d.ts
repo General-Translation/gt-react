@@ -6,7 +6,6 @@ declare const _default: {
     readonly defaultLocale: "en";
     readonly getLocale: () => string;
     readonly renderSettings: {
-        readonly fallbackToPrevious: true;
         readonly method: "skeleton";
         readonly timeout: null;
     };
