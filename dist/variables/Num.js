@@ -32,13 +32,13 @@ var useDefaultLocale_1 = __importDefault(require("../hooks/useDefaultLocale"));
 function Num(_a) {
     var _b = _a === void 0 ? { name: "n" } : _a, children = _b.children, _c = _b.name, name = _c === void 0 ? "n" : _c, value = _b.value, _d = _b.options, options = _d === void 0 ? {} : _d;
     var locales = [(0, useLocale_1.default)(), (0, useDefaultLocale_1.default)()];
-    var renderedValue = (typeof children !== 'undefined' && typeof value === 'undefined') ? children : value;
+    var renderedValue = (typeof children !== 'undefined') ? children : value;
     renderedValue = (typeof renderedValue === 'string') ? parseFloat(renderedValue) : renderedValue;
     if (typeof renderedValue === 'number') {
         // Using Intl.NumberFormat for consistent number formatting
         renderedValue = (0, generaltranslation_1.formatNum)({ value: renderedValue, languages: locales, options: options });
     }
-    return ((0, jsx_runtime_1.jsx)("span", { "data-gt-variable-name": name, "data-gt-variable-type": "number", "data-gt-variable-options": JSON.stringify(options), children: value }));
+    return ((0, jsx_runtime_1.jsx)("span", { "data-gt-variable-name": name, "data-gt-variable-type": "number", "data-gt-variable-options": JSON.stringify(options), children: renderedValue }));
 }
 ;
 Num.gtTransformation = "variable-number";

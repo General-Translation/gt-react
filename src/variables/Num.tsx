@@ -33,8 +33,8 @@ function Num({ children, name = "n", value, options = {} }: {
 } = { name: "n" }): JSX.Element {
     
     const locales = [useLocale(), useDefaultLocale()]
-    
-    let renderedValue = (typeof children !== 'undefined' && typeof value === 'undefined') ? children : value;
+
+    let renderedValue = (typeof children !== 'undefined') ? children : value;
     renderedValue = (typeof renderedValue === 'string') ? parseFloat(renderedValue) : renderedValue;
     if (typeof renderedValue === 'number') {
         // Using Intl.NumberFormat for consistent number formatting
@@ -43,7 +43,7 @@ function Num({ children, name = "n", value, options = {} }: {
 
     return (
         <span data-gt-variable-name={name} data-gt-variable-type={"number"} data-gt-variable-options={JSON.stringify(options)}>
-            {value}
+            {renderedValue}
         </span>
     );
 };
