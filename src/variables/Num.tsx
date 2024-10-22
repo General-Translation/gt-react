@@ -1,3 +1,5 @@
+
+import React from "react";
 import { formatNum } from 'generaltranslation';
 import useLocale from '../hooks/useLocale';
 import useDefaultLocale from '../hooks/useDefaultLocale';

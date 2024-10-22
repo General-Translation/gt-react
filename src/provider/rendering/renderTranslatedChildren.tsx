@@ -77,7 +77,7 @@ function renderTranslatedElement({
             'data-generaltranslation': undefined,
             children: renderTranslatedChildren({ 
                 source: sourceBranch, 
-                target: targetBranch,
+                target: targetBranch as TranslatedChildren,
                 variables, variablesOptions, locales
             } )
         });

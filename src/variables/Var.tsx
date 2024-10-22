@@ -1,3 +1,5 @@
+import React from "react";
+
 /**
  * The `<Var>` component renders a variable value, which can either be passed as `children` or a `value`.
  * If `children` is provided, it will be used; otherwise, the `value` is rendered.

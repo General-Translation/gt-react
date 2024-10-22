@@ -1,3 +1,4 @@
+import React from "react";
 import { getPluralBranch } from "../../internal";
 import useLocale from "../../hooks/useLocale";
 import useDefaultLocale from "../../hooks/useDefaultLocale";

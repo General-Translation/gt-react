@@ -1,3 +1,4 @@
+import React from "react";
 import { determineLanguage, isSameLanguage, renderContentToString, requiresTranslation } from "generaltranslation";
 import { ReactElement, useCallback, useEffect, useState } from "react";
 import useBrowserLocale from "../hooks/useBrowserLocale";
