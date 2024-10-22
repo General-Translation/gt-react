@@ -1,5 +1,3 @@
-'use client'
-
 import { formatNum } from 'generaltranslation';
 import useLocale from '../hooks/useLocale';
 import useDefaultLocale from '../hooks/useDefaultLocale';
@@ -42,7 +40,7 @@ function Num({ children, name = "n", value, options = {} }: {
     }
 
     return (
-        <span data-gt-variable-name={name} data-gt-variable-type={"number"} data-gt-variable-options={JSON.stringify(options)}>
+        <span data-_gt-variable-name={name} data-_gt-variable-type={"number"} data-_gt-variable-options={JSON.stringify(options)}>
             {renderedValue}
         </span>
     );

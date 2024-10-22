@@ -1,5 +1,5 @@
 import * as primitives from './primitives/primitives'
-import calculateHash from "./internal/calculateHash";
+import hashReactChildrenObjects from "./internal/hashReactChildrenObjects";
 import flattenDictionary from "./internal/flattenDictionary";
 import addGTIdentifier from "./internal/addGTIdentifier";
 import writeChildrenAsObjects from "./internal/writeChildrenAsObjects";
@@ -12,5 +12,5 @@ import isVariableObject from './provider/helpers/isVariableObject';
 export {
     addGTIdentifier, writeChildrenAsObjects, isVariableObject,
     flattenDictionary, getDictionaryEntry, getVariableProps,
-    calculateHash, getPluralBranch, extractEntryMetadata, primitives
+    hashReactChildrenObjects, getPluralBranch, extractEntryMetadata, primitives
 } 

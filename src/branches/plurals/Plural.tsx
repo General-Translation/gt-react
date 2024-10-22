@@ -1,5 +1,3 @@
-'use client'
-
 import { getPluralBranch } from "../../internal";
 import useLocale from "../../hooks/useLocale";
 import useDefaultLocale from "../../hooks/useDefaultLocale";
@@ -38,7 +36,7 @@ function Plural({
         throw new Error(`Plural with children "${children}" requires "n" option.`);
     const branch = getPluralBranch(n, [locale, defaultLocale], branches) || children;
     return (
-        <span data-generaltranslation={generaltranslation} data-gt-n={n}>
+        <span data-generaltranslation={generaltranslation} data-_gt-n={n}>
             {branch}
         </span>
     );

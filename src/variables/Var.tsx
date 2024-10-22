@@ -1,5 +1,3 @@
-'use client'
-
 /**
  * The `<Var>` component renders a variable value, which can either be passed as `children` or a `value`.
  * If `children` is provided, it will be used; otherwise, the `value` is rendered.
@@ -27,7 +25,7 @@ function Var({ children, name, value }: {
     let final = typeof children !== 'undefined' ? children : value;
     
     return (
-        <span data-gt-variable-name={name} data-gt-variable-type={"variable"}>
+        <span data-_gt-variable-name={name} data-_gt-variable-type={"variable"}>
             {final}
         </span>
     );

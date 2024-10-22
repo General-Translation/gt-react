@@ -1,5 +1,3 @@
-'use client'
-
 import React, { ReactNode, useCallback } from "react";
 import useGTContext from "../provider/GTContext";
 

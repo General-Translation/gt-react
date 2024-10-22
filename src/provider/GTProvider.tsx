@@ -1,9 +1,7 @@
-'use client'
-
-import { determineLanguage, isSameLanguage, renderContentToString } from "generaltranslation";
+import { determineLanguage, isSameLanguage, renderContentToString, requiresTranslation } from "generaltranslation";
 import { ReactElement, useCallback, useEffect, useState } from "react";
 import useBrowserLocale from "../hooks/useBrowserLocale";
-import { defaultDictionary, defaultDictionaryName, libraryDefaultLocale, pluralForms } from "../primitives/primitives";
+import { defaultDictionary, defaultDictionaryName, libraryDefaultLocale, localeCookieName, pluralForms } from "../primitives/primitives";
 import { GTContext } from "./GTContext";
 import { Dictionary, DictionaryEntry, Translation } from "../primitives/types";
 import getDictionaryEntry from "./helpers/getDictionaryEntry";
@@ -50,13 +48,13 @@ export default function GTProvider({
         throw new Error("gt-react Error: General Translation cloud services require a project ID! Find yours at www.generaltranslation.com/dashboard.")
     }
 
-    const browserLocale = useBrowserLocale(defaultLocale);
+    const browserLocale = useBrowserLocale(defaultLocale, localeCookieName, locales);
     locale = locale || browserLocale;
     if (locales) {
         locale = determineLanguage([locale, browserLocale], locales) || locale;
     }
 
-    const translationRequired = locale && isSameLanguage(locale, defaultLocale) ? false : true;
+    const translationRequired = requiresTranslation(defaultLocale, locale, locales);
 
     const [translations, setTranslations] = useState<Record<string, Translation> | null>(
         cacheURL ? null : {}

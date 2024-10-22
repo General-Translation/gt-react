@@ -67,7 +67,7 @@ function renderTranslatedElement({
     if (transformation === "plural") {
         const n = typeof variables.n === 'number' ? variables.n :
                     typeof sourceElement.props.n === 'number' ?  sourceElement.props.n :
-                        sourceElement.props['data-gt-n'];
+                        sourceElement.props['data-_gt-n'];
         const sourceBranches = generaltranslation.branches || {};
         const sourceBranch = getPluralBranch(n, locales, sourceBranches) || sourceElement.props.children;
         const targetBranches = targetElement.props["data-generaltranslation"].branches || {};
@@ -85,8 +85,8 @@ function renderTranslatedElement({
 
     if (transformation === "branch") {
         let { name, branch, children } = props;
-        name = name || sourceElement.props['data-gt-name'] || "branch";
-        branch = variables[name] || branch || sourceElement.props['data-gt-branch-name'];
+        name = name || sourceElement.props['data-_gt-name'] || "branch";
+        branch = variables[name] || branch || sourceElement.props['data-_gt-branch-name'];
         const sourceBranch = (generaltranslation.branches || {})[branch] || children;
         const targetBranch = (targetElement.props["data-generaltranslation"].branches || {})[branch] || targetElement.props.children;
         return React.createElement('span', {
@@ -231,7 +231,5 @@ export default function renderTranslatedChildren({
  
     }
 
-    // if target can't be rendered by itself and source can't be rendered by itself, there's nothing more to do
-    // that's the only scenario in which renderTranslatedChildren reaches this point
-
+    return source;
 }
