@@ -1,12 +1,12 @@
 {
   "name": "gt-next",
-  "version": "0.2.17",
-  "description": "",
+  "version": "1.0.0",
+  "description": "A Next.js library for automatic internationalization.",
   "main": "dist/index.server.js",
   "peerDependencies": {
     "next": ">=13.0.0",
-    "react": "^16.8.0 || ^17.0.0 || ^18.0.0",
-    "react-dom": "^16.8.0 || ^17.0.0 || ^18.0.0"
+    "react": ">=16.8.0",
+    "react-dom": ">=16.8.0"
   },
   "scripts": {
     "patch": "npm version patch",
@@ -16,18 +16,27 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/general-translation/gt-react.git"
+    "url": "git+https://github.com/general-translation/gt-next.git"
   },
   "author": "General Translation, Inc.",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/general-translation/gt-react/issues"
+    "url": "https://github.com/general-translation/gt-next/issues"
   },
-  "homepage": "https://github.com/general-translation/gt-react#readme",
+  "homepage": "https://github.com/general-translation/gt-next#readme",
   "devDependencies": {
+    "@rollup/plugin-commonjs": "^28.0.1",
+    "@rollup/plugin-node-resolve": "^15.3.0",
+    "@rollup/plugin-terser": "^0.4.4",
+    "@rollup/plugin-typescript": "^12.1.1",
     "@types/node": "^20.14.9",
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
+    "rollup": "^4.24.0",
+    "rollup-plugin-dts": "^6.1.1",
+    "rollup-plugin-peer-deps-external": "^2.2.4",
+    "rollup-plugin-preserve-directives": "^0.4.0",
+    "tslib": "^2.8.0",
     "typescript": "^5.5.2"
   },
   "exports": {
@@ -85,27 +94,27 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "gt-react/config": [
+      "gt-next/config": [
         "/dist/config",
         "/dist/config"
       ],
-      "gt-react/client": [
+      "gt-next/client": [
         "/dist/client",
         "/dist/client"
       ],
-      "gt-react/server": [
+      "gt-next/server": [
         "/dist/server",
         "/dist/server"
       ],
-      "gt-react/middleware": [
+      "gt-next/middleware": [
         "/dist/middleware",
         "/dist/middleware"
       ],
-      "gt-react/_request": [
+      "gt-next/_request": [
         "/dist/_request",
         "/dist/_request"
       ],
-      "gt-react/_dictionary": [
+      "gt-next/_dictionary": [
         "/dist/_dictionary",
         "/dist/_dictionary"
       ]
@@ -119,7 +128,7 @@
     "i18n"
   ],
   "dependencies": {
-    "generaltranslation": "^2.0.70",
-    "gt-react": "^4.2.13"
+    "generaltranslation": "^3.0.4",
+    "gt-react": "^5.0.3"
   }
 }

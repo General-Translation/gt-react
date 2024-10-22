@@ -1,4 +1,4 @@
-import GT, { isSameLanguage } from "generaltranslation";
+import GT, { requiresTranslation } from "generaltranslation";
 import remoteTranslationsManager, { RemoteTranslationsManager } from "./RemoteTranslationsManager";
 
 type I18NConfigurationParams = {
@@ -147,11 +147,8 @@ export default class I18NConfiguration {
      * @param locale - The user's locale
      * @returns True if translation is required, otherwise false
      */
-    translationRequired(locale: string): boolean {
-        if (!locale) return false;
-        if (this.locales && !this.locales.some(approvedLocale => isSameLanguage(locale, approvedLocale))) return false;
-        if (isSameLanguage(locale, this.defaultLocale)) return false;
-        return true;
+    requiresTranslation(locale: string): boolean {
+        return requiresTranslation(this.defaultLocale, locale, this.locales);
     }
 
     /**

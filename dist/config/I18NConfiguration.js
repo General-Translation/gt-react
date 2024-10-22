@@ -172,14 +172,8 @@ var I18NConfiguration = /** @class */ (function () {
      * @param locale - The user's locale
      * @returns True if translation is required, otherwise false
      */
-    I18NConfiguration.prototype.translationRequired = function (locale) {
-        if (!locale)
-            return false;
-        if (this.locales && !this.locales.some(function (approvedLocale) { return (0, generaltranslation_1.isSameLanguage)(locale, approvedLocale); }))
-            return false;
-        if ((0, generaltranslation_1.isSameLanguage)(locale, this.defaultLocale))
-            return false;
-        return true;
+    I18NConfiguration.prototype.requiresTranslation = function (locale) {
+        return (0, generaltranslation_1.requiresTranslation)(this.defaultLocale, locale, this.locales);
     };
     /**
      * Get the translation dictionaries for this user's locale, if they exist

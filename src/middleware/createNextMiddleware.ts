@@ -1,4 +1,4 @@
-import { isValidLanguageCode, isSameLanguage, determineLanguage } from "generaltranslation";
+import { isValidLanguageCode, determineLanguage } from "generaltranslation";
 import { headers } from 'next/headers'
 import { NextResponse } from "next/server";
 import { primitives } from 'gt-react/internal'

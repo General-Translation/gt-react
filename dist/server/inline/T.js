@@ -116,10 +116,10 @@ var renderDefaultChildren_1 = __importDefault(require("../rendering/renderDefaul
  */
 function T(_a) {
     return __awaiter(this, void 0, void 0, function () {
-        var I18NConfig, locale, defaultLocale, translationRequired, variables, variablesOptions, translationsPromise, taggedChildren, childrenAsObjects, key, _b, translations, translation, target, translationPromise, promise, loadingFallback, errorFallback;
+        var I18NConfig, locale, defaultLocale, translationRequired, variables, variablesOptions, translationsPromise, taggedChildren, childrenAsObjects, key, translations, translation, target, translationPromise, promise, loadingFallback, errorFallback;
         var children = _a.children, id = _a.id, context = _a.context, renderSettings = _a.renderSettings, props = __rest(_a, ["children", "id", "context", "renderSettings"]);
-        return __generator(this, function (_c) {
-            switch (_c.label) {
+        return __generator(this, function (_b) {
+            switch (_b.label) {
                 case 0:
                     if (!children) {
                         return [2 /*return*/];
@@ -127,7 +127,7 @@ function T(_a) {
                     I18NConfig = (0, getI18NConfig_1.default)();
                     locale = (0, getLocale_1.default)();
                     defaultLocale = I18NConfig.getDefaultLocale();
-                    translationRequired = I18NConfig.translationRequired(locale);
+                    translationRequired = I18NConfig.requiresTranslation(locale);
                     variables = props.variables, variablesOptions = props.variablesOptions;
                     if (translationRequired) {
                         translationsPromise = I18NConfig.getTranslations(locale, props.dictionaryName);
@@ -142,20 +142,10 @@ function T(_a) {
                                 defaultLocale: defaultLocale
                             })];
                     }
-                    if (!context) return [3 /*break*/, 2];
-                    return [4 /*yield*/, (0, internal_1.calculateHash)([childrenAsObjects, context])];
-                case 1:
-                    _b = _c.sent();
-                    return [3 /*break*/, 4];
-                case 2: return [4 /*yield*/, (0, internal_1.calculateHash)(childrenAsObjects)];
-                case 3:
-                    _b = _c.sent();
-                    _c.label = 4;
-                case 4:
-                    key = _b;
+                    key = (0, internal_1.hashReactChildrenObjects)(context ? [childrenAsObjects, context] : childrenAsObjects);
                     return [4 /*yield*/, translationsPromise];
-                case 5:
-                    translations = _c.sent();
+                case 1:
+                    translations = _b.sent();
                     translation = translations === null || translations === void 0 ? void 0 : translations[id || key];
                     if ((translation === null || translation === void 0 ? void 0 : translation.k) === key) {
                         target = translation.t;

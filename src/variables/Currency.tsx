@@ -50,10 +50,10 @@ function Currency({
     return (
         <span 
             data-generaltranslation={generaltranslation} 
-            data-gt-variable-name={name} 
-            data-gt-variable-type={"currency"} 
-            data-gt-variable-options={{ style: 'currency', currency, ...options }}
-            data-gt-unformatted-value={(typeof renderedValue === 'number' && !isNaN(renderedValue)) ? renderedValue : undefined}
+            data-_gt-variable-name={name} 
+            data-_gt-variable-type={"currency"} 
+            data-_gt-variable-options={{ style: 'currency', currency, ...options }}
+            data-_gt-unformatted-value={(typeof renderedValue === 'number' && !isNaN(renderedValue)) ? renderedValue : undefined}
         >
             {typeof formattedValue === 'string' ? formattedValue : undefined}
         </span>

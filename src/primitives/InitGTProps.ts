@@ -25,6 +25,8 @@ type InitGTProps = {
     _batchInterval?: number; // ms
     // Translation assistance
     description?: string
+    // AI
+    preferredModel?: string; // see docs.generaltranslation.com for a list of the most recent options
     // Other
     [key: string]: any;
 }

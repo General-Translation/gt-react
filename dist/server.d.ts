@@ -1,4 +1,4 @@
 import T from "./server/inline/T";
-import translate from "./server/strings/translate";
-export { T, translate };
+import tx from "./server/strings/tx";
+export { T, tx };
 //# sourceMappingURL=server.d.ts.map

@@ -39,7 +39,7 @@ function Plural({
     return (
         <span 
             data-generaltranslation={generaltranslation} 
-            data-gt-n={n}
+            data-_gt-n={n}
         >
             {branch}
         </span>

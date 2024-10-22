@@ -69,7 +69,7 @@ export default class I18NConfiguration {
      * @param locale - The user's locale
      * @returns True if translation is required, otherwise false
      */
-    translationRequired(locale: string): boolean;
+    requiresTranslation(locale: string): boolean;
     /**
      * Get the translation dictionaries for this user's locale, if they exist
      * @param locale - The language set by the user

@@ -17,9 +17,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = createServerTFunction;
 var jsx_runtime_1 = require("react/jsx-runtime");
 var internal_1 = require("gt-react/internal");
-var translate_1 = __importDefault(require("./strings/translate"));
 var T_1 = __importDefault(require("./inline/T"));
 var getDictionary_1 = __importDefault(require("../dictionary/getDictionary"));
+var tx_1 = __importDefault(require("./strings/tx"));
 function createServerTFunction(prefixID) {
     var getID = function (id) {
         return prefixID ? "".concat(prefixID, ".").concat(id) : id;
@@ -50,7 +50,7 @@ function createServerTFunction(prefixID) {
             return '';
         }
         if (typeof entry === 'string') {
-            return (0, translate_1.default)(entry, {
+            return (0, tx_1.default)(entry, {
                 id: id
             }, variables, variablesOptions);
         }

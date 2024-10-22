@@ -56,7 +56,7 @@ function renderTranslatedElement(_a) {
     if (transformation === "plural") {
         var n = typeof variables.n === 'number' ? variables.n :
             typeof sourceElement.props.n === 'number' ? sourceElement.props.n :
-                sourceElement.props['data-gt-n'];
+                sourceElement.props['data-_gt-n'];
         var sourceBranches = generaltranslation.branches || {};
         var sourceBranch = (0, internal_1.getPluralBranch)(n, locales, sourceBranches) || sourceElement.props.children;
         var targetBranches = targetElement.props["data-generaltranslation"].branches || {};
@@ -71,8 +71,8 @@ function renderTranslatedElement(_a) {
     }
     if (transformation === "branch") {
         var name_1 = props.name, branch = props.branch, children = props.children;
-        name_1 = name_1 || sourceElement.props['data-gt-name'] || "branch";
-        branch = variables[name_1] || branch || sourceElement.props['data-gt-branch-name'];
+        name_1 = name_1 || sourceElement.props['data-_gt-name'] || "branch";
+        branch = variables[name_1] || branch || sourceElement.props['data-_gt-branch-name'];
         var sourceBranch = (generaltranslation.branches || {})[branch] || children;
         var targetBranch = (targetElement.props["data-generaltranslation"].branches || {})[branch] || targetElement.props.children;
         return react_1.default.createElement('span', __assign(__assign({}, props), { 'data-generaltranslation': undefined, children: renderTranslatedChildren({
@@ -181,7 +181,6 @@ function renderTranslatedChildren(_a) {
             });
         }
     }
-    // if target can't be rendered by itself and source can't be rendered by itself, there's nothing more to do
-    // that's the only scenario in which renderTranslatedChildren reaches this point
+    return source;
 }
 //# sourceMappingURL=renderTranslatedChildren.js.map

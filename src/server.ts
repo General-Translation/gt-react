@@ -1,5 +1,5 @@
 import T from "./server/inline/T";
-import translate from "./server/strings/translate"
+import tx from "./server/strings/tx";
 export {
-    T, translate
+    T, tx
 }

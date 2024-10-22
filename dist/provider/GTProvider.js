@@ -113,7 +113,7 @@ function GTProvider(_a) {
                     renderSettings = I18NConfig.getRenderSettings();
                     dictionary = {};
                     translations = {};
-                    translationRequired = I18NConfig.translationRequired(locale);
+                    translationRequired = I18NConfig.requiresTranslation(locale);
                     if (!translationRequired) return [3 /*break*/, 2];
                     return [4 /*yield*/, I18NConfig.getTranslations(locale)];
                 case 1:
@@ -125,10 +125,10 @@ function GTProvider(_a) {
                 case 3:
                     existingTranslations = _c;
                     return [4 /*yield*/, Promise.all(Object.entries(rawDictionary).map(function (_a) { return __awaiter(_this, [_a], void 0, function (_b) {
-                            var prefixedID, _c, entry, metadata, taggedEntry, entryAsObjects, key, _d, translation, translationPromise_1, _e, _f, translationPromise, loadingFallback, errorFallback;
+                            var prefixedID, _c, entry, metadata, taggedEntry, entryAsObjects, key, translation, translationPromise_1, _d, _e, translationPromise, loadingFallback, errorFallback;
                             var id = _b[0], dictionaryEntry = _b[1];
-                            return __generator(this, function (_g) {
-                                switch (_g.label) {
+                            return __generator(this, function (_f) {
+                                switch (_f.label) {
                                     case 0:
                                         prefixedID = getID(id);
                                         _c = (0, internal_1.extractEntryMetadata)(dictionaryEntry), entry = _c.entry, metadata = _c.metadata;
@@ -141,36 +141,26 @@ function GTProvider(_a) {
                                         if (!translationRequired || !entry)
                                             return [2 /*return*/];
                                         entryAsObjects = (0, internal_1.writeChildrenAsObjects)(taggedEntry);
-                                        if (!(metadata === null || metadata === void 0 ? void 0 : metadata.context)) return [3 /*break*/, 2];
-                                        return [4 /*yield*/, (0, internal_1.calculateHash)([entryAsObjects, metadata.context])];
-                                    case 1:
-                                        _d = _g.sent();
-                                        return [3 /*break*/, 4];
-                                    case 2: return [4 /*yield*/, (0, internal_1.calculateHash)(entryAsObjects)];
-                                    case 3:
-                                        _d = _g.sent();
-                                        _g.label = 4;
-                                    case 4:
-                                        key = _d;
+                                        key = (0, internal_1.hashReactChildrenObjects)((metadata === null || metadata === void 0 ? void 0 : metadata.context) ? [entryAsObjects, metadata.context] : entryAsObjects);
                                         translation = existingTranslations === null || existingTranslations === void 0 ? void 0 : existingTranslations[prefixedID];
                                         if (translation && translation.k === key) {
                                             return [2 /*return*/, translations[id] = translation];
                                         }
                                         if (!I18NConfig.translationEnabled())
                                             return [2 /*return*/];
-                                        if (!(typeof taggedEntry === 'string')) return [3 /*break*/, 8];
+                                        if (!(typeof taggedEntry === 'string')) return [3 /*break*/, 4];
                                         translationPromise_1 = I18NConfig.translate({ content: (0, generaltranslation_1.splitStringToContent)(taggedEntry), targetLanguage: locale, options: __assign({ id: prefixedID, hash: key }, additionalMetadata) });
-                                        if (!(renderSettings.method !== "subtle")) return [3 /*break*/, 6];
-                                        _f = translations[id];
+                                        if (!(renderSettings.method !== "subtle")) return [3 /*break*/, 2];
+                                        _e = translations[id];
                                         return [4 /*yield*/, translationPromise_1];
-                                    case 5:
-                                        _e = _f === (_g.sent());
-                                        return [3 /*break*/, 7];
-                                    case 6:
-                                        _e = undefined;
-                                        _g.label = 7;
-                                    case 7: return [2 /*return*/, _e];
-                                    case 8:
+                                    case 1:
+                                        _d = _e === (_f.sent());
+                                        return [3 /*break*/, 3];
+                                    case 2:
+                                        _d = undefined;
+                                        _f.label = 3;
+                                    case 3: return [2 /*return*/, _d];
+                                    case 4:
                                         translationPromise = I18NConfig.translateChildren({
                                             children: entryAsObjects,
                                             targetLanguage: locale,

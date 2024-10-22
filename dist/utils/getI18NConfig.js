@@ -17,13 +17,15 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = getI18NConfig;
 var I18NConfiguration_1 = __importDefault(require("../config/I18NConfiguration"));
 var defaultInitGTProps_1 = __importDefault(require("../primitives/defaultInitGTProps"));
+var getDefaultFromEnv_1 = __importDefault(require("./getDefaultFromEnv"));
 var I18NConfig;
 function getI18NConfig() {
     if (I18NConfig)
         return I18NConfig;
     var I18NConfigParams = process.env._GENERALTRANSLATION_I18N_CONFIG_PARAMS;
+    var env = (0, getDefaultFromEnv_1.default)('NODE_ENV') || 'production';
     if (I18NConfigParams) {
-        I18NConfig = new I18NConfiguration_1.default(JSON.parse(I18NConfigParams));
+        I18NConfig = new I18NConfiguration_1.default(__assign(__assign({}, JSON.parse(I18NConfigParams)), { env: env }));
     }
     else {
         console.warn('Unable to access gt-next configuration. Using defaults.');
@@ -34,7 +36,7 @@ function getI18NConfig() {
         var apiKey = process.env.GT_API_KEY;
         if (!apiKey)
             throw new Error("API key is required for automatic translation! Create an API key: www.generaltranslation.com/dashboard/api-keys. (Or, turn off automatic translation by setting baseURL to an empty string.)");
-        I18NConfig = new I18NConfiguration_1.default(__assign(__assign({}, defaultInitGTProps_1.default), { maxConcurrentRequests: defaultInitGTProps_1.default._maxConcurrectRequests, batchInterval: defaultInitGTProps_1.default._batchInterval, apiKey: apiKey, projectID: projectID }));
+        I18NConfig = new I18NConfiguration_1.default(__assign(__assign({}, defaultInitGTProps_1.default), { maxConcurrentRequests: defaultInitGTProps_1.default._maxConcurrectRequests, batchInterval: defaultInitGTProps_1.default._batchInterval, apiKey: apiKey, projectID: projectID, env: env }));
     }
     return I18NConfig;
 }

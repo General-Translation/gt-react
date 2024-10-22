@@ -1,7 +1,7 @@
 import { extractEntryMetadata, getDictionaryEntry } from "gt-react/internal";
-import translate from "./strings/translate";
 import T from "./inline/T";
 import getDictionary from "../dictionary/getDictionary";
+import tx from "./strings/tx";
 
 export default function createServerTFunction( 
     prefixID?: string
@@ -48,7 +48,7 @@ export default function createServerTFunction(
         }
 
         if (typeof entry === 'string') {
-            return translate(entry, { 
+            return tx(entry, { 
                 id 
             }, variables, variablesOptions);
         }

@@ -1,14 +1,19 @@
 import I18NConfiguration from "../config/I18NConfiguration";
 import defaultInitGTProps from "../primitives/defaultInitGTProps";
+import getDefaultFromEnv from "./getDefaultFromEnv";
 
 let I18NConfig: I18NConfiguration;
 
 export default function getI18NConfig(): I18NConfiguration {
     if (I18NConfig) return I18NConfig;
     const I18NConfigParams = process.env._GENERALTRANSLATION_I18N_CONFIG_PARAMS;
+    const env = getDefaultFromEnv('NODE_ENV') || 'production';
     
     if (I18NConfigParams) {
-        I18NConfig = new I18NConfiguration(JSON.parse(I18NConfigParams))
+        I18NConfig = new I18NConfiguration({
+            ...JSON.parse(I18NConfigParams),
+            env,
+        })
     } 
     
     else {
@@ -27,7 +32,8 @@ export default function getI18NConfig(): I18NConfiguration {
             ...defaultInitGTProps, 
             maxConcurrentRequests: defaultInitGTProps._maxConcurrectRequests,
             batchInterval: defaultInitGTProps._batchInterval,
-            apiKey, projectID
+            apiKey, projectID,
+            env
         })  
     }
     

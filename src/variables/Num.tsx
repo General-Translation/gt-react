@@ -49,10 +49,10 @@ function Num({
     return (
         <span 
             data-generaltranslation={generaltranslation} 
-            data-gt-variable-name={name} 
-            data-gt-variable-type={"number"} 
-            data-gt-variable-options={options}
-            data-gt-unformatted-value={typeof renderedValue === 'number' && !isNaN(renderedValue) ? renderedValue : undefined}
+            data-_gt-variable-name={name} 
+            data-_gt-variable-type={"number"} 
+            data-_gt-variable-options={options}
+            data-_gt-unformatted-value={typeof renderedValue === 'number' && !isNaN(renderedValue) ? renderedValue : undefined}
         >
             {formattedValue}
         </span>

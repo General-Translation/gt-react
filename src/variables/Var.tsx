@@ -30,9 +30,9 @@ function Var({ children, name = "value", value, ...props }: {
     return (
         <span 
             data-generaltranslation={generaltranslation} 
-            data-gt-variable-name={name} 
-            data-gt-variable-type={"variable"}
-            data-gt-unformatted-value={value ?? undefined}
+            data-_gt-variable-name={name} 
+            data-_gt-variable-type={"variable"}
+            data-_gt-unformatted-value={value ?? undefined}
         >
             {value}
         </span>

@@ -1,4 +1,4 @@
-import { addGTIdentifier, writeChildrenAsObjects, calculateHash } from "gt-react/internal";
+import { addGTIdentifier, writeChildrenAsObjects, hashReactChildrenObjects } from "gt-react/internal";
 import getI18NConfig from "../../utils/getI18NConfig";
 import getLocale from "../../request/getLocale";
 import getMetadata from "../../request/getMetadata";
@@ -75,7 +75,7 @@ export default async function T({
     const I18NConfig = getI18NConfig();
     const locale = getLocale();
     const defaultLocale = I18NConfig.getDefaultLocale();
-    const translationRequired = I18NConfig.translationRequired(locale);
+    const translationRequired = I18NConfig.requiresTranslation(locale);
 
     const { variables, variablesOptions } = props;
 
@@ -93,7 +93,7 @@ export default async function T({
         });
     }
 
-    const key: string = context ? await calculateHash([childrenAsObjects, context]) : await calculateHash(childrenAsObjects);
+    const key: string = hashReactChildrenObjects(context ? [childrenAsObjects, context] : childrenAsObjects);
 
     const translations = await translationsPromise;
     const translation = translations?.[id || key];

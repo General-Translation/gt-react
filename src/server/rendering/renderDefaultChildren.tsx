@@ -39,7 +39,7 @@ export default function renderDefaultChildren({
             if (generaltranslation?.transformation === "plural") {
                 const n = typeof variables.n === 'number' ? variables.n :
                             typeof props.n === 'number' ?  props.n :
-                            props['data-gt-n'];
+                            props['data-_gt-n'];
                 const branches = generaltranslation.branches || {};
                 return React.createElement('span', {
                     ...props,
@@ -49,8 +49,8 @@ export default function renderDefaultChildren({
             }
             if (generaltranslation?.transformation === "branch") {
                 let { children, name, branch, ...branches } = props;
-                name = name || props['data-gt-name'] || "branch";
-                branch = variables[name] || branch || child.props['data-gt-branch-name'];
+                name = name || props['data-_gt-name'] || "branch";
+                branch = variables[name] || branch || child.props['data-_gt-branch-name'];
                 branches = generaltranslation.branches || {};
                 return React.createElement('span', {
                     ...props,

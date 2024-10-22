@@ -1,6 +1,6 @@
 // 
 import React from "react";
-import { addGTIdentifier, flattenDictionary, calculateHash, writeChildrenAsObjects, extractEntryMetadata, primitives } from "gt-react/internal";
+import { addGTIdentifier, flattenDictionary, hashReactChildrenObjects, writeChildrenAsObjects, extractEntryMetadata, primitives } from "gt-react/internal";
 import { ReactNode } from "react";
 import getI18NConfig from "../utils/getI18NConfig";
 import _ClientProvider from "./_ClientProvider";
@@ -44,7 +44,7 @@ export default async function GTProvider({
     let dictionary: Record<string, any> = {};
     let translations: Record<string, any> = {};
 
-    const translationRequired = I18NConfig.translationRequired(locale)
+    const translationRequired = I18NConfig.requiresTranslation(locale)
 
     let existingTranslations: Record<string, any> = 
         translationRequired ? await I18NConfig.getTranslations(locale) : {}
@@ -68,7 +68,7 @@ export default async function GTProvider({
 
         const entryAsObjects = writeChildrenAsObjects(taggedEntry);
 
-        const key: string = metadata?.context ? await calculateHash([entryAsObjects, metadata.context]) : await calculateHash(entryAsObjects);
+        const key: string = hashReactChildrenObjects(metadata?.context ? [entryAsObjects, metadata.context] : entryAsObjects);
 
         const translation = existingTranslations?.[prefixedID];
 

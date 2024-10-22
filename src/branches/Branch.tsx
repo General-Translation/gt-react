@@ -35,8 +35,8 @@ function Branch({
     return (
         <span 
             data-generaltranslation={generaltranslation} 
-            data-gt-name={name || "branch"} 
-            data-gt-branch-name={branch}
+            data-_gt-name={name || "branch"} 
+            data-_gt-branch-name={branch}
         >
             {renderedBranch}
         </span>

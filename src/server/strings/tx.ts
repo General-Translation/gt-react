@@ -1,6 +1,6 @@
 import { renderContentToString, splitStringToContent } from "generaltranslation";
 import getI18NConfig from "../../utils/getI18NConfig";
-import { calculateHash } from "gt-react/internal";
+import { hashReactChildrenObjects } from "gt-react/internal";
 import getLocale from '../../request/getLocale'
 import getMetadata from "../../request/getMetadata";
 
@@ -12,7 +12,7 @@ import getMetadata from "../../request/getMetadata";
  * By default, General Translation saves the translation in a remote cache if an `id` option is passed.
  *
  * @async
- * @function translate
+ * @function tx (translate)
  * 
  * @param {string} content - The content string that needs to be translated.
  * @param {Object} [options] - Translation options.
@@ -29,17 +29,17 @@ import getMetadata from "../../request/getMetadata";
  * 
  * @example
  * // Basic usage with default locale detection
- * const translation = await translate("Hello, world!");
+ * const translation = await tx("Hello, world!");
  * 
  * @example
  * // Providing specific translation options
- * const translation = await translate("Hello, world!", { language: 'es', context: 'Translate informally' });
+ * const translation = await tx("Hello, world!", { language: 'es', context: 'Translate informally' });
  * 
  * @example
  * // Using variables in the content string
- * const translation = await translate("The price is {price}", {}, { price: 29.99 });
+ * const translation = await tx("The price is {price}", { language: 'es' }, { price: 29.99 });
  */
-export default async function translate(
+export default async function tx(
     content: string, 
     options: {
         id?: string,
@@ -59,12 +59,12 @@ export default async function translate(
     
     options.language = options.language || getLocale();
 
-    if (!I18NConfig.translationRequired(options.language)) 
+    if (!I18NConfig.requiresTranslation(options.language)) 
         return renderContentToString(contentAsArray, [options.language, I18NConfig.getDefaultLocale()], variables, variableOptions);
     
-    let key;
+    let key: string | undefined;
     if (options.id) {
-        key = options.context ? await calculateHash([content, options.context]) : await calculateHash(content);
+        key = hashReactChildrenObjects(options.context ? [content, options.context] : content);
         const translations = await I18NConfig.getTranslations(options.language, options?.dictionaryName || undefined);
         if (translations?.[options.id] && translations[options.id].k === key)
             return renderContentToString(translations[options.id].t, [options.language, I18NConfig.getDefaultLocale()], variables, variableOptions);

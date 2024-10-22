@@ -6,7 +6,7 @@
  * By default, General Translation saves the translation in a remote cache if an `id` option is passed.
  *
  * @async
- * @function translate
+ * @function tx (translate)
  *
  * @param {string} content - The content string that needs to be translated.
  * @param {Object} [options] - Translation options.
@@ -23,20 +23,20 @@
  *
  * @example
  * // Basic usage with default locale detection
- * const translation = await translate("Hello, world!");
+ * const translation = await tx("Hello, world!");
  *
  * @example
  * // Providing specific translation options
- * const translation = await translate("Hello, world!", { language: 'es', context: 'Translate informally' });
+ * const translation = await tx("Hello, world!", { language: 'es', context: 'Translate informally' });
  *
  * @example
  * // Using variables in the content string
- * const translation = await translate("The price is {price}", {}, { price: 29.99 });
+ * const translation = await tx("The price is {price}", { language: 'es' }, { price: 29.99 });
  */
-export default function translate(content: string, options?: {
+export default function tx(content: string, options?: {
     id?: string;
     language?: string;
     context?: string;
     [key: string]: any;
 }, variables?: Record<string, any>, variableOptions?: Record<string, Intl.NumberFormatOptions | Intl.DateTimeFormatOptions>): Promise<string>;
-//# sourceMappingURL=translate.d.ts.map
+//# sourceMappingURL=tx.d.ts.map

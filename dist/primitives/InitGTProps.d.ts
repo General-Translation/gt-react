@@ -17,6 +17,7 @@ type InitGTProps = {
     _maxConcurrentRequests?: number;
     _batchInterval?: number;
     description?: string;
+    preferredModel?: string;
     [key: string]: any;
 };
 export default InitGTProps;
