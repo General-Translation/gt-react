@@ -1,5 +1,3 @@
-'use client'
-
 import useGTContext from "../provider/GTContext";
 
 /**

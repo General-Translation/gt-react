@@ -1,8 +1,7 @@
-'use client'
-
 import { useState, useEffect } from 'react';
 import { libraryDefaultLocale, localeCookieName } from '../primitives/primitives';
 import getLocaleCookie from '../cookies/getLocaleCookie';
+import { determineLanguage } from 'generaltranslation';
 
 /**
  * Hook to retrieve the browser's default language, with support for a fallback and locale stored in a cookie.
@@ -24,11 +23,22 @@ import getLocaleCookie from '../cookies/getLocaleCookie';
  * it will take precedence. If not, it falls back to the `navigator.language` or `navigator.userLanguage`. If none of these are available,
  * the provided `defaultLocale` is used.
  */
-export default function useBrowserLocale(defaultLocale: string = libraryDefaultLocale, cookieName: string = localeCookieName): string {
+export default function useBrowserLocale(
+    defaultLocale: string = libraryDefaultLocale, 
+    cookieName: string = localeCookieName,
+    locales?: string[],
+): string {
     const [locale, setLocale] = useState<string>('');
     useEffect(() => {
-        const browserLocale = (cookieName ? getLocaleCookie(cookieName) : undefined) || navigator.language || (navigator as any)?.userLanguage || defaultLocale;
+        const browserLocale = 
+            (cookieName ? getLocaleCookie(cookieName) : undefined)
+            || (locales ? determineLanguage(navigator.languages as string[], locales) : undefined)
+            || navigator.languages?.[0] 
+            || navigator.language 
+            || (navigator as any)?.userLanguage 
+            || defaultLocale
+        ;
         setLocale(browserLocale);
-    }, [defaultLocale]);
+    }, [defaultLocale, locales]);
     return locale;
 }

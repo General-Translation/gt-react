@@ -1,5 +1,3 @@
-'use client'
-
 import { formatDateTime } from 'generaltranslation';
 import useLocale from '../hooks/useLocale';
 import useDefaultLocale from '../hooks/useDefaultLocale';
@@ -50,7 +48,7 @@ function DateTime({ children, name = "date", value, options = {} }: {
 
     // Render the formatted date within a span element
     return (
-        <span data-gt-variable-name={name} data-gt-variable-type={"date"} data-gt-variable-options={options}>
+        <span data-_gt-variable-name={name} data-_gt-variable-type={"date"} data-_gt-variable-options={options}>
             {final}
         </span>
     );

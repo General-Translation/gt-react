@@ -18,5 +18,5 @@
  * it will take precedence. If not, it falls back to the `navigator.language` or `navigator.userLanguage`. If none of these are available,
  * the provided `defaultLocale` is used.
  */
-export default function useBrowserLocale(defaultLocale?: string, cookieName?: string): string;
+export default function useBrowserLocale(defaultLocale?: string, cookieName?: string, locales?: string[]): string;
 //# sourceMappingURL=useBrowserLocale.d.ts.map

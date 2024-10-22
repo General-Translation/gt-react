@@ -1,5 +1,3 @@
-'use client'
-
 /**
  * The `<Branch>` component dynamically renders a specified branch of content or a fallback child component.
  * It allows for flexible content switching based on the `branch` prop and an object of possible branches (`...branches`).
@@ -31,7 +29,7 @@ function Branch({
     const { 'data-generaltranslation': generaltranslation, ...branches } = props;
     const renderedBranch = (branch && typeof branches[branch] !== 'undefined') ? branches[branch] : children;
     return (
-        <span data-generaltranslation={generaltranslation} data-gt-name={name || "branch"} data-gt-branch-name={branch}>
+        <span data-generaltranslation={generaltranslation} data-_gt-name={name || "branch"} data-_gt-branch-name={branch}>
             {renderedBranch}
         </span>
     );

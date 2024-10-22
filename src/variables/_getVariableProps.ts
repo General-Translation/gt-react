@@ -17,15 +17,15 @@ export default function getVariableProps(props: {
         variableOptions?: Intl.NumberFormatOptions | Intl.DateTimeFormatOptions
     } = {
         variableType,
-        variableName: props.name || props['data-gt-variable-name'] || defaultVariableNames[variableType],
+        variableName: props.name || props['data-_gt-variable-name'] || defaultVariableNames[variableType],
         variableValue: (() => {
             if (typeof props.value !== 'undefined') return props.value;
-            if (typeof props['data-gt-unformatted-value'] !== 'undefined') return props['data-gt-unformatted-value'];
+            if (typeof props['data-_gt-unformatted-value'] !== 'undefined') return props['data-_gt-unformatted-value'];
             if (typeof props.children !== 'undefined') return props.children;
             return undefined;
         }
         )(),
-        variableOptions: props.options || props['data-gt-variable-options'] || undefined
+        variableOptions: props.options || props['data-_gt-variable-options'] || undefined
     };
 
     return result;

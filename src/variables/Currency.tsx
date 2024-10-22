@@ -1,5 +1,3 @@
-'use client'
-
 import { formatCurrency } from 'generaltranslation';
 import useLocale from '../hooks/useLocale';
 import useDefaultLocale from '../hooks/useDefaultLocale';
@@ -43,7 +41,7 @@ function Currency({ children, name = "cost", value, currency = "USD", options = 
     }
 
     return (
-        <span data-gt-variable-name={name} data-gt-variable-type={"currency"} data-gt-variable-options={{ style: 'currency', currency, ...options }}>
+        <span data-_gt-variable-name={name} data-_gt-variable-type={"currency"} data-_gt-variable-options={{ style: 'currency', currency, ...options }}>
             {renderedValue}
         </span>
     );
