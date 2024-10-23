@@ -11,8 +11,8 @@ export default function getI18NConfig(): I18NConfiguration {
     
     if (I18NConfigParams) {
         I18NConfig = new I18NConfiguration({
+            env, // may be overrided
             ...JSON.parse(I18NConfigParams),
-            env,
         })
     } 
     
@@ -32,8 +32,7 @@ export default function getI18NConfig(): I18NConfiguration {
             ...defaultInitGTProps, 
             maxConcurrentRequests: defaultInitGTProps._maxConcurrectRequests,
             batchInterval: defaultInitGTProps._batchInterval,
-            apiKey, projectID,
-            env
+            apiKey, projectID, env
         })  
     }
     

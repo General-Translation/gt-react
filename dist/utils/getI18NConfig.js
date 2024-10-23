@@ -25,7 +25,7 @@ function getI18NConfig() {
     var I18NConfigParams = process.env._GENERALTRANSLATION_I18N_CONFIG_PARAMS;
     var env = (0, getDefaultFromEnv_1.default)('NODE_ENV') || 'production';
     if (I18NConfigParams) {
-        I18NConfig = new I18NConfiguration_1.default(__assign(__assign({}, JSON.parse(I18NConfigParams)), { env: env }));
+        I18NConfig = new I18NConfiguration_1.default(__assign({ env: env }, JSON.parse(I18NConfigParams)));
     }
     else {
         console.warn('Unable to access gt-next configuration. Using defaults.');
