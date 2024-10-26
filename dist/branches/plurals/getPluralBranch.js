@@ -1,3 +1,7 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.getBranchNameFromNumber = getBranchNameFromNumber;
+exports.default = getPluralBranch;
 /**
  * Helper function to get the branch name from a number based on provided options.
  *
@@ -5,7 +9,7 @@
  * @param {Record<string, any>} options - The options containing possible branch names.
  * @returns {string} The determined branch name.
  */
-export function getBranchNameFromNumber(n, locales, options) {
+function getBranchNameFromNumber(n, locales, options) {
     var pluralRules = new Intl.PluralRules(locales);
     var provisionalBranchName = pluralRules.select(n);
     // aliases
@@ -63,7 +67,7 @@ export function getBranchNameFromNumber(n, locales, options) {
  * @param {any} branches - The object containing possible branches.
  * @returns {any} The determined branch.
  */
-export default function getPluralBranch(n, locales, branches) {
+function getPluralBranch(n, locales, branches) {
     var branchName = '';
     var branch = null;
     if (typeof n === 'number' && !branch && branches)

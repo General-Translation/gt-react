@@ -1,4 +1,7 @@
-export default function isVariableObject(obj) {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = isVariableObject;
+function isVariableObject(obj) {
     if (obj && typeof obj === 'object' && typeof obj.key === 'string') {
         var keys = Object.keys(obj);
         if (keys.length === 1)

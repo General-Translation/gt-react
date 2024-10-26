@@ -1,3 +1,4 @@
+"use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -34,18 +35,23 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-import { jsx as _jsx } from "react/jsx-runtime";
-import { determineLanguage, renderContentToString, requiresTranslation } from "generaltranslation";
-import { useCallback, useEffect, useState } from "react";
-import useBrowserLocale from "../hooks/useBrowserLocale";
-import { GTContext } from "./GTContext";
-import getDictionaryEntry from "./helpers/getDictionaryEntry";
-import { addGTIdentifier } from "../internal";
-import extractEntryMetadata from "./helpers/extractEntryMetadata";
-import renderDefaultChildren from "./rendering/renderDefaultChildren";
-import renderTranslatedChildren from "./rendering/renderTranslatedChildren";
-import primitives from "../primitives/primitives";
-var defaultDictionary = primitives.defaultDictionary, defaultDictionaryName = primitives.defaultDictionaryName, libraryDefaultLocale = primitives.libraryDefaultLocale, localeCookieName = primitives.localeCookieName;
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = GTProvider;
+var jsx_runtime_1 = require("react/jsx-runtime");
+var generaltranslation_1 = require("generaltranslation");
+var react_1 = require("react");
+var useBrowserLocale_1 = __importDefault(require("../hooks/useBrowserLocale"));
+var GTContext_1 = require("./GTContext");
+var getDictionaryEntry_1 = __importDefault(require("./helpers/getDictionaryEntry"));
+var internal_1 = require("../internal");
+var extractEntryMetadata_1 = __importDefault(require("./helpers/extractEntryMetadata"));
+var renderDefaultChildren_1 = __importDefault(require("./rendering/renderDefaultChildren"));
+var renderTranslatedChildren_1 = __importDefault(require("./rendering/renderTranslatedChildren"));
+var primitives_1 = __importDefault(require("../primitives/primitives"));
+var defaultDictionary = primitives_1.default.defaultDictionary, defaultDictionaryName = primitives_1.default.defaultDictionaryName, libraryDefaultLocale = primitives_1.default.libraryDefaultLocale, localeCookieName = primitives_1.default.localeCookieName;
 /**
  * Provides General Translation context to its children, which can then access `useGT`, `useLocale`, and `useDefaultLocale`.
  *
@@ -60,20 +66,20 @@ var defaultDictionary = primitives.defaultDictionary, defaultDictionaryName = pr
  *
  * @returns {JSX.Element} The provider component for General Translation context.
  */
-export default function GTProvider(_a) {
+function GTProvider(_a) {
     var _this = this;
     var children = _a.children, projectID = _a.projectID, _b = _a.dictionary, dictionary = _b === void 0 ? defaultDictionary : _b, _c = _a.dictionaryName, dictionaryName = _c === void 0 ? defaultDictionaryName : _c, locales = _a.locales, _d = _a.defaultLocale, defaultLocale = _d === void 0 ? (locales === null || locales === void 0 ? void 0 : locales[0]) || libraryDefaultLocale : _d, locale = _a.locale, _e = _a.cacheURL, cacheURL = _e === void 0 ? 'https://cache.gtx.dev' : _e;
     if (!projectID && cacheURL === 'https://cache.gtx.dev') {
         throw new Error("gt-react Error: General Translation cloud services require a project ID! Find yours at www.generaltranslation.com/dashboard.");
     }
-    var browserLocale = useBrowserLocale(defaultLocale, localeCookieName, locales);
+    var browserLocale = (0, useBrowserLocale_1.default)(defaultLocale, localeCookieName, locales);
     locale = locale || browserLocale;
     if (locales) {
-        locale = determineLanguage([locale, browserLocale], locales) || locale;
+        locale = (0, generaltranslation_1.determineLanguage)([locale, browserLocale], locales) || locale;
     }
-    var translationRequired = requiresTranslation(defaultLocale, locale, locales);
-    var _f = useState(cacheURL ? null : {}), translations = _f[0], setTranslations = _f[1];
-    useEffect(function () {
+    var translationRequired = (0, generaltranslation_1.requiresTranslation)(defaultLocale, locale, locales);
+    var _f = (0, react_1.useState)(cacheURL ? null : {}), translations = _f[0], setTranslations = _f[1];
+    (0, react_1.useEffect)(function () {
         if (!translations) {
             if (!translationRequired) {
                 setTranslations({}); // no translation required
@@ -97,10 +103,10 @@ export default function GTProvider(_a) {
             }
         }
     }, [translations, translationRequired]);
-    var translate = useCallback(function (id, options, f) {
+    var translate = (0, react_1.useCallback)(function (id, options, f) {
         if (options === void 0) { options = {}; }
         // get the dictionary entry
-        var _a = extractEntryMetadata(getDictionaryEntry(dictionary, id)), entry = _a.entry, metadata = _a.metadata;
+        var _a = (0, extractEntryMetadata_1.default)((0, getDictionaryEntry_1.default)(dictionary, id)), entry = _a.entry, metadata = _a.metadata;
         if (entry === undefined || entry === null) {
             console.warn("Dictionary entry with id \"".concat(id, "\" is null or undefined"));
             return;
@@ -122,13 +128,13 @@ export default function GTProvider(_a) {
         else if (typeof entry === 'function') {
             entry = entry(options);
         }
-        var taggedEntry = addGTIdentifier(entry, id);
+        var taggedEntry = (0, internal_1.addGTIdentifier)(entry, id);
         // If no translations are required
         if (!translationRequired) {
             if (typeof taggedEntry === 'string') {
-                return renderContentToString(taggedEntry, defaultLocale, variables, variablesOptions);
+                return (0, generaltranslation_1.renderContentToString)(taggedEntry, defaultLocale, variables, variablesOptions);
             }
-            return renderDefaultChildren({
+            return (0, renderDefaultChildren_1.default)({
                 children: taggedEntry,
                 variables: variables,
                 variablesOptions: variablesOptions,
@@ -139,9 +145,9 @@ export default function GTProvider(_a) {
         if (translations) {
             var translation = translations[id];
             if (typeof taggedEntry === 'string') {
-                return renderContentToString(translation.t, [locale, defaultLocale], variables, variablesOptions);
+                return (0, generaltranslation_1.renderContentToString)(translation.t, [locale, defaultLocale], variables, variablesOptions);
             }
-            return renderTranslatedChildren({
+            return (0, renderTranslatedChildren_1.default)({
                 source: taggedEntry,
                 target: translation.t,
                 variables: variables,
@@ -150,7 +156,7 @@ export default function GTProvider(_a) {
             });
         }
     }, [dictionary, translations, translationRequired, defaultLocale]);
-    return (_jsx(GTContext.Provider, { value: {
+    return ((0, jsx_runtime_1.jsx)(GTContext_1.GTContext.Provider, { value: {
             translate: translate,
             locale: locale,
             defaultLocale: defaultLocale,

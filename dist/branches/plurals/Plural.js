@@ -1,3 +1,4 @@
+"use strict";
 var __rest = (this && this.__rest) || function (s, e) {
     var t = {};
     for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
@@ -9,10 +10,14 @@ var __rest = (this && this.__rest) || function (s, e) {
         }
     return t;
 };
-import { jsx as _jsx } from "react/jsx-runtime";
-import { getPluralBranch } from "../../internal";
-import useLocale from "../../hooks/useLocale";
-import useDefaultLocale from "../../hooks/useDefaultLocale";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+var jsx_runtime_1 = require("react/jsx-runtime");
+var internal_1 = require("../../internal");
+var useLocale_1 = __importDefault(require("../../hooks/useLocale"));
+var useDefaultLocale_1 = __importDefault(require("../../hooks/useDefaultLocale"));
 /**
  * The `<Plural>` component dynamically renders content based on the plural form of the given number (`n`).
  * It determines which content to display by matching the value of `n` to the appropriate pluralization branch,
@@ -36,13 +41,13 @@ import useDefaultLocale from "../../hooks/useDefaultLocale";
 function Plural(_a) {
     var children = _a.children, n = _a.n, props = __rest(_a, ["children", "n"]);
     var generaltranslation = props["data-generaltranslation"], branches = __rest(props, ['data-generaltranslation']);
-    var locale = useLocale();
-    var defaultLocale = useDefaultLocale();
+    var locale = (0, useLocale_1.default)();
+    var defaultLocale = (0, useDefaultLocale_1.default)();
     if (typeof n !== 'number')
         throw new Error("Plural with children \"".concat(children, "\" requires \"n\" option."));
-    var branch = getPluralBranch(n, [locale, defaultLocale], branches) || children;
-    return (_jsx("span", { "data-generaltranslation": generaltranslation, "data-_gt-n": n, children: branch }));
+    var branch = (0, internal_1.getPluralBranch)(n, [locale, defaultLocale], branches) || children;
+    return ((0, jsx_runtime_1.jsx)("span", { "data-generaltranslation": generaltranslation, "data-_gt-n": n, children: branch }));
 }
 Plural.gtTransformation = "plural";
-export default Plural;
+exports.default = Plural;
 //# sourceMappingURL=Plural.js.map

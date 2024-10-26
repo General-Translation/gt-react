@@ -1,3 +1,4 @@
+"use strict";
 var __assign = (this && this.__assign) || function () {
     __assign = Object.assign || function(t) {
         for (var s, i = 1, n = arguments.length; i < n; i++) {
@@ -9,8 +10,13 @@ var __assign = (this && this.__assign) || function () {
     };
     return __assign.apply(this, arguments);
 };
-import React from 'react';
-import defaultVariableNames from '../variables/_defaultVariableNames';
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = writeChildrenAsObjects;
+var react_1 = __importDefault(require("react"));
+var _defaultVariableNames_1 = __importDefault(require("../variables/_defaultVariableNames"));
 /**
  * Gets the tag name of a React element.
  * @param {ReactElement} child - The React element.
@@ -36,7 +42,7 @@ var getTagName = function (child) {
     return 'function';
 };
 var handleSingleChild = function (child) {
-    if (React.isValidElement(child)) {
+    if (react_1.default.isValidElement(child)) {
         var _a = child, type = _a.type, props = _a.props;
         var objectElement = {
             type: getTagName(child),
@@ -47,7 +53,7 @@ var handleSingleChild = function (child) {
             var newGTProp = __assign({}, generaltranslation);
             var transformation = generaltranslation.transformation;
             if (transformation === "variable") {
-                var variableName = props.name || defaultVariableNames[generaltranslation === null || generaltranslation === void 0 ? void 0 : generaltranslation.variableType] || "value";
+                var variableName = props.name || _defaultVariableNames_1.default[generaltranslation === null || generaltranslation === void 0 ? void 0 : generaltranslation.variableType] || "value";
                 return { variable: generaltranslation.variableType || "variable", key: variableName };
             }
             if (transformation === "plural" && generaltranslation.branches) {
@@ -83,7 +89,7 @@ var handleSingleChild = function (child) {
  * @param {Children} children - The children to process.
  * @returns {object} The processed children as objects.
 */
-export default function writeChildrenAsObjects(children) {
+function writeChildrenAsObjects(children) {
     return Array.isArray(children) ? children.map(handleSingleChild) : handleSingleChild(children);
 }
 //# sourceMappingURL=writeChildrenAsObjects.js.map

@@ -1,8 +1,14 @@
-import { useState, useEffect } from 'react';
-import getLocaleCookie from '../cookies/getLocaleCookie';
-import { determineLanguage } from 'generaltranslation';
-import primitives from '../primitives/primitives';
-var libraryDefaultLocale = primitives.libraryDefaultLocale, localeCookieName = primitives.localeCookieName;
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = useBrowserLocale;
+var react_1 = require("react");
+var getLocaleCookie_1 = __importDefault(require("../cookies/getLocaleCookie"));
+var generaltranslation_1 = require("generaltranslation");
+var primitives_1 = __importDefault(require("../primitives/primitives"));
+var libraryDefaultLocale = primitives_1.default.libraryDefaultLocale, localeCookieName = primitives_1.default.localeCookieName;
 /**
  * Hook to retrieve the browser's default language, with support for a fallback and locale stored in a cookie.
  *
@@ -23,14 +29,14 @@ var libraryDefaultLocale = primitives.libraryDefaultLocale, localeCookieName = p
  * it will take precedence. If not, it falls back to the `navigator.language` or `navigator.userLanguage`. If none of these are available,
  * the provided `defaultLocale` is used.
  */
-export default function useBrowserLocale(defaultLocale, cookieName, locales) {
+function useBrowserLocale(defaultLocale, cookieName, locales) {
     if (defaultLocale === void 0) { defaultLocale = libraryDefaultLocale; }
     if (cookieName === void 0) { cookieName = localeCookieName; }
-    var _a = useState(''), locale = _a[0], setLocale = _a[1];
-    useEffect(function () {
+    var _a = (0, react_1.useState)(''), locale = _a[0], setLocale = _a[1];
+    (0, react_1.useEffect)(function () {
         var _a;
-        var browserLocale = (cookieName ? getLocaleCookie(cookieName) : undefined)
-            || (locales ? determineLanguage(navigator.languages, locales) : undefined)
+        var browserLocale = (cookieName ? (0, getLocaleCookie_1.default)(cookieName) : undefined)
+            || (locales ? (0, generaltranslation_1.determineLanguage)(navigator.languages, locales) : undefined)
             || ((_a = navigator.languages) === null || _a === void 0 ? void 0 : _a[0])
             || navigator.language
             || (navigator === null || navigator === void 0 ? void 0 : navigator.userLanguage)

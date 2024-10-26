@@ -1,3 +1,4 @@
+"use strict";
 var __assign = (this && this.__assign) || function () {
     __assign = Object.assign || function(t) {
         for (var s, i = 1, n = arguments.length; i < n; i++) {
@@ -20,17 +21,22 @@ var __rest = (this && this.__rest) || function (s, e) {
         }
     return t;
 };
-import { jsx as _jsx } from "react/jsx-runtime";
-import React from "react";
-import { isSameLanguage } from "generaltranslation";
-import useDefaultLocale from "../hooks/useDefaultLocale";
-import useLocale from "../hooks/useLocale";
-import renderDefaultChildren from "../provider/rendering/renderDefaultChildren";
-import { addGTIdentifier } from "../internal";
-import useGTContext from "../provider/GTContext";
-import renderTranslatedChildren from "../provider/rendering/renderTranslatedChildren";
-import useGT from "../hooks/useGT";
-import { useMemo } from "react";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = T;
+var jsx_runtime_1 = require("react/jsx-runtime");
+var react_1 = __importDefault(require("react"));
+var generaltranslation_1 = require("generaltranslation");
+var useDefaultLocale_1 = __importDefault(require("../hooks/useDefaultLocale"));
+var useLocale_1 = __importDefault(require("../hooks/useLocale"));
+var renderDefaultChildren_1 = __importDefault(require("../provider/rendering/renderDefaultChildren"));
+var internal_1 = require("../internal");
+var GTContext_1 = __importDefault(require("../provider/GTContext"));
+var renderTranslatedChildren_1 = __importDefault(require("../provider/rendering/renderTranslatedChildren"));
+var useGT_1 = __importDefault(require("../hooks/useGT"));
+var react_2 = require("react");
 /**
  * Translation component that handles rendering translated content, including plural forms.
  * Used with the required `id` parameter instead of `const t = useGT()`.
@@ -60,29 +66,29 @@ import { useMemo } from "react";
  * ```
  *
  */
-export default function T(_a) {
+function T(_a) {
     var children = _a.children, id = _a.id, props = __rest(_a, ["children", "id"]);
     if (!id) {
         throw new Error("Client-side <T> with no provided 'id' prop. Children: ".concat(children));
     }
     var variables = props.variables, variablesOptions = props.variablesOptions;
-    var translations = useGTContext("<T id=\"".concat(id, "\"> used on the client-side outside of <GTProvider>")).translations;
-    var t = useGT();
+    var translations = (0, GTContext_1.default)("<T id=\"".concat(id, "\"> used on the client-side outside of <GTProvider>")).translations;
+    var t = (0, useGT_1.default)();
     if (!children) {
-        return _jsx(React.Fragment, { children: t(id, __assign({ variables: variables }, (variablesOptions && { variablesOptions: variablesOptions }))) }, id);
+        return (0, jsx_runtime_1.jsx)(react_1.default.Fragment, { children: t(id, __assign({ variables: variables }, (variablesOptions && { variablesOptions: variablesOptions }))) }, id);
     }
-    var locale = useLocale();
-    var defaultLocale = useDefaultLocale();
-    var taggedChildren = useMemo(function () { return addGTIdentifier(children); }, [children]);
+    var locale = (0, useLocale_1.default)();
+    var defaultLocale = (0, useDefaultLocale_1.default)();
+    var taggedChildren = (0, react_2.useMemo)(function () { return (0, internal_1.addGTIdentifier)(children); }, [children]);
     var translationRequired = (function () {
         if (!locale)
             return false;
-        if (isSameLanguage(locale, defaultLocale))
+        if ((0, generaltranslation_1.isSameLanguage)(locale, defaultLocale))
             return false;
         return true;
     })();
     if (!translationRequired) {
-        return renderDefaultChildren({
+        return (0, renderDefaultChildren_1.default)({
             children: taggedChildren,
             variables: variables,
             variablesOptions: variablesOptions,
@@ -93,14 +99,14 @@ export default function T(_a) {
     var translation = translations[id];
     if (!translation || !translation.t) {
         console.error("<T id=\"".concat(id, "\"> is used in a client component without a corresponding translation."));
-        return renderDefaultChildren({
+        return (0, renderDefaultChildren_1.default)({
             children: taggedChildren,
             variables: variables,
             variablesOptions: variablesOptions,
             defaultLocale: defaultLocale
         });
     }
-    return renderTranslatedChildren({
+    return (0, renderTranslatedChildren_1.default)({
         source: taggedChildren, target: translation.t,
         variables: variables,
         variablesOptions: variablesOptions,

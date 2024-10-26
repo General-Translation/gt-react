@@ -1,10 +1,16 @@
-import defaultVariableNames from "./_defaultVariableNames";
-export default function getVariableProps(props) {
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = getVariableProps;
+var _defaultVariableNames_1 = __importDefault(require("./_defaultVariableNames"));
+function getVariableProps(props) {
     var _a;
     var variableType = ((_a = props['data-generaltranslation']) === null || _a === void 0 ? void 0 : _a.variableType) || "variable";
     var result = {
         variableType: variableType,
-        variableName: props.name || props['data-_gt-variable-name'] || defaultVariableNames[variableType],
+        variableName: props.name || props['data-_gt-variable-name'] || _defaultVariableNames_1.default[variableType],
         variableValue: (function () {
             if (typeof props.value !== 'undefined')
                 return props.value;

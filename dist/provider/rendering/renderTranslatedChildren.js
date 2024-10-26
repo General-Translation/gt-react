@@ -1,3 +1,4 @@
+"use strict";
 var __assign = (this && this.__assign) || function () {
     __assign = Object.assign || function(t) {
         for (var s, i = 1, n = arguments.length; i < n; i++) {
@@ -9,16 +10,21 @@ var __assign = (this && this.__assign) || function () {
     };
     return __assign.apply(this, arguments);
 };
-import { jsx as _jsx } from "react/jsx-runtime";
-import React from "react";
-import isVariableObject from "../helpers/isVariableObject";
-import getGTProp from "../helpers/getGTProp";
-import getVariableProps from "../../variables/_getVariableProps";
-import { getPluralBranch } from "../../internal";
-import renderDefaultChildren from "./renderDefaultChildren";
-import renderVariable from "./renderVariable";
-import primitives from '../../primitives/primitives';
-var libraryDefaultLocale = primitives.libraryDefaultLocale;
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = renderTranslatedChildren;
+var jsx_runtime_1 = require("react/jsx-runtime");
+var react_1 = __importDefault(require("react"));
+var isVariableObject_1 = __importDefault(require("../helpers/isVariableObject"));
+var getGTProp_1 = __importDefault(require("../helpers/getGTProp"));
+var _getVariableProps_1 = __importDefault(require("../../variables/_getVariableProps"));
+var internal_1 = require("../../internal");
+var renderDefaultChildren_1 = __importDefault(require("./renderDefaultChildren"));
+var renderVariable_1 = __importDefault(require("./renderVariable"));
+var primitives_1 = __importDefault(require("../../primitives/primitives"));
+var libraryDefaultLocale = primitives_1.default.libraryDefaultLocale;
 function renderTranslatedElement(_a) {
     var _b;
     var sourceElement = _a.sourceElement, targetElement = _a.targetElement, _c = _a.variables, variables = _c === void 0 ? {} : _c, _d = _a.variablesOptions, variablesOptions = _d === void 0 ? {} : _d, _e = _a.locales, locales = _e === void 0 ? [libraryDefaultLocale] : _e;
@@ -30,10 +36,10 @@ function renderTranslatedElement(_a) {
             typeof sourceElement.props.n === 'number' ? sourceElement.props.n :
                 sourceElement.props['data-_gt-n'];
         var sourceBranches = generaltranslation.branches || {};
-        var sourceBranch = getPluralBranch(n, locales, sourceBranches) || sourceElement.props.children;
+        var sourceBranch = (0, internal_1.getPluralBranch)(n, locales, sourceBranches) || sourceElement.props.children;
         var targetBranches = targetElement.props["data-generaltranslation"].branches || {};
-        var targetBranch = getPluralBranch(n, locales, targetBranches) || targetElement.props.children;
-        return React.createElement('span', __assign(__assign({}, props), { 'data-generaltranslation': undefined, children: renderTranslatedChildren({
+        var targetBranch = (0, internal_1.getPluralBranch)(n, locales, targetBranches) || targetElement.props.children;
+        return react_1.default.createElement('span', __assign(__assign({}, props), { 'data-generaltranslation': undefined, children: renderTranslatedChildren({
                 source: sourceBranch,
                 target: targetBranch,
                 variables: variables,
@@ -47,7 +53,7 @@ function renderTranslatedElement(_a) {
         branch = variables[name_1] || branch || sourceElement.props['data-_gt-branch-name'];
         var sourceBranch = (generaltranslation.branches || {})[branch] || children;
         var targetBranch = (targetElement.props["data-generaltranslation"].branches || {})[branch] || targetElement.props.children;
-        return React.createElement('span', __assign(__assign({}, props), { 'data-generaltranslation': undefined, children: renderTranslatedChildren({
+        return react_1.default.createElement('span', __assign(__assign({}, props), { 'data-generaltranslation': undefined, children: renderTranslatedChildren({
                 source: sourceBranch,
                 target: targetBranch,
                 variables: variables,
@@ -56,7 +62,7 @@ function renderTranslatedElement(_a) {
             }) }));
     }
     if ((props === null || props === void 0 ? void 0 : props.children) && ((_b = targetElement.props) === null || _b === void 0 ? void 0 : _b.children)) {
-        return React.cloneElement(sourceElement, __assign(__assign({}, props), { 'data-generaltranslation': undefined, children: renderTranslatedChildren({
+        return react_1.default.cloneElement(sourceElement, __assign(__assign({}, props), { 'data-generaltranslation': undefined, children: renderTranslatedChildren({
                 source: props.children,
                 target: targetElement.props.children,
                 variables: variables,
@@ -66,7 +72,7 @@ function renderTranslatedElement(_a) {
     }
     return sourceElement;
 }
-export default function renderTranslatedChildren(_a) {
+function renderTranslatedChildren(_a) {
     var source = _a.source, target = _a.target, _b = _a.variables, variables = _b === void 0 ? {} : _b, _c = _a.variablesOptions, variablesOptions = _c === void 0 ? {} : _c, _d = _a.locales, locales = _d === void 0 ? [libraryDefaultLocale] : _d;
     // Most straightforward case, return a valid React node
     if ((target === null || typeof target === 'undefined') && source)
@@ -75,11 +81,11 @@ export default function renderTranslatedChildren(_a) {
         return target;
     if (Array.isArray(source) && Array.isArray(target)) {
         var sourceElements_1 = source.filter(function (sourceChild) {
-            if (React.isValidElement(sourceChild)) {
-                var generaltranslation = getGTProp(sourceChild);
-                getVariableProps(sourceChild.props);
+            if (react_1.default.isValidElement(sourceChild)) {
+                var generaltranslation = (0, getGTProp_1.default)(sourceChild);
+                (0, _getVariableProps_1.default)(sourceChild.props);
                 if ((generaltranslation === null || generaltranslation === void 0 ? void 0 : generaltranslation.transformation) === "variable") {
-                    var _a = getVariableProps(sourceChild.props), variableName = _a.variableName, variableValue = _a.variableValue, variableOptions = _a.variableOptions;
+                    var _a = (0, _getVariableProps_1.default)(sourceChild.props), variableName = _a.variableName, variableValue = _a.variableValue, variableOptions = _a.variableOptions;
                     if (typeof variables[variableName] === 'undefined') {
                         variables[variableName] = variableValue;
                     }
@@ -93,7 +99,7 @@ export default function renderTranslatedChildren(_a) {
         var findMatchingSourceElement_1 = function (targetElement) {
             return sourceElements_1.find(function (sourceChild) {
                 var _a, _b;
-                var generaltranslation = getGTProp(sourceChild);
+                var generaltranslation = (0, getGTProp_1.default)(sourceChild);
                 if (typeof (generaltranslation === null || generaltranslation === void 0 ? void 0 : generaltranslation.id) !== 'undefined') {
                     var sourceID = generaltranslation.id;
                     var targetID = (_b = (_a = targetElement === null || targetElement === void 0 ? void 0 : targetElement.props) === null || _a === void 0 ? void 0 : _a['data-generaltranslation']) === null || _b === void 0 ? void 0 : _b.id;
@@ -104,9 +110,9 @@ export default function renderTranslatedChildren(_a) {
         };
         return target.map(function (targetChild, index) {
             if (typeof targetChild === 'string')
-                return _jsx(React.Fragment, { children: targetChild }, "string_".concat(index));
-            if (isVariableObject(targetChild)) {
-                return _jsx(React.Fragment, { children: renderVariable({
+                return (0, jsx_runtime_1.jsx)(react_1.default.Fragment, { children: targetChild }, "string_".concat(index));
+            if ((0, isVariableObject_1.default)(targetChild)) {
+                return (0, jsx_runtime_1.jsx)(react_1.default.Fragment, { children: (0, renderVariable_1.default)({
                         variableType: targetChild.variable || "variable",
                         variableName: targetChild.key,
                         variableValue: variables[targetChild.key],
@@ -115,7 +121,7 @@ export default function renderTranslatedChildren(_a) {
             }
             var matchingSourceElement = findMatchingSourceElement_1(targetChild);
             if (matchingSourceElement)
-                return _jsx(React.Fragment, { children: renderTranslatedElement({
+                return (0, jsx_runtime_1.jsx)(react_1.default.Fragment, { children: renderTranslatedElement({
                         sourceElement: matchingSourceElement,
                         targetElement: targetChild,
                         variables: variables,
@@ -125,8 +131,8 @@ export default function renderTranslatedChildren(_a) {
         });
     }
     if (target && typeof target === 'object' && !Array.isArray(target)) {
-        var targetType = isVariableObject(target) ? "variable" : "element";
-        if (React.isValidElement(source)) {
+        var targetType = (0, isVariableObject_1.default)(target) ? "variable" : "element";
+        if (react_1.default.isValidElement(source)) {
             if (targetType === "element") {
                 return renderTranslatedElement({
                     sourceElement: source, targetElement: target,
@@ -135,9 +141,9 @@ export default function renderTranslatedChildren(_a) {
                     locales: locales
                 });
             }
-            var generaltranslation = getGTProp(source);
+            var generaltranslation = (0, getGTProp_1.default)(source);
             if ((generaltranslation === null || generaltranslation === void 0 ? void 0 : generaltranslation.transformation) === "variable") {
-                var _e = getVariableProps(source.props), variableName = _e.variableName, variableValue = _e.variableValue, variableOptions = _e.variableOptions;
+                var _e = (0, _getVariableProps_1.default)(source.props), variableName = _e.variableName, variableValue = _e.variableValue, variableOptions = _e.variableOptions;
                 if (typeof variables[variableName] === 'undefined') {
                     variables[variableName] = variableValue;
                 }
@@ -146,7 +152,7 @@ export default function renderTranslatedChildren(_a) {
         }
         if (targetType === "variable") {
             var targetVariable = target;
-            return renderVariable({
+            return (0, renderVariable_1.default)({
                 variableType: targetVariable.variable || "variable",
                 variableName: targetVariable.key,
                 variableValue: variables[targetVariable.key],
@@ -154,6 +160,6 @@ export default function renderTranslatedChildren(_a) {
             });
         }
     }
-    return renderDefaultChildren({ children: source, variables: variables, variablesOptions: variablesOptions, defaultLocale: locales[0] });
+    return (0, renderDefaultChildren_1.default)({ children: source, variables: variables, variablesOptions: variablesOptions, defaultLocale: locales[0] });
 }
 //# sourceMappingURL=renderTranslatedChildren.js.map

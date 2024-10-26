@@ -1,3 +1,4 @@
+"use strict";
 var __assign = (this && this.__assign) || function () {
     __assign = Object.assign || function(t) {
         for (var s, i = 1, n = arguments.length; i < n; i++) {
@@ -20,16 +21,18 @@ var __rest = (this && this.__rest) || function (s, e) {
         }
     return t;
 };
-import { hashString } from 'generaltranslation/internal';
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = hashReactChildrenObjects;
+var internal_1 = require("generaltranslation/internal");
 /**
  * Calculates a unique ID for the given children objects by hashing their sanitized JSON string representation.
  *
  * @param {any} childrenAsObjects - The children objects to be hashed.
  * @returns {string} - A promise that resolves to the unique ID.
  */
-export default function hashReactChildrenObjects(childrenAsObjects) {
+function hashReactChildrenObjects(childrenAsObjects) {
     var unhashedKey = JSON.stringify(sanitizeChildrenAsObjects(childrenAsObjects));
-    return hashString(unhashedKey);
+    return (0, internal_1.hashString)(unhashedKey);
 }
 function sanitizeChildrenAsObjects(childrenAsObjects) {
     var sanitizeChild = function (child) {

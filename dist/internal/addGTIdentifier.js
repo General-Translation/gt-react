@@ -1,3 +1,4 @@
+"use strict";
 var __assign = (this && this.__assign) || function () {
     __assign = Object.assign || function(t) {
         for (var s, i = 1, n = arguments.length; i < n; i++) {
@@ -8,6 +9,29 @@ var __assign = (this && this.__assign) || function () {
         return t;
     };
     return __assign.apply(this, arguments);
+};
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
 };
 var __rest = (this && this.__rest) || function (s, e) {
     var t = {};
@@ -20,9 +44,11 @@ var __rest = (this && this.__rest) || function (s, e) {
         }
     return t;
 };
-import React, { isValidElement } from 'react';
-import { isAcceptedPluralForm } from '../primitives/primitives';
-export default function addGTIdentifier(children, outerID, startingIndex) {
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = addGTIdentifier;
+var react_1 = __importStar(require("react"));
+var primitives_1 = require("../primitives/primitives");
+function addGTIdentifier(children, outerID, startingIndex) {
     if (startingIndex === void 0) { startingIndex = 0; }
     // Object to keep track of the current index for GT IDs
     var index = startingIndex;
@@ -44,7 +70,7 @@ export default function addGTIdentifier(children, outerID, startingIndex) {
             if (transformationParts[0] === "plural") {
                 var pluralBranches = Object.entries(props).reduce(function (acc, _a) {
                     var branchName = _a[0], branch = _a[1];
-                    if (isAcceptedPluralForm(branchName)) {
+                    if ((0, primitives_1.isAcceptedPluralForm)(branchName)) {
                         acc[branchName] = addGTIdentifier(branch, branchName, index);
                     }
                     return acc;
@@ -67,7 +93,7 @@ export default function addGTIdentifier(children, outerID, startingIndex) {
         return result;
     };
     function handleSingleChild(child) {
-        if (isValidElement(child)) {
+        if ((0, react_1.isValidElement)(child)) {
             var props = child.props;
             // Create new props for the element, including the GT identifier and a key
             var generaltranslation = createGTProp(child);
@@ -80,14 +106,14 @@ export default function addGTIdentifier(children, outerID, startingIndex) {
             if (props.children) {
                 newProps.children = handleChildren(props.children);
             }
-            return React.cloneElement(child, newProps);
+            return react_1.default.cloneElement(child, newProps);
         }
         return child;
     }
     function handleChildren(children) {
         if (Array.isArray(children)) {
             outerID = undefined;
-            return React.Children.map(children, handleSingleChild);
+            return react_1.default.Children.map(children, handleSingleChild);
         }
         else {
             return handleSingleChild(children);
