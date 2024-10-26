@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useState } from "react";
 import { _GTContext, _renderDefaultChildren, _renderTranslatedChildren } from "gt-react/client";
-import { addGTIdentifier, extractEntryMetadata, getPluralBranch, primitives } from "gt-react/internal";
+import { addGTIdentifier, extractEntryMetadata } from "gt-react/internal";
 import { renderContentToString } from "generaltranslation";
 import ClientResolver from "./ClientResolver";
 
