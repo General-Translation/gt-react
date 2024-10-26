@@ -38,13 +38,14 @@ import { jsx as _jsx } from "react/jsx-runtime";
 import { determineLanguage, renderContentToString, requiresTranslation } from "generaltranslation";
 import { useCallback, useEffect, useState } from "react";
 import useBrowserLocale from "../hooks/useBrowserLocale";
-import { defaultDictionary, defaultDictionaryName, libraryDefaultLocale, localeCookieName } from "../primitives/primitives";
 import { GTContext } from "./GTContext";
 import getDictionaryEntry from "./helpers/getDictionaryEntry";
 import { addGTIdentifier } from "../internal";
 import extractEntryMetadata from "./helpers/extractEntryMetadata";
 import renderDefaultChildren from "./rendering/renderDefaultChildren";
 import renderTranslatedChildren from "./rendering/renderTranslatedChildren";
+import primitives from "../primitives/primitives";
+var defaultDictionary = primitives.defaultDictionary, defaultDictionaryName = primitives.defaultDictionaryName, libraryDefaultLocale = primitives.libraryDefaultLocale, localeCookieName = primitives.localeCookieName;
 /**
  * Provides General Translation context to its children, which can then access `useGT`, `useLocale`, and `useDefaultLocale`.
  *

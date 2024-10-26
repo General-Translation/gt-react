@@ -1,11 +1,11 @@
 import React, { ReactElement, ReactNode } from "react";
 import getGTProp from "../helpers/getGTProp";
 import getVariableProps from "../../variables/_getVariableProps";
-import Plural from "../../branches/plurals/Plural";
 import { getPluralBranch } from "../../internal";
-import Branch from "../../branches/Branch";
-import { libraryDefaultLocale } from "../../primitives/primitives";
 import renderVariable from "./renderVariable";
+
+import primitives from '../../primitives/primitives';
+const { libraryDefaultLocale } = primitives;
 
 export default function renderDefaultChildren({
     children, variables = {}, variablesOptions = {},

@@ -3,10 +3,12 @@ import { TranslatedChildren, TranslatedElement, VariableObject } from "../../pri
 import isVariableObject from "../helpers/isVariableObject";
 import getGTProp from "../helpers/getGTProp";
 import getVariableProps from "../../variables/_getVariableProps";
-import { libraryDefaultLocale } from "../../primitives/primitives";
 import { getPluralBranch } from "../../internal";
 import renderDefaultChildren from "./renderDefaultChildren";
 import renderVariable from "./renderVariable";
+
+import primitives from '../../primitives/primitives';
+const { libraryDefaultLocale } = primitives;
 
 function renderTranslatedElement({
     sourceElement, targetElement, variables = {}, variablesOptions = {},

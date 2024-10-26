@@ -14,10 +14,11 @@ import React from "react";
 import isVariableObject from "../helpers/isVariableObject";
 import getGTProp from "../helpers/getGTProp";
 import getVariableProps from "../../variables/_getVariableProps";
-import { libraryDefaultLocale } from "../../primitives/primitives";
 import { getPluralBranch } from "../../internal";
 import renderDefaultChildren from "./renderDefaultChildren";
 import renderVariable from "./renderVariable";
+import primitives from '../../primitives/primitives';
+var libraryDefaultLocale = primitives.libraryDefaultLocale;
 function renderTranslatedElement(_a) {
     var _b;
     var sourceElement = _a.sourceElement, targetElement = _a.targetElement, _c = _a.variables, variables = _c === void 0 ? {} : _c, _d = _a.variablesOptions, variablesOptions = _d === void 0 ? {} : _d, _e = _a.locales, locales = _e === void 0 ? [libraryDefaultLocale] : _e;

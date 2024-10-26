@@ -2,7 +2,7 @@ import React from "react";
 import { determineLanguage, isSameLanguage, renderContentToString, requiresTranslation } from "generaltranslation";
 import { ReactElement, useCallback, useEffect, useState } from "react";
 import useBrowserLocale from "../hooks/useBrowserLocale";
-import { defaultDictionary, defaultDictionaryName, libraryDefaultLocale, localeCookieName, pluralForms } from "../primitives/primitives";
+
 import { GTContext } from "./GTContext";
 import { Dictionary, DictionaryEntry, Translation } from "../primitives/types";
 import getDictionaryEntry from "./helpers/getDictionaryEntry";
@@ -10,6 +10,9 @@ import { addGTIdentifier } from "../internal";
 import extractEntryMetadata from "./helpers/extractEntryMetadata";
 import renderDefaultChildren from "./rendering/renderDefaultChildren";
 import renderTranslatedChildren from "./rendering/renderTranslatedChildren";
+
+import primitives from "../primitives/primitives";
+const { defaultDictionary, defaultDictionaryName, libraryDefaultLocale, localeCookieName } = primitives;
 
 /**
  * Provides General Translation context to its children, which can then access `useGT`, `useLocale`, and `useDefaultLocale`.

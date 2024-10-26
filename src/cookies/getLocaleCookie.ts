@@ -1,4 +1,5 @@
-import { localeCookieName } from "../primitives/primitives";
+import primitives from '../primitives/primitives';
+const { localeCookieName } = primitives;
 
 /**
  * Function to get the value of a specific cookie by its name.

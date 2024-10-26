@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react';
-import { libraryDefaultLocale, localeCookieName } from '../primitives/primitives';
 import getLocaleCookie from '../cookies/getLocaleCookie';
 import { determineLanguage } from 'generaltranslation';
+
+import primitives from '../primitives/primitives';
+const { libraryDefaultLocale, localeCookieName } = primitives;
 
 /**
  * Hook to retrieve the browser's default language, with support for a fallback and locale stored in a cookie.

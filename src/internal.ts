@@ -1,4 +1,4 @@
-import * as primitives from './primitives/primitives'
+import primitives, { isAcceptedPluralForm } from './primitives/primitives'
 import hashReactChildrenObjects from "./internal/hashReactChildrenObjects";
 import flattenDictionary from "./internal/flattenDictionary";
 import addGTIdentifier from "./internal/addGTIdentifier";
@@ -12,5 +12,6 @@ import isVariableObject from './provider/helpers/isVariableObject';
 export {
     addGTIdentifier, writeChildrenAsObjects, isVariableObject,
     flattenDictionary, getDictionaryEntry, getVariableProps,
-    hashReactChildrenObjects, getPluralBranch, extractEntryMetadata, primitives
+    hashReactChildrenObjects, getPluralBranch, extractEntryMetadata, primitives,
+    isAcceptedPluralForm
 } 

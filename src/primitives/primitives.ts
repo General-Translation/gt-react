@@ -1,22 +1,19 @@
 import _defaultVariableNames from "../variables/_defaultVariableNames";
 
-export const defaultVariableNames = _defaultVariableNames;
+const primitives = {
+  defaultVariableNames: _defaultVariableNames,
+  localeCookieName: "generaltranslation-locale",
+  libraryDefaultLocale: "en", // language to use as default if none is provided
+  pluralForms: ["singular", "plural", "dual", "zero", "one", "two", "few", "many", "other"],
+  defaultCacheURL: "https://cache.gtx.dev",
+  defaultDictionary: {},
+  defaultDictionaryName: "default"
+} as const;
 
-export const localeCookieName = "generaltranslation-locale";
-
-export const libraryDefaultLocale = "en"; // language to use as default if none is provided
-
-export const pluralForms = ["singular", "plural", "dual", "zero", "one", "two", "few", "many", "other"] as const;
+export default primitives;
 
 export function isAcceptedPluralForm(
-    form: string
-  ): form is (typeof pluralForms)[number] {
-    return pluralForms.includes(form as (typeof pluralForms)[number]);
-  }
-
-export const defaultDictionary = {};
-
-export const defaultDictionaryName = "default";
-
-export const defaultCacheURL = "https://cache.gtx.dev";
-
+  form: string
+): form is (typeof primitives.pluralForms)[number] {
+  return primitives.pluralForms.includes(form as (typeof primitives.pluralForms)[number]);
+}

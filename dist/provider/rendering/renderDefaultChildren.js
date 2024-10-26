@@ -24,8 +24,9 @@ import React from "react";
 import getGTProp from "../helpers/getGTProp";
 import getVariableProps from "../../variables/_getVariableProps";
 import { getPluralBranch } from "../../internal";
-import { libraryDefaultLocale } from "../../primitives/primitives";
 import renderVariable from "./renderVariable";
+import primitives from '../../primitives/primitives';
+var libraryDefaultLocale = primitives.libraryDefaultLocale;
 export default function renderDefaultChildren(_a) {
     var children = _a.children, _b = _a.variables, variables = _b === void 0 ? {} : _b, _c = _a.variablesOptions, variablesOptions = _c === void 0 ? {} : _c, _d = _a.defaultLocale, defaultLocale = _d === void 0 ? libraryDefaultLocale : _d;
     var handleSingleChild = function (child) {
