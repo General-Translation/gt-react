@@ -84,7 +84,11 @@ export default function T({
     // Do translation
     const translation = translations[id];
     if (!translation || !translation.t) {
-        throw new Error(`<T id="${id}"> is used in a client component without a corresponding translation.`)
+        console.error(`<T id="${id}"> is used in a client component without a corresponding translation.`);
+        return renderDefaultChildren({
+            children: taggedChildren,
+            variables, variablesOptions, defaultLocale
+        }) as JSX.Element;
     }
 
     return renderTranslatedChildren({

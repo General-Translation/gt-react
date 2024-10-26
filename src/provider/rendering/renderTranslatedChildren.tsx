@@ -1,52 +1,12 @@
 import React, { isValidElement, ReactElement, ReactNode } from "react";
 import { TranslatedChildren, TranslatedElement, VariableObject } from "../../primitives/types";
-import Num from "../../variables/Num";
-import Var from "../../variables/Var";
-import Currency from "../../variables/Currency";
-import DateTime from "../../variables/DateTime";
 import isVariableObject from "../helpers/isVariableObject";
 import getGTProp from "../helpers/getGTProp";
 import getVariableProps from "../../variables/_getVariableProps";
 import { libraryDefaultLocale } from "../../primitives/primitives";
 import { getPluralBranch } from "../../internal";
-
-export function renderVariable({
-    variableType, variableName, variableValue, variableOptions
-}: {
-    variableType: "variable" | "number" | "datetime" | "currency"
-    variableName: string,
-    variableValue: any,
-    variableOptions: Intl.NumberFormatOptions | Intl.DateTimeFormatOptions
-}) {
-    if (variableType === "number") {
-        return (
-            <Num 
-                name={variableName} 
-                value={variableValue}
-                options={variableOptions}
-            />
-        )
-    } else if (variableType === "datetime") {
-        return (
-            <DateTime
-                name={variableName} 
-                value={variableValue}
-                options={variableOptions}
-            />
-        )
-    } else if (variableType === "currency") {
-        return (
-            <Currency
-                name={variableName} 
-                value={variableValue}
-                options={variableOptions}
-            />
-        )
-    }
-    return (
-        <Var name={variableName} value={variableValue} />
-    );
-}
+import renderDefaultChildren from "./renderDefaultChildren";
+import renderVariable from "./renderVariable";
 
 function renderTranslatedElement({
     sourceElement, targetElement, variables = {}, variablesOptions = {},
@@ -231,5 +191,5 @@ export default function renderTranslatedChildren({
  
     }
 
-    return source;
+    return renderDefaultChildren({ children: source, variables, variablesOptions, defaultLocale: locales[0] });
 }

@@ -1,6 +1,5 @@
 {
   "compilerOptions": {
-    "noEmit": true,
     "module": "ESNext",
     "strict": true,
     "esModuleInterop": true,

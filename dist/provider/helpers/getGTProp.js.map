@@ -1,0 +1,1 @@
+{"version":3,"file":"getGTProp.js","sourceRoot":"","sources":["../../../src/provider/helpers/getGTProp.ts"],"names":[],"mappings":"AAGA,MAAM,CAAC,OAAO,UAAU,SAAS,CAC7B,KAAuC;IAEvC,IAAI,KAAK,IAAI,KAAK,CAAC,KAAK,IAAI,KAAK,CAAC,KAAK,CAAC,yBAAyB,CAAC,EAAE,CAAC;QACjE,OAAO,KAAK,CAAC,KAAK,CAAC,yBAAyB,CAAC,CAAC;IAClD,CAAC;IACD,OAAO,IAAI,CAAC;AAChB,CAAC"}

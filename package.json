@@ -2,8 +2,7 @@
   "name": "gt-react",
   "version": "5.0.3",
   "description": "A React library for automatic internationalization.",
-  "main": "dist/index.cjs.min.cjs",
-  "module": "dist/index.esm.min.mjs",
+  "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "peerDependencies": {
     "react": ">=16.8.0",
@@ -43,18 +42,15 @@
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "import": "./dist/index.esm.min.mjs",
-      "require": "./dist/index.cjs.min.cjs"
+      "default": "./dist/index.js"
     },
     "./internal": {
       "types": "./dist/internal.d.ts",
-      "import": "./dist/internal.esm.min.mjs",
-      "require": "./dist/internal.cjs.min.cjs"
+      "default": "./dist/internal.js"
     },
     "./client": {
       "types": "./dist/client.d.ts",
-      "import": "./dist/client.esm.min.mjs",
-      "require": "./dist/client.cjs.min.cjs"
+      "default": "./dist/client.js"
     }
   },
   "typesVersions": {
