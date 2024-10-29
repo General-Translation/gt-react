@@ -21,10 +21,10 @@ export default function ClientProvider({
     translationRequired: boolean,
 }) {
 
-    /*const [isMounted, setIsMounted] = useState(false);
+    const [isMounted, setIsMounted] = useState(false);
     useLayoutEffect(() => {
         setIsMounted(true);
-    }, [])*/
+    }, [])
 
     const translate = useCallback((id: string, options: Record<string, any> = {}, f?: Function) => {
 
@@ -101,7 +101,7 @@ export default function ClientProvider({
         <_GTContext.Provider value={{
             translate, locale, defaultLocale, translations
         }}>
-            {children}
+            {isMounted && children}
         </_GTContext.Provider>
     );
 };

@@ -24,11 +24,11 @@ var generaltranslation_1 = require("generaltranslation");
 var ClientResolver_1 = __importDefault(require("./ClientResolver"));
 // meant to be used inside the server-side <GTProvider>
 function ClientProvider(_a) {
-    /*const [isMounted, setIsMounted] = useState(false);
-    useLayoutEffect(() => {
-        setIsMounted(true);
-    }, [])*/
     var children = _a.children, dictionary = _a.dictionary, translations = _a.translations, locale = _a.locale, defaultLocale = _a.defaultLocale, translationRequired = _a.translationRequired;
+    var _b = (0, react_1.useState)(false), isMounted = _b[0], setIsMounted = _b[1];
+    (0, react_1.useLayoutEffect)(function () {
+        setIsMounted(true);
+    }, []);
     var translate = (0, react_1.useCallback)(function (id, options, f) {
         if (options === void 0) { options = {}; }
         var _a = (0, internal_1.extractEntryMetadata)(dictionary[id]), entry = _a.entry, metadata = _a.metadata;
@@ -94,7 +94,7 @@ function ClientProvider(_a) {
             locale: locale,
             defaultLocale: defaultLocale,
             translations: translations
-        }, children: children }));
+        }, children: isMounted && children }));
 }
 ;
 //# sourceMappingURL=ClientProvider.js.map
