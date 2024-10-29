@@ -46,7 +46,7 @@ function Num({ children, name = "n", value, options = {} }: {
             data-_gt-variable-name={name} 
             data-_gt-variable-type={"number"} 
             data-_gt-variable-options={JSON.stringify(options)}
-            suppressHydrationWarning
+            style={{ display: 'contents' }}
         >
             {renderedValue}
         </span>

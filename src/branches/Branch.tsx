@@ -35,7 +35,7 @@ function Branch({
             data-generaltranslation={generaltranslation} 
             data-_gt-name={name || "branch"} 
             data-_gt-branch-name={branch}
-            suppressHydrationWarning
+            style={{ display: 'contents' }}
         >
             {renderedBranch}
         </span>

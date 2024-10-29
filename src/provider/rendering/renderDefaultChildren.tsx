@@ -41,24 +41,14 @@ export default function renderDefaultChildren({
                             typeof child.props.n === 'number' ?  child.props.n :
                                 child.props['data-_gt-n'];
                 const branches = generaltranslation.branches || {};
-                return React.createElement('span', {
-                    ...child.props,
-                    suppressHydrationWarning: true,
-                    'data-generaltranslation': undefined,
-                    children: handleChildren(getPluralBranch(n, [defaultLocale], branches) || child.props.children)
-                });
+                return handleChildren(getPluralBranch(n, [defaultLocale], branches) || child.props.children);
             }
             if (generaltranslation?.transformation === "branch") {
                 let { children, name, branch, ...branches } = child.props;
                 name = name || child.props['data-_gt-name'] || "branch";
                 branch = variables[name] || branch || child.props['data-_gt-branch-name'];
                 branches = generaltranslation.branches || {};
-                return React.createElement('span', {
-                    ...child.props,
-                    suppressHydrationWarning: true,
-                    'data-generaltranslation': undefined,
-                    children: handleChildren(branches[branch])
-                });
+                return handleChildren(branches[branch]);
             }
             if (child.props.children) {
                 return React.cloneElement(child, {

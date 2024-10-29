@@ -30,7 +30,7 @@ function Var({ children, name, value }: {
         <span 
             data-_gt-variable-name={name} 
             data-_gt-variable-type={"variable"}
-            suppressHydrationWarning
+            style={{ display: 'contents' }}
         >
             {final}
         </span>

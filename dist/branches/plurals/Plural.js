@@ -46,7 +46,7 @@ function Plural(_a) {
     if (typeof n !== 'number')
         throw new Error("Plural with children \"".concat(children, "\" requires \"n\" option."));
     var branch = (0, internal_1.getPluralBranch)(n, [locale, defaultLocale], branches) || children;
-    return ((0, jsx_runtime_1.jsx)("span", { "data-generaltranslation": generaltranslation, "data-_gt-n": n, suppressHydrationWarning: true, children: branch }));
+    return ((0, jsx_runtime_1.jsx)("span", { "data-generaltranslation": generaltranslation, "data-_gt-n": n, style: { display: 'contents' }, children: branch }));
 }
 Plural.gtTransformation = "plural";
 exports.default = Plural;

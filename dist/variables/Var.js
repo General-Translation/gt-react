@@ -22,7 +22,7 @@ var jsx_runtime_1 = require("react/jsx-runtime");
 function Var(_a) {
     var children = _a.children, name = _a.name, value = _a.value;
     var final = typeof children !== 'undefined' ? children : value;
-    return ((0, jsx_runtime_1.jsx)("span", { "data-_gt-variable-name": name, "data-_gt-variable-type": "variable", suppressHydrationWarning: true, children: final }));
+    return ((0, jsx_runtime_1.jsx)("span", { "data-_gt-variable-name": name, "data-_gt-variable-type": "variable", style: { display: 'contents' }, children: final }));
 }
 ;
 Var.gtTransformation = "variable-variable";

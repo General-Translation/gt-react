@@ -46,7 +46,7 @@ function DateTime(_a) {
         final = ((0, generaltranslation_1.formatDateTime)({ value: dateValue, languages: locales, options: options })).replace(/[\u200F\u202B\u202E]/g, '');
     }
     // Render the formatted date within a span element
-    return ((0, jsx_runtime_1.jsx)("span", { "data-_gt-variable-name": name, "data-_gt-variable-type": "date", "data-_gt-variable-options": options, suppressHydrationWarning: true, children: final }));
+    return ((0, jsx_runtime_1.jsx)("span", { "data-_gt-variable-name": name, "data-_gt-variable-type": "date", "data-_gt-variable-options": options, style: { display: 'contents' }, children: final }));
 }
 ;
 // Static property for transformation type
