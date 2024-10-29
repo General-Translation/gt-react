@@ -31,7 +31,12 @@ function Branch({
     const { 'data-generaltranslation': generaltranslation, ...branches } = props;
     const renderedBranch = (branch && typeof branches[branch] !== 'undefined') ? branches[branch] : children;
     return (
-        <span data-generaltranslation={generaltranslation} data-_gt-name={name || "branch"} data-_gt-branch-name={branch}>
+        <span 
+            data-generaltranslation={generaltranslation} 
+            data-_gt-name={name || "branch"} 
+            data-_gt-branch-name={branch}
+            suppressHydrationWarning
+        >
             {renderedBranch}
         </span>
     );

@@ -161,7 +161,6 @@ function GTProvider(_a) {
             locale: locale,
             defaultLocale: defaultLocale,
             translations: translations
-        }, children: (translations && browserLocale) ?
-            children : undefined }));
+        }, children: children }));
 }
 //# sourceMappingURL=GTProvider.js.map

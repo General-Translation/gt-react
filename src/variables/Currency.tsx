@@ -42,7 +42,12 @@ function Currency({ children, name = "cost", value, currency = "USD", options = 
     }
 
     return (
-        <span data-_gt-variable-name={name} data-_gt-variable-type={"currency"} data-_gt-variable-options={{ style: 'currency', currency, ...options }}>
+        <span 
+            data-_gt-variable-name={name} 
+            data-_gt-variable-type={"currency"} 
+            data-_gt-variable-options={{ style: 'currency', currency, ...options }}
+            suppressHydrationWarning
+        >
             {renderedValue}
         </span>
     );

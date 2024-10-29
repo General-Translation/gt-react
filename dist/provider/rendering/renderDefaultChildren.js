@@ -54,14 +54,14 @@ function renderDefaultChildren(_a) {
                     typeof child.props.n === 'number' ? child.props.n :
                         child.props['data-_gt-n'];
                 var branches = generaltranslation.branches || {};
-                return react_1.default.createElement('span', __assign(__assign({}, child.props), { 'data-generaltranslation': undefined, children: handleChildren((0, internal_1.getPluralBranch)(n, [defaultLocale], branches) || child.props.children) }));
+                return react_1.default.createElement('span', __assign(__assign({}, child.props), { suppressHydrationWarning: true, 'data-generaltranslation': undefined, children: handleChildren((0, internal_1.getPluralBranch)(n, [defaultLocale], branches) || child.props.children) }));
             }
             if ((generaltranslation === null || generaltranslation === void 0 ? void 0 : generaltranslation.transformation) === "branch") {
                 var _b = child.props, children_1 = _b.children, name_1 = _b.name, branch = _b.branch, branches = __rest(_b, ["children", "name", "branch"]);
                 name_1 = name_1 || child.props['data-_gt-name'] || "branch";
                 branch = variables[name_1] || branch || child.props['data-_gt-branch-name'];
                 branches = generaltranslation.branches || {};
-                return react_1.default.createElement('span', __assign(__assign({}, child.props), { 'data-generaltranslation': undefined, children: handleChildren(branches[branch]) }));
+                return react_1.default.createElement('span', __assign(__assign({}, child.props), { suppressHydrationWarning: true, 'data-generaltranslation': undefined, children: handleChildren(branches[branch]) }));
             }
             if (child.props.children) {
                 return react_1.default.cloneElement(child, __assign(__assign({}, child.props), { 'data-generaltranslation': undefined, children: handleChildren(child.props.children) }));

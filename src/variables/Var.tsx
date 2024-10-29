@@ -27,7 +27,11 @@ function Var({ children, name, value }: {
     let final = typeof children !== 'undefined' ? children : value;
     
     return (
-        <span data-_gt-variable-name={name} data-_gt-variable-type={"variable"}>
+        <span 
+            data-_gt-variable-name={name} 
+            data-_gt-variable-type={"variable"}
+            suppressHydrationWarning
+        >
             {final}
         </span>
     );

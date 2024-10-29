@@ -1,4 +1,4 @@
-import React, { ReactNode, useCallback } from "react";
+import React, { isValidElement, ReactNode, useCallback, useEffect, useState } from "react";
 import useGTContext from "../provider/GTContext";
 
 /**
@@ -21,6 +21,7 @@ export default function useGT(id: string = ''):
         f?: Function
     ) => ReactNode 
 {
+
     // Create a prefix for translation keys if an id is provided
     const getID = (suffix: string) => {
         return id ? `${id}.${suffix}` : suffix;
@@ -47,7 +48,7 @@ export default function useGT(id: string = ''):
     ): string | JSX.Element {
         const prefixedID = getID(id);
         const translation = translate ? translate(prefixedID, options, f) : undefined;
-        if (!translation) console.warn(`t('${id}') finding no translation for dictionary item ${prefixedID} !`)
+        if (!translation) console.warn(`t('${id}') finding no translation for dictionary item ${prefixedID} !`);
         return translation;
     };
 

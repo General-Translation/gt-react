@@ -147,10 +147,7 @@ export default function GTProvider({
         <GTContext.Provider value={{
             translate, locale, defaultLocale, translations
         }}>
-            {
-                (translations && browserLocale) ?
-                children : undefined
-            }
+            {children}
         </GTContext.Provider>
     )
 

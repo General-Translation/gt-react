@@ -49,7 +49,12 @@ function DateTime({ children, name = "date", value, options = {} }: {
 
     // Render the formatted date within a span element
     return (
-        <span data-_gt-variable-name={name} data-_gt-variable-type={"date"} data-_gt-variable-options={options}>
+        <span 
+            data-_gt-variable-name={name} 
+            data-_gt-variable-type={"date"} 
+            data-_gt-variable-options={options}
+            suppressHydrationWarning
+        >
             {final}
         </span>
     );

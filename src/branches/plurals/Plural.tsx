@@ -37,7 +37,11 @@ function Plural({
         throw new Error(`Plural with children "${children}" requires "n" option.`);
     const branch = getPluralBranch(n, [locale, defaultLocale], branches) || children;
     return (
-        <span data-generaltranslation={generaltranslation} data-_gt-n={n}>
+        <span 
+            data-generaltranslation={generaltranslation} 
+            data-_gt-n={n} 
+            suppressHydrationWarning
+        >
             {branch}
         </span>
     );
