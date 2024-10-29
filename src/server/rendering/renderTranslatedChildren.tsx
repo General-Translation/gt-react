@@ -75,6 +75,7 @@ function renderTranslatedElement({
         const targetBranch = getPluralBranch(n, locales, targetBranches) || targetElement.props.children;
         return React.createElement('span', {
             ...props,
+            suppressHydrationWarning: true,
             'data-generaltranslation': undefined,
             children: renderTranslatedChildren({ 
                 source: sourceBranch, 
@@ -92,6 +93,7 @@ function renderTranslatedElement({
         const targetBranch = (targetElement.props["data-generaltranslation"].branches || {})[branch] || targetElement.props.children;
         return React.createElement('span', {
             ...props,
+            suppressHydrationWarning: true,
             'data-generaltranslation': undefined,
             children: renderTranslatedChildren({ 
                 source: sourceBranch, 

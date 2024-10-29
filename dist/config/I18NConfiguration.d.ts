@@ -82,13 +82,24 @@ export default class I18NConfiguration {
      * @param params - Parameters for translation
      * @returns Translated string
      */
-    translate(params: any): Promise<string>;
+    translate(params: {
+        content: string | (string | {
+            key: string;
+            variable?: string;
+        })[];
+        targetLanguage: string;
+        options: Record<string, any>;
+    }): Promise<string>;
     /**
      * Translate the children components
      * @param params - Parameters for translation
      * @returns A promise that resolves when translation is complete
     */
-    translateChildren(params: any): Promise<any>;
+    translateChildren(params: {
+        children: any;
+        targetLanguage: string;
+        metadata: Record<string, any>;
+    }): Promise<any>;
     /**
      * Send a batch request for React translation
      * @param batch - The batch of requests to be sent

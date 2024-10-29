@@ -73,6 +73,7 @@ function DateTime({ children, name = "date", value, options = {}, ...props }: {
             data-_gt-variable-type={"date"} 
             data-_gt-variable-options={options}
             data-_gt-unformatted-value={isValidDate(dateValue) ? dateValue : undefined}
+            suppressHydrationWarning
         >
             {formattedValue}
         </span>

@@ -166,12 +166,13 @@ export default class I18NConfiguration {
      * @param params - Parameters for translation
      * @returns Translated string
      */
-    async translate(params: any): Promise<string> {
-        const cacheKey = JSON.stringify(params);
+    
+    async translate(params: { content: string | (string | { key: string, variable?: string })[], targetLanguage: string, options: Record<string, any> }): Promise<string> {
+        const cacheKey = constructCacheKey(params.targetLanguage, params.options);
         if (this._translationCache.has(cacheKey)) {
             return this._translationCache.get(cacheKey);
         }
-        const { content, targetLanguage, options }: { content: string, targetLanguage: string, options: Record<string, any> } = params;
+        const { content, targetLanguage, options } = params;
         const dictionaryName: string = params.options?.dictionaryName || this.dictionaryName;
         const translationPromise = new Promise<string>((resolve, reject) => {
             this._queue.push({
@@ -188,7 +189,7 @@ export default class I18NConfiguration {
             });
         });
         this._translationCache.set(cacheKey, translationPromise);
-        return translationPromise.finally(() => this._translationCache.delete(cacheKey));
+        return translationPromise;
     }
    
     /**
@@ -196,13 +197,13 @@ export default class I18NConfiguration {
      * @param params - Parameters for translation
      * @returns A promise that resolves when translation is complete
     */
-    async translateChildren(params: any): Promise<any> {
-        const cacheKey = JSON.stringify(params);
+    async translateChildren(params: { children: any, targetLanguage: string, metadata: Record<string, any> }): Promise<any> {
+        const cacheKey = constructCacheKey(params.targetLanguage, params.metadata);
         if (this._translationCache.has(cacheKey)) {
             return this._translationCache.get(cacheKey);
         }
-        const { children, targetLanguage, metadata }: { children: any, targetLanguage: string, metadata: Record<string, any> } = params;
-        const dictionaryName: string = params.options?.dictionaryName || this.dictionaryName;
+        const { children, targetLanguage, metadata } = params;
+        const dictionaryName: string = metadata?.dictionaryName || this.dictionaryName;
         const translationPromise = new Promise<any>((resolve, reject) => {
             this._queue.push({
                 type: "react",
@@ -217,7 +218,7 @@ export default class I18NConfiguration {
             });
         });
         this._translationCache.set(cacheKey, translationPromise);
-        return translationPromise.finally(() => this._translationCache.delete(cacheKey));
+        return translationPromise;
     }
 
     /**
@@ -269,3 +270,6 @@ export default class I18NConfiguration {
     }
 
 }
+
+// Constructs the unique identification key for the map which is the in-memory same-render-cycle cache
+const constructCacheKey = (targetLanguage: string, metadata: Record<string, any>) => `${targetLanguage}-${metadata.hash}`;

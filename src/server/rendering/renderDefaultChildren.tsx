@@ -43,6 +43,7 @@ export default function renderDefaultChildren({
                 const branches = generaltranslation.branches || {};
                 return React.createElement('span', {
                     ...props,
+                    suppressHydrationWarning: true,
                     'data-generaltranslation': undefined,
                     children: handleChildren(getPluralBranch(n, [defaultLocale], branches) || child.props.children)
                 });
@@ -54,6 +55,7 @@ export default function renderDefaultChildren({
                 branches = generaltranslation.branches || {};
                 return React.createElement('span', {
                     ...props,
+                    suppressHydrationWarning: true,
                     'data-generaltranslation': undefined,
                     children: handleChildren(branches[branch])
                 });

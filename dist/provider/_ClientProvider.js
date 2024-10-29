@@ -25,11 +25,6 @@ var ClientResolver_1 = __importDefault(require("./ClientResolver"));
 // meant to be used inside the server-side <GTProvider>
 function _ClientProvider(_a) {
     var children = _a.children, dictionary = _a.dictionary, translations = _a.translations, locale = _a.locale, defaultLocale = _a.defaultLocale, translationRequired = _a.translationRequired;
-    var _b = (0, react_1.useState)(false), hasMounted = _b[0], setHasMounted = _b[1];
-    (0, react_1.useEffect)(function () {
-        // prevent hydration errors when translations load
-        setHasMounted(true);
-    }, []);
     var translate = (0, react_1.useCallback)(function (id, options, f) {
         if (options === void 0) { options = {}; }
         var _a = (0, internal_1.extractEntryMetadata)(dictionary[id]), entry = _a.entry, metadata = _a.metadata;
@@ -95,8 +90,7 @@ function _ClientProvider(_a) {
             locale: locale,
             defaultLocale: defaultLocale,
             translations: translations
-        }, children: hasMounted ?
-            children :
-            undefined }));
+        }, children: children }));
 }
+;
 //# sourceMappingURL=_ClientProvider.js.map

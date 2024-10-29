@@ -204,7 +204,7 @@ var I18NConfiguration = /** @class */ (function () {
             var _this = this;
             var _a;
             return __generator(this, function (_b) {
-                cacheKey = JSON.stringify(params);
+                cacheKey = constructCacheKey(params.targetLanguage, params.options);
                 if (this._translationCache.has(cacheKey)) {
                     return [2 /*return*/, this._translationCache.get(cacheKey)];
                 }
@@ -225,7 +225,7 @@ var I18NConfiguration = /** @class */ (function () {
                     });
                 });
                 this._translationCache.set(cacheKey, translationPromise);
-                return [2 /*return*/, translationPromise.finally(function () { return _this._translationCache.delete(cacheKey); })];
+                return [2 /*return*/, translationPromise];
             });
         });
     };
@@ -238,14 +238,13 @@ var I18NConfiguration = /** @class */ (function () {
         return __awaiter(this, void 0, void 0, function () {
             var cacheKey, children, targetLanguage, metadata, dictionaryName, translationPromise;
             var _this = this;
-            var _a;
-            return __generator(this, function (_b) {
-                cacheKey = JSON.stringify(params);
+            return __generator(this, function (_a) {
+                cacheKey = constructCacheKey(params.targetLanguage, params.metadata);
                 if (this._translationCache.has(cacheKey)) {
                     return [2 /*return*/, this._translationCache.get(cacheKey)];
                 }
                 children = params.children, targetLanguage = params.targetLanguage, metadata = params.metadata;
-                dictionaryName = ((_a = params.options) === null || _a === void 0 ? void 0 : _a.dictionaryName) || this.dictionaryName;
+                dictionaryName = (metadata === null || metadata === void 0 ? void 0 : metadata.dictionaryName) || this.dictionaryName;
                 translationPromise = new Promise(function (resolve, reject) {
                     _this._queue.push({
                         type: "react",
@@ -260,7 +259,7 @@ var I18NConfiguration = /** @class */ (function () {
                     });
                 });
                 this._translationCache.set(cacheKey, translationPromise);
-                return [2 /*return*/, translationPromise.finally(function () { return _this._translationCache.delete(cacheKey); })];
+                return [2 /*return*/, translationPromise];
             });
         });
     };
@@ -327,4 +326,6 @@ var I18NConfiguration = /** @class */ (function () {
     return I18NConfiguration;
 }());
 exports.default = I18NConfiguration;
+// Constructs the unique identification key for the map which is the in-memory same-render-cycle cache
+var constructCacheKey = function (targetLanguage, metadata) { return "".concat(targetLanguage, "-").concat(metadata.hash); };
 //# sourceMappingURL=I18NConfiguration.js.map

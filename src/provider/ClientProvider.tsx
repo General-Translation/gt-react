@@ -1,13 +1,13 @@
 'use client'
 
-import { useCallback, useEffect, useState } from "react";
+import { Suspense, useCallback, useLayoutEffect, useState } from "react";
 import { _GTContext, _renderDefaultChildren, _renderTranslatedChildren } from "gt-react/client";
 import { addGTIdentifier, extractEntryMetadata } from "gt-react/internal";
 import { renderContentToString } from "generaltranslation";
 import ClientResolver from "./ClientResolver";
 
 // meant to be used inside the server-side <GTProvider>
-export default function _ClientProvider({
+export default function ClientProvider({
     children,
     dictionary, translations,
     locale, defaultLocale,
@@ -18,14 +18,13 @@ export default function _ClientProvider({
     translations: Record<string, any>
     locale: string,
     defaultLocale: string
-    translationRequired: boolean
+    translationRequired: boolean,
 }) {
 
-    const [hasMounted, setHasMounted] = useState<boolean>(false);
-    useEffect(() => {
-        // prevent hydration errors when translations load
-        setHasMounted(true);
-    }, []);
+    /*const [isMounted, setIsMounted] = useState(false);
+    useLayoutEffect(() => {
+        setIsMounted(true);
+    }, [])*/
 
     const translate = useCallback((id: string, options: Record<string, any> = {}, f?: Function) => {
 
@@ -102,11 +101,7 @@ export default function _ClientProvider({
         <_GTContext.Provider value={{
             translate, locale, defaultLocale, translations
         }}>
-            {
-                hasMounted ?
-                children :
-                undefined
-            }
+            {children}
         </_GTContext.Provider>
     );
-}
+};

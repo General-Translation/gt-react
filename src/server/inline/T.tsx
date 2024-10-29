@@ -3,9 +3,9 @@ import getI18NConfig from "../../utils/getI18NConfig";
 import getLocale from "../../request/getLocale";
 import getMetadata from "../../request/getMetadata";
 import { Suspense } from "react";
-import Resolver from "./Resolver";
 import renderTranslatedChildren from "../rendering/renderTranslatedChildren";
 import renderDefaultChildren from "../rendering/renderDefaultChildren";
+import ServerResolver from "./ServerResolver";
 
 type RenderSettings = {
     method: "skeleton" | "replace" | "hang" | "subtle",
@@ -76,12 +76,13 @@ export default async function T({
     const locale = getLocale();
     const defaultLocale = I18NConfig.getDefaultLocale();
     const translationRequired = I18NConfig.requiresTranslation(locale);
+    const dictionaryName = I18NConfig.getDictionaryName();
 
     const { variables, variablesOptions } = props;
 
     let translationsPromise;
     if (translationRequired) {
-        translationsPromise = I18NConfig.getTranslations(locale, props.dictionaryName);
+        translationsPromise = I18NConfig.getTranslations(locale, dictionaryName);
     }
 
     const taggedChildren = addGTIdentifier(children);
@@ -96,6 +97,7 @@ export default async function T({
     const key: string = hashReactChildrenObjects(context ? [childrenAsObjects, context] : childrenAsObjects);
 
     const translations = await translationsPromise;
+
     const translation = translations?.[id || key];
 
     if (translation?.k === key) {
@@ -126,21 +128,25 @@ export default async function T({
     let loadingFallback;
     let errorFallback;
 
-    if (translation) {
-        errorFallback = renderDefaultChildren({
-            children: taggedChildren, variables, variablesOptions, defaultLocale
-        });
-        if (renderSettings.method === "skeleton") {
-            loadingFallback = <></>
-        }
-        else if (renderSettings.method === "replace") {
-            loadingFallback = errorFallback;
-        }
+    errorFallback = renderDefaultChildren({
+        children: taggedChildren, variables, variablesOptions, defaultLocale
+    });
+
+    if (renderSettings.method === "replace") {
+        loadingFallback = errorFallback;
+    }
+    else if (renderSettings.method === "skeleton") {
+        loadingFallback = <></>
     }
 
     if (renderSettings.method === "hang") {
         // Wait until the site is translated to return
-        return <Resolver children={promise} fallback={errorFallback} />;
+        try {
+            return await promise;
+        } catch (error) {
+            console.error(error);
+            return errorFallback;
+        }
     }
 
     if (!["skeleton", "replace"].includes(renderSettings.method) && !id) {
@@ -150,10 +156,5 @@ export default async function T({
         return errorFallback;
     }
 
-    return (
-        <Suspense fallback={loadingFallback}>
-            <Resolver children={promise} fallback={errorFallback} />
-        </Suspense>
-    )
-    
+    return <ServerResolver suppressHydrationWarning promise={promise} loadingFallback={loadingFallback} errorFallback={errorFallback} />;
 }

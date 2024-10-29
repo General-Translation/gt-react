@@ -3,11 +3,12 @@ import React from "react";
 import { addGTIdentifier, flattenDictionary, hashReactChildrenObjects, writeChildrenAsObjects, extractEntryMetadata, primitives } from "gt-react/internal";
 import { ReactNode } from "react";
 import getI18NConfig from "../utils/getI18NConfig";
-import _ClientProvider from "./_ClientProvider";
 import getLocale from '../request/getLocale';
 import getMetadata from '../request/getMetadata';
 import { splitStringToContent } from "generaltranslation";
 import getDictionary, { getDictionaryEntry } from "../dictionary/getDictionary";
+import renderDefaultChildren from "../server/rendering/renderDefaultChildren";
+import ClientProvider from "./ClientProvider";
 
 /**
  * Provides General Translation context to its children, which can then access `useGT`, `useLocale`, and `useDefaultLocale`.
@@ -40,6 +41,7 @@ export default async function GTProvider({
     const additionalMetadata = getMetadata();
     const defaultLocale = I18NConfig.getDefaultLocale();
     const renderSettings = I18NConfig.getRenderSettings();
+    const dictionaryName = I18NConfig.getDictionaryName();
 
     let dictionary: Record<string, any> = {};
     let translations: Record<string, any> = {};
@@ -47,7 +49,7 @@ export default async function GTProvider({
     const translationRequired = I18NConfig.requiresTranslation(locale)
 
     let existingTranslations: Record<string, any> = 
-        translationRequired ? await I18NConfig.getTranslations(locale) : {}
+        translationRequired ? await I18NConfig.getTranslations(locale, dictionaryName) : {}
 
     await Promise.all(Object.entries(rawDictionary).map(async ([id, dictionaryEntry]) => {
 
@@ -96,7 +98,12 @@ export default async function GTProvider({
         let errorFallback;
 
         if (renderSettings.method === "skeleton") {
-            loadingFallback = <React.Fragment key={`skeleton_${id}`}></React.Fragment>
+            loadingFallback = <React.Fragment key={`skeleton_${id}`} />
+        }
+        else if (renderSettings.method === "replace") {
+            loadingFallback = renderDefaultChildren({
+                children: taggedEntry, defaultLocale
+            })
         }
 
         return translations[id] = { 
@@ -107,7 +114,7 @@ export default async function GTProvider({
     }));
 
     return (
-        <_ClientProvider
+        <ClientProvider
             dictionary={dictionary}
             translations={{...existingTranslations, ...translations}}
             locale={locale}
@@ -115,7 +122,7 @@ export default async function GTProvider({
             translationRequired={translationRequired}
         >
             {children}
-        </_ClientProvider>
+        </ClientProvider>
     )
 
 }

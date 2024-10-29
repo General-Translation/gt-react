@@ -54,6 +54,7 @@ export default async function tx(
     if (!content)  return '';
 
     const I18NConfig = getI18NConfig();
+    const dictionaryName = I18NConfig.getDictionaryName();
 
     const contentAsArray = splitStringToContent(content);
     
@@ -65,7 +66,7 @@ export default async function tx(
     let key: string | undefined;
     if (options.id) {
         key = hashReactChildrenObjects(options.context ? [content, options.context] : content);
-        const translations = await I18NConfig.getTranslations(options.language, options?.dictionaryName || undefined);
+        const translations = await I18NConfig.getTranslations(options.language, dictionaryName);
         if (translations?.[options.id] && translations[options.id].k === key)
             return renderContentToString(translations[options.id].t, [options.language, I18NConfig.getDefaultLocale()], variables, variableOptions);
     }
