@@ -35,7 +35,7 @@ function Var(_a) {
     var generaltranslation = props["data-generaltranslation"];
     if (typeof children !== 'undefined' && typeof value === 'undefined')
         value = children;
-    return ((0, jsx_runtime_1.jsx)("span", { "data-generaltranslation": generaltranslation, "data-_gt-variable-name": name, "data-_gt-variable-type": "variable", "data-_gt-unformatted-value": value !== null && value !== void 0 ? value : undefined, suppressHydrationWarning: true, children: value }));
+    return ((0, jsx_runtime_1.jsx)("span", { "data-generaltranslation": generaltranslation, "data-_gt-variable-name": name, "data-_gt-variable-type": "variable", "data-_gt-unformatted-value": value !== null && value !== void 0 ? value : undefined, style: { display: 'contents' }, children: value }));
 }
 ;
 Var.gtTransformation = "variable-variable"; // keep this because Var is imported in other functions

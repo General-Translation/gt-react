@@ -202,7 +202,7 @@ function T(_a) {
                         // a translation may be available from a cached translation dictionary next time the component is loaded
                         return [2 /*return*/, errorFallback];
                     }
-                    return [2 /*return*/, (0, jsx_runtime_1.jsx)(ServerResolver_1.default, { suppressHydrationWarning: true, promise: promise, loadingFallback: loadingFallback, errorFallback: errorFallback })];
+                    return [2 /*return*/, (0, jsx_runtime_1.jsx)(ServerResolver_1.default, { promise: promise, loadingFallback: loadingFallback, errorFallback: errorFallback })];
             }
         });
     });

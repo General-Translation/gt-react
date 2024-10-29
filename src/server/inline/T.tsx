@@ -156,5 +156,5 @@ export default async function T({
         return errorFallback;
     }
 
-    return <ServerResolver suppressHydrationWarning promise={promise} loadingFallback={loadingFallback} errorFallback={errorFallback} />;
+    return <ServerResolver promise={promise} loadingFallback={loadingFallback} errorFallback={errorFallback} />;
 }

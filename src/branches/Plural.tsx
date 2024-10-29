@@ -40,7 +40,7 @@ function Plural({
         <span 
             data-generaltranslation={generaltranslation} 
             data-_gt-n={n}
-            suppressHydrationWarning
+            style={{ display: 'contents' }}
         >
             {branch}
         </span>

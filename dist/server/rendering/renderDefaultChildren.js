@@ -51,14 +51,14 @@ function renderDefaultChildren(_a) {
                     typeof props.n === 'number' ? props.n :
                         props['data-_gt-n'];
                 var branches = generaltranslation.branches || {};
-                return react_1.default.createElement('span', __assign(__assign({}, props), { suppressHydrationWarning: true, 'data-generaltranslation': undefined, children: handleChildren((0, internal_1.getPluralBranch)(n, [defaultLocale], branches) || child.props.children) }));
+                return handleChildren((0, internal_1.getPluralBranch)(n, [defaultLocale], branches) || child.props.children);
             }
             if ((generaltranslation === null || generaltranslation === void 0 ? void 0 : generaltranslation.transformation) === "branch") {
                 var children_1 = props.children, name_1 = props.name, branch = props.branch, branches = __rest(props, ["children", "name", "branch"]);
                 name_1 = name_1 || props['data-_gt-name'] || "branch";
                 branch = variables[name_1] || branch || child.props['data-_gt-branch-name'];
                 branches = generaltranslation.branches || {};
-                return react_1.default.createElement('span', __assign(__assign({}, props), { suppressHydrationWarning: true, 'data-generaltranslation': undefined, children: handleChildren(branches[branch]) }));
+                return handleChildren(branches[branch]);
             }
             if (child.props.children) {
                 return react_1.default.cloneElement(child, __assign(__assign({}, props), { 'data-generaltranslation': undefined, children: handleChildren(child.props.children) }));

@@ -33,7 +33,7 @@ function Var({ children, name = "value", value, ...props }: {
             data-_gt-variable-name={name} 
             data-_gt-variable-type={"variable"}
             data-_gt-unformatted-value={value ?? undefined}
-            suppressHydrationWarning
+            style={{ display: 'contents' }}
         >
             {value}
         </span>

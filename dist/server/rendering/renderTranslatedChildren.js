@@ -61,13 +61,13 @@ function renderTranslatedElement(_a) {
         var sourceBranch = (0, internal_1.getPluralBranch)(n, locales, sourceBranches) || sourceElement.props.children;
         var targetBranches = targetElement.props["data-generaltranslation"].branches || {};
         var targetBranch = (0, internal_1.getPluralBranch)(n, locales, targetBranches) || targetElement.props.children;
-        return react_1.default.createElement('span', __assign(__assign({}, props), { suppressHydrationWarning: true, 'data-generaltranslation': undefined, children: renderTranslatedChildren({
-                source: sourceBranch,
-                target: targetBranch,
-                variables: variables,
-                variablesOptions: variablesOptions,
-                locales: locales
-            }) }));
+        return renderTranslatedChildren({
+            source: sourceBranch,
+            target: targetBranch,
+            variables: variables,
+            variablesOptions: variablesOptions,
+            locales: locales
+        });
     }
     if (transformation === "branch") {
         var name_1 = props.name, branch = props.branch, children = props.children;
@@ -75,13 +75,13 @@ function renderTranslatedElement(_a) {
         branch = variables[name_1] || branch || sourceElement.props['data-_gt-branch-name'];
         var sourceBranch = (generaltranslation.branches || {})[branch] || children;
         var targetBranch = (targetElement.props["data-generaltranslation"].branches || {})[branch] || targetElement.props.children;
-        return react_1.default.createElement('span', __assign(__assign({}, props), { suppressHydrationWarning: true, 'data-generaltranslation': undefined, children: renderTranslatedChildren({
-                source: sourceBranch,
-                target: targetBranch,
-                variables: variables,
-                variablesOptions: variablesOptions,
-                locales: locales
-            }) }));
+        return renderTranslatedChildren({
+            source: sourceBranch,
+            target: targetBranch,
+            variables: variables,
+            variablesOptions: variablesOptions,
+            locales: locales
+        });
     }
     if ((props === null || props === void 0 ? void 0 : props.children) && ((_b = targetElement.props) === null || _b === void 0 ? void 0 : _b.children)) {
         return react_1.default.cloneElement(sourceElement, __assign(__assign({}, props), { 'data-generaltranslation': undefined, children: renderTranslatedChildren({

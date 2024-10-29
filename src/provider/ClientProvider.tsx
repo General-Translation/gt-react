@@ -1,6 +1,6 @@
 'use client'
 
-import { Suspense, useCallback, useLayoutEffect, useState } from "react";
+import React, { useCallback, useLayoutEffect, useEffect, useState, useRef } from "react";
 import { _GTContext, _renderDefaultChildren, _renderTranslatedChildren } from "gt-react/client";
 import { addGTIdentifier, extractEntryMetadata } from "gt-react/internal";
 import { renderContentToString } from "generaltranslation";
@@ -24,7 +24,7 @@ export default function ClientProvider({
     const [isMounted, setIsMounted] = useState(false);
     useLayoutEffect(() => {
         setIsMounted(true);
-    }, [])
+    }, []);
 
     const translate = useCallback((id: string, options: Record<string, any> = {}, f?: Function) => {
 

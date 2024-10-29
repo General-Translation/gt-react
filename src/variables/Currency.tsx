@@ -54,7 +54,7 @@ function Currency({
             data-_gt-variable-type={"currency"} 
             data-_gt-variable-options={{ style: 'currency', currency, ...options }}
             data-_gt-unformatted-value={(typeof renderedValue === 'number' && !isNaN(renderedValue)) ? renderedValue : undefined}
-            suppressHydrationWarning
+            style={{ display: 'contents' }}
         >
             {typeof formattedValue === 'string' ? formattedValue : undefined}
         </span>

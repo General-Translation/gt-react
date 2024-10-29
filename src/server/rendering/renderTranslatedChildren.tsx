@@ -73,16 +73,11 @@ function renderTranslatedElement({
         const sourceBranch = getPluralBranch(n, locales, sourceBranches) || sourceElement.props.children;
         const targetBranches = targetElement.props["data-generaltranslation"].branches || {};
         const targetBranch = getPluralBranch(n, locales, targetBranches) || targetElement.props.children;
-        return React.createElement('span', {
-            ...props,
-            suppressHydrationWarning: true,
-            'data-generaltranslation': undefined,
-            children: renderTranslatedChildren({ 
-                source: sourceBranch, 
-                target: targetBranch,
-                variables, variablesOptions, locales
-            } )
-        });
+        return renderTranslatedChildren({ 
+            source: sourceBranch, 
+            target: targetBranch,
+            variables, variablesOptions, locales
+        } )
     }
 
     if (transformation === "branch") {
@@ -91,16 +86,11 @@ function renderTranslatedElement({
         branch = variables[name] || branch || sourceElement.props['data-_gt-branch-name'];
         const sourceBranch = (generaltranslation.branches || {})[branch] || children;
         const targetBranch = (targetElement.props["data-generaltranslation"].branches || {})[branch] || targetElement.props.children;
-        return React.createElement('span', {
-            ...props,
-            suppressHydrationWarning: true,
-            'data-generaltranslation': undefined,
-            children: renderTranslatedChildren({ 
-                source: sourceBranch, 
-                target: targetBranch,
-                variables, variablesOptions, locales
-            } )
-        });
+        return renderTranslatedChildren({ 
+            source: sourceBranch, 
+            target: targetBranch,
+            variables, variablesOptions, locales
+        } )
     }
 
     if (props?.children && targetElement.props?.children) {
