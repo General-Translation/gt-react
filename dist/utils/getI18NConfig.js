@@ -18,26 +18,27 @@ exports.default = getI18NConfig;
 var I18NConfiguration_1 = __importDefault(require("../config/I18NConfiguration"));
 var defaultInitGTProps_1 = __importDefault(require("../primitives/defaultInitGTProps"));
 var getDefaultFromEnv_1 = __importDefault(require("./getDefaultFromEnv"));
-var I18NConfig;
 function getI18NConfig() {
-    if (I18NConfig)
-        return I18NConfig;
+    var globalObj = globalThis;
+    if (globalObj._GENERALTRANSLATION_I18N_CONFIG_INSTANCE) {
+        return globalObj._GENERALTRANSLATION_I18N_CONFIG_INSTANCE;
+    }
     var I18NConfigParams = process.env._GENERALTRANSLATION_I18N_CONFIG_PARAMS;
     var env = (0, getDefaultFromEnv_1.default)('NODE_ENV') || 'production';
     if (I18NConfigParams) {
-        I18NConfig = new I18NConfiguration_1.default(__assign({ env: env }, JSON.parse(I18NConfigParams)));
+        globalObj._GENERALTRANSLATION_I18N_CONFIG_INSTANCE = new I18NConfiguration_1.default(__assign({ env: env }, JSON.parse(I18NConfigParams)));
     }
     else {
         console.warn('Unable to access gt-next configuration. Using defaults.');
-        // Defaults and checks
         var projectID = process.env.GT_PROJECT_ID;
         if (!projectID)
-            throw new Error('Project ID missing! Set projectID as GT_PROJECT_ID in the environment or by passing the projectID parameter to initGT(). Find your project ID: www.generaltranslation.com/dashboard.');
+            throw new Error('Project ID missing! Set projectID as GT_PROJECT_ID...');
         var apiKey = process.env.GT_API_KEY;
         if (!apiKey)
-            throw new Error("API key is required for automatic translation! Create an API key: www.generaltranslation.com/dashboard/api-keys. (Or, turn off automatic translation by setting baseURL to an empty string.)");
-        I18NConfig = new I18NConfiguration_1.default(__assign(__assign({}, defaultInitGTProps_1.default), { maxConcurrentRequests: defaultInitGTProps_1.default._maxConcurrectRequests, batchInterval: defaultInitGTProps_1.default._batchInterval, apiKey: apiKey, projectID: projectID, env: env }));
+            throw new Error("API key is required for automatic translation!...");
+        globalObj._GENERALTRANSLATION_I18N_CONFIG_INSTANCE = new I18NConfiguration_1.default(__assign(__assign({}, defaultInitGTProps_1.default), { maxConcurrentRequests: defaultInitGTProps_1.default._maxConcurrectRequests, batchInterval: defaultInitGTProps_1.default._batchInterval, apiKey: apiKey, projectID: projectID, env: env }));
     }
-    return I18NConfig;
+    return globalObj._GENERALTRANSLATION_I18N_CONFIG_INSTANCE;
 }
+;
 //# sourceMappingURL=getI18NConfig.js.map

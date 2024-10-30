@@ -24,10 +24,19 @@ var generaltranslation_1 = require("generaltranslation");
 var ClientResolver_1 = __importDefault(require("./ClientResolver"));
 // meant to be used inside the server-side <GTProvider>
 function ClientProvider(_a) {
+    /*
+    // Do not touch or you will be fired
+    // This is an evil but necessary way to bypass hydration errors
+    // Only works with dictionaries
+    const [, _FORCE_RERENDER] = useState(false);
+    useLayoutEffect(() => {
+        _FORCE_RERENDER(true);
+    }, []);
+    */
     var children = _a.children, dictionary = _a.dictionary, translations = _a.translations, locale = _a.locale, defaultLocale = _a.defaultLocale, translationRequired = _a.translationRequired;
-    var _b = (0, react_1.useState)(false), isMounted = _b[0], setIsMounted = _b[1];
+    var _b = (0, react_1.useState)(false), hasMounted = _b[0], setHasMounted = _b[1];
     (0, react_1.useLayoutEffect)(function () {
-        setIsMounted(true);
+        setHasMounted(true);
     }, []);
     var translate = (0, react_1.useCallback)(function (id, options, f) {
         if (options === void 0) { options = {}; }
@@ -84,6 +93,7 @@ function ClientProvider(_a) {
                 if (!translation.loadingFallback) {
                     translation.loadingFallback = translation.errorFallback;
                 }
+                // the <Suspense> exists here to beat hydration errors
                 return ((0, jsx_runtime_1.jsx)(ClientResolver_1.default, { promise: translation.promise, renderTranslation: renderTranslation, errorFallback: translation.errorFallback, loadingFallback: translation.loadingFallback }));
             }
             return renderTranslation(translation.t);
@@ -94,7 +104,7 @@ function ClientProvider(_a) {
             locale: locale,
             defaultLocale: defaultLocale,
             translations: translations
-        }, children: isMounted && children }));
+        }, children: hasMounted && children }));
 }
 ;
 //# sourceMappingURL=ClientProvider.js.map

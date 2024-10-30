@@ -46,17 +46,6 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-var __rest = (this && this.__rest) || function (s, e) {
-    var t = {};
-    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
-        t[p] = s[p];
-    if (s != null && typeof Object.getOwnPropertySymbols === "function")
-        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
-            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))
-                t[p[i]] = s[p[i]];
-        }
-    return t;
-};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -67,9 +56,10 @@ var internal_1 = require("gt-react/internal");
 var getI18NConfig_1 = __importDefault(require("../../utils/getI18NConfig"));
 var getLocale_1 = __importDefault(require("../../request/getLocale"));
 var getMetadata_1 = __importDefault(require("../../request/getMetadata"));
+var react_1 = require("react");
 var renderTranslatedChildren_1 = __importDefault(require("../rendering/renderTranslatedChildren"));
 var renderDefaultChildren_1 = __importDefault(require("../rendering/renderDefaultChildren"));
-var ServerResolver_1 = __importDefault(require("./ServerResolver"));
+var Resolver_1 = __importDefault(require("./Resolver"));
 /**
  * Translation component that renders its children translated into the user's language.
  *
@@ -114,11 +104,11 @@ var ServerResolver_1 = __importDefault(require("./ServerResolver"));
  * @throws {Error} If a plural translation is requested but the `n` option is not provided.
  */
 function T(_a) {
-    return __awaiter(this, void 0, void 0, function () {
-        var I18NConfig, locale, defaultLocale, translationRequired, dictionaryName, variables, variablesOptions, translationsPromise, taggedChildren, childrenAsObjects, key, translations, translation, target, translationPromise, promise, loadingFallback, errorFallback, error_1;
-        var children = _a.children, id = _a.id, context = _a.context, renderSettings = _a.renderSettings, props = __rest(_a, ["children", "id", "context", "renderSettings"]);
-        return __generator(this, function (_b) {
-            switch (_b.label) {
+    return __awaiter(this, arguments, void 0, function (_b) {
+        var I18NConfig, locale, defaultLocale, translationRequired, dictionaryName, translationsPromise, taggedChildren, childrenAsObjects, key, translations, translation, target, translationPromise, promise, loadingFallback, errorFallback, error_1;
+        var children = _b.children, id = _b.id, context = _b.context, renderSettings = _b.renderSettings, variables = _b.variables, variablesOptions = _b.variablesOptions;
+        return __generator(this, function (_c) {
+            switch (_c.label) {
                 case 0:
                     if (!children) {
                         return [2 /*return*/];
@@ -128,7 +118,6 @@ function T(_a) {
                     defaultLocale = I18NConfig.getDefaultLocale();
                     translationRequired = I18NConfig.requiresTranslation(locale);
                     dictionaryName = I18NConfig.getDictionaryName();
-                    variables = props.variables, variablesOptions = props.variablesOptions;
                     if (translationRequired) {
                         translationsPromise = I18NConfig.getTranslations(locale, dictionaryName);
                     }
@@ -145,7 +134,7 @@ function T(_a) {
                     key = (0, internal_1.hashReactChildrenObjects)(context ? [childrenAsObjects, context] : childrenAsObjects);
                     return [4 /*yield*/, translationsPromise];
                 case 1:
-                    translations = _b.sent();
+                    translations = _c.sent();
                     translation = translations === null || translations === void 0 ? void 0 : translations[id || key];
                     if ((translation === null || translation === void 0 ? void 0 : translation.k) === key) {
                         target = translation.t;
@@ -161,7 +150,7 @@ function T(_a) {
                     translationPromise = I18NConfig.translateChildren({
                         children: childrenAsObjects,
                         targetLanguage: locale,
-                        metadata: __assign(__assign(__assign(__assign(__assign({}, props), (id && { id: id })), { hash: key }), ((0, getMetadata_1.default)())), (renderSettings.timeout && { timeout: renderSettings.timeout }))
+                        metadata: __assign(__assign(__assign(__assign({}, (id && { id: id })), { hash: key }), ((0, getMetadata_1.default)())), (renderSettings.timeout && { timeout: renderSettings.timeout }))
                     });
                     promise = translationPromise.then(function (translation) {
                         var target = translation;
@@ -186,13 +175,13 @@ function T(_a) {
                         loadingFallback = (0, jsx_runtime_1.jsx)(jsx_runtime_1.Fragment, {});
                     }
                     if (!(renderSettings.method === "hang")) return [3 /*break*/, 5];
-                    _b.label = 2;
+                    _c.label = 2;
                 case 2:
-                    _b.trys.push([2, 4, , 5]);
+                    _c.trys.push([2, 4, , 5]);
                     return [4 /*yield*/, promise];
-                case 3: return [2 /*return*/, _b.sent()];
+                case 3: return [2 /*return*/, _c.sent()];
                 case 4:
-                    error_1 = _b.sent();
+                    error_1 = _c.sent();
                     console.error(error_1);
                     return [2 /*return*/, errorFallback];
                 case 5:
@@ -202,7 +191,7 @@ function T(_a) {
                         // a translation may be available from a cached translation dictionary next time the component is loaded
                         return [2 /*return*/, errorFallback];
                     }
-                    return [2 /*return*/, (0, jsx_runtime_1.jsx)(ServerResolver_1.default, { promise: promise, loadingFallback: loadingFallback, errorFallback: errorFallback })];
+                    return [2 /*return*/, ((0, jsx_runtime_1.jsx)(react_1.Suspense, { fallback: loadingFallback, children: (0, jsx_runtime_1.jsx)(Resolver_1.default, { children: promise, fallback: errorFallback }) }))];
             }
         });
     });

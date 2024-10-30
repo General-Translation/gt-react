@@ -27,11 +27,7 @@ export default async function GTProvider({
 
     const I18NConfig = getI18NConfig()
 
-    const rawDictionary = flattenDictionary(
-        id ?
-        getDictionaryEntry(id) :
-        getDictionary()
-    );
+    const rawDictionary = flattenDictionary(getDictionary());
 
     const getID = (suffix: string) => {
         return id ? `${id}.${suffix}` : suffix;
@@ -51,9 +47,9 @@ export default async function GTProvider({
     let existingTranslations: Record<string, any> = 
         translationRequired ? await I18NConfig.getTranslations(locale, dictionaryName) : {}
 
-    await Promise.all(Object.entries(rawDictionary).map(async ([id, dictionaryEntry]) => {
+    await Promise.all(Object.entries(id ? getDictionaryEntry(id) : rawDictionary).map(async ([suffix, dictionaryEntry]) => {
 
-        const prefixedID = getID(id);
+        const entryID = getID(suffix);
 
         let { entry, metadata } = extractEntryMetadata(dictionaryEntry);
 
@@ -62,9 +58,9 @@ export default async function GTProvider({
             metadata = { ...metadata, isFunction: true };
         }
 
-        const taggedEntry = addGTIdentifier(entry, prefixedID);
+        const taggedEntry = addGTIdentifier(entry, entryID);
 
-        dictionary[id] = [taggedEntry, metadata];
+        dictionary[entryID] = [taggedEntry, metadata];
         
         if (!translationRequired || !entry) return;
 
@@ -72,18 +68,18 @@ export default async function GTProvider({
 
         const key: string = hashReactChildrenObjects(metadata?.context ? [entryAsObjects, metadata.context] : entryAsObjects);
 
-        const translation = existingTranslations?.[prefixedID];
+        const translation = existingTranslations?.[entryID];
 
         if (translation && translation.k === key) {
-            return translations[id] = translation;
+            return translations[entryID] = translation;
         }
 
         if (!I18NConfig.translationEnabled()) return;
 
         if (typeof taggedEntry === 'string') {
-            const translationPromise = I18NConfig.translate({ content: splitStringToContent(taggedEntry), targetLanguage: locale, options: { id: prefixedID, hash: key, ...additionalMetadata } });
+            const translationPromise = I18NConfig.translate({ content: splitStringToContent(taggedEntry), targetLanguage: locale, options: { id: entryID, hash: key, ...additionalMetadata } });
             return renderSettings.method !== "subtle" 
-                ? translations[id] === await translationPromise :
+                ? translations[entryID] === await translationPromise :
                 undefined
             ;
         }
@@ -91,14 +87,14 @@ export default async function GTProvider({
         const translationPromise = I18NConfig.translateChildren({ 
             children: entryAsObjects, 
             targetLanguage: locale, 
-            metadata: { id: prefixedID, hash: key, ...additionalMetadata, ...(renderSettings.timeout && { timeout: renderSettings.timeout }) } 
+            metadata: { id: entryID, hash: key, ...additionalMetadata, ...(renderSettings.timeout && { timeout: renderSettings.timeout }) } 
         });
 
         let loadingFallback;
         let errorFallback;
 
         if (renderSettings.method === "skeleton") {
-            loadingFallback = <React.Fragment key={`skeleton_${id}`} />
+            loadingFallback = <React.Fragment key={`skeleton_${entryID}`} />
         }
         else if (renderSettings.method === "replace") {
             loadingFallback = renderDefaultChildren({
@@ -106,7 +102,7 @@ export default async function GTProvider({
             })
         }
 
-        return translations[id] = { 
+        return translations[entryID] = { 
             promise: translationPromise,
             loadingFallback, errorFallback
         }

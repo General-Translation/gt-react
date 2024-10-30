@@ -5,7 +5,7 @@ import getMetadata from "../../request/getMetadata";
 import { Suspense } from "react";
 import renderTranslatedChildren from "../rendering/renderTranslatedChildren";
 import renderDefaultChildren from "../rendering/renderDefaultChildren";
-import ServerResolver from "./ServerResolver";
+import Resolver from "./Resolver";
 
 type RenderSettings = {
     method: "skeleton" | "replace" | "hang" | "subtle",
@@ -59,7 +59,7 @@ export default async function T({
     children, id,
     context,
     renderSettings,
-    ...props
+    variables, variablesOptions
 }: {
     children: any,
     id?: string
@@ -77,8 +77,6 @@ export default async function T({
     const defaultLocale = I18NConfig.getDefaultLocale();
     const translationRequired = I18NConfig.requiresTranslation(locale);
     const dictionaryName = I18NConfig.getDictionaryName();
-
-    const { variables, variablesOptions } = props;
 
     let translationsPromise;
     if (translationRequired) {
@@ -106,7 +104,7 @@ export default async function T({
         return renderTranslatedChildren({
             source: taggedChildren, target,
             variables, variablesOptions, locales: [locale, defaultLocale]
-        });
+        })
     }
 
     renderSettings ||= I18NConfig.getRenderSettings();
@@ -114,7 +112,7 @@ export default async function T({
     const translationPromise = I18NConfig.translateChildren({ 
         children: childrenAsObjects, 
         targetLanguage: locale, 
-        metadata: { ...props, ...(id && { id }), hash: key, ...(getMetadata()), ...(renderSettings.timeout && { timeout: renderSettings.timeout }) } 
+        metadata: { ...(id && { id }), hash: key, ...(getMetadata()), ...(renderSettings.timeout && { timeout: renderSettings.timeout }) } 
     });
     let promise = translationPromise.then(translation => {
         let target = translation;
@@ -156,5 +154,9 @@ export default async function T({
         return errorFallback;
     }
 
-    return <ServerResolver promise={promise} loadingFallback={loadingFallback} errorFallback={errorFallback} />;
+    return (
+        <Suspense fallback={loadingFallback}>
+            <Resolver children={promise} fallback={errorFallback} />
+        </Suspense>
+    )
 }

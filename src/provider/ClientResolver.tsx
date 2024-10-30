@@ -1,7 +1,7 @@
 'use client'
 
 import { Num } from "gt-react";
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 
 export default function ClientResolver({
   promise,

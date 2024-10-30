@@ -189,7 +189,10 @@ export default class I18NConfiguration {
             });
         });
         this._translationCache.set(cacheKey, translationPromise);
-        return translationPromise;
+        return translationPromise.catch((error) => {
+            this._translationCache.delete(cacheKey)
+            throw new Error(error);
+        });
     }
    
     /**
@@ -272,4 +275,7 @@ export default class I18NConfiguration {
 }
 
 // Constructs the unique identification key for the map which is the in-memory same-render-cycle cache
-const constructCacheKey = (targetLanguage: string, metadata: Record<string, any>) => `${targetLanguage}-${metadata.hash}`;
+const constructCacheKey = (targetLanguage: string, metadata: Record<string, any>) => {
+    console.log(`${targetLanguage}-${metadata.hash}`);
+    return `${targetLanguage}-${metadata.hash}`;
+}

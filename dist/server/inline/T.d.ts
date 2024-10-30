@@ -45,7 +45,7 @@ type RenderSettings = {
  *
  * @throws {Error} If a plural translation is requested but the `n` option is not provided.
  */
-export default function T({ children, id, context, renderSettings, ...props }: {
+export default function T({ children, id, context, renderSettings, variables, variablesOptions }: {
     children: any;
     id?: string;
     context?: string;

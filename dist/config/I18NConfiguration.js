@@ -225,7 +225,10 @@ var I18NConfiguration = /** @class */ (function () {
                     });
                 });
                 this._translationCache.set(cacheKey, translationPromise);
-                return [2 /*return*/, translationPromise];
+                return [2 /*return*/, translationPromise.catch(function (error) {
+                        _this._translationCache.delete(cacheKey);
+                        throw new Error(error);
+                    })];
             });
         });
     };
@@ -327,5 +330,8 @@ var I18NConfiguration = /** @class */ (function () {
 }());
 exports.default = I18NConfiguration;
 // Constructs the unique identification key for the map which is the in-memory same-render-cycle cache
-var constructCacheKey = function (targetLanguage, metadata) { return "".concat(targetLanguage, "-").concat(metadata.hash); };
+var constructCacheKey = function (targetLanguage, metadata) {
+    console.log("".concat(targetLanguage, "-").concat(metadata.hash));
+    return "".concat(targetLanguage, "-").concat(metadata.hash);
+};
 //# sourceMappingURL=I18NConfiguration.js.map

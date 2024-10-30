@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useCallback, useLayoutEffect, useEffect, useState, useRef } from "react";
+import React, { useCallback, useLayoutEffect, useEffect, useState, useRef, Suspense } from "react";
 import { _GTContext, _renderDefaultChildren, _renderTranslatedChildren } from "gt-react/client";
 import { addGTIdentifier, extractEntryMetadata } from "gt-react/internal";
 import { renderContentToString } from "generaltranslation";
@@ -21,9 +21,19 @@ export default function ClientProvider({
     translationRequired: boolean,
 }) {
 
-    const [isMounted, setIsMounted] = useState(false);
+    /*
+    // Do not touch or you will be fired
+    // This is an evil but necessary way to bypass hydration errors
+    // Only works with dictionaries
+    const [, _FORCE_RERENDER] = useState(false); 
     useLayoutEffect(() => {
-        setIsMounted(true);
+        _FORCE_RERENDER(true);
+    }, []);
+    */
+
+    const [hasMounted, setHasMounted] = useState(false); 
+    useLayoutEffect(() => {
+        setHasMounted(true);
     }, []);
 
     const translate = useCallback((id: string, options: Record<string, any> = {}, f?: Function) => {
@@ -83,6 +93,8 @@ export default function ClientProvider({
                 if (!translation.loadingFallback) {
                     translation.loadingFallback = translation.errorFallback;
                 }
+                
+                // the <Suspense> exists here to beat hydration errors
                 return (
                     <ClientResolver 
                         promise={translation.promise}
@@ -101,7 +113,7 @@ export default function ClientProvider({
         <_GTContext.Provider value={{
             translate, locale, defaultLocale, translations
         }}>
-            {isMounted && children}
+            {hasMounted && children}
         </_GTContext.Provider>
     );
 };
