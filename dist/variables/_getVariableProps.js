@@ -20,7 +20,9 @@ function getVariableProps(props) {
                 return props.children;
             return undefined;
         })(),
-        variableOptions: props.options || props['data-_gt-variable-options'] || undefined
+        variableOptions: props.options ||
+            (typeof props['data-_gt-variable-options'] === 'string') && JSON.parse(props['data-_gt-variable-options']) ||
+            props['data-_gt-variable-options'] || undefined
     };
     return result;
 }

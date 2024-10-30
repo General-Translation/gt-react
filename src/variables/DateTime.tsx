@@ -54,6 +54,7 @@ function DateTime({ children, name = "date", value, options = {} }: {
             data-_gt-variable-type={"date"} 
             data-_gt-variable-options={options}
             style={{ display: 'contents' }}
+            suppressHydrationWarning
         >
             {final}
         </span>

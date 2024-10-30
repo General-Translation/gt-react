@@ -37,7 +37,7 @@ function Num(_a) {
         // Using Intl.NumberFormat for consistent number formatting
         renderedValue = (0, generaltranslation_1.formatNum)({ value: renderedValue, languages: locales, options: options });
     }
-    return ((0, jsx_runtime_1.jsx)("span", { "data-_gt-variable-name": name, "data-_gt-variable-type": "number", "data-_gt-variable-options": JSON.stringify(options), style: { display: 'contents' }, children: renderedValue }));
+    return ((0, jsx_runtime_1.jsx)("span", { "data-_gt-variable-name": name, "data-_gt-variable-type": "number", "data-_gt-variable-options": options, style: { display: 'contents' }, children: renderedValue }));
 }
 ;
 Num.gtTransformation = "variable-number";

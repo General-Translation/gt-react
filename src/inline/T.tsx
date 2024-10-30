@@ -7,7 +7,7 @@ import { addGTIdentifier } from "../internal";
 import useGTContext from "../provider/GTContext";
 import renderTranslatedChildren from "../provider/rendering/renderTranslatedChildren";
 import useGT from "../hooks/useGT";
-import { useMemo } from "react";
+import { useMemo, useLayoutEffect, useState } from "react";
 
 /**
  * Translation component that handles rendering translated content, including plural forms.
@@ -90,9 +90,9 @@ export default function T({
             variables, variablesOptions, defaultLocale
         }) as JSX.Element;
     }
-
+   
     return renderTranslatedChildren({
-        source: taggedChildren, target:  translation.t,
+        source: taggedChildren, target: translation.t,
         variables, variablesOptions, locales: [locale, defaultLocale]
     }) as JSX.Element;
 }
