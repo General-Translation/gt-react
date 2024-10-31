@@ -1,4 +1,15 @@
 "use strict";
+var __assign = (this && this.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -20,9 +31,14 @@ function getVariableProps(props) {
                 return props.children;
             return undefined;
         })(),
-        variableOptions: props.options ||
-            (typeof props['data-_gt-variable-options'] === 'string') && JSON.parse(props['data-_gt-variable-options']) ||
-            props['data-_gt-variable-options'] || undefined
+        variableOptions: (function () {
+            var variableOptions = __assign(__assign({}, (props.currency && { currency: props.currency })), (props.options && __assign({}, props.options)));
+            if (Object.keys(variableOptions).length)
+                return variableOptions;
+            if (typeof props['data-_gt-variable-options'] === 'string')
+                return JSON.parse(props['data-_gt-variable-options']);
+            return props['data-_gt-variable-options'] || undefined;
+        })()
     };
     return result;
 }

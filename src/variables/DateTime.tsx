@@ -52,7 +52,7 @@ function DateTime({ children, name = "date", value, options = {} }: {
         <span 
             data-_gt-variable-name={name} 
             data-_gt-variable-type={"date"} 
-            data-_gt-variable-options={options}
+            data-_gt-variable-options={JSON.stringify(options)}
             style={{ display: 'contents' }}
             suppressHydrationWarning
         >

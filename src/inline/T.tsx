@@ -1,13 +1,12 @@
-import React from "react";
+import React, { Suspense } from "react";
 import { isSameLanguage } from "generaltranslation";
 import useDefaultLocale from "../hooks/useDefaultLocale";
 import useLocale from "../hooks/useLocale";
 import renderDefaultChildren from "../provider/rendering/renderDefaultChildren";
-import { addGTIdentifier } from "../internal";
+import { addGTIdentifier, hashReactChildrenObjects, writeChildrenAsObjects } from "../internal";
 import useGTContext from "../provider/GTContext";
 import renderTranslatedChildren from "../provider/rendering/renderTranslatedChildren";
-import useGT from "../hooks/useGT";
-import { useMemo, useLayoutEffect, useState } from "react";
+import { useMemo } from "react";
 
 /**
  * Translation component that handles rendering translated content, including plural forms.
@@ -45,7 +44,9 @@ export default function T({
     id: string
     context?: string,
     [key: string]: any
-}): JSX.Element {
+}): JSX.Element | undefined {
+
+    if (!children) return undefined;
     
     if (!id) {
         throw new Error(`Client-side <T> with no provided 'id' prop. Children: ${children}`)
@@ -56,12 +57,6 @@ export default function T({
     const { translations } = useGTContext(
         `<T id="${id}"> used on the client-side outside of <GTProvider>`
     );
-
-    const t = useGT();
-
-    if (!children) {
-        return <React.Fragment key={id}>{t(id, { variables, ...(variablesOptions && { variablesOptions })})}</React.Fragment>;
-    }
 
     const locale = useLocale();
     const defaultLocale = useDefaultLocale();
@@ -82,13 +77,40 @@ export default function T({
     }
 
     // Do translation
+    const context = props.context;
+    const [childrenAsObjects, key] = useMemo(() => {
+        const childrenAsObjects = writeChildrenAsObjects(taggedChildren);
+        const key: string = hashReactChildrenObjects(context ? [childrenAsObjects, context] : childrenAsObjects);
+        return [childrenAsObjects, key];
+    }, [context, taggedChildren]);
+
     const translation = translations[id];
-    if (!translation || !translation.t) {
-        console.error(`<T id="${id}"> is used in a client component without a corresponding translation.`);
-        return renderDefaultChildren({
+    
+    if (translation?.promise) {
+        throw new Error(`<T id="${id}">, "${id}" is also used as a key in the dictionary. Don't give <T> components the same ID as dictionary entries.`)
+    }
+    if (!translation || !translation.t || translation.k !== key) {
+        
+        if (process?.env.NODE_ENV === 'development' || process?.env.NODE_ENV === 'test') {
+            throw new Error(
+                `<T id="${id}"> is used in a client component without a valid corresponding translation. This can cause Next.js hydration errors.`
+                + `\n\nYour current environment: "${process?.env.NODE_ENV}". In production, this error will display as a warning only, and content will be rendered in your default language.`
+                + `\n\nTo fix this error, consider using a getGT() dictionary pattern or pushing translations from the command line in advance.`
+            );
+        }
+
+        console.warn(`<T id="${id}"> is used in a client component without a valid corresponding translation.`);
+        const defaultChildren = renderDefaultChildren({
             children: taggedChildren,
             variables, variablesOptions, defaultLocale
         }) as JSX.Element;
+
+        // The suspense exists here for hydration reasons
+        return (
+            <Suspense fallback={defaultChildren}>
+                {defaultChildren}
+            </Suspense>
+        );
     }
    
     return renderTranslatedChildren({

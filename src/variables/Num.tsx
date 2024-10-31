@@ -36,19 +36,21 @@ function Num({ children, name = "n", value, options = {} }: {
 
     let renderedValue = (typeof children !== 'undefined') ? children : value;
     renderedValue = (typeof renderedValue === 'string') ? parseFloat(renderedValue) : renderedValue;
+    let formattedValue = renderedValue;
     if (typeof renderedValue === 'number') {
         // Using Intl.NumberFormat for consistent number formatting
-        renderedValue = formatNum({ value: renderedValue, languages: locales, options });
+        formattedValue = formatNum({ value: renderedValue, languages: locales, options });
     }
 
     return (
         <span 
             data-_gt-variable-name={name} 
             data-_gt-variable-type={"number"} 
-            data-_gt-variable-options={options}
+            data-_gt-variable-options={JSON.stringify(options)}
             style={{ display: 'contents' }}
+            suppressHydrationWarning
         >
-            {renderedValue}
+            {formattedValue}
         </span>
     );
 };

@@ -33,11 +33,12 @@ function Num(_a) {
     var locales = [(0, useLocale_1.default)(), (0, useDefaultLocale_1.default)()];
     var renderedValue = (typeof children !== 'undefined') ? children : value;
     renderedValue = (typeof renderedValue === 'string') ? parseFloat(renderedValue) : renderedValue;
+    var formattedValue = renderedValue;
     if (typeof renderedValue === 'number') {
         // Using Intl.NumberFormat for consistent number formatting
-        renderedValue = (0, generaltranslation_1.formatNum)({ value: renderedValue, languages: locales, options: options });
+        formattedValue = (0, generaltranslation_1.formatNum)({ value: renderedValue, languages: locales, options: options });
     }
-    return ((0, jsx_runtime_1.jsx)("span", { "data-_gt-variable-name": name, "data-_gt-variable-type": "number", "data-_gt-variable-options": options, style: { display: 'contents' }, children: renderedValue }));
+    return ((0, jsx_runtime_1.jsx)("span", { "data-_gt-variable-name": name, "data-_gt-variable-type": "number", "data-_gt-variable-options": JSON.stringify(options), style: { display: 'contents' }, suppressHydrationWarning: true, children: formattedValue }));
 }
 ;
 Num.gtTransformation = "variable-number";

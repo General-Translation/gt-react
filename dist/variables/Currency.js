@@ -48,7 +48,7 @@ function Currency(_a) {
     if (typeof renderedValue === 'number') {
         renderedValue = (0, generaltranslation_1.formatCurrency)({ value: renderedValue, languages: locales, currency: currency, options: options });
     }
-    return ((0, jsx_runtime_1.jsx)("span", { "data-_gt-variable-name": name, "data-_gt-variable-type": "currency", "data-_gt-variable-options": __assign({ style: 'currency', currency: currency }, options), style: { display: 'contents' }, children: renderedValue }));
+    return ((0, jsx_runtime_1.jsx)("span", { "data-_gt-variable-name": name, "data-_gt-variable-type": "currency", "data-_gt-variable-options": JSON.stringify(__assign({ style: 'currency', currency: currency }, options)), style: { display: 'contents' }, suppressHydrationWarning: true, children: renderedValue }));
 }
 ;
 // Static property to indicate the transformation type

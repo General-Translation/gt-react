@@ -1,15 +1,4 @@
 "use strict";
-var __assign = (this && this.__assign) || function () {
-    __assign = Object.assign || function(t) {
-        for (var s, i = 1, n = arguments.length; i < n; i++) {
-            s = arguments[i];
-            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-                t[p] = s[p];
-        }
-        return t;
-    };
-    return __assign.apply(this, arguments);
-};
 var __rest = (this && this.__rest) || function (s, e) {
     var t = {};
     for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
@@ -27,7 +16,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = T;
 var jsx_runtime_1 = require("react/jsx-runtime");
-var react_1 = __importDefault(require("react"));
+var react_1 = require("react");
 var generaltranslation_1 = require("generaltranslation");
 var useDefaultLocale_1 = __importDefault(require("../hooks/useDefaultLocale"));
 var useLocale_1 = __importDefault(require("../hooks/useLocale"));
@@ -35,7 +24,6 @@ var renderDefaultChildren_1 = __importDefault(require("../provider/rendering/ren
 var internal_1 = require("../internal");
 var GTContext_1 = __importDefault(require("../provider/GTContext"));
 var renderTranslatedChildren_1 = __importDefault(require("../provider/rendering/renderTranslatedChildren"));
-var useGT_1 = __importDefault(require("../hooks/useGT"));
 var react_2 = require("react");
 /**
  * Translation component that handles rendering translated content, including plural forms.
@@ -68,15 +56,13 @@ var react_2 = require("react");
  */
 function T(_a) {
     var children = _a.children, id = _a.id, props = __rest(_a, ["children", "id"]);
+    if (!children)
+        return undefined;
     if (!id) {
         throw new Error("Client-side <T> with no provided 'id' prop. Children: ".concat(children));
     }
     var variables = props.variables, variablesOptions = props.variablesOptions;
     var translations = (0, GTContext_1.default)("<T id=\"".concat(id, "\"> used on the client-side outside of <GTProvider>")).translations;
-    var t = (0, useGT_1.default)();
-    if (!children) {
-        return (0, jsx_runtime_1.jsx)(react_1.default.Fragment, { children: t(id, __assign({ variables: variables }, (variablesOptions && { variablesOptions: variablesOptions }))) }, id);
-    }
     var locale = (0, useLocale_1.default)();
     var defaultLocale = (0, useDefaultLocale_1.default)();
     var taggedChildren = (0, react_2.useMemo)(function () { return (0, internal_1.addGTIdentifier)(children); }, [children]);
@@ -96,15 +82,31 @@ function T(_a) {
         });
     }
     // Do translation
+    var context = props.context;
+    var _b = (0, react_2.useMemo)(function () {
+        var childrenAsObjects = (0, internal_1.writeChildrenAsObjects)(taggedChildren);
+        var key = (0, internal_1.hashReactChildrenObjects)(context ? [childrenAsObjects, context] : childrenAsObjects);
+        return [childrenAsObjects, key];
+    }, [context, taggedChildren]), childrenAsObjects = _b[0], key = _b[1];
     var translation = translations[id];
-    if (!translation || !translation.t) {
-        console.error("<T id=\"".concat(id, "\"> is used in a client component without a corresponding translation."));
-        return (0, renderDefaultChildren_1.default)({
+    if (translation === null || translation === void 0 ? void 0 : translation.promise) {
+        throw new Error("<T id=\"".concat(id, "\">, \"").concat(id, "\" is also used as a key in the dictionary. Don't give <T> components the same ID as dictionary entries."));
+    }
+    if (!translation || !translation.t || translation.k !== key) {
+        if ((process === null || process === void 0 ? void 0 : process.env.NODE_ENV) === 'development' || (process === null || process === void 0 ? void 0 : process.env.NODE_ENV) === 'test') {
+            throw new Error("<T id=\"".concat(id, "\"> is used in a client component without a valid corresponding translation. This can cause Next.js hydration errors.")
+                + "\n\nYour current environment: \"".concat(process === null || process === void 0 ? void 0 : process.env.NODE_ENV, "\". In production, this error will display as a warning only, and content will be rendered in your default language.")
+                + "\n\nTo fix this error, consider using a getGT() dictionary pattern or pushing translations from the command line in advance.");
+        }
+        console.warn("<T id=\"".concat(id, "\"> is used in a client component without a valid corresponding translation."));
+        var defaultChildren = (0, renderDefaultChildren_1.default)({
             children: taggedChildren,
             variables: variables,
             variablesOptions: variablesOptions,
             defaultLocale: defaultLocale
         });
+        // The suspense exists here for hydration reasons
+        return ((0, jsx_runtime_1.jsx)(react_1.Suspense, { fallback: defaultChildren, children: defaultChildren }));
     }
     return (0, renderTranslatedChildren_1.default)({
         source: taggedChildren, target: translation.t,

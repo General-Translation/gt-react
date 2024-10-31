@@ -32,5 +32,5 @@ export default function T({ children, id, ...props }: {
     id: string;
     context?: string;
     [key: string]: any;
-}): JSX.Element;
+}): JSX.Element | undefined;
 //# sourceMappingURL=T.d.ts.map

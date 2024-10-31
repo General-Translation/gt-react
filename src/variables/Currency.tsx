@@ -45,8 +45,9 @@ function Currency({ children, name = "cost", value, currency = "USD", options = 
         <span 
             data-_gt-variable-name={name} 
             data-_gt-variable-type={"currency"} 
-            data-_gt-variable-options={{ style: 'currency', currency, ...options }}
+            data-_gt-variable-options={JSON.stringify({ style: 'currency', currency, ...options })}
             style={{ display: 'contents' }}
+            suppressHydrationWarning
         >
             {renderedValue}
         </span>

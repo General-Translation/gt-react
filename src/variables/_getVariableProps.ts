@@ -25,10 +25,12 @@ export default function getVariableProps(props: {
             return undefined;
         }
         )(),
-        variableOptions: 
-            props.options || 
-            (typeof props['data-_gt-variable-options'] === 'string') && JSON.parse(props['data-_gt-variable-options']) ||
-            props['data-_gt-variable-options'] || undefined
+        variableOptions: (() => {
+            const variableOptions = { ...(props.currency && { currency: props.currency }), ...(props.options && { ...props.options }) };
+            if (Object.keys(variableOptions).length) return variableOptions;
+            if (typeof props['data-_gt-variable-options'] === 'string') return JSON.parse(props['data-_gt-variable-options']);
+            return props['data-_gt-variable-options'] || undefined;
+        })()
     };
 
     return result;
