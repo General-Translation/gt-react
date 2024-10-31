@@ -32,7 +32,6 @@ function Var({ children, name = "value", value, ...props }: {
             data-generaltranslation={generaltranslation} 
             data-_gt-variable-name={name} 
             data-_gt-variable-type={"variable"}
-            data-_gt-unformatted-value={value ?? undefined}
             style={{ display: 'contents' }}
         >
             {value}

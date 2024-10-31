@@ -231,11 +231,11 @@ export default class I18NConfiguration {
     private async _sendBatchRequest(batch: Array<any>): Promise<void> {
         this._activeRequests++;
         try {
-            const bundlePromise = this.gt.translateBundle(batch);
+            const batchPromise = this.gt.translateBatch(batch);
             batch.forEach((item) => {
                 if (this._remoteTranslationsManager && item.revalidate) this._remoteTranslationsManager.setTranslationRequested(item.data.targetLanguage, item.data.metadata.dictionaryName);
             })
-            const results = await bundlePromise;
+            const results = await batchPromise;
             batch.forEach((item, index) => {
                 const result = results[index];
                 if (!result) return item.reject('Translation failed.');
@@ -276,6 +276,5 @@ export default class I18NConfiguration {
 
 // Constructs the unique identification key for the map which is the in-memory same-render-cycle cache
 const constructCacheKey = (targetLanguage: string, metadata: Record<string, any>) => {
-    console.log(`${targetLanguage}-${metadata.hash}`);
     return `${targetLanguage}-${metadata.hash}`;
 }

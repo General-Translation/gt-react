@@ -27,7 +27,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = renderDefaultChildren;
 var react_1 = __importDefault(require("react"));
-var renderTranslatedChildren_1 = require("./renderTranslatedChildren");
+var renderVariable_1 = __importDefault(require("./renderVariable"));
 var internal_1 = require("gt-react/internal");
 var internal_2 = require("gt-react/internal");
 function renderDefaultChildren(_a) {
@@ -39,7 +39,7 @@ function renderDefaultChildren(_a) {
                 var _b = (0, internal_1.getVariableProps)(child.props), variableName = _b.variableName, variableType = _b.variableType, variableValue = _b.variableValue, variableOptions = _b.variableOptions; // needs both regular props and data-generaltranslation
                 variableValue = (typeof variables[variableName] !== 'undefined') ?
                     variables[variableName] : variableValue;
-                return (0, renderTranslatedChildren_1.renderVariable)({
+                return (0, renderVariable_1.default)({
                     variableName: variableName,
                     variableType: variableType,
                     variableValue: variableValue,

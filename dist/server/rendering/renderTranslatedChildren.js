@@ -25,29 +25,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.renderVariable = renderVariable;
 exports.default = renderTranslatedChildren;
 var jsx_runtime_1 = require("react/jsx-runtime");
 var react_1 = __importDefault(require("react"));
-var Num_1 = __importDefault(require("../../variables/Num"));
-var Var_1 = __importDefault(require("../../variables/Var"));
-var Currency_1 = __importDefault(require("../../variables/Currency"));
-var DateTime_1 = __importDefault(require("../../variables/DateTime"));
 var internal_1 = require("gt-react/internal");
 var getGTProp_1 = __importDefault(require("../../utils/getGTProp"));
-function renderVariable(_a) {
-    var variableType = _a.variableType, variableName = _a.variableName, variableValue = _a.variableValue, variableOptions = _a.variableOptions;
-    if (variableType === "number") {
-        return ((0, jsx_runtime_1.jsx)(Num_1.default, { name: variableName, value: variableValue, options: variableOptions }));
-    }
-    else if (variableType === "datetime") {
-        return ((0, jsx_runtime_1.jsx)(DateTime_1.default, { name: variableName, value: variableValue, options: variableOptions }));
-    }
-    else if (variableType === "currency") {
-        return ((0, jsx_runtime_1.jsx)(Currency_1.default, { name: variableName, value: variableValue, options: variableOptions }));
-    }
-    return ((0, jsx_runtime_1.jsx)(Var_1.default, { name: variableName, value: variableValue }));
-}
+var renderVariable_1 = __importDefault(require("./renderVariable"));
 function renderTranslatedElement(_a) {
     var _b;
     var sourceElement = _a.sourceElement, targetElement = _a.targetElement, _c = _a.variables, variables = _c === void 0 ? {} : _c, _d = _a.variablesOptions, variablesOptions = _d === void 0 ? {} : _d, _e = _a.locales, locales = _e === void 0 ? [internal_1.primitives.libraryDefaultLocale] : _e;
@@ -133,7 +116,7 @@ function renderTranslatedChildren(_a) {
             if (typeof targetChild === 'string')
                 return (0, jsx_runtime_1.jsx)(react_1.default.Fragment, { children: targetChild }, "string_".concat(index));
             if ((0, internal_1.isVariableObject)(targetChild)) {
-                return ((0, jsx_runtime_1.jsx)(react_1.default.Fragment, { children: renderVariable({
+                return ((0, jsx_runtime_1.jsx)(react_1.default.Fragment, { children: (0, renderVariable_1.default)({
                         variableType: targetChild.variable || "variable",
                         variableName: targetChild.key,
                         variableValue: variables[targetChild.key],
@@ -173,7 +156,7 @@ function renderTranslatedChildren(_a) {
         }
         if (targetType === "variable") {
             var targetVariable = target;
-            return renderVariable({
+            return (0, renderVariable_1.default)({
                 variableType: targetVariable.variable || "variable",
                 variableName: targetVariable.key,
                 variableValue: variables[targetVariable.key],

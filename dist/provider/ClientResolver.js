@@ -38,6 +38,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = ClientResolver;
+var jsx_runtime_1 = require("react/jsx-runtime");
 var react_1 = require("react");
 function ClientResolver(_a) {
     var _this = this;
@@ -72,6 +73,7 @@ function ClientResolver(_a) {
     if (translationData) {
         return renderTranslation(translationData);
     }
-    return loadingFallback;
+    // the <Suspense> here is to prevent hydration errors
+    return ((0, jsx_runtime_1.jsx)(react_1.Suspense, { fallback: loadingFallback, children: loadingFallback }));
 }
 //# sourceMappingURL=ClientResolver.js.map

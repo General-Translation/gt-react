@@ -272,7 +272,7 @@ var I18NConfiguration = /** @class */ (function () {
      */
     I18NConfiguration.prototype._sendBatchRequest = function (batch) {
         return __awaiter(this, void 0, void 0, function () {
-            var bundlePromise, results_1, error_1;
+            var batchPromise, results_1, error_1;
             var _this = this;
             return __generator(this, function (_a) {
                 switch (_a.label) {
@@ -281,12 +281,12 @@ var I18NConfiguration = /** @class */ (function () {
                         _a.label = 1;
                     case 1:
                         _a.trys.push([1, 3, 4, 5]);
-                        bundlePromise = this.gt.translateBundle(batch);
+                        batchPromise = this.gt.translateBatch(batch);
                         batch.forEach(function (item) {
                             if (_this._remoteTranslationsManager && item.revalidate)
                                 _this._remoteTranslationsManager.setTranslationRequested(item.data.targetLanguage, item.data.metadata.dictionaryName);
                         });
-                        return [4 /*yield*/, bundlePromise];
+                        return [4 /*yield*/, batchPromise];
                     case 2:
                         results_1 = _a.sent();
                         batch.forEach(function (item, index) {
@@ -331,7 +331,6 @@ var I18NConfiguration = /** @class */ (function () {
 exports.default = I18NConfiguration;
 // Constructs the unique identification key for the map which is the in-memory same-render-cycle cache
 var constructCacheKey = function (targetLanguage, metadata) {
-    console.log("".concat(targetLanguage, "-").concat(metadata.hash));
     return "".concat(targetLanguage, "-").concat(metadata.hash);
 };
 //# sourceMappingURL=I18NConfiguration.js.map

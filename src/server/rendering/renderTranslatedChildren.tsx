@@ -1,49 +1,8 @@
 import React, { ReactElement, ReactNode } from "react";
 import { TranslatedChildren, TranslatedElement, VariableObject } from "gt-react/dist/primitives/types";
-import Num from "../../variables/Num";
-import Var from "../../variables/Var";
-import Currency from "../../variables/Currency";
-import DateTime from "../../variables/DateTime";
 import { isVariableObject, getVariableProps, primitives, getPluralBranch} from 'gt-react/internal'
 import getGTProp from "../../utils/getGTProp";
-
-export function renderVariable({
-    variableType, variableName, variableValue, variableOptions,
-}: {
-    variableType: "variable" | "number" | "datetime" | "currency"
-    variableName: string,
-    variableValue: any,
-    variableOptions: Intl.NumberFormatOptions | Intl.DateTimeFormatOptions
-}) {
-    if (variableType === "number") {
-        return (
-            <Num 
-                name={variableName} 
-                value={variableValue}
-                options={variableOptions}
-            />
-        )
-    } else if (variableType === "datetime") {
-        return (
-            <DateTime
-                name={variableName} 
-                value={variableValue}
-                options={variableOptions}
-            />
-        )
-    } else if (variableType === "currency") {
-        return (
-            <Currency
-                name={variableName} 
-                value={variableValue}
-                options={variableOptions}
-            />
-        )
-    }
-    return (
-        <Var name={variableName} value={variableValue} />
-    );
-}
+import renderVariable from "./renderVariable"
 
 function renderTranslatedElement({
     sourceElement, targetElement, 

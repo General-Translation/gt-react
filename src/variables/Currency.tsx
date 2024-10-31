@@ -52,7 +52,7 @@ function Currency({
             data-generaltranslation={generaltranslation} 
             data-_gt-variable-name={name} 
             data-_gt-variable-type={"currency"} 
-            data-_gt-variable-options={{ style: 'currency', currency, ...options }}
+            data-_gt-variable-options={JSON.stringify({ style: 'currency', currency, ...options })}
             data-_gt-unformatted-value={(typeof renderedValue === 'number' && !isNaN(renderedValue)) ? renderedValue : undefined}
             style={{ display: 'contents' }}
         >

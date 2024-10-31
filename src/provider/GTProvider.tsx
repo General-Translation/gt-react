@@ -27,8 +27,6 @@ export default async function GTProvider({
 
     const I18NConfig = getI18NConfig()
 
-    const rawDictionary = flattenDictionary(getDictionary());
-
     const getID = (suffix: string) => {
         return id ? `${id}.${suffix}` : suffix;
     }
@@ -47,7 +45,7 @@ export default async function GTProvider({
     let existingTranslations: Record<string, any> = 
         translationRequired ? await I18NConfig.getTranslations(locale, dictionaryName) : {}
 
-    await Promise.all(Object.entries(id ? getDictionaryEntry(id) : rawDictionary).map(async ([suffix, dictionaryEntry]) => {
+    await Promise.all(Object.entries(flattenDictionary(id ? getDictionaryEntry(id) : getDictionary())).map(async ([suffix, dictionaryEntry]) => {
 
         const entryID = getID(suffix);
 

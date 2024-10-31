@@ -95,14 +95,13 @@ var ClientProvider_1 = __importDefault(require("./ClientProvider"));
 */
 function GTProvider(_a) {
     return __awaiter(this, arguments, void 0, function (_b) {
-        var I18NConfig, rawDictionary, getID, locale, additionalMetadata, defaultLocale, renderSettings, dictionaryName, dictionary, translations, translationRequired, existingTranslations, _c;
+        var I18NConfig, getID, locale, additionalMetadata, defaultLocale, renderSettings, dictionaryName, dictionary, translations, translationRequired, existingTranslations, _c;
         var _this = this;
         var children = _b.children, id = _b.id;
         return __generator(this, function (_d) {
             switch (_d.label) {
                 case 0:
                     I18NConfig = (0, getI18NConfig_1.default)();
-                    rawDictionary = (0, internal_1.flattenDictionary)((0, getDictionary_1.default)());
                     getID = function (suffix) {
                         return id ? "".concat(id, ".").concat(suffix) : suffix;
                     };
@@ -124,7 +123,7 @@ function GTProvider(_a) {
                     _d.label = 3;
                 case 3:
                     existingTranslations = _c;
-                    return [4 /*yield*/, Promise.all(Object.entries(id ? (0, getDictionary_1.getDictionaryEntry)(id) : rawDictionary).map(function (_a) { return __awaiter(_this, [_a], void 0, function (_b) {
+                    return [4 /*yield*/, Promise.all(Object.entries((0, internal_1.flattenDictionary)(id ? (0, getDictionary_1.getDictionaryEntry)(id) : (0, getDictionary_1.default)())).map(function (_a) { return __awaiter(_this, [_a], void 0, function (_b) {
                             var entryID, _c, entry, metadata, taggedEntry, entryAsObjects, key, translation, translationPromise_1, _d, _e, translationPromise, loadingFallback, errorFallback;
                             var suffix = _b[0], dictionaryEntry = _b[1];
                             return __generator(this, function (_f) {

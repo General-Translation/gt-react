@@ -21,21 +21,6 @@ export default function ClientProvider({
     translationRequired: boolean,
 }) {
 
-    /*
-    // Do not touch or you will be fired
-    // This is an evil but necessary way to bypass hydration errors
-    // Only works with dictionaries
-    const [, _FORCE_RERENDER] = useState(false); 
-    useLayoutEffect(() => {
-        _FORCE_RERENDER(true);
-    }, []);
-    */
-
-    const [hasMounted, setHasMounted] = useState(false); 
-    useLayoutEffect(() => {
-        setHasMounted(true);
-    }, []);
-
     const translate = useCallback((id: string, options: Record<string, any> = {}, f?: Function) => {
 
         let { entry, metadata } = extractEntryMetadata(dictionary[id]);
@@ -94,7 +79,7 @@ export default function ClientProvider({
                     translation.loadingFallback = translation.errorFallback;
                 }
                 
-                // the <Suspense> exists here to beat hydration errors
+                
                 return (
                     <ClientResolver 
                         promise={translation.promise}
@@ -113,7 +98,7 @@ export default function ClientProvider({
         <_GTContext.Provider value={{
             translate, locale, defaultLocale, translations
         }}>
-            {hasMounted && children}
+            {children}
         </_GTContext.Provider>
     );
 };

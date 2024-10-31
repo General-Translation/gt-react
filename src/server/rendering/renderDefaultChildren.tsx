@@ -1,5 +1,5 @@
 import React, { ReactElement, ReactNode } from "react"
-import { renderVariable } from "./renderTranslatedChildren"
+import renderVariable from "./renderVariable"
 import { getPluralBranch, getVariableProps } from "gt-react/internal"
 import { primitives } from 'gt-react/internal'
 

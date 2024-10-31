@@ -33,5 +33,10 @@ export default function ClientResolver({
         return renderTranslation(translationData);
     }
 
-    return loadingFallback;
+    // the <Suspense> here is to prevent hydration errors
+    return (
+        <Suspense fallback={loadingFallback}>
+            {loadingFallback}
+        </Suspense>
+    );
 }

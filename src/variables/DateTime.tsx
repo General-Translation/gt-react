@@ -72,7 +72,7 @@ function DateTime({ children, name = "date", value, options = {}, ...props }: {
             data-generaltranslation={generaltranslation} 
             data-_gt-variable-name={name} 
             data-_gt-variable-type={"date"} 
-            data-_gt-variable-options={options}
+            data-_gt-variable-options={JSON.stringify(options)}
             data-_gt-unformatted-value={isValidDate(dateValue) ? dateValue : undefined}
             style={{ display: 'contents' }}
         >
