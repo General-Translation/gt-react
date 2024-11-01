@@ -51,7 +51,7 @@ export default async function tx(
     variableOptions?: Record<string, Intl.NumberFormatOptions | Intl.DateTimeFormatOptions>
 ): Promise<string> {
 
-    if (!content)  return '';
+    if (!content) return '';
 
     const I18NConfig = getI18NConfig();
     const dictionaryName = I18NConfig.getDictionaryName();
@@ -79,7 +79,14 @@ export default async function tx(
             !options.id // because it is only saved if an id is present
         ) {
             const translation = await translationPromise;
-            return renderContentToString(translation, [options.targetLanguage, I18NConfig.getDefaultLocale()], variables, variableOptions);
+            try {
+                return renderContentToString(translation, [options.targetLanguage, I18NConfig.getDefaultLocale()], variables, variableOptions);
+            } catch (error) {
+                console.error(
+                    `gt-next string translation error. tx("${content}")${options.id ? ` with id "${options.id}"` : ''} failed.`, error
+                );
+                return '';
+            }
         }
     }
 

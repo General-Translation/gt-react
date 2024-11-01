@@ -124,7 +124,14 @@ function tx(content_1) {
                     return [4 /*yield*/, translationPromise];
                 case 3:
                     translation = _a.sent();
-                    return [2 /*return*/, (0, generaltranslation_1.renderContentToString)(translation, [options.targetLanguage, I18NConfig.getDefaultLocale()], variables, variableOptions)];
+                    try {
+                        return [2 /*return*/, (0, generaltranslation_1.renderContentToString)(translation, [options.targetLanguage, I18NConfig.getDefaultLocale()], variables, variableOptions)];
+                    }
+                    catch (error) {
+                        console.error("gt-next string translation error. tx(\"".concat(content, "\")").concat(options.id ? " with id \"".concat(options.id, "\"") : '', " failed."), error);
+                        return [2 /*return*/, ''];
+                    }
+                    _a.label = 4;
                 case 4: return [2 /*return*/, (0, generaltranslation_1.renderContentToString)(contentAsArray, [options.targetLanguage, I18NConfig.getDefaultLocale()], variables, variableOptions)];
             }
         });
