@@ -1,5 +1,5 @@
 export default function getVariableProps(props: {
-    'data-generaltranslation': {
+    'data-_gt'?: {
         transformation: "variable";
         [key: string]: any;
     };

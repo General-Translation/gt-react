@@ -97,7 +97,7 @@ function addGTIdentifier(children, outerID, startingIndex) {
             var props = child.props;
             // Create new props for the element, including the GT identifier and a key
             var generaltranslation = createGTProp(child);
-            var newProps = __assign(__assign({}, props), { 'data-generaltranslation': generaltranslation });
+            var newProps = __assign(__assign({}, props), { 'data-_gt': generaltranslation });
             if (outerID) {
                 newProps.key = outerID;
                 outerID = undefined;

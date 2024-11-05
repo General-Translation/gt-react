@@ -18,7 +18,7 @@ exports.default = getVariableProps;
 var _defaultVariableNames_1 = __importDefault(require("./_defaultVariableNames"));
 function getVariableProps(props) {
     var _a;
-    var variableType = ((_a = props['data-generaltranslation']) === null || _a === void 0 ? void 0 : _a.variableType) || "variable";
+    var variableType = ((_a = props['data-_gt']) === null || _a === void 0 ? void 0 : _a.variableType) || "variable";
     var result = {
         variableType: variableType,
         variableName: props.name || props['data-_gt-variable-name'] || _defaultVariableNames_1.default[variableType],

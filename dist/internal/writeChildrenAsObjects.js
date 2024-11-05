@@ -37,8 +37,8 @@ var getTagName = function (child) {
         return type;
     if (props.href)
         return 'a';
-    if ((_a = props['data-generaltranslation']) === null || _a === void 0 ? void 0 : _a.id)
-        return "C".concat(props['data-generaltranslation'].id);
+    if ((_a = props['data-_gt']) === null || _a === void 0 ? void 0 : _a.id)
+        return "C".concat(props['data-_gt'].id);
     return 'function';
 };
 var handleSingleChild = function (child) {
@@ -48,8 +48,8 @@ var handleSingleChild = function (child) {
             type: getTagName(child),
             props: {}
         };
-        if (props['data-generaltranslation']) {
-            var generaltranslation = props['data-generaltranslation'];
+        if (props['data-_gt']) {
+            var generaltranslation = props['data-_gt'];
             var newGTProp = __assign({}, generaltranslation);
             var transformation = generaltranslation.transformation;
             if (transformation === "variable") {
@@ -74,7 +74,7 @@ var handleSingleChild = function (child) {
                 });
                 newGTProp = __assign(__assign({}, newGTProp), { branches: newBranches_2 });
             }
-            objectElement.props['data-generaltranslation'] = newGTProp;
+            objectElement.props['data-_gt'] = newGTProp;
         }
         if (props.children) {
             objectElement.props.children = writeChildrenAsObjects(props.children);

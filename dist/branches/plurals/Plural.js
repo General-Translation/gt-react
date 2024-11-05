@@ -40,13 +40,13 @@ var useDefaultLocale_1 = __importDefault(require("../../hooks/useDefaultLocale")
  */
 function Plural(_a) {
     var children = _a.children, n = _a.n, props = __rest(_a, ["children", "n"]);
-    var generaltranslation = props["data-generaltranslation"], branches = __rest(props, ['data-generaltranslation']);
+    var generaltranslation = props["data-_gt"], branches = __rest(props, ['data-_gt']);
     var locale = (0, useLocale_1.default)();
     var defaultLocale = (0, useDefaultLocale_1.default)();
     if (typeof n !== 'number')
         throw new Error("Plural with children \"".concat(children, "\" requires \"n\" option."));
     var branch = (0, internal_1.getPluralBranch)(n, [locale, defaultLocale], branches) || children;
-    return ((0, jsx_runtime_1.jsx)("span", { "data-generaltranslation": generaltranslation, "data-_gt-n": n, style: { display: 'contents' }, children: branch }));
+    return ((0, jsx_runtime_1.jsx)("span", { "data-_gt": generaltranslation, "data-_gt-n": n, style: { display: 'contents' }, children: branch }));
 }
 Plural.gtTransformation = "plural";
 exports.default = Plural;

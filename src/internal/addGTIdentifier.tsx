@@ -58,7 +58,7 @@ export default function addGTIdentifier(children: Children, outerID?: string | u
             let generaltranslation = createGTProp(child);  
             let newProps = {
                 ...props,
-                'data-generaltranslation': generaltranslation
+                'data-_gt': generaltranslation
             };
             if (outerID) {
                 newProps.key = outerID;

@@ -30,7 +30,7 @@ function Plural({
     n?: number;
     [key: string]: any;
 }) {
-    const { 'data-generaltranslation': generaltranslation, ...branches } = props;
+    const { 'data-_gt': generaltranslation, ...branches } = props;
     const locale = useLocale();
     const defaultLocale = useDefaultLocale();
     if (typeof n !== 'number') 
@@ -38,7 +38,7 @@ function Plural({
     const branch = getPluralBranch(n, [locale, defaultLocale], branches) || children;
     return (
         <span 
-            data-generaltranslation={generaltranslation} 
+            data-_gt={generaltranslation} 
             data-_gt-n={n}
             style={{ display: 'contents' }}
         >

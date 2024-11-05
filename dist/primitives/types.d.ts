@@ -22,7 +22,7 @@ export type TranslatedChildren = TranslatedChild | TranslatedChild[];
 export type TranslatedElement = {
     type: string;
     props: {
-        'data-generaltranslation': {
+        'data-_gt': {
             id: number;
             transformation: string;
             variableType?: "variable" | "number" | "currency" | "datetime";

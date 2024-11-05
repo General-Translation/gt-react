@@ -53,7 +53,7 @@ export default function renderDefaultChildren({
             if (child.props.children) {
                 return React.cloneElement(child, {
                     ...child.props,
-                    'data-generaltranslation': undefined,
+                    'data-_gt': undefined,
                     children: handleChildren(child.props.children)
                 });
             }

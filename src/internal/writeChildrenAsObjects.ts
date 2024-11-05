@@ -15,7 +15,7 @@ const getTagName = (child: ReactElement): string => {
     }
     if (type && typeof type === 'string') return type;
     if (props.href) return 'a';
-    if (props['data-generaltranslation']?.id) return `C${props['data-generaltranslation'].id}`;
+    if (props['data-_gt']?.id) return `C${props['data-_gt'].id}`;
     return 'function';
 };
 
@@ -26,9 +26,9 @@ const handleSingleChild = (child: any): any => {
             type: getTagName(child),
             props: {}
         };
-        if (props['data-generaltranslation']) {
+        if (props['data-_gt']) {
 
-            const generaltranslation = props['data-generaltranslation'];
+            const generaltranslation = props['data-_gt'];
             let newGTProp: Record<string, any> = {
                 ...generaltranslation
             };
@@ -55,7 +55,7 @@ const handleSingleChild = (child: any): any => {
                 newGTProp = { ...newGTProp, branches: newBranches }
             }
             
-            objectElement.props['data-generaltranslation'] = newGTProp;
+            objectElement.props['data-_gt'] = newGTProp;
         }
         if (props.children) {
             objectElement.props.children = writeChildrenAsObjects(props.children)

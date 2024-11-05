@@ -1,14 +1,14 @@
 import defaultVariableNames from "./_defaultVariableNames";
 
 export default function getVariableProps(props: { 
-    'data-generaltranslation': {
+    'data-_gt'?: {
         transformation: "variable",
         [key: string]: any
     }
     [key: string]: any 
 }) {
 
-    const variableType: "variable" | "number" | "datetime" | "currency" = props['data-generaltranslation']?.variableType || "variable"
+    const variableType: "variable" | "number" | "datetime" | "currency" = props['data-_gt']?.variableType || "variable"
 
     const result: {
         variableName: string,
