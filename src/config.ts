@@ -29,7 +29,6 @@ import { NextConfig } from "next";
  * @param {string[]} [locales] - List of supported locales for the application. Defaults to the first locale or the default locale if not provided.
  * @param {string} [defaultLocale=locales?.[0] || defaultInitGTProps.defaultLocale] - The default locale to use if none is specified.
  * @param {object} [renderSettings=defaultInitGTProps.renderSettings] - Render settings for how translations should be handled.
- * @param {string} [dictionaryName=defaultInitGTProps.dictionaryName] - The name of the dictionary file to be used for translation.
  * @param {number} [_maxConcurrentRequests=defaultInitGTProps._maxConcurrectRequests] - Maximum number of concurrent requests allowed.
  * @param {number} [_batchInterval=defaultInitGTProps._batchInterval] - The interval in milliseconds between batched translation requests.
  * @param {object} metadata - Additional metadata that can be passed for extended configuration.
@@ -48,7 +47,6 @@ export function initGT({
     locales,
     defaultLocale = locales?.[0] || defaultInitGTProps.defaultLocale,
     renderSettings = defaultInitGTProps.renderSettings,
-    dictionaryName = defaultInitGTProps.dictionaryName,
     _maxConcurrentRequests = defaultInitGTProps._maxConcurrectRequests,
     _batchInterval = defaultInitGTProps._batchInterval,
     ...metadata
@@ -64,7 +62,7 @@ export function initGT({
 
     const I18NConfigParams = JSON.stringify({
         apiKey, projectID, baseURL, cacheURL, locales, defaultLocale,
-        renderSettings, dictionaryName,
+        renderSettings,
         maxConcurrentRequests: _maxConcurrentRequests,
         batchInterval: _batchInterval, ...metadata
     });

@@ -76,11 +76,10 @@ export default async function T({
     const locale = getLocale();
     const defaultLocale = I18NConfig.getDefaultLocale();
     const translationRequired = I18NConfig.requiresTranslation(locale);
-    const dictionaryName = I18NConfig.getDictionaryName();
 
     let translationsPromise;
     if (translationRequired) {
-        translationsPromise = I18NConfig.getTranslations(locale, dictionaryName);
+        translationsPromise = I18NConfig.getTranslations(locale);
     }
 
     const taggedChildren = addGTIdentifier(children);

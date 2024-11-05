@@ -46,6 +46,17 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+var __rest = (this && this.__rest) || function (s, e) {
+    var t = {};
+    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
+        t[p] = s[p];
+    if (s != null && typeof Object.getOwnPropertySymbols === "function")
+        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
+            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))
+                t[p[i]] = s[p[i]];
+        }
+    return t;
+};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -93,7 +104,7 @@ var getMetadata_1 = __importDefault(require("../../request/getMetadata"));
  */
 function tx(content_1) {
     return __awaiter(this, arguments, void 0, function (content, options, variables, variableOptions) {
-        var I18NConfig, dictionaryName, contentAsArray, key, translations, translationPromise, renderSettings, translation;
+        var I18NConfig, dictionaryName, contentAsArray, key, translations, language, others, translationPromise, renderSettings, translation;
         if (options === void 0) { options = {}; }
         return __generator(this, function (_a) {
             switch (_a.label) {
@@ -116,7 +127,8 @@ function tx(content_1) {
                     _a.label = 2;
                 case 2:
                     if (!I18NConfig.translationEnabled()) return [3 /*break*/, 4];
-                    translationPromise = I18NConfig.translate({ content: content, targetLanguage: options.language, options: __assign(__assign(__assign({}, options), { hash: key }), ((0, getMetadata_1.default)())) });
+                    language = options.language, others = __rest(options, ["language"]);
+                    translationPromise = I18NConfig.translate({ content: content, targetLanguage: options.language, options: __assign(__assign(__assign({}, others), ((0, getMetadata_1.default)())), { hash: key }) });
                     renderSettings = I18NConfig.getRenderSettings();
                     if (!(renderSettings.method !== "subtle" ||
                         !options.id) // because it is only saved if an id is present

@@ -19,7 +19,6 @@ import getMetadata from "../../request/getMetadata";
  * @param {string} [options.id] - A unique identifier for the content, used for caching and fetching translations.
  * @param {string} [options.language] - The target language for translation. Defaults to the current locale if not provided.
  * @param {string} [options.context] - Additional context for the translation process, which may influence the translation's outcome.
- * @param {Object} [options.dictionaryName] - Optional dictionary name for fetching translations from a specific dictionary.
  * @param {Object} [variables] - An optional map of variables to be injected into the translated content.
  * @param {Object} [variableOptions] - Options for formatting numbers and dates using `Intl.NumberFormat` or `Intl.DateTimeFormat`.
  * 
@@ -54,7 +53,6 @@ export default async function tx(
     if (!content) return '';
 
     const I18NConfig = getI18NConfig();
-    const dictionaryName = I18NConfig.getDictionaryName();
 
     const contentAsArray = splitStringToContent(content);
     
@@ -66,13 +64,14 @@ export default async function tx(
     let key: string | undefined;
     if (options.id) {
         key = hashReactChildrenObjects(options.context ? [content, options.context] : content);
-        const translations = await I18NConfig.getTranslations(options.language, dictionaryName);
+        const translations = await I18NConfig.getTranslations(options.language);
         if (translations?.[options.id] && translations[options.id].k === key)
             return renderContentToString(translations[options.id].t, [options.language, I18NConfig.getDefaultLocale()], variables, variableOptions);
     }
 
     if (I18NConfig.translationEnabled()) {
-        const translationPromise = I18NConfig.translate({ content, targetLanguage: options.language, options: { ...options, hash: key, ...(getMetadata()) } });
+        const { language, ...others } = options;
+        const translationPromise = I18NConfig.translate({ content, targetLanguage: options.language, options: { ...others, ...(getMetadata()), hash: key } });
         const renderSettings = I18NConfig.getRenderSettings()
         if (
             renderSettings.method !== "subtle" || 

@@ -12,7 +12,6 @@ export default {
         method: "skeleton",
         timeout: null
     },
-    dictionaryName: primitives.defaultDictionaryName,
     getMetadata: () => ({}),
     _maxConcurrectRequests: 2,
     _batchInterval: 1000

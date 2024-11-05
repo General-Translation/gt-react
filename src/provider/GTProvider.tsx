@@ -35,7 +35,6 @@ export default async function GTProvider({
     const additionalMetadata = getMetadata();
     const defaultLocale = I18NConfig.getDefaultLocale();
     const renderSettings = I18NConfig.getRenderSettings();
-    const dictionaryName = I18NConfig.getDictionaryName();
 
     let dictionary: Record<string, any> = {};
     let translations: Record<string, any> = {};
@@ -43,7 +42,7 @@ export default async function GTProvider({
     const translationRequired = I18NConfig.requiresTranslation(locale)
 
     let existingTranslations: Record<string, any> = 
-        translationRequired ? await I18NConfig.getTranslations(locale, dictionaryName) : {}
+        translationRequired ? await I18NConfig.getTranslations(locale) : {}
 
     await Promise.all(Object.entries(flattenDictionary(id ? getDictionaryEntry(id) : getDictionary())).map(async ([suffix, dictionaryEntry]) => {
 

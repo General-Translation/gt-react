@@ -16,8 +16,6 @@ type InitGTProps = {
         method: "skeleton" | "replace" | "hang" | "subtle",
         timeout: number | null
     }
-    // Dictionaries
-    dictionaryName?: string;
     // Other metadata
     getMetadata?: () => Record<string, any>
     // Batching config

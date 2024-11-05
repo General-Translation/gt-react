@@ -12,7 +12,6 @@ type I18NConfigurationParams = {
         method: "skeleton" | "replace" | "hang" | "subtle",
         timeout: number | null
     }
-    dictionaryName: string;
     translations?: Record<string, () => Promise<Record<string, any>>>;
     maxConcurrentRequests: number;
     batchInterval: number;
@@ -32,7 +31,6 @@ export default class I18NConfiguration {
         timeout: number | null
     }
     // Dictionaries
-    dictionaryName: string;
     private _remoteTranslationsManager: RemoteTranslationsManager | undefined;
     // GT
     gt: GT;
@@ -56,7 +54,7 @@ export default class I18NConfiguration {
         // Render method
         renderSettings,
         // Dictionaries
-        dictionary, dictionaryName,
+        dictionary,
         // Batching config
         maxConcurrentRequests, batchInterval,
         // Other metadata
@@ -70,15 +68,12 @@ export default class I18NConfiguration {
         this.locales = locales;
         // Render method
         this.renderSettings = renderSettings;
-        // Dictionaries
-        this.dictionaryName = dictionaryName;
         // GT
         this.gt = new GT({ projectID, apiKey, defaultLanguage: defaultLocale, baseURL });
         // Other metadata
         this.metadata = { 
             projectID: this.projectID, 
-            defaultLanguage: this.defaultLocale, 
-            dictionaryName,
+            defaultLanguage: this.defaultLocale,
             ...(this.renderSettings.timeout && { timeout: this.renderSettings.timeout - batchInterval }),
             ...metadata
         };
@@ -115,14 +110,6 @@ export default class I18NConfiguration {
     }
 
     /**
-     * Gets the name of the current dictionary
-     * @returns {string} A BCP-47 language tag
-    */
-    getDictionaryName(): string {
-        return this.dictionaryName;
-    }
-
-    /**
      * @returns A boolean indicating whether automatic translation is enabled or disabled for this config
     */
     translationEnabled(): boolean {
@@ -154,11 +141,10 @@ export default class I18NConfiguration {
     /**
      * Get the translation dictionaries for this user's locale, if they exist
      * @param locale - The language set by the user
-     * @param dictionaryName - User-defined dictionary name, for distinguishing between multiple translation dictionaries for a single language.
      * @returns A promise that resolves to the translations.
     */
-    async getTranslations(locale: string, dictionaryName: string = this.dictionaryName): Promise<Record<string, any>> {
-        return (await this._remoteTranslationsManager?.getTranslations(locale, dictionaryName)) || {};
+    async getTranslations(locale: string): Promise<Record<string, any>> {
+        return (await this._remoteTranslationsManager?.getTranslations(locale)) || {};
     }
    
     /**
@@ -173,7 +159,6 @@ export default class I18NConfiguration {
             return this._translationCache.get(cacheKey);
         }
         const { content, targetLanguage, options } = params;
-        const dictionaryName: string = params.options?.dictionaryName || this.dictionaryName;
         const translationPromise = new Promise<string>((resolve, reject) => {
             this._queue.push({
                 type: "string",
@@ -183,7 +168,7 @@ export default class I18NConfiguration {
                     projectID: this.projectID,
                     metadata: { ...this.metadata, ...options }
                 },
-                revalidate: (this._remoteTranslationsManager) ? this._remoteTranslationsManager.getTranslationRequested(targetLanguage, dictionaryName) : false,
+                revalidate: (this._remoteTranslationsManager) ? this._remoteTranslationsManager.getTranslationRequested(targetLanguage) : false,
                 resolve,
                 reject
             });
@@ -206,7 +191,6 @@ export default class I18NConfiguration {
             return this._translationCache.get(cacheKey);
         }
         const { children, targetLanguage, metadata } = params;
-        const dictionaryName: string = metadata?.dictionaryName || this.dictionaryName;
         const translationPromise = new Promise<any>((resolve, reject) => {
             this._queue.push({
                 type: "react",
@@ -215,7 +199,7 @@ export default class I18NConfiguration {
                     targetLanguage,
                     metadata: { ...this.metadata, ...metadata }
                 },
-                revalidate: (this._remoteTranslationsManager) ? this._remoteTranslationsManager.getTranslationRequested(targetLanguage, dictionaryName) : false,
+                revalidate: (this._remoteTranslationsManager) ? this._remoteTranslationsManager.getTranslationRequested(targetLanguage) : false,
                 resolve,
                 reject
             });
@@ -233,7 +217,7 @@ export default class I18NConfiguration {
         try {
             const batchPromise = this.gt.translateBatch(batch);
             batch.forEach((item) => {
-                if (this._remoteTranslationsManager && item.revalidate) this._remoteTranslationsManager.setTranslationRequested(item.data.targetLanguage, item.data.metadata.dictionaryName);
+                if (this._remoteTranslationsManager && item.revalidate) this._remoteTranslationsManager.setTranslationRequested(item.data.targetLanguage);
             })
             const results = await batchPromise;
             batch.forEach((item, index) => {
@@ -244,7 +228,6 @@ export default class I18NConfiguration {
                     if (result.translation && result.language && result.reference && this._remoteTranslationsManager) {
                         this._remoteTranslationsManager.setTranslations(
                             result.language,
-                            result.reference.dictionaryName,
                             result.reference.key,
                             result.reference.id,
                             result.translation

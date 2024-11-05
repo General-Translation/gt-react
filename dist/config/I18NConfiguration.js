@@ -202,14 +202,13 @@ var I18NConfiguration = /** @class */ (function () {
         return __awaiter(this, void 0, void 0, function () {
             var cacheKey, content, targetLanguage, options, dictionaryName, translationPromise;
             var _this = this;
-            var _a;
-            return __generator(this, function (_b) {
+            return __generator(this, function (_a) {
                 cacheKey = constructCacheKey(params.targetLanguage, params.options);
                 if (this._translationCache.has(cacheKey)) {
                     return [2 /*return*/, this._translationCache.get(cacheKey)];
                 }
                 content = params.content, targetLanguage = params.targetLanguage, options = params.options;
-                dictionaryName = ((_a = params.options) === null || _a === void 0 ? void 0 : _a.dictionaryName) || this.dictionaryName;
+                dictionaryName = this.dictionaryName;
                 translationPromise = new Promise(function (resolve, reject) {
                     _this._queue.push({
                         type: "string",
@@ -247,7 +246,7 @@ var I18NConfiguration = /** @class */ (function () {
                     return [2 /*return*/, this._translationCache.get(cacheKey)];
                 }
                 children = params.children, targetLanguage = params.targetLanguage, metadata = params.metadata;
-                dictionaryName = (metadata === null || metadata === void 0 ? void 0 : metadata.dictionaryName) || this.dictionaryName;
+                dictionaryName = this.dictionaryName;
                 translationPromise = new Promise(function (resolve, reject) {
                     _this._queue.push({
                         type: "react",
