@@ -82,7 +82,6 @@ var getMetadata_1 = __importDefault(require("../../request/getMetadata"));
  * @param {string} [options.id] - A unique identifier for the content, used for caching and fetching translations.
  * @param {string} [options.language] - The target language for translation. Defaults to the current locale if not provided.
  * @param {string} [options.context] - Additional context for the translation process, which may influence the translation's outcome.
- * @param {Object} [options.dictionaryName] - Optional dictionary name for fetching translations from a specific dictionary.
  * @param {Object} [variables] - An optional map of variables to be injected into the translated content.
  * @param {Object} [variableOptions] - Options for formatting numbers and dates using `Intl.NumberFormat` or `Intl.DateTimeFormat`.
  *
@@ -104,7 +103,7 @@ var getMetadata_1 = __importDefault(require("../../request/getMetadata"));
  */
 function tx(content_1) {
     return __awaiter(this, arguments, void 0, function (content, options, variables, variableOptions) {
-        var I18NConfig, dictionaryName, contentAsArray, key, translations, language, others, translationPromise, renderSettings, translation;
+        var I18NConfig, contentAsArray, key, translations, language, others, translationPromise, renderSettings, translation;
         if (options === void 0) { options = {}; }
         return __generator(this, function (_a) {
             switch (_a.label) {
@@ -112,14 +111,13 @@ function tx(content_1) {
                     if (!content)
                         return [2 /*return*/, ''];
                     I18NConfig = (0, getI18NConfig_1.default)();
-                    dictionaryName = I18NConfig.getDictionaryName();
                     contentAsArray = (0, generaltranslation_1.splitStringToContent)(content);
                     options.language = options.language || (0, getLocale_1.default)();
                     if (!I18NConfig.requiresTranslation(options.language))
                         return [2 /*return*/, (0, generaltranslation_1.renderContentToString)(contentAsArray, [options.language, I18NConfig.getDefaultLocale()], variables, variableOptions)];
                     if (!options.id) return [3 /*break*/, 2];
                     key = (0, internal_1.hashReactChildrenObjects)(options.context ? [content, options.context] : content);
-                    return [4 /*yield*/, I18NConfig.getTranslations(options.language, dictionaryName)];
+                    return [4 /*yield*/, I18NConfig.getTranslations(options.language)];
                 case 1:
                     translations = _a.sent();
                     if ((translations === null || translations === void 0 ? void 0 : translations[options.id]) && translations[options.id].k === key)

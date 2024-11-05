@@ -95,7 +95,7 @@ var ClientProvider_1 = __importDefault(require("./ClientProvider"));
 */
 function GTProvider(_a) {
     return __awaiter(this, arguments, void 0, function (_b) {
-        var I18NConfig, getID, locale, additionalMetadata, defaultLocale, renderSettings, dictionaryName, dictionary, translations, translationRequired, existingTranslations, _c;
+        var I18NConfig, getID, locale, additionalMetadata, defaultLocale, renderSettings, dictionary, translations, translationRequired, existingTranslations, _c;
         var _this = this;
         var children = _b.children, id = _b.id;
         return __generator(this, function (_d) {
@@ -109,12 +109,11 @@ function GTProvider(_a) {
                     additionalMetadata = (0, getMetadata_1.default)();
                     defaultLocale = I18NConfig.getDefaultLocale();
                     renderSettings = I18NConfig.getRenderSettings();
-                    dictionaryName = I18NConfig.getDictionaryName();
                     dictionary = {};
                     translations = {};
                     translationRequired = I18NConfig.requiresTranslation(locale);
                     if (!translationRequired) return [3 /*break*/, 2];
-                    return [4 /*yield*/, I18NConfig.getTranslations(locale, dictionaryName)];
+                    return [4 /*yield*/, I18NConfig.getTranslations(locale)];
                 case 1:
                     _c = _d.sent();
                     return [3 /*break*/, 3];

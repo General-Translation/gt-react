@@ -12,7 +12,6 @@ type InitGTProps = {
         method: "skeleton" | "replace" | "hang" | "subtle";
         timeout: number | null;
     };
-    dictionaryName?: string;
     getMetadata?: () => Record<string, any>;
     _maxConcurrentRequests?: number;
     _batchInterval?: number;

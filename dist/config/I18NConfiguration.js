@@ -96,11 +96,11 @@ var I18NConfiguration = /** @class */ (function () {
         // Render method
         renderSettings = _a.renderSettings, 
         // Dictionaries
-        dictionary = _a.dictionary, dictionaryName = _a.dictionaryName, 
+        dictionary = _a.dictionary, 
         // Batching config
         maxConcurrentRequests = _a.maxConcurrentRequests, batchInterval = _a.batchInterval, 
         // Other metadata
-        metadata = __rest(_a, ["apiKey", "projectID", "baseURL", "cacheURL", "defaultLocale", "locales", "renderSettings", "dictionary", "dictionaryName", "maxConcurrentRequests", "batchInterval"]);
+        metadata = __rest(_a, ["apiKey", "projectID", "baseURL", "cacheURL", "defaultLocale", "locales", "renderSettings", "dictionary", "maxConcurrentRequests", "batchInterval"]);
         // Cloud integration
         this.projectID = projectID;
         this.baseURL = baseURL;
@@ -109,12 +109,10 @@ var I18NConfiguration = /** @class */ (function () {
         this.locales = locales;
         // Render method
         this.renderSettings = renderSettings;
-        // Dictionaries
-        this.dictionaryName = dictionaryName;
         // GT
         this.gt = new generaltranslation_1.default({ projectID: projectID, apiKey: apiKey, defaultLanguage: defaultLocale, baseURL: baseURL });
         // Other metadata
-        this.metadata = __assign(__assign({ projectID: this.projectID, defaultLanguage: this.defaultLocale, dictionaryName: dictionaryName }, (this.renderSettings.timeout && { timeout: this.renderSettings.timeout - batchInterval })), metadata);
+        this.metadata = __assign(__assign({ defaultLanguage: this.defaultLocale }, (this.renderSettings.timeout && { timeout: this.renderSettings.timeout - batchInterval })), metadata);
         // Dictionary managers
         if (cacheURL && projectID) {
             this._remoteTranslationsManager = RemoteTranslationsManager_1.default;
@@ -146,13 +144,6 @@ var I18NConfiguration = /** @class */ (function () {
         return this.locales;
     };
     /**
-     * Gets the name of the current dictionary
-     * @returns {string} A BCP-47 language tag
-    */
-    I18NConfiguration.prototype.getDictionaryName = function () {
-        return this.dictionaryName;
-    };
-    /**
      * @returns A boolean indicating whether automatic translation is enabled or disabled for this config
     */
     I18NConfiguration.prototype.translationEnabled = function () {
@@ -178,16 +169,14 @@ var I18NConfiguration = /** @class */ (function () {
     /**
      * Get the translation dictionaries for this user's locale, if they exist
      * @param locale - The language set by the user
-     * @param dictionaryName - User-defined dictionary name, for distinguishing between multiple translation dictionaries for a single language.
      * @returns A promise that resolves to the translations.
     */
-    I18NConfiguration.prototype.getTranslations = function (locale_1) {
-        return __awaiter(this, arguments, void 0, function (locale, dictionaryName) {
+    I18NConfiguration.prototype.getTranslations = function (locale) {
+        return __awaiter(this, void 0, void 0, function () {
             var _a;
-            if (dictionaryName === void 0) { dictionaryName = this.dictionaryName; }
             return __generator(this, function (_b) {
                 switch (_b.label) {
-                    case 0: return [4 /*yield*/, ((_a = this._remoteTranslationsManager) === null || _a === void 0 ? void 0 : _a.getTranslations(locale, dictionaryName))];
+                    case 0: return [4 /*yield*/, ((_a = this._remoteTranslationsManager) === null || _a === void 0 ? void 0 : _a.getTranslations(locale))];
                     case 1: return [2 /*return*/, (_b.sent()) || {}];
                 }
             });
@@ -200,7 +189,7 @@ var I18NConfiguration = /** @class */ (function () {
      */
     I18NConfiguration.prototype.translate = function (params) {
         return __awaiter(this, void 0, void 0, function () {
-            var cacheKey, content, targetLanguage, options, dictionaryName, translationPromise;
+            var cacheKey, content, targetLanguage, options, translationPromise;
             var _this = this;
             return __generator(this, function (_a) {
                 cacheKey = constructCacheKey(params.targetLanguage, params.options);
@@ -208,7 +197,6 @@ var I18NConfiguration = /** @class */ (function () {
                     return [2 /*return*/, this._translationCache.get(cacheKey)];
                 }
                 content = params.content, targetLanguage = params.targetLanguage, options = params.options;
-                dictionaryName = this.dictionaryName;
                 translationPromise = new Promise(function (resolve, reject) {
                     _this._queue.push({
                         type: "string",
@@ -218,7 +206,7 @@ var I18NConfiguration = /** @class */ (function () {
                             projectID: _this.projectID,
                             metadata: __assign(__assign({}, _this.metadata), options)
                         },
-                        revalidate: (_this._remoteTranslationsManager) ? _this._remoteTranslationsManager.getTranslationRequested(targetLanguage, dictionaryName) : false,
+                        revalidate: (_this._remoteTranslationsManager) ? _this._remoteTranslationsManager.getTranslationRequested(targetLanguage) : false,
                         resolve: resolve,
                         reject: reject
                     });
@@ -238,7 +226,7 @@ var I18NConfiguration = /** @class */ (function () {
     */
     I18NConfiguration.prototype.translateChildren = function (params) {
         return __awaiter(this, void 0, void 0, function () {
-            var cacheKey, children, targetLanguage, metadata, dictionaryName, translationPromise;
+            var cacheKey, children, targetLanguage, metadata, translationPromise;
             var _this = this;
             return __generator(this, function (_a) {
                 cacheKey = constructCacheKey(params.targetLanguage, params.metadata);
@@ -246,7 +234,6 @@ var I18NConfiguration = /** @class */ (function () {
                     return [2 /*return*/, this._translationCache.get(cacheKey)];
                 }
                 children = params.children, targetLanguage = params.targetLanguage, metadata = params.metadata;
-                dictionaryName = this.dictionaryName;
                 translationPromise = new Promise(function (resolve, reject) {
                     _this._queue.push({
                         type: "react",
@@ -255,7 +242,7 @@ var I18NConfiguration = /** @class */ (function () {
                             targetLanguage: targetLanguage,
                             metadata: __assign(__assign({}, _this.metadata), metadata)
                         },
-                        revalidate: (_this._remoteTranslationsManager) ? _this._remoteTranslationsManager.getTranslationRequested(targetLanguage, dictionaryName) : false,
+                        revalidate: (_this._remoteTranslationsManager) ? _this._remoteTranslationsManager.getTranslationRequested(targetLanguage) : false,
                         resolve: resolve,
                         reject: reject
                     });
@@ -283,7 +270,7 @@ var I18NConfiguration = /** @class */ (function () {
                         batchPromise = this.gt.translateBatch(batch);
                         batch.forEach(function (item) {
                             if (_this._remoteTranslationsManager && item.revalidate)
-                                _this._remoteTranslationsManager.setTranslationRequested(item.data.targetLanguage, item.data.metadata.dictionaryName);
+                                _this._remoteTranslationsManager.setTranslationRequested(item.data.targetLanguage);
                         });
                         return [4 /*yield*/, batchPromise];
                     case 2:
@@ -295,7 +282,7 @@ var I18NConfiguration = /** @class */ (function () {
                             if (result && typeof result === 'object') {
                                 item.resolve(result.translation);
                                 if (result.translation && result.language && result.reference && _this._remoteTranslationsManager) {
-                                    _this._remoteTranslationsManager.setTranslations(result.language, result.reference.dictionaryName, result.reference.key, result.reference.id, result.translation);
+                                    _this._remoteTranslationsManager.setTranslations(result.language, result.reference.key, result.reference.id, result.translation);
                                 }
                             }
                         });

@@ -16,7 +16,6 @@ exports.default = {
         method: "skeleton",
         timeout: null
     },
-    dictionaryName: internal_1.primitives.defaultDictionaryName,
     getMetadata: function () { return ({}); },
     _maxConcurrectRequests: 2,
     _batchInterval: 1000

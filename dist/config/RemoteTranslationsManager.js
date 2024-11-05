@@ -48,18 +48,17 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.RemoteTranslationsManager = void 0;
-exports.getDictionaryReference = getDictionaryReference;
+exports.getTranslationReference = getTranslationReference;
 /**
- * Generates a dictionary reference string from locale and dictionary name.
- * @param {string} locale - The locale of the dictionary.
- * @param {string} dictionaryName - The name of the dictionary.
- * @returns {string} The encoded dictionary reference.
+ * Generates a reference string from locale.
+ * @param {string} locale - The locale/language code.
+ * @returns {string} The encoded reference.
  */
-function getDictionaryReference(locale, dictionaryName) {
-    return "".concat(encodeURIComponent(dictionaryName), "/").concat(encodeURIComponent(locale));
+function getTranslationReference(locale) {
+    return encodeURIComponent(locale);
 }
 /**
- * Manages remote dictionaries for translation purposes.
+ * Manages remote translations.
  */
 var RemoteTranslationsManager = /** @class */ (function () {
     /**
@@ -70,23 +69,23 @@ var RemoteTranslationsManager = /** @class */ (function () {
             cacheURL: "https://cache.gtx.dev",
             projectID: ""
         };
-        this.dictionaryMap = new Map();
+        this.translationsMap = new Map();
         this.fetchPromises = new Map();
         this.requestedTranslations = new Map();
     }
     /**
-     * Sets the configuration for the RemoteDictionaryManager.
-     * @param {Partial<RemoteDictionaryConfig>} newConfig - The new configuration to apply.
+     * Sets the configuration for the RemoteTranslationsManager.
+     * @param {Partial<RemoteTranslationsConfig>} newConfig - The new configuration to apply.
      */
     RemoteTranslationsManager.prototype.setConfig = function (newConfig) {
         this.config = __assign(__assign({}, this.config), newConfig);
     };
     /**
-     * Fetches a dictionary from the remote cache.
-     * @param {string} reference - The dictionary reference.
-     * @returns {Promise<Record<string, any> | null>} The fetched dictionary or null if not found.
+     * Fetches translations from the remote cache.
+     * @param {string} reference - The translation reference.
+     * @returns {Promise<Record<string, any> | null>} The fetched translations or null if not found.
      */
-    RemoteTranslationsManager.prototype._fetchDictionary = function (reference) {
+    RemoteTranslationsManager.prototype._fetchTranslations = function (reference) {
         return __awaiter(this, void 0, void 0, function () {
             var response, result, error_1;
             return __generator(this, function (_a) {
@@ -105,7 +104,7 @@ var RemoteTranslationsManager = /** @class */ (function () {
                         return [3 /*break*/, 4];
                     case 3:
                         error_1 = _a.sent();
-                        console.error('Remote dictionary error:', error_1);
+                        console.error('Remote translations error:', error_1);
                         return [3 /*break*/, 4];
                     case 4: return [2 /*return*/, null];
                 }
@@ -113,75 +112,74 @@ var RemoteTranslationsManager = /** @class */ (function () {
         });
     };
     /**
-     * Retrieves a dictionary based on locale and dictionary name.
-     * @param {string} locale - The locale of the dictionary.
-     * @param {string} dictionaryName - The name of the dictionary.
-     * @returns {Promise<Record<string, any> | null>} The dictionary data or null if not found.
+     * Retrieves translations for a given locale.
+     * @param {string} locale - The locale/language code.
+     * @returns {Promise<Record<string, any> | null>} The translations data or null if not found.
      */
-    RemoteTranslationsManager.prototype.getTranslations = function (locale, dictionaryName) {
+    RemoteTranslationsManager.prototype.getTranslations = function (locale) {
         return __awaiter(this, void 0, void 0, function () {
-            var reference, fetchPromise, retrievedDictionary;
+            var reference, fetchPromise, retrievedTranslations;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        reference = getDictionaryReference(locale, dictionaryName);
-                        if (this.dictionaryMap.has(reference)) {
-                            return [2 /*return*/, this.dictionaryMap.get(reference) || null];
+                        reference = getTranslationReference(locale);
+                        if (this.translationsMap.has(reference)) {
+                            return [2 /*return*/, this.translationsMap.get(reference) || null];
                         }
                         if (!this.fetchPromises.has(reference)) return [3 /*break*/, 2];
                         return [4 /*yield*/, this.fetchPromises.get(reference)];
                     case 1: return [2 /*return*/, (_a.sent()) || null];
                     case 2:
-                        fetchPromise = this._fetchDictionary(reference);
+                        fetchPromise = this._fetchTranslations(reference);
                         this.fetchPromises.set(reference, fetchPromise);
                         return [4 /*yield*/, fetchPromise];
                     case 3:
-                        retrievedDictionary = _a.sent();
+                        retrievedTranslations = _a.sent();
                         this.fetchPromises.delete(reference);
-                        if (retrievedDictionary) {
-                            this.dictionaryMap.set(reference, retrievedDictionary);
+                        if (retrievedTranslations) {
+                            this.translationsMap.set(reference, retrievedTranslations);
                         }
-                        return [2 /*return*/, retrievedDictionary];
+                        return [2 /*return*/, retrievedTranslations];
                 }
             });
         });
     };
     /**
-     * Sets a new entry in the specified dictionary.
-     * @param {string} locale - The locale of the dictionary.
-     * @param {string} dictionaryName - The name of the dictionary.
+     * Sets a new translation entry.
+     * @param {string} locale - The locale/language code.
      * @param {string} key - The key for the new entry.
      * @param {string} [id=key] - The id for the new entry, defaults to key if not provided.
      * @param {any} translation - The translation value.
      * @returns {boolean} True if the entry was set successfully, false otherwise.
      */
-    RemoteTranslationsManager.prototype.setTranslations = function (locale, dictionaryName, key, id, translation) {
+    RemoteTranslationsManager.prototype.setTranslations = function (locale, key, id, translation) {
         var _a;
         if (id === void 0) { id = key; }
-        if (!(locale && dictionaryName && key && id && translation))
+        if (!(locale && key && id && translation))
             return false;
-        var reference = getDictionaryReference(locale, dictionaryName);
-        var currentDictionary = this.dictionaryMap.get(reference) || {};
-        this.dictionaryMap.set(reference, __assign(__assign({}, currentDictionary), (_a = {}, _a[id] = (translation && typeof translation === 'object' && translation.t) ? __assign(__assign({}, translation), { k: key }) : { k: key, t: translation }, _a)));
+        var reference = getTranslationReference(locale);
+        var currentTranslations = this.translationsMap.get(reference) || {};
+        this.translationsMap.set(reference, __assign(__assign({}, currentTranslations), (_a = {}, _a[id] = (translation && typeof translation === 'object' && translation.t)
+            ? __assign(__assign({}, translation), { k: key }) : { k: key, t: translation }, _a)));
         return true;
     };
     /**
-     * Marks a translation as requested for a given locale and dictionary
+     * Marks translations as requested for a given locale
      */
-    RemoteTranslationsManager.prototype.setTranslationRequested = function (locale, dictionaryName) {
-        var reference = getDictionaryReference(locale, dictionaryName);
+    RemoteTranslationsManager.prototype.setTranslationRequested = function (locale) {
+        var reference = getTranslationReference(locale);
         this.requestedTranslations.set(reference, true);
     };
     /**
-     * Checks if a translation has been requested for a given locale and dictionary
+     * Checks if translations have been requested for a given locale
      */
-    RemoteTranslationsManager.prototype.getTranslationRequested = function (locale, dictionaryName) {
-        var reference = getDictionaryReference(locale, dictionaryName);
+    RemoteTranslationsManager.prototype.getTranslationRequested = function (locale) {
+        var reference = getTranslationReference(locale);
         return this.requestedTranslations.get(reference) ? true : false;
     };
     return RemoteTranslationsManager;
 }());
 exports.RemoteTranslationsManager = RemoteTranslationsManager;
-var remoteDictionaryManager = new RemoteTranslationsManager();
-exports.default = remoteDictionaryManager;
+var remoteTranslationsManager = new RemoteTranslationsManager();
+exports.default = remoteTranslationsManager;
 //# sourceMappingURL=RemoteTranslationsManager.js.map

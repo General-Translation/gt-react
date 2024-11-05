@@ -10,7 +10,6 @@ type I18NConfigurationParams = {
         method: "skeleton" | "replace" | "hang" | "subtle";
         timeout: number | null;
     };
-    dictionaryName: string;
     translations?: Record<string, () => Promise<Record<string, any>>>;
     maxConcurrentRequests: number;
     batchInterval: number;
@@ -25,7 +24,6 @@ export default class I18NConfiguration {
         method: "skeleton" | "replace" | "hang" | "subtle";
         timeout: number | null;
     };
-    dictionaryName: string;
     private _remoteTranslationsManager;
     gt: GT;
     metadata: Record<string, any>;
@@ -34,7 +32,7 @@ export default class I18NConfiguration {
     private _queue;
     private _activeRequests;
     private _translationCache;
-    constructor({ apiKey, projectID, baseURL, cacheURL, defaultLocale, locales, renderSettings, dictionary, dictionaryName, maxConcurrentRequests, batchInterval, ...metadata }: I18NConfigurationParams);
+    constructor({ apiKey, projectID, baseURL, cacheURL, defaultLocale, locales, renderSettings, dictionary, maxConcurrentRequests, batchInterval, ...metadata }: I18NConfigurationParams);
     /**
      * Gets the application's default locale
      * @returns {string} A BCP-47 language tag
@@ -45,11 +43,6 @@ export default class I18NConfiguration {
      * @returns {string[] | undefined} A list of BCP-47 language tags, or undefined if none were provided
     */
     getLocales(): string[] | undefined;
-    /**
-     * Gets the name of the current dictionary
-     * @returns {string} A BCP-47 language tag
-    */
-    getDictionaryName(): string;
     /**
      * @returns A boolean indicating whether automatic translation is enabled or disabled for this config
     */
@@ -73,10 +66,9 @@ export default class I18NConfiguration {
     /**
      * Get the translation dictionaries for this user's locale, if they exist
      * @param locale - The language set by the user
-     * @param dictionaryName - User-defined dictionary name, for distinguishing between multiple translation dictionaries for a single language.
      * @returns A promise that resolves to the translations.
     */
-    getTranslations(locale: string, dictionaryName?: string): Promise<Record<string, any>>;
+    getTranslations(locale: string): Promise<Record<string, any>>;
     /**
      * Translate content into language
      * @param params - Parameters for translation

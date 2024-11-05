@@ -13,7 +13,6 @@
  * @param {string} [options.id] - A unique identifier for the content, used for caching and fetching translations.
  * @param {string} [options.language] - The target language for translation. Defaults to the current locale if not provided.
  * @param {string} [options.context] - Additional context for the translation process, which may influence the translation's outcome.
- * @param {Object} [options.dictionaryName] - Optional dictionary name for fetching translations from a specific dictionary.
  * @param {Object} [variables] - An optional map of variables to be injected into the translated content.
  * @param {Object} [variableOptions] - Options for formatting numbers and dates using `Intl.NumberFormat` or `Intl.DateTimeFormat`.
  *

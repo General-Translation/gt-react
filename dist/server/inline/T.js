@@ -105,7 +105,7 @@ var Resolver_1 = __importDefault(require("./Resolver"));
  */
 function T(_a) {
     return __awaiter(this, arguments, void 0, function (_b) {
-        var I18NConfig, locale, defaultLocale, translationRequired, dictionaryName, translationsPromise, taggedChildren, childrenAsObjects, key, translations, translation, target, translationPromise, promise, loadingFallback, errorFallback, error_1;
+        var I18NConfig, locale, defaultLocale, translationRequired, translationsPromise, taggedChildren, childrenAsObjects, key, translations, translation, target, translationPromise, promise, loadingFallback, errorFallback, error_1;
         var children = _b.children, id = _b.id, context = _b.context, renderSettings = _b.renderSettings, variables = _b.variables, variablesOptions = _b.variablesOptions;
         return __generator(this, function (_c) {
             switch (_c.label) {
@@ -117,9 +117,8 @@ function T(_a) {
                     locale = (0, getLocale_1.default)();
                     defaultLocale = I18NConfig.getDefaultLocale();
                     translationRequired = I18NConfig.requiresTranslation(locale);
-                    dictionaryName = I18NConfig.getDictionaryName();
                     if (translationRequired) {
-                        translationsPromise = I18NConfig.getTranslations(locale, dictionaryName);
+                        translationsPromise = I18NConfig.getTranslations(locale);
                     }
                     taggedChildren = (0, internal_1.addGTIdentifier)(children);
                     childrenAsObjects = (0, internal_1.writeChildrenAsObjects)(taggedChildren);

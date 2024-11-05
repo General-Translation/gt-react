@@ -72,7 +72,6 @@ export default class I18NConfiguration {
         this.gt = new GT({ projectID, apiKey, defaultLanguage: defaultLocale, baseURL });
         // Other metadata
         this.metadata = { 
-            projectID: this.projectID, 
             defaultLanguage: this.defaultLocale,
             ...(this.renderSettings.timeout && { timeout: this.renderSettings.timeout - batchInterval }),
             ...metadata
