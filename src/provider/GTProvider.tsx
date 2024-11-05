@@ -12,7 +12,7 @@ import renderDefaultChildren from "./rendering/renderDefaultChildren";
 import renderTranslatedChildren from "./rendering/renderTranslatedChildren";
 
 import primitives from "../primitives/primitives";
-const { defaultDictionary, defaultDictionaryName, libraryDefaultLocale, localeCookieName } = primitives;
+const { defaultDictionary, libraryDefaultLocale, localeCookieName } = primitives;
 
 /**
  * Provides General Translation context to its children, which can then access `useGT`, `useLocale`, and `useDefaultLocale`.
@@ -20,7 +20,6 @@ const { defaultDictionary, defaultDictionaryName, libraryDefaultLocale, localeCo
  * @param {React.ReactNode} children - The children components that will use the translation context.
  * @param {string} [projectID] - The project ID required for General Translation cloud services.
  * @param {Dictionary} [dictionary=defaultDictionary] - The translation dictionary for the project.
- * @param {string} [dictionaryName=defaultDictionaryName] - The name of the translation dictionary.
  * @param {string[]} [locales] - The list of approved locales for the project.
  * @param {string} [defaultLocale=libraryDefaultLocale] - The default locale to use if no other locale is found.
  * @param {string} [locale] - The current locale, if already set.
@@ -32,7 +31,6 @@ export default function GTProvider({
     children, 
     projectID,
     dictionary = defaultDictionary, 
-    dictionaryName = defaultDictionaryName,
     locales, 
     defaultLocale = locales?.[0] || libraryDefaultLocale, 
     locale, 
@@ -41,7 +39,6 @@ export default function GTProvider({
     children?: any;
     projectID?: string;
     dictionary?: Dictionary;
-    dictionaryName?: string;
     locales?: string[];
     defaultLocale?: string;
     locale?: string;
@@ -70,7 +67,7 @@ export default function GTProvider({
                 setTranslations({}); // no translation required
             } else {
                 (async () => {
-                    const response = await fetch(`${cacheURL}/${projectID}/${locale}/${dictionaryName}`);
+                    const response = await fetch(`${cacheURL}/${projectID}/${locale}`);
                     const result = await response.json();
                     setTranslations(result);
                 })()
