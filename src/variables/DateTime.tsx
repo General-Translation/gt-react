@@ -26,14 +26,14 @@ function DateTime({ children, name = "date", value, options = {}, ...props }: {
     name?: string;
     value?: any; // The default value which can be number, string, or Date
     options?: Intl.DateTimeFormatOptions; // Optional formatting options for the date
-    'data-generaltranslation'?: any
+    'data-_gt'?: any
 }): JSX.Element {
 
     const I18NConfig = getI18NConfig();
     const locales = [ getLocale(), I18NConfig.getDefaultLocale() ];
 
     // Extract general translation data from props
-    const { "data-generaltranslation": generaltranslation } = props;
+    const { "data-_gt": generaltranslation } = props;
 
     // Determine the default value to use
     if (typeof children !== 'undefined' && typeof value === 'undefined') {
@@ -42,7 +42,7 @@ function DateTime({ children, name = "date", value, options = {}, ...props }: {
     if (!value) {
         return (
             <span 
-                data-generaltranslation={generaltranslation} 
+                data-_gt={generaltranslation} 
                 data-_gt-variable-name={name} 
                 data-_gt-variable-type={"date"} 
                 data-_gt-variable-options={options}
@@ -69,7 +69,7 @@ function DateTime({ children, name = "date", value, options = {}, ...props }: {
     // Render the formatted date within a span element
     return (
         <span 
-            data-generaltranslation={generaltranslation} 
+            data-_gt={generaltranslation} 
             data-_gt-variable-name={name} 
             data-_gt-variable-type={"date"} 
             data-_gt-variable-options={JSON.stringify(options)}

@@ -20,16 +20,16 @@ function Var({ children, name = "value", value, ...props }: {
     children?: any;
     name?: string;
     value?: any;
-    'data-generaltranslation'?: any
+    'data-_gt'?: any
 }): JSX.Element {
     
-    const { "data-generaltranslation": generaltranslation } = props;
+    const { "data-_gt": generaltranslation } = props;
     
     if (typeof children !== 'undefined' && typeof value === 'undefined') value = children;
 
     return (
         <span 
-            data-generaltranslation={generaltranslation} 
+            data-_gt={generaltranslation} 
             data-_gt-variable-name={name} 
             data-_gt-variable-type={"variable"}
             style={{ display: 'contents' }}

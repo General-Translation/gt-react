@@ -34,9 +34,9 @@ function renderDefaultChildren(_a) {
     var children = _a.children, _b = _a.variables, variables = _b === void 0 ? {} : _b, _c = _a.variablesOptions, variablesOptions = _c === void 0 ? {} : _c, _d = _a.defaultLocale, defaultLocale = _d === void 0 ? internal_2.primitives.libraryDefaultLocale : _d;
     var handleSingleChild = function (child) {
         if (react_1.default.isValidElement(child)) {
-            var _a = child.props, generaltranslation = _a["data-generaltranslation"], props = __rest(_a, ['data-generaltranslation']);
+            var _a = child.props, generaltranslation = _a["data-_gt"], props = __rest(_a, ['data-_gt']);
             if ((generaltranslation === null || generaltranslation === void 0 ? void 0 : generaltranslation.transformation) === "variable") {
-                var _b = (0, internal_1.getVariableProps)(child.props), variableName = _b.variableName, variableType = _b.variableType, variableValue = _b.variableValue, variableOptions = _b.variableOptions; // needs both regular props and data-generaltranslation
+                var _b = (0, internal_1.getVariableProps)(child.props), variableName = _b.variableName, variableType = _b.variableType, variableValue = _b.variableValue, variableOptions = _b.variableOptions; // needs both regular props and data-_gt
                 variableValue = (typeof variables[variableName] !== 'undefined') ?
                     variables[variableName] : variableValue;
                 return (0, renderVariable_1.default)({
@@ -61,7 +61,7 @@ function renderDefaultChildren(_a) {
                 return handleChildren(branches[branch]);
             }
             if (child.props.children) {
-                return react_1.default.cloneElement(child, __assign(__assign({}, props), { 'data-generaltranslation': undefined, children: handleChildren(child.props.children) }));
+                return react_1.default.cloneElement(child, __assign(__assign({}, props), { 'data-_gt': undefined, children: handleChildren(child.props.children) }));
             }
         }
         return child;

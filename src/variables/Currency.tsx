@@ -30,13 +30,13 @@ function Currency({
     value?: any;
     currency?: string;
     options?: Intl.NumberFormatOptions;
-    'data-generaltranslation'?: any
+    'data-_gt'?: any
 }): JSX.Element {
     
     const I18NConfig = getI18NConfig();
     const locales = [ getLocale(), I18NConfig.getDefaultLocale() ];
 
-    const { "data-generaltranslation": generaltranslation } = props;
+    const { "data-_gt": generaltranslation } = props;
 
     // Determine the value to be formatted
     let renderedValue = (typeof children !== 'undefined' && typeof value === 'undefined') ? children : value;
@@ -49,7 +49,7 @@ function Currency({
 
     return (
         <span 
-            data-generaltranslation={generaltranslation} 
+            data-_gt={generaltranslation} 
             data-_gt-variable-name={name} 
             data-_gt-variable-type={"currency"} 
             data-_gt-variable-options={JSON.stringify({ style: 'currency', currency, ...options })}

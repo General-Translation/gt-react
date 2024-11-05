@@ -53,7 +53,7 @@ function Currency(_a) {
     var children = _a.children, _b = _a.name, name = _b === void 0 ? "cost" : _b, value = _a.value, _c = _a.currency, currency = _c === void 0 ? "USD" : _c, _d = _a.options, options = _d === void 0 ? {} : _d, props = __rest(_a, ["children", "name", "value", "currency", "options"]);
     var I18NConfig = (0, getI18NConfig_1.default)();
     var locales = [(0, getLocale_1.default)(), I18NConfig.getDefaultLocale()];
-    var generaltranslation = props["data-generaltranslation"];
+    var generaltranslation = props["data-_gt"];
     // Determine the value to be formatted
     var renderedValue = (typeof children !== 'undefined' && typeof value === 'undefined') ? children : value;
     renderedValue = (typeof renderedValue === 'string') ? parseFloat(renderedValue) : renderedValue;
@@ -61,7 +61,7 @@ function Currency(_a) {
     var formattedValue = (typeof renderedValue === 'number')
         ? (0, generaltranslation_1.formatCurrency)({ value: renderedValue, currency: currency, languages: locales, options: options })
         : renderedValue;
-    return ((0, jsx_runtime_1.jsx)("span", { "data-generaltranslation": generaltranslation, "data-_gt-variable-name": name, "data-_gt-variable-type": "currency", "data-_gt-variable-options": JSON.stringify(__assign({ style: 'currency', currency: currency }, options)), "data-_gt-unformatted-value": (typeof renderedValue === 'number' && !isNaN(renderedValue)) ? renderedValue : undefined, style: { display: 'contents' }, children: typeof formattedValue === 'string' ? formattedValue : undefined }));
+    return ((0, jsx_runtime_1.jsx)("span", { "data-_gt": generaltranslation, "data-_gt-variable-name": name, "data-_gt-variable-type": "currency", "data-_gt-variable-options": JSON.stringify(__assign({ style: 'currency', currency: currency }, options)), "data-_gt-unformatted-value": (typeof renderedValue === 'number' && !isNaN(renderedValue)) ? renderedValue : undefined, style: { display: 'contents' }, children: typeof formattedValue === 'string' ? formattedValue : undefined }));
 }
 ;
 Currency.gtTransformation = "variable-currency";

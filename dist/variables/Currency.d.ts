@@ -24,7 +24,7 @@ declare function Currency({ children, name, value, currency, options, ...props }
     value?: any;
     currency?: string;
     options?: Intl.NumberFormatOptions;
-    'data-generaltranslation'?: any;
+    'data-_gt'?: any;
 }): JSX.Element;
 declare namespace Currency {
     var gtTransformation: string;

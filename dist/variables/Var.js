@@ -32,10 +32,10 @@ var jsx_runtime_1 = require("react/jsx-runtime");
  */
 function Var(_a) {
     var children = _a.children, _b = _a.name, name = _b === void 0 ? "value" : _b, value = _a.value, props = __rest(_a, ["children", "name", "value"]);
-    var generaltranslation = props["data-generaltranslation"];
+    var generaltranslation = props["data-_gt"];
     if (typeof children !== 'undefined' && typeof value === 'undefined')
         value = children;
-    return ((0, jsx_runtime_1.jsx)("span", { "data-generaltranslation": generaltranslation, "data-_gt-variable-name": name, "data-_gt-variable-type": "variable", style: { display: 'contents' }, children: value }));
+    return ((0, jsx_runtime_1.jsx)("span", { "data-_gt": generaltranslation, "data-_gt-variable-name": name, "data-_gt-variable-type": "variable", style: { display: 'contents' }, children: value }));
 }
 ;
 Var.gtTransformation = "variable-variable"; // keep this because Var is imported in other functions

@@ -29,16 +29,16 @@ function Plural({
 }: {
     children?: any;
     n?: number;
-    'data-generaltranslation'?: any
+    'data-_gt'?: any
     [key: string]: any
 }) {
-    const { 'data-generaltranslation': generaltranslation, ...branches } = props;
+    const { 'data-_gt': generaltranslation, ...branches } = props;
     const locale = getLocale();
     const defaultLocale = getI18NConfig().getDefaultLocale();
     const branch = (typeof n === 'number' ? getPluralBranch(n, [locale, defaultLocale], branches) : children) || children;
     return (
         <span 
-            data-generaltranslation={generaltranslation} 
+            data-_gt={generaltranslation} 
             data-_gt-n={n}
             style={{ display: 'contents' }}
         >

@@ -42,13 +42,13 @@ function DateTime(_a) {
     var I18NConfig = (0, getI18NConfig_1.default)();
     var locales = [(0, getLocale_1.default)(), I18NConfig.getDefaultLocale()];
     // Extract general translation data from props
-    var generaltranslation = props["data-generaltranslation"];
+    var generaltranslation = props["data-_gt"];
     // Determine the default value to use
     if (typeof children !== 'undefined' && typeof value === 'undefined') {
         value = children;
     }
     if (!value) {
-        return ((0, jsx_runtime_1.jsx)("span", { "data-generaltranslation": generaltranslation, "data-_gt-variable-name": name, "data-_gt-variable-type": "date", "data-_gt-variable-options": options, style: { display: 'contents' } }));
+        return ((0, jsx_runtime_1.jsx)("span", { "data-_gt": generaltranslation, "data-_gt-variable-name": name, "data-_gt-variable-type": "date", "data-_gt-variable-options": options, style: { display: 'contents' } }));
     }
     // Convert value to a Date object if it's a Unix time, string, or Date object
     var dateValue;
@@ -65,7 +65,7 @@ function DateTime(_a) {
     var dateString = dateValue ? (0, generaltranslation_1.formatDateTime)({ value: dateValue, languages: locales, options: options }) : '';
     var formattedValue = dateString.replace(/[\u200F\u202B\u202E]/g, '');
     // Render the formatted date within a span element
-    return ((0, jsx_runtime_1.jsx)("span", { "data-generaltranslation": generaltranslation, "data-_gt-variable-name": name, "data-_gt-variable-type": "date", "data-_gt-variable-options": JSON.stringify(options), "data-_gt-unformatted-value": isValidDate(dateValue) ? dateValue : undefined, style: { display: 'contents' }, children: formattedValue }));
+    return ((0, jsx_runtime_1.jsx)("span", { "data-_gt": generaltranslation, "data-_gt-variable-name": name, "data-_gt-variable-type": "date", "data-_gt-variable-options": JSON.stringify(options), "data-_gt-unformatted-value": isValidDate(dateValue) ? dateValue : undefined, style: { display: 'contents' }, children: formattedValue }));
 }
 ;
 DateTime.gtTransformation = "variable-datetime";

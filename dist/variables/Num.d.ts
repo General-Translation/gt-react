@@ -23,7 +23,7 @@ declare function Num({ children, name, value, options, ...props }: {
     name?: string;
     value?: any;
     options?: Intl.NumberFormatOptions;
-    'data-generaltranslation'?: any;
+    'data-_gt'?: any;
 }): JSX.Element;
 declare namespace Num {
     var gtTransformation: string;

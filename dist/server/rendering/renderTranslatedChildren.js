@@ -34,7 +34,7 @@ var renderVariable_1 = __importDefault(require("./renderVariable"));
 function renderTranslatedElement(_a) {
     var _b;
     var sourceElement = _a.sourceElement, targetElement = _a.targetElement, _c = _a.variables, variables = _c === void 0 ? {} : _c, _d = _a.variablesOptions, variablesOptions = _d === void 0 ? {} : _d, _e = _a.locales, locales = _e === void 0 ? [internal_1.primitives.libraryDefaultLocale] : _e;
-    var _f = sourceElement.props, generaltranslation = _f["data-generaltranslation"], props = __rest(_f, ['data-generaltranslation']);
+    var _f = sourceElement.props, generaltranslation = _f["data-_gt"], props = __rest(_f, ['data-_gt']);
     var transformation = generaltranslation === null || generaltranslation === void 0 ? void 0 : generaltranslation["transformation"];
     if (transformation === "plural") {
         var n = typeof variables.n === 'number' ? variables.n :
@@ -42,7 +42,7 @@ function renderTranslatedElement(_a) {
                 sourceElement.props['data-_gt-n'];
         var sourceBranches = generaltranslation.branches || {};
         var sourceBranch = (0, internal_1.getPluralBranch)(n, locales, sourceBranches) || sourceElement.props.children;
-        var targetBranches = targetElement.props["data-generaltranslation"].branches || {};
+        var targetBranches = targetElement.props["data-_gt"].branches || {};
         var targetBranch = (0, internal_1.getPluralBranch)(n, locales, targetBranches) || targetElement.props.children;
         return renderTranslatedChildren({
             source: sourceBranch,
@@ -57,7 +57,7 @@ function renderTranslatedElement(_a) {
         name_1 = name_1 || sourceElement.props['data-_gt-name'] || "branch";
         branch = variables[name_1] || branch || sourceElement.props['data-_gt-branch-name'];
         var sourceBranch = (generaltranslation.branches || {})[branch] || children;
-        var targetBranch = (targetElement.props["data-generaltranslation"].branches || {})[branch] || targetElement.props.children;
+        var targetBranch = (targetElement.props["data-_gt"].branches || {})[branch] || targetElement.props.children;
         return renderTranslatedChildren({
             source: sourceBranch,
             target: targetBranch,
@@ -67,7 +67,7 @@ function renderTranslatedElement(_a) {
         });
     }
     if ((props === null || props === void 0 ? void 0 : props.children) && ((_b = targetElement.props) === null || _b === void 0 ? void 0 : _b.children)) {
-        return react_1.default.cloneElement(sourceElement, __assign(__assign({}, props), { 'data-generaltranslation': undefined, children: renderTranslatedChildren({
+        return react_1.default.cloneElement(sourceElement, __assign(__assign({}, props), { 'data-_gt': undefined, children: renderTranslatedChildren({
                 source: props.children,
                 target: targetElement.props.children,
                 variables: variables,
@@ -106,7 +106,7 @@ function renderTranslatedChildren(_a) {
                 var generaltranslation = (0, getGTProp_1.default)(sourceChild);
                 if (typeof (generaltranslation === null || generaltranslation === void 0 ? void 0 : generaltranslation.id) !== 'undefined') {
                     var sourceID = generaltranslation.id;
-                    var targetID = (_b = (_a = targetElement === null || targetElement === void 0 ? void 0 : targetElement.props) === null || _a === void 0 ? void 0 : _a['data-generaltranslation']) === null || _b === void 0 ? void 0 : _b.id;
+                    var targetID = (_b = (_a = targetElement === null || targetElement === void 0 ? void 0 : targetElement.props) === null || _a === void 0 ? void 0 : _a['data-_gt']) === null || _b === void 0 ? void 0 : _b.id;
                     return sourceID === targetID;
                 }
                 return false;

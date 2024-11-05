@@ -17,7 +17,7 @@ export default function renderDefaultChildren({
     const handleSingleChild = (child: ReactNode) => {
         if (React.isValidElement(child)) {
             const {
-                'data-generaltranslation': generaltranslation,
+                'data-_gt': generaltranslation,
                 ...props
             } = child.props;
             if (generaltranslation?.transformation === "variable") {
@@ -26,7 +26,7 @@ export default function renderDefaultChildren({
                     variableType,
                     variableValue,
                     variableOptions
-                } = getVariableProps(child.props); // needs both regular props and data-generaltranslation
+                } = getVariableProps(child.props); // needs both regular props and data-_gt
                 variableValue = (typeof variables[variableName] !== 'undefined') ?
                     variables[variableName] : variableValue;
                 return renderVariable({
@@ -53,7 +53,7 @@ export default function renderDefaultChildren({
             if (child.props.children) {
                 return React.cloneElement(child, {
                     ...props,
-                    'data-generaltranslation': undefined,
+                    'data-_gt': undefined,
                     children: handleChildren(child.props.children)
                 });
             }

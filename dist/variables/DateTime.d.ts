@@ -22,7 +22,7 @@ declare function DateTime({ children, name, value, options, ...props }: {
     name?: string;
     value?: any;
     options?: Intl.DateTimeFormatOptions;
-    'data-generaltranslation'?: any;
+    'data-_gt'?: any;
 }): JSX.Element;
 declare namespace DateTime {
     var gtTransformation: string;

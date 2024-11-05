@@ -18,7 +18,7 @@ function renderTranslatedElement({
 }) {
 
     const { props: { 
-        'data-generaltranslation': generaltranslation,
+        'data-_gt': generaltranslation,
         ...props 
     } } = sourceElement;
 
@@ -30,7 +30,7 @@ function renderTranslatedElement({
                         sourceElement.props['data-_gt-n'];
         const sourceBranches = generaltranslation.branches || {};
         const sourceBranch = getPluralBranch(n, locales, sourceBranches) || sourceElement.props.children;
-        const targetBranches = targetElement.props["data-generaltranslation"].branches || {};
+        const targetBranches = targetElement.props["data-_gt"].branches || {};
         const targetBranch = getPluralBranch(n, locales, targetBranches) || targetElement.props.children;
         return renderTranslatedChildren({ 
             source: sourceBranch, 
@@ -44,7 +44,7 @@ function renderTranslatedElement({
         name = name || sourceElement.props['data-_gt-name'] || "branch";
         branch = variables[name] || branch || sourceElement.props['data-_gt-branch-name'];
         const sourceBranch = (generaltranslation.branches || {})[branch] || children;
-        const targetBranch = (targetElement.props["data-generaltranslation"].branches || {})[branch] || targetElement.props.children;
+        const targetBranch = (targetElement.props["data-_gt"].branches || {})[branch] || targetElement.props.children;
         return renderTranslatedChildren({ 
             source: sourceBranch, 
             target: targetBranch,
@@ -55,7 +55,7 @@ function renderTranslatedElement({
     if (props?.children && targetElement.props?.children) {
         return React.cloneElement(sourceElement, {
             ...props,
-            'data-generaltranslation': undefined,
+            'data-_gt': undefined,
             children: renderTranslatedChildren({ 
                 source: props.children, 
                 target: targetElement.props.children,
@@ -112,7 +112,7 @@ export default function renderTranslatedChildren({
                 const generaltranslation = getGTProp(sourceChild);
                 if (typeof generaltranslation?.id !== 'undefined') {
                     const sourceID = generaltranslation.id;
-                    const targetID = targetElement?.props?.['data-generaltranslation']?.id;
+                    const targetID = targetElement?.props?.['data-_gt']?.id;
                     return sourceID === targetID;
                 }
                 return false;
