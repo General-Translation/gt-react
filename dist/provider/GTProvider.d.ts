@@ -5,7 +5,6 @@ import { Dictionary } from "../primitives/types";
  * @param {React.ReactNode} children - The children components that will use the translation context.
  * @param {string} [projectID] - The project ID required for General Translation cloud services.
  * @param {Dictionary} [dictionary=defaultDictionary] - The translation dictionary for the project.
- * @param {string} [dictionaryName=defaultDictionaryName] - The name of the translation dictionary.
  * @param {string[]} [locales] - The list of approved locales for the project.
  * @param {string} [defaultLocale=libraryDefaultLocale] - The default locale to use if no other locale is found.
  * @param {string} [locale] - The current locale, if already set.
@@ -13,11 +12,10 @@ import { Dictionary } from "../primitives/types";
  *
  * @returns {JSX.Element} The provider component for General Translation context.
  */
-export default function GTProvider({ children, projectID, dictionary, dictionaryName, locales, defaultLocale, locale, cacheURL }: {
+export default function GTProvider({ children, projectID, dictionary, locales, defaultLocale, locale, cacheURL }: {
     children?: any;
     projectID?: string;
     dictionary?: Dictionary;
-    dictionaryName?: string;
     locales?: string[];
     defaultLocale?: string;
     locale?: string;

@@ -51,14 +51,13 @@ var extractEntryMetadata_1 = __importDefault(require("./helpers/extractEntryMeta
 var renderDefaultChildren_1 = __importDefault(require("./rendering/renderDefaultChildren"));
 var renderTranslatedChildren_1 = __importDefault(require("./rendering/renderTranslatedChildren"));
 var primitives_1 = __importDefault(require("../primitives/primitives"));
-var defaultDictionary = primitives_1.default.defaultDictionary, defaultDictionaryName = primitives_1.default.defaultDictionaryName, libraryDefaultLocale = primitives_1.default.libraryDefaultLocale, localeCookieName = primitives_1.default.localeCookieName;
+var defaultDictionary = primitives_1.default.defaultDictionary, libraryDefaultLocale = primitives_1.default.libraryDefaultLocale, localeCookieName = primitives_1.default.localeCookieName;
 /**
  * Provides General Translation context to its children, which can then access `useGT`, `useLocale`, and `useDefaultLocale`.
  *
  * @param {React.ReactNode} children - The children components that will use the translation context.
  * @param {string} [projectID] - The project ID required for General Translation cloud services.
  * @param {Dictionary} [dictionary=defaultDictionary] - The translation dictionary for the project.
- * @param {string} [dictionaryName=defaultDictionaryName] - The name of the translation dictionary.
  * @param {string[]} [locales] - The list of approved locales for the project.
  * @param {string} [defaultLocale=libraryDefaultLocale] - The default locale to use if no other locale is found.
  * @param {string} [locale] - The current locale, if already set.
@@ -68,7 +67,7 @@ var defaultDictionary = primitives_1.default.defaultDictionary, defaultDictionar
  */
 function GTProvider(_a) {
     var _this = this;
-    var children = _a.children, projectID = _a.projectID, _b = _a.dictionary, dictionary = _b === void 0 ? defaultDictionary : _b, _c = _a.dictionaryName, dictionaryName = _c === void 0 ? defaultDictionaryName : _c, locales = _a.locales, _d = _a.defaultLocale, defaultLocale = _d === void 0 ? (locales === null || locales === void 0 ? void 0 : locales[0]) || libraryDefaultLocale : _d, locale = _a.locale, _e = _a.cacheURL, cacheURL = _e === void 0 ? 'https://cache.gtx.dev' : _e;
+    var children = _a.children, projectID = _a.projectID, _b = _a.dictionary, dictionary = _b === void 0 ? defaultDictionary : _b, locales = _a.locales, _c = _a.defaultLocale, defaultLocale = _c === void 0 ? (locales === null || locales === void 0 ? void 0 : locales[0]) || libraryDefaultLocale : _c, locale = _a.locale, _d = _a.cacheURL, cacheURL = _d === void 0 ? 'https://cache.gtx.dev' : _d;
     if (!projectID && cacheURL === 'https://cache.gtx.dev') {
         throw new Error("gt-react Error: General Translation cloud services require a project ID! Find yours at www.generaltranslation.com/dashboard.");
     }
@@ -78,7 +77,7 @@ function GTProvider(_a) {
         locale = (0, generaltranslation_1.determineLanguage)([locale, browserLocale], locales) || locale;
     }
     var translationRequired = (0, generaltranslation_1.requiresTranslation)(defaultLocale, locale, locales);
-    var _f = (0, react_1.useState)(cacheURL ? null : {}), translations = _f[0], setTranslations = _f[1];
+    var _e = (0, react_1.useState)(cacheURL ? null : {}), translations = _e[0], setTranslations = _e[1];
     (0, react_1.useEffect)(function () {
         if (!translations) {
             if (!translationRequired) {
@@ -89,7 +88,7 @@ function GTProvider(_a) {
                     var response, result;
                     return __generator(this, function (_a) {
                         switch (_a.label) {
-                            case 0: return [4 /*yield*/, fetch("".concat(cacheURL, "/").concat(projectID, "/").concat(locale, "/").concat(dictionaryName))];
+                            case 0: return [4 /*yield*/, fetch("".concat(cacheURL, "/").concat(projectID, "/").concat(locale))];
                             case 1:
                                 response = _a.sent();
                                 return [4 /*yield*/, response.json()];

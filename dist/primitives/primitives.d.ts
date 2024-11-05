@@ -10,7 +10,6 @@ declare const primitives: {
     readonly pluralForms: readonly ["singular", "plural", "dual", "zero", "one", "two", "few", "many", "other"];
     readonly defaultCacheURL: "https://cache.gtx.dev";
     readonly defaultDictionary: {};
-    readonly defaultDictionaryName: "default";
 };
 export default primitives;
 export declare function isAcceptedPluralForm(form: string): form is (typeof primitives.pluralForms)[number];

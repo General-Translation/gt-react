@@ -12,7 +12,6 @@ var primitives = {
     pluralForms: ["singular", "plural", "dual", "zero", "one", "two", "few", "many", "other"],
     defaultCacheURL: "https://cache.gtx.dev",
     defaultDictionary: {},
-    defaultDictionaryName: "default"
 };
 exports.default = primitives;
 function isAcceptedPluralForm(form) {
