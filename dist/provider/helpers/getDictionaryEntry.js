@@ -7,7 +7,8 @@ exports.default = getDictionaryEntry;
 var react_1 = __importDefault(require("react"));
 function getDictionaryEntry(dictionary, id) {
     if (!id || typeof id !== 'string') {
-        throw new Error("Invalid dictionary id: \"".concat(id, "\""));
+        console.error("Invalid dictionary id: \"".concat(id, "\""));
+        return undefined;
     }
     ;
     var current = dictionary;
@@ -15,7 +16,8 @@ function getDictionaryEntry(dictionary, id) {
     for (var _i = 0, dictionaryPath_1 = dictionaryPath; _i < dictionaryPath_1.length; _i++) {
         var key = dictionaryPath_1[_i];
         if (typeof current !== 'object' || Array.isArray(current) || react_1.default.isValidElement(current)) {
-            throw new Error("Invalid dictionary id: \"".concat(id, "\""));
+            console.error("Invalid dictionary id: \"".concat(id, "\""));
+            return undefined;
         }
         current = current[key];
     }
