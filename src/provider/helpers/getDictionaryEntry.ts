@@ -6,13 +6,15 @@ export default function getDictionaryEntry(
     id: string
 ): Dictionary | DictionaryEntry {
     if (!id || typeof id !== 'string') {
-        throw new Error(`Invalid dictionary id: "${id}"`)
+        console.error(`Invalid dictionary id: "${id}"`)
+        return undefined;
     };
     let current: Dictionary | DictionaryEntry = dictionary;
     let dictionaryPath = id.split(".");
     for (const key of dictionaryPath) {
         if (typeof current !== 'object' || Array.isArray(current) || React.isValidElement(current)) {
-            throw new Error(`Invalid dictionary id: "${id}"`)
+            console.error(`Invalid dictionary id: "${id}"`)
+            return undefined;
         }
         current = (current as Dictionary)[key]
     }
