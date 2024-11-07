@@ -17,7 +17,7 @@ export default function getGT(id?: string): (
     id: string, 
     options?: Record<string, any>, 
     f?: Function
-) => string | JSX.Element | Promise<string | JSX.Element> {
+) => string | JSX.Element | Promise<string | JSX.Element> | undefined {
 
     const serverTFunction = createServerTFunction(id);
 
@@ -34,7 +34,7 @@ export default function getGT(id?: string): (
         id: string, 
         options: Record<string, any> = {}, 
         f?: Function
-    ): string | JSX.Element | Promise<string | JSX.Element> {
+    ): string | JSX.Element | Promise<string | JSX.Element> | undefined {
         return serverTFunction(id, options, f);
     }
     

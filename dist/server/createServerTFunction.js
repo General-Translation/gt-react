@@ -46,8 +46,8 @@ function createServerTFunction(prefixID) {
             entry = entry(options);
         }
         if (!entry) {
-            console.warn("No entry found for id: ".concat(id));
-            return '';
+            console.warn("No entry found for id: \"".concat(id, "\""));
+            return undefined;
         }
         if (typeof entry === 'string') {
             return (0, tx_1.default)(entry, {

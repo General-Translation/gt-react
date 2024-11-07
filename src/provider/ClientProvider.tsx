@@ -25,9 +25,9 @@ export default function ClientProvider({
 
         let { entry, metadata } = extractEntryMetadata(dictionary[id]);
 
-        if (entry === undefined || entry === null) {
+        if (!entry) {
             console.warn(`Dictionary entry with id "${id}" is null or undefined`)
-            return;
+            return undefined;
         };
 
         if (metadata && metadata.isFunction) {
@@ -48,49 +48,51 @@ export default function ClientProvider({
             variablesOptions = { ...variablesOptions || {}, ...options.variablesOptions };
 
         if (typeof entry === 'string') {
+            const translation = translations[id]?.t || entry;
             return renderContentToString(
-                translationRequired ? translations[id].t : entry, 
+                translationRequired ? translation : entry, 
                 [locale, defaultLocale],
                 variables, variablesOptions
-            )
+            );
         };
 
-        if (!translationRequired) {
+        if (!translationRequired || !translations[id]) {
             return _renderDefaultChildren({
                 children: entry, variables, variablesOptions, defaultLocale
             })
         }
 
-        if (translations[id]) {
-            const renderTranslation = ((translationEntry: any) => {
-                return _renderTranslatedChildren({
-                    source: entry, target: translationEntry, variables,
-                    variablesOptions, locales: [locale, defaultLocale]
-                });
+        const renderTranslation = ((translationEntry: any) => {
+            return _renderTranslatedChildren({
+                source: entry, target: translationEntry, variables,
+                variablesOptions, locales: [locale, defaultLocale]
             });
-            const translation = translations[id];
-            if (translation.promise) {
-                if (!translation.errorFallback) {
-                    translation.errorFallback = _renderDefaultChildren({
-                        children: entry, variables, variablesOptions, defaultLocale
-                    })
-                }
-                if (!translation.loadingFallback) {
-                    translation.loadingFallback = translation.errorFallback;
-                }
-                
-                
-                return (
-                    <ClientResolver 
-                        promise={translation.promise}
-                        renderTranslation={renderTranslation}
-                        errorFallback={translation.errorFallback}
-                        loadingFallback={translation.loadingFallback}
-                    />
-                );
+        });
+
+        const translation = translations[id];
+
+        if (translation.promise) {
+            if (!translation.errorFallback) {
+                translation.errorFallback = _renderDefaultChildren({
+                    children: entry, variables, variablesOptions, defaultLocale
+                })
             }
-            return renderTranslation(translation.t);
+            if (!translation.loadingFallback) {
+                translation.loadingFallback = translation.errorFallback;
+            }
+            
+            
+            return (
+                <ClientResolver 
+                    promise={translation.promise}
+                    renderTranslation={renderTranslation}
+                    errorFallback={translation.errorFallback}
+                    loadingFallback={translation.loadingFallback}
+                />
+            );
         }
+
+        return renderTranslation(translation.t);
 
     }, [dictionary, translations]);
 

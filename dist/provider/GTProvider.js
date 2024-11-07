@@ -123,10 +123,11 @@ function GTProvider(_a) {
                 case 3:
                     existingTranslations = _c;
                     return [4 /*yield*/, Promise.all(Object.entries((0, internal_1.flattenDictionary)(id ? (0, getDictionary_1.getDictionaryEntry)(id) : (0, getDictionary_1.default)())).map(function (_a) { return __awaiter(_this, [_a], void 0, function (_b) {
-                            var entryID, _c, entry, metadata, taggedEntry, entryAsObjects, key, translation, translationPromise_1, _d, _e, translationPromise, loadingFallback, errorFallback;
+                            var entryID, _c, entry, metadata, taggedEntry, entryAsObjects, key, translation, translationPromise_1, _d, _e, _f, translationPromise, loadingFallback, errorFallback;
+                            var _g;
                             var suffix = _b[0], dictionaryEntry = _b[1];
-                            return __generator(this, function (_f) {
-                                switch (_f.label) {
+                            return __generator(this, function (_h) {
+                                switch (_h.label) {
                                     case 0:
                                         entryID = getID(suffix);
                                         _c = (0, internal_1.extractEntryMetadata)(dictionaryEntry), entry = _c.entry, metadata = _c.metadata;
@@ -149,14 +150,16 @@ function GTProvider(_a) {
                                         if (!(typeof taggedEntry === 'string')) return [3 /*break*/, 4];
                                         translationPromise_1 = I18NConfig.translate({ content: (0, generaltranslation_1.splitStringToContent)(taggedEntry), targetLanguage: locale, options: __assign({ id: entryID, hash: key }, additionalMetadata) });
                                         if (!(renderSettings.method !== "subtle")) return [3 /*break*/, 2];
-                                        _e = translations[entryID];
+                                        _e = translations;
+                                        _f = entryID;
+                                        _g = {};
                                         return [4 /*yield*/, translationPromise_1];
                                     case 1:
-                                        _d = _e === (_f.sent());
+                                        _d = _e[_f] = (_g.t = _h.sent(), _g.k = key, _g);
                                         return [3 /*break*/, 3];
                                     case 2:
                                         _d = undefined;
-                                        _f.label = 3;
+                                        _h.label = 3;
                                     case 3: return [2 /*return*/, _d];
                                     case 4:
                                         translationPromise = I18NConfig.translateChildren({

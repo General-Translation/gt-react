@@ -17,7 +17,7 @@ export default function createServerTFunction(
         id: string, 
         options?: Record<string, any>,
         f?: Function
-    ): JSX.Element | string | Promise<JSX.Element | string> => {
+    ): JSX.Element | string | Promise<JSX.Element | string> | undefined => {
 
         id = getID(id);
 
@@ -43,8 +43,8 @@ export default function createServerTFunction(
         }
 
         if (!entry) {
-            console.warn(`No entry found for id: ${id}`);
-            return '';
+            console.warn(`No entry found for id: "${id}"`);
+            return undefined;
         }
 
         if (typeof entry === 'string') {

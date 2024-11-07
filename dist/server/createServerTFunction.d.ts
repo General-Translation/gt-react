@@ -1,2 +1,2 @@
-export default function createServerTFunction(prefixID?: string): (id: string, options?: Record<string, any>, f?: Function) => JSX.Element | string | Promise<JSX.Element | string>;
+export default function createServerTFunction(prefixID?: string): (id: string, options?: Record<string, any>, f?: Function) => JSX.Element | string | Promise<JSX.Element | string> | undefined;
 //# sourceMappingURL=createServerTFunction.d.ts.map
