@@ -39,10 +39,13 @@ function useGT(id) {
         if (id === void 0) { id = ''; }
         if (options === void 0) { options = {}; }
         var prefixedID = getID(id);
-        var translation = translate ? translate(prefixedID, options, f) : undefined;
-        if (!translation)
-            console.warn("t('".concat(id, "') finding no translation for dictionary item ").concat(prefixedID, " !"));
-        return translation;
+        if (translate) {
+            var translation = translate(prefixedID, options, f);
+            if (!translation)
+                console.warn("t('".concat(id, "') finding no translation for dictionary item ").concat(prefixedID, " !"));
+            return translation;
+        }
+        return undefined;
     }
     ;
     return t;

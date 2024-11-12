@@ -44,11 +44,11 @@ export default function renderDefaultChildren({
                 return handleChildren(getPluralBranch(n, [defaultLocale], branches) || child.props.children);
             }
             if (generaltranslation?.transformation === "branch") {
-                let { children, name, branch, ...branches } = child.props;
+                let { children, name, branch, 'data-_gt': _gt, ...branches } = child.props;
                 name = name || child.props['data-_gt-name'] || "branch";
                 branch = variables[name] || branch || child.props['data-_gt-branch-name'];
                 branches = generaltranslation.branches || {};
-                return handleChildren(branches[branch]);
+                return handleChildren(branches[branch] !== undefined ? branches[branch] : children);
             }
             if (child.props.children) {
                 return React.cloneElement(child, {

@@ -57,11 +57,11 @@ function renderDefaultChildren(_a) {
                 return handleChildren((0, internal_1.getPluralBranch)(n, [defaultLocale], branches) || child.props.children);
             }
             if ((generaltranslation === null || generaltranslation === void 0 ? void 0 : generaltranslation.transformation) === "branch") {
-                var _b = child.props, children_1 = _b.children, name_1 = _b.name, branch = _b.branch, branches = __rest(_b, ["children", "name", "branch"]);
+                var _b = child.props, children_1 = _b.children, name_1 = _b.name, branch = _b.branch, _gt = _b["data-_gt"], branches = __rest(_b, ["children", "name", "branch", 'data-_gt']);
                 name_1 = name_1 || child.props['data-_gt-name'] || "branch";
                 branch = variables[name_1] || branch || child.props['data-_gt-branch-name'];
                 branches = generaltranslation.branches || {};
-                return handleChildren(branches[branch]);
+                return handleChildren(branches[branch] !== undefined ? branches[branch] : children_1);
             }
             if (child.props.children) {
                 return react_1.default.cloneElement(child, __assign(__assign({}, child.props), { 'data-_gt': undefined, children: handleChildren(child.props.children) }));

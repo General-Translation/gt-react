@@ -45,11 +45,14 @@ export default function useGT(id: string = ''):
         id: string = '', 
         options: Record<string, any> = {}, 
         f?: Function
-    ): string | JSX.Element {
+    ): string | JSX.Element | undefined {
         const prefixedID = getID(id);
-        const translation = translate ? translate(prefixedID, options, f) : undefined;
-        if (!translation) console.warn(`t('${id}') finding no translation for dictionary item ${prefixedID} !`);
-        return translation;
+        if (translate) {
+            const translation = translate(prefixedID, options, f);
+            if (!translation) console.warn(`t('${id}') finding no translation for dictionary item ${prefixedID} !`);
+            return translation;
+        }
+        return undefined;
     };
 
     return t;
