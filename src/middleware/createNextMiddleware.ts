@@ -111,6 +111,7 @@ export default function createNextMiddleware({
                 return res;
             }
 
+            /*
             const cookieLocale = req.cookies.get(primitives.localeCookieName)?.value;
             if (cookieLocale && typeof cookieLocale === 'string') {
                 let cookieLocaleIsValid = false;
@@ -132,6 +133,7 @@ export default function createNextMiddleware({
                     return NextResponse.redirect(req.nextUrl)
                 }
             }
+            */
 
             // If there's no locale, try to get one from the referer
             const referer = headerList.get('referer')
