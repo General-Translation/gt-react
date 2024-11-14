@@ -66,6 +66,7 @@ function renderDefaultChildren(_a) {
             if (child.props.children) {
                 return react_1.default.cloneElement(child, __assign(__assign({}, child.props), { 'data-_gt': undefined, children: handleChildren(child.props.children) }));
             }
+            return react_1.default.cloneElement(child, __assign(__assign({}, child.props), { 'data-_gt': undefined }));
         }
         return child;
     };
