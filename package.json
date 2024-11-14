@@ -73,6 +73,6 @@
     "i18n"
   ],
   "dependencies": {
-    "generaltranslation": "^3.3.0"
+    "generaltranslation": "^3.3.2"
   }
 }
