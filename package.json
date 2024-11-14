@@ -4,7 +4,7 @@
   "description": "A Next.js library for automatic internationalization.",
   "main": "dist/index.server.js",
   "peerDependencies": {
-    "generaltranslation": "^3.1.0",
+    "generaltranslation": "^3.3.0",
     "next": ">=13.0.0",
     "react": ">=16.8.0",
     "react-dom": ">=16.8.0"
@@ -120,6 +120,6 @@
     "i18n"
   ],
   "dependencies": {
-    "gt-react": "^5.3.4"
+    "gt-react": "^5.3.5"
   }
 }
