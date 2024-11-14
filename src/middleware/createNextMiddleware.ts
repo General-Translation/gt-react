@@ -106,31 +106,10 @@ export default function createNextMiddleware({
             }
 
             if (pathnameHasLocale) {
+                res.cookies.set(primitives.localeCookieName, userLocale)
+                applyNewCookies(req, res);
                 return res;
             }
-
-            /*
-            const cookieLocale = req.cookies.get(primitives.localeCookieName)?.value;
-            if (cookieLocale && typeof cookieLocale === 'string') {
-                let cookieLocaleIsValid = false;
-                if (locales) {
-                    const approvedLocale = determineLanguage(cookieLocale, locales);
-                    if (approvedLocale) {
-                        userLocale = approvedLocale;
-                        cookieLocaleIsValid = true;
-                    }
-                } else {
-                    if (isValidLanguageCode(cookieLocale)) {
-                        userLocale = cookieLocale;
-                        cookieLocaleIsValid = true;
-                    }
-                }
-                if (cookieLocaleIsValid) {
-                    req.nextUrl.pathname = `/${userLocale}/${pathname}`
-                    applyNewCookies(req, res);
-                    return NextResponse.redirect(req.nextUrl)
-                }
-            }*/
 
             // If there's no locale, try to get one from the referer
             const referer = headerList.get('referer')
@@ -175,7 +154,7 @@ export default function createNextMiddleware({
             }
         }
 
-        res.cookies.set(primitives.localeCookieName, userLocale);
+        res.cookies.set(primitives.localeCookieName, userLocale)
 
         if (localeRouting) {
 
