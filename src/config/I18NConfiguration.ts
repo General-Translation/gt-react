@@ -189,6 +189,7 @@ export default class I18NConfiguration {
         if (this._translationCache.has(cacheKey)) {
             return this._translationCache.get(cacheKey);
         }
+        
         const { children, targetLanguage, metadata } = params;
         const translationPromise = new Promise<any>((resolve, reject) => {
             this._queue.push({

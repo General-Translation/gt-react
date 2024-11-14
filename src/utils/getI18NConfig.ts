@@ -11,7 +11,7 @@ export default function getI18NConfig(): I18NConfiguration {
     }
 
     const I18NConfigParams = process.env._GENERALTRANSLATION_I18N_CONFIG_PARAMS;
-    const env = getDefaultFromEnv('NODE_ENV') || 'production';
+    const env = getDefaultFromEnv('NODE_ENV') || '';
     
     if (I18NConfigParams) {
         globalObj._GENERALTRANSLATION_I18N_CONFIG_INSTANCE = new I18NConfiguration({

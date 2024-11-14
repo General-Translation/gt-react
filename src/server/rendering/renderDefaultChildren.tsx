@@ -57,6 +57,7 @@ export default function renderDefaultChildren({
                     children: handleChildren(child.props.children)
                 });
             }
+            return React.cloneElement(child, { ...props, 'data-_gt': undefined });
         }
         return child;
     }

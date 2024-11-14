@@ -24,7 +24,7 @@ function getI18NConfig() {
         return globalObj._GENERALTRANSLATION_I18N_CONFIG_INSTANCE;
     }
     var I18NConfigParams = process.env._GENERALTRANSLATION_I18N_CONFIG_PARAMS;
-    var env = (0, getDefaultFromEnv_1.default)('NODE_ENV') || 'production';
+    var env = (0, getDefaultFromEnv_1.default)('NODE_ENV') || '';
     if (I18NConfigParams) {
         globalObj._GENERALTRANSLATION_I18N_CONFIG_INSTANCE = new I18NConfiguration_1.default(__assign({ env: env }, JSON.parse(I18NConfigParams)));
     }
