@@ -72,7 +72,7 @@ function createNextMiddleware(_a) {
         var _a, _b, _c;
         var headerList = (0, headers_1.headers)();
         var res = server_1.NextResponse.next();
-        var userLocale = defaultLocale;
+        var userLocale = (0, generaltranslation_1.standardizeLanguageCode)(defaultLocale);
         if (localeRouting) {
             // Check if there is any supported locale in the pathname
             var pathname = req.nextUrl.pathname;
@@ -82,12 +82,12 @@ function createNextMiddleware(_a) {
                 if (locales) {
                     var approvedLocale = (0, generaltranslation_1.determineLanguage)(locale, locales);
                     if (approvedLocale) {
-                        userLocale = approvedLocale;
+                        userLocale = (0, generaltranslation_1.standardizeLanguageCode)(approvedLocale);
                         pathnameHasLocale = true;
                     }
                 }
                 else {
-                    userLocale = locale;
+                    userLocale = (0, generaltranslation_1.standardizeLanguageCode)(locale);
                     pathnameHasLocale = true;
                 }
             }
@@ -105,13 +105,13 @@ function createNextMiddleware(_a) {
                     if (locales) {
                         var approvedLocale = (0, generaltranslation_1.determineLanguage)(refererLocale, locales);
                         if (approvedLocale) {
-                            userLocale = approvedLocale;
+                            userLocale = (0, generaltranslation_1.standardizeLanguageCode)(approvedLocale);
                             refererLocaleIsValid = true;
                         }
                     }
                     else {
                         if ((0, generaltranslation_1.isValidLanguageCode)(refererLocale)) {
-                            userLocale = refererLocale;
+                            userLocale = (0, generaltranslation_1.standardizeLanguageCode)(refererLocale);
                             refererLocaleIsValid = true;
                         }
                     }
@@ -128,22 +128,27 @@ function createNextMiddleware(_a) {
             if (locales) {
                 var approvedLocale = (0, generaltranslation_1.determineLanguage)(acceptedLocales, locales);
                 if (approvedLocale) {
-                    userLocale = approvedLocale;
+                    userLocale = (0, generaltranslation_1.standardizeLanguageCode)(approvedLocale);
                 }
             }
             else {
-                userLocale = acceptedLocales[0];
+                userLocale = (0, generaltranslation_1.standardizeLanguageCode)(acceptedLocales[0]);
             }
         }
         res.cookies.set(internal_1.primitives.localeCookieName, userLocale);
         if (localeRouting) {
             var pathname = req.nextUrl.pathname;
-            // Redirect if there is no locale
-            req.nextUrl.pathname = "/".concat(userLocale).concat(pathname);
-            // e.g. incoming request is /products
-            // The new URL is now /en-US/products
-            applyNewCookies(req, res);
-            return server_1.NextResponse.redirect(req.nextUrl);
+            if (userLocale === defaultLocale) {
+                var rewrittenRes = server_1.NextResponse.rewrite(new URL("/".concat(userLocale).concat(pathname), req.nextUrl), req.nextUrl);
+                rewrittenRes.cookies.set(internal_1.primitives.localeCookieName, userLocale);
+                applyNewCookies(req, rewrittenRes);
+                return rewrittenRes;
+            }
+            else {
+                req.nextUrl.pathname = "/".concat(userLocale).concat(pathname);
+                applyNewCookies(req, res);
+                return server_1.NextResponse.redirect(req.nextUrl);
+            }
         }
         applyNewCookies(req, res);
         return res;

@@ -1,4 +1,4 @@
-import { isValidLanguageCode, determineLanguage } from "generaltranslation";
+import { isValidLanguageCode, determineLanguage, standardizeLanguageCode } from "generaltranslation";
 import { headers } from 'next/headers'
 import { NextResponse } from "next/server";
 import { primitives } from 'gt-react/internal'
@@ -81,7 +81,7 @@ export default function createNextMiddleware({
 
         const res = NextResponse.next();
 
-        let userLocale = defaultLocale;
+        let userLocale = standardizeLanguageCode(defaultLocale);
 
         if (localeRouting) {
             
@@ -96,11 +96,11 @@ export default function createNextMiddleware({
                 if (locales) {
                     const approvedLocale = determineLanguage(locale, locales);
                     if (approvedLocale) {
-                        userLocale = approvedLocale;
+                        userLocale = standardizeLanguageCode(approvedLocale);
                         pathnameHasLocale = true;
                     }
                 } else {
-                    userLocale = locale;
+                    userLocale = standardizeLanguageCode(locale);
                     pathnameHasLocale = true;
                 }
             }
@@ -121,12 +121,12 @@ export default function createNextMiddleware({
                     if (locales) {
                         const approvedLocale = determineLanguage(refererLocale, locales);
                         if (approvedLocale) {
-                            userLocale = approvedLocale;
+                            userLocale = standardizeLanguageCode(approvedLocale);
                             refererLocaleIsValid = true;
                         }
                     } else {
                         if (isValidLanguageCode(refererLocale)) {
-                            userLocale = refererLocale;
+                            userLocale = standardizeLanguageCode(refererLocale);
                             refererLocaleIsValid = true;
                         }
                     }
@@ -146,11 +146,11 @@ export default function createNextMiddleware({
             if (locales) {
                 const approvedLocale = determineLanguage(acceptedLocales, locales);
                 if (approvedLocale) {
-                    userLocale = approvedLocale;
+                    userLocale = standardizeLanguageCode(approvedLocale);
                 }
             }
             else {
-                userLocale = acceptedLocales[0]
+                userLocale = standardizeLanguageCode(acceptedLocales[0])
             }
         }
 
@@ -160,14 +160,18 @@ export default function createNextMiddleware({
 
             const { pathname } = req.nextUrl
 
-            // Redirect if there is no locale
-            req.nextUrl.pathname = `/${userLocale}${pathname}`
-        
-            // e.g. incoming request is /products
-            // The new URL is now /en-US/products
-            applyNewCookies(req, res);
-            return NextResponse.redirect(req.nextUrl)
-
+            if (userLocale === defaultLocale) {
+                const rewrittenRes = NextResponse.rewrite(
+                    new URL(`/${userLocale}${pathname}`, req.nextUrl), req.nextUrl
+                );
+                rewrittenRes.cookies.set(primitives.localeCookieName, userLocale)
+                applyNewCookies(req, rewrittenRes);
+                return rewrittenRes;
+            } else {
+                req.nextUrl.pathname = `/${userLocale}${pathname}`
+                applyNewCookies(req, res);
+                return NextResponse.redirect(req.nextUrl)
+            }
         }
 
         applyNewCookies(req, res);
