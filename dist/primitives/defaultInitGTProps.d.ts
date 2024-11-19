@@ -4,7 +4,7 @@ declare const _default: {
     readonly baseURL: "https://prod.gtx.dev";
     readonly cacheURL: "https://cache.gtx.dev";
     readonly defaultLocale: "en";
-    readonly getLocale: () => "en";
+    readonly getLocale: () => Promise<"en">;
     readonly renderSettings: {
         readonly method: "skeleton";
         readonly timeout: null;

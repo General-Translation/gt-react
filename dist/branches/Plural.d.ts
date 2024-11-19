@@ -17,7 +17,7 @@
  * @param {number} [n] - The number used to determine the plural form. This is required for pluralization to work.
  * @param {object} [branches] - An object containing possible plural branches, typically including `one` for singular
  * and `other` for plural forms, but it may vary depending on the locale.
- * @returns {JSX.Element} The rendered content corresponding to the plural form of `n`, or the fallback content.
+ * @returns {Promise<JSX.Element>} The rendered content corresponding to the plural form of `n`, or the fallback content.
  * @throws {Error} If `n` is not provided or not a valid number.
  */
 declare function Plural({ children, n, ...props }: {
@@ -25,7 +25,7 @@ declare function Plural({ children, n, ...props }: {
     n?: number;
     'data-_gt'?: any;
     [key: string]: any;
-}): import("react/jsx-runtime").JSX.Element;
+}): Promise<import("react/jsx-runtime").JSX.Element>;
 declare namespace Plural {
     var gtTransformation: string;
 }

@@ -114,7 +114,9 @@ function T(_a) {
                         return [2 /*return*/];
                     }
                     I18NConfig = (0, getI18NConfig_1.default)();
-                    locale = (0, getLocale_1.default)();
+                    return [4 /*yield*/, (0, getLocale_1.default)()];
+                case 1:
+                    locale = _c.sent();
                     defaultLocale = I18NConfig.getDefaultLocale();
                     translationRequired = I18NConfig.requiresTranslation(locale);
                     if (translationRequired) {
@@ -132,7 +134,7 @@ function T(_a) {
                     }
                     key = (0, internal_1.hashReactChildrenObjects)(context ? [childrenAsObjects, context] : childrenAsObjects);
                     return [4 /*yield*/, translationsPromise];
-                case 1:
+                case 2:
                     translations = _c.sent();
                     translation = translations === null || translations === void 0 ? void 0 : translations[id || key];
                     if ((translation === null || translation === void 0 ? void 0 : translation.k) === key) {
@@ -173,17 +175,17 @@ function T(_a) {
                     else if (renderSettings.method === "skeleton") {
                         loadingFallback = (0, jsx_runtime_1.jsx)(jsx_runtime_1.Fragment, {});
                     }
-                    if (!(renderSettings.method === "hang")) return [3 /*break*/, 5];
-                    _c.label = 2;
-                case 2:
-                    _c.trys.push([2, 4, , 5]);
+                    if (!(renderSettings.method === "hang")) return [3 /*break*/, 6];
+                    _c.label = 3;
+                case 3:
+                    _c.trys.push([3, 5, , 6]);
                     return [4 /*yield*/, promise];
-                case 3: return [2 /*return*/, _c.sent()];
-                case 4:
+                case 4: return [2 /*return*/, _c.sent()];
+                case 5:
                     error_1 = _c.sent();
                     console.error(error_1);
                     return [2 /*return*/, errorFallback];
-                case 5:
+                case 6:
                     if (!["skeleton", "replace"].includes(renderSettings.method) && !id) {
                         // If none of those, i.e. "subtle" 
                         // return the children, with no special rendering

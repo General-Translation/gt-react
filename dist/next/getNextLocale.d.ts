@@ -4,8 +4,8 @@
  * headers function is available, it returns the primary language from the 'accept-language'
  * header. If the headers function or 'accept-language' header is not available, returns null.
  *
- * @returns {string | null} A promise that resolves to the primary language from the
+ * @returns {Promise<string | null>} A promise that resolves to the primary language from the
  * 'accept-language' header, or null if not available.
  */
-export declare function getNextLocale(defaultLocale?: string, locales?: string[] | undefined): string;
+export declare function getNextLocale(defaultLocale?: string, locales?: string[] | undefined): Promise<string>;
 //# sourceMappingURL=getNextLocale.d.ts.map

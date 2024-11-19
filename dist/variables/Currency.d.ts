@@ -25,7 +25,7 @@ declare function Currency({ children, name, value, currency, options, ...props }
     currency?: string;
     options?: Intl.NumberFormatOptions;
     'data-_gt'?: any;
-}): JSX.Element;
+}): Promise<JSX.Element>;
 declare namespace Currency {
     var gtTransformation: string;
 }

@@ -15,7 +15,7 @@
  * @param {string} [name="date"] - Optional name for the date field, used for metadata purposes.
  * @param {string|number|Date} [value] - The default value for the date. Can be a string, number (timestamp), or `Date` object.
  * @param {Intl.DateTimeFormatOptions} [options={}] - Optional formatting options for the date, following `Intl.DateTimeFormatOptions` specifications.
- * @returns {JSX.Element} The formatted date or time component.
+ * @returns {Promise<JSX.Element>} The formatted date or time component.
  */
 declare function DateTime({ children, name, value, options, ...props }: {
     children?: any;
@@ -23,7 +23,7 @@ declare function DateTime({ children, name, value, options, ...props }: {
     value?: any;
     options?: Intl.DateTimeFormatOptions;
     'data-_gt'?: any;
-}): JSX.Element;
+}): Promise<JSX.Element>;
 declare namespace DateTime {
     var gtTransformation: string;
 }

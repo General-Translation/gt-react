@@ -16,7 +16,7 @@
  * @param {string} [name="n"] - Optional name for the number field, used for metadata purposes.
  * @param {string|number} [value] - The default value for the number. Can be a string or number. Strings will be parsed to numbers.
  * @param {Intl.NumberFormatOptions} [options={}] - Optional formatting options for the number, following `Intl.NumberFormatOptions` specifications.
- * @returns {JSX.Element} The formatted number component.
+ * @returns {Promise<JSX.Element>} The formatted number component.
  */
 declare function Num({ children, name, value, options, ...props }: {
     children?: any;
@@ -24,7 +24,7 @@ declare function Num({ children, name, value, options, ...props }: {
     value?: any;
     options?: Intl.NumberFormatOptions;
     'data-_gt'?: any;
-}): JSX.Element;
+}): Promise<JSX.Element>;
 declare namespace Num {
     var gtTransformation: string;
 }

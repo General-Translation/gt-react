@@ -7,7 +7,7 @@ type InitGTProps = {
     cacheURL?: string;
     locales?: string[];
     defaultLocale?: string;
-    getLocale?: () => string;
+    getLocale?: () => Promise<string>;
     renderSettings?: {
         method: "skeleton" | "replace" | "hang" | "subtle";
         timeout: number | null;
