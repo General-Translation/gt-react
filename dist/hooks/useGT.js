@@ -15,7 +15,7 @@ var GTContext_1 = __importDefault(require("../provider/GTContext"));
  * const t = useGT('user');
  * console.log(t('name')); // Translates item 'user.name'
  *
- * const t = useTranslation();
+ * const t = useGT();
  * console.log(t('hello')); // Translates item 'hello'
  */
 function useGT(id) {

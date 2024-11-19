@@ -8,7 +8,7 @@ var _defaultVariableNames_1 = __importDefault(require("../variables/_defaultVari
 var primitives = {
     defaultVariableNames: _defaultVariableNames_1.default,
     localeCookieName: "generaltranslation-locale",
-    libraryDefaultLocale: "en", // language to use as default if none is provided
+    libraryDefaultLocale: "en-US", // language to use as default if none is provided
     pluralForms: ["singular", "plural", "dual", "zero", "one", "two", "few", "many", "other"],
     defaultCacheURL: "https://cache.gtx.dev",
     defaultDictionary: {},
