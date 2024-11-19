@@ -1,5 +1,4 @@
 import { isValidLanguageCode, determineLanguage, standardizeLanguageCode } from "generaltranslation";
-import { headers } from 'next/headers'
 import { NextResponse } from "next/server";
 import { primitives } from 'gt-react/internal'
 import { ResponseCookies, RequestCookies } from "next/dist/compiled/@edge-runtime/cookies";
@@ -77,7 +76,7 @@ export default function createNextMiddleware({
     */
     function nextMiddleware(req: any) {
 
-        const headerList = headers();
+        const headerList = new Headers(req.headers)
 
         const res = NextResponse.next();
 

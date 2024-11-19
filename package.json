@@ -6,8 +6,8 @@
   "peerDependencies": {
     "generaltranslation": "^3.3.2",
     "next": ">=13.0.0",
-    "react": ">=16.8.0",
-    "react-dom": ">=16.8.0"
+    "react": ">=16.8.0 || >=19.0.0-rc",
+    "react-dom": ">=16.8.0 || >=19.0.0-rc"
   },
   "scripts": {
     "patch": "npm version patch",
