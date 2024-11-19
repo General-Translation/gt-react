@@ -69,23 +69,21 @@ export default async function tx(
             return renderContentToString(translations[options.id].t, [options.language, I18NConfig.getDefaultLocale()], variables, variableOptions);
     }
 
-    if (I18NConfig.translationEnabled()) {
-        const { language, ...others } = options;
-        const translationPromise = I18NConfig.translate({ content, targetLanguage: options.language, options: { ...others, ...(await getMetadata()), hash: key } });
-        const renderSettings = I18NConfig.getRenderSettings()
-        if (
-            renderSettings.method !== "subtle" || 
-            !options.id // because it is only saved if an id is present
-        ) {
-            const translation = await translationPromise;
-            try {
-                return renderContentToString(translation, [options.targetLanguage, I18NConfig.getDefaultLocale()], variables, variableOptions);
-            } catch (error) {
-                console.error(
-                    `gt-next string translation error. tx("${content}")${options.id ? ` with id "${options.id}"` : ''} failed.`, error
-                );
-                return '';
-            }
+    const { language, ...others } = options;
+    const translationPromise = I18NConfig.translate({ content, targetLanguage: options.language, options: { ...others, ...(await getMetadata()), hash: key } });
+    const renderSettings = I18NConfig.getRenderSettings()
+    if (
+        renderSettings.method !== "subtle" || 
+        !options.id // because it is only saved if an id is present
+    ) {
+        const translation = await translationPromise;
+        try {
+            return renderContentToString(translation, [options.targetLanguage, I18NConfig.getDefaultLocale()], variables, variableOptions);
+        } catch (error) {
+            console.error(
+                `gt-next string translation error. tx("${content}")${options.id ? ` with id "${options.id}"` : ''} failed.`, error
+            );
+            return '';
         }
     }
 

@@ -71,8 +71,6 @@ export default async function GTProvider({
             return translations[entryID] = translation;
         }
 
-        if (!I18NConfig.translationEnabled()) return;
-
         if (typeof taggedEntry === 'string') {
             const translationPromise = I18NConfig.translate({ content: splitStringToContent(taggedEntry), targetLanguage: locale, options: { id: entryID, hash: key, ...additionalMetadata } });
             return renderSettings.method !== "subtle" 

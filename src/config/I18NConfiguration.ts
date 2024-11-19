@@ -1,5 +1,6 @@
 import GT, { requiresTranslation } from "generaltranslation";
 import remoteTranslationsManager, { RemoteTranslationsManager } from "./RemoteTranslationsManager";
+import defaultInitGTProps from "../primitives/defaultInitGTProps";
 
 type I18NConfigurationParams = {
     apiKey: string;
@@ -112,7 +113,7 @@ export default class I18NConfiguration {
      * @returns A boolean indicating whether automatic translation is enabled or disabled for this config
     */
     translationEnabled(): boolean {
-        return (this.baseURL && this.projectID) ? true : false;
+        return (this.baseURL && this.projectID && (this.baseURL === defaultInitGTProps.baseURL && !this.gt.apiKey)) ? true : false;
     }
 
     /**
@@ -134,7 +135,7 @@ export default class I18NConfiguration {
      * @returns True if translation is required, otherwise false
      */
     requiresTranslation(locale: string): boolean {
-        return requiresTranslation(this.defaultLocale, locale, this.locales);
+        return this.translationEnabled() && requiresTranslation(this.defaultLocale, locale, this.locales);
     }
 
     /**

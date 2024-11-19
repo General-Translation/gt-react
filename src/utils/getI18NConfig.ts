@@ -21,13 +21,13 @@ export default function getI18NConfig(): I18NConfiguration {
     } else {
         console.warn('Unable to access gt-next configuration. Using defaults.');
 
-        const projectID = process.env.GT_PROJECT_ID;
+        const projectID = process.env.GT_PROJECT_ID || '';
         if (!projectID)
-            throw new Error('Project ID missing! Set projectID as GT_PROJECT_ID...');
+            console.error('Project ID missing! Set projectID as GT_PROJECT_ID...');
         
-        const apiKey = process.env.GT_API_KEY;
+        const apiKey = process.env.GT_API_KEY || '';
         if (!apiKey)
-            throw new Error("API key is required for automatic translation!...");
+            console.error("API key is required for automatic translation!...");
 
         globalObj._GENERALTRANSLATION_I18N_CONFIG_INSTANCE = new I18NConfiguration({
             ...defaultInitGTProps, 

@@ -86,6 +86,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var generaltranslation_1 = __importStar(require("generaltranslation"));
 var RemoteTranslationsManager_1 = __importDefault(require("./RemoteTranslationsManager"));
+var defaultInitGTProps_1 = __importDefault(require("../primitives/defaultInitGTProps"));
 var I18NConfiguration = /** @class */ (function () {
     function I18NConfiguration(_a) {
         var 
@@ -147,7 +148,7 @@ var I18NConfiguration = /** @class */ (function () {
      * @returns A boolean indicating whether automatic translation is enabled or disabled for this config
     */
     I18NConfiguration.prototype.translationEnabled = function () {
-        return (this.baseURL && this.projectID) ? true : false;
+        return (this.baseURL && this.projectID && (this.baseURL === defaultInitGTProps_1.default.baseURL && !this.gt.apiKey)) ? true : false;
     };
     /**
      * Get the rendering instructions
