@@ -17,7 +17,7 @@ type InitGTProps = {
         timeout: number | null
     }
     // Other metadata
-    getMetadata?: () => Record<string, any>
+    getMetadata?: () => Promise<Record<string, any>>
     // Batching config
     _maxConcurrentRequests?: number;
     _batchInterval?: number; // ms

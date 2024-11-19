@@ -111,7 +111,7 @@ export default async function T({
     const translationPromise = I18NConfig.translateChildren({ 
         children: childrenAsObjects, 
         targetLanguage: locale, 
-        metadata: { ...(id && { id }), hash: key, ...(getMetadata()), ...(renderSettings.timeout && { timeout: renderSettings.timeout }) } 
+        metadata: { ...(id && { id }), hash: key, ...(await getMetadata()), ...(renderSettings.timeout && { timeout: renderSettings.timeout }) } 
     });
     let promise = translationPromise.then(translation => {
         let target = translation;

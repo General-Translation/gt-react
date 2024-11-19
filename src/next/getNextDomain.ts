@@ -9,7 +9,7 @@ import { headers } from "next/headers";
  * @returns {string | null} A promise that resolves to the value of the 'host' header,
  * or null if not available.
  */
-export function getNextDomain(): string | null {
-    const headerList = headers();
+export async function getNextDomain(): Promise<string | null> {
+    const headerList = await headers();
     return headerList.get('host') || null;
 }

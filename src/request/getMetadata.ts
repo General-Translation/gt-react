@@ -1,19 +1,19 @@
 import { getNextDomain } from "../next/getNextDomain";
 
-let getMetadataFunction: () => Record<string, any>;
+let getMetadataFunction: () => Promise<Record<string, any>>;
 
-export default function getMetadata(): Record<string, any> {
-    if (getMetadataFunction) return getMetadataFunction();
+export default async function getMetadata(): Promise<Record<string, any>> {
+    if (getMetadataFunction) return await getMetadataFunction();
     try {
         const customRequestConfig = require('gt-next/_request');
         const customGetMetadata = customRequestConfig?.default?.getMetadata || customRequestConfig.getMetadata;
-        const metadata = customGetMetadata();
-        getMetadataFunction = customGetMetadata();
+        const metadata = await customGetMetadata();
+        getMetadataFunction = await customGetMetadata();
         return metadata;
     } catch {
-        getMetadataFunction = () => { return {
-            domain: getNextDomain()
-        }};
+        getMetadataFunction = async () => ({
+            domain: await getNextDomain()
+        });
         return getMetadataFunction();
     };
         

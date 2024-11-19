@@ -71,7 +71,7 @@ export default async function tx(
 
     if (I18NConfig.translationEnabled()) {
         const { language, ...others } = options;
-        const translationPromise = I18NConfig.translate({ content, targetLanguage: options.language, options: { ...others, ...(getMetadata()), hash: key } });
+        const translationPromise = I18NConfig.translate({ content, targetLanguage: options.language, options: { ...others, ...(await getMetadata()), hash: key } });
         const renderSettings = I18NConfig.getRenderSettings()
         if (
             renderSettings.method !== "subtle" || 

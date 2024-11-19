@@ -12,7 +12,7 @@ export default {
         method: "skeleton",
         timeout: null
     },
-    getMetadata: () => ({}),
+    getMetadata: async () => ({}),
     _maxConcurrectRequests: 2,
     _batchInterval: 1000
 } as const;

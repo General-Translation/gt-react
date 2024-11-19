@@ -32,7 +32,7 @@ export default async function GTProvider({
     }
 
     const locale = await getLocale();
-    const additionalMetadata = getMetadata();
+    const additionalMetadata = await getMetadata();
     const defaultLocale = I18NConfig.getDefaultLocale();
     const renderSettings = I18NConfig.getRenderSettings();
 
