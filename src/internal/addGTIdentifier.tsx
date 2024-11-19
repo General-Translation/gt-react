@@ -23,7 +23,13 @@ export default function addGTIdentifier(children: Children, outerID?: string | u
         const { type, props } = child;
         index += 1;
         let result: GTProp = { id: index };
-        const transformation: string = typeof type === 'function' ? ((type as any).gtTransformation || '') : '';
+        let transformation: string;
+        try {
+            transformation = typeof type === 'function' ? ((type as any).gtTransformation || '') : '';
+        } catch (error) {
+            console.error(error)
+            transformation = ''
+        }
         if (transformation) {
             const transformationParts = transformation.split('-');
             if (transformationParts[0] === "variable") {

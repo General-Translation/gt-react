@@ -61,7 +61,14 @@ function addGTIdentifier(children, outerID, startingIndex) {
         var type = child.type, props = child.props;
         index += 1;
         var result = { id: index };
-        var transformation = typeof type === 'function' ? (type.gtTransformation || '') : '';
+        var transformation;
+        try {
+            transformation = typeof type === 'function' ? (type.gtTransformation || '') : '';
+        }
+        catch (error) {
+            console.error(error);
+            transformation = '';
+        }
         if (transformation) {
             var transformationParts = transformation.split('-');
             if (transformationParts[0] === "variable") {

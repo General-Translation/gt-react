@@ -9,7 +9,7 @@ import { ReactNode } from "react";
  * const t = useGT('user');
  * console.log(t('name')); // Translates item 'user.name'
  *
- * const t = useTranslation();
+ * const t = useGT();
  * console.log(t('hello')); // Translates item 'hello'
  */
 export default function useGT(id?: string): (id: string, options?: Record<string, any>, f?: Function) => ReactNode;

@@ -6,7 +6,7 @@ declare const primitives: {
         currency: "cost";
     };
     readonly localeCookieName: "generaltranslation-locale";
-    readonly libraryDefaultLocale: "en";
+    readonly libraryDefaultLocale: "en-US";
     readonly pluralForms: readonly ["singular", "plural", "dual", "zero", "one", "two", "few", "many", "other"];
     readonly defaultCacheURL: "https://cache.gtx.dev";
     readonly defaultDictionary: {};
