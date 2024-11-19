@@ -108,21 +108,23 @@ function GTProvider(_a) {
                     return [4 /*yield*/, (0, getLocale_1.default)()];
                 case 1:
                     locale = _d.sent();
-                    additionalMetadata = (0, getMetadata_1.default)();
+                    return [4 /*yield*/, (0, getMetadata_1.default)()];
+                case 2:
+                    additionalMetadata = _d.sent();
                     defaultLocale = I18NConfig.getDefaultLocale();
                     renderSettings = I18NConfig.getRenderSettings();
                     dictionary = {};
                     translations = {};
                     translationRequired = I18NConfig.requiresTranslation(locale);
-                    if (!translationRequired) return [3 /*break*/, 3];
+                    if (!translationRequired) return [3 /*break*/, 4];
                     return [4 /*yield*/, I18NConfig.getTranslations(locale)];
-                case 2:
-                    _c = _d.sent();
-                    return [3 /*break*/, 4];
                 case 3:
-                    _c = {};
-                    _d.label = 4;
+                    _c = _d.sent();
+                    return [3 /*break*/, 5];
                 case 4:
+                    _c = {};
+                    _d.label = 5;
+                case 5:
                     existingTranslations = _c;
                     return [4 /*yield*/, Promise.all(Object.entries((0, internal_1.flattenDictionary)(id ? (0, getDictionary_1.getDictionaryEntry)(id) : (0, getDictionary_1.default)())).map(function (_a) { return __awaiter(_this, [_a], void 0, function (_b) {
                             var entryID, _c, entry, metadata, taggedEntry, entryAsObjects, key, translation, translationPromise_1, _d, _e, _f, translationPromise, loadingFallback, errorFallback;
@@ -186,7 +188,7 @@ function GTProvider(_a) {
                                 }
                             });
                         }); }))];
-                case 5:
+                case 6:
                     _d.sent();
                     return [2 /*return*/, ((0, jsx_runtime_1.jsx)(ClientProvider_1.default, { dictionary: dictionary, translations: __assign(__assign({}, existingTranslations), translations), locale: locale, defaultLocale: defaultLocale, translationRequired: translationRequired, children: children }))];
             }

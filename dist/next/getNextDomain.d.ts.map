@@ -1,1 +1,1 @@
-{"version":3,"file":"getNextDomain.d.ts","sourceRoot":"","sources":["../../src/next/getNextDomain.ts"],"names":[],"mappings":"AAEA;;;;;;;;GAQG;AACH,wBAAgB,aAAa,IAAI,MAAM,GAAG,IAAI,CAG7C"}
+{"version":3,"file":"getNextDomain.d.ts","sourceRoot":"","sources":["../../src/next/getNextDomain.ts"],"names":[],"mappings":"AAEA;;;;;;;;GAQG;AACH,wBAAsB,aAAa,IAAI,OAAO,CAAC,MAAM,GAAG,IAAI,CAAC,CAG5D"}

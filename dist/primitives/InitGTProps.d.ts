@@ -12,7 +12,7 @@ type InitGTProps = {
         method: "skeleton" | "replace" | "hang" | "subtle";
         timeout: number | null;
     };
-    getMetadata?: () => Record<string, any>;
+    getMetadata?: () => Promise<Record<string, any>>;
     _maxConcurrentRequests?: number;
     _batchInterval?: number;
     description?: string;

@@ -9,7 +9,7 @@ declare const _default: {
         readonly method: "skeleton";
         readonly timeout: null;
     };
-    readonly getMetadata: () => {};
+    readonly getMetadata: () => Promise<{}>;
     readonly _maxConcurrectRequests: 2;
     readonly _batchInterval: 1000;
 };

@@ -105,10 +105,11 @@ var Resolver_1 = __importDefault(require("./Resolver"));
  */
 function T(_a) {
     return __awaiter(this, arguments, void 0, function (_b) {
-        var I18NConfig, locale, defaultLocale, translationRequired, translationsPromise, taggedChildren, childrenAsObjects, key, translations, translation, target, translationPromise, promise, loadingFallback, errorFallback, error_1;
+        var I18NConfig, locale, defaultLocale, translationRequired, translationsPromise, taggedChildren, childrenAsObjects, key, translations, translation, target, translationPromise, _c, _d, _e, promise, loadingFallback, errorFallback, error_1;
+        var _f;
         var children = _b.children, id = _b.id, context = _b.context, renderSettings = _b.renderSettings, variables = _b.variables, variablesOptions = _b.variablesOptions;
-        return __generator(this, function (_c) {
-            switch (_c.label) {
+        return __generator(this, function (_g) {
+            switch (_g.label) {
                 case 0:
                     if (!children) {
                         return [2 /*return*/];
@@ -116,7 +117,7 @@ function T(_a) {
                     I18NConfig = (0, getI18NConfig_1.default)();
                     return [4 /*yield*/, (0, getLocale_1.default)()];
                 case 1:
-                    locale = _c.sent();
+                    locale = _g.sent();
                     defaultLocale = I18NConfig.getDefaultLocale();
                     translationRequired = I18NConfig.requiresTranslation(locale);
                     if (translationRequired) {
@@ -135,7 +136,7 @@ function T(_a) {
                     key = (0, internal_1.hashReactChildrenObjects)(context ? [childrenAsObjects, context] : childrenAsObjects);
                     return [4 /*yield*/, translationsPromise];
                 case 2:
-                    translations = _c.sent();
+                    translations = _g.sent();
                     translation = translations === null || translations === void 0 ? void 0 : translations[id || key];
                     if ((translation === null || translation === void 0 ? void 0 : translation.k) === key) {
                         target = translation.t;
@@ -148,11 +149,16 @@ function T(_a) {
                             })];
                     }
                     renderSettings || (renderSettings = I18NConfig.getRenderSettings());
-                    translationPromise = I18NConfig.translateChildren({
+                    _d = (_c = I18NConfig).translateChildren;
+                    _f = {
                         children: childrenAsObjects,
-                        targetLanguage: locale,
-                        metadata: __assign(__assign(__assign(__assign({}, (id && { id: id })), { hash: key }), ((0, getMetadata_1.default)())), (renderSettings.timeout && { timeout: renderSettings.timeout }))
-                    });
+                        targetLanguage: locale
+                    };
+                    _e = [__assign(__assign({}, (id && { id: id })), { hash: key })];
+                    return [4 /*yield*/, (0, getMetadata_1.default)()];
+                case 3:
+                    translationPromise = _d.apply(_c, [(_f.metadata = __assign.apply(void 0, [__assign.apply(void 0, _e.concat([(_g.sent())])), (renderSettings.timeout && { timeout: renderSettings.timeout })]),
+                            _f)]);
                     promise = translationPromise.then(function (translation) {
                         var target = translation;
                         return (0, renderTranslatedChildren_1.default)({
@@ -175,17 +181,17 @@ function T(_a) {
                     else if (renderSettings.method === "skeleton") {
                         loadingFallback = (0, jsx_runtime_1.jsx)(jsx_runtime_1.Fragment, {});
                     }
-                    if (!(renderSettings.method === "hang")) return [3 /*break*/, 6];
-                    _c.label = 3;
-                case 3:
-                    _c.trys.push([3, 5, , 6]);
+                    if (!(renderSettings.method === "hang")) return [3 /*break*/, 7];
+                    _g.label = 4;
+                case 4:
+                    _g.trys.push([4, 6, , 7]);
                     return [4 /*yield*/, promise];
-                case 4: return [2 /*return*/, _c.sent()];
-                case 5:
-                    error_1 = _c.sent();
+                case 5: return [2 /*return*/, _g.sent()];
+                case 6:
+                    error_1 = _g.sent();
                     console.error(error_1);
                     return [2 /*return*/, errorFallback];
-                case 6:
+                case 7:
                     if (!["skeleton", "replace"].includes(renderSettings.method) && !id) {
                         // If none of those, i.e. "subtle" 
                         // return the children, with no special rendering

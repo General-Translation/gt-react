@@ -103,10 +103,11 @@ var getMetadata_1 = __importDefault(require("../../request/getMetadata"));
  */
 function tx(content_1) {
     return __awaiter(this, arguments, void 0, function (content, options, variables, variableOptions) {
-        var I18NConfig, contentAsArray, _a, _b, key, translations, language, others, translationPromise, renderSettings, translation;
+        var I18NConfig, contentAsArray, _a, _b, key, translations, language, others, translationPromise, _c, _d, _e, renderSettings, translation;
+        var _f;
         if (options === void 0) { options = {}; }
-        return __generator(this, function (_c) {
-            switch (_c.label) {
+        return __generator(this, function (_g) {
+            switch (_g.label) {
                 case 0:
                     if (!content)
                         return [2 /*return*/, ''];
@@ -117,8 +118,8 @@ function tx(content_1) {
                     if (_b) return [3 /*break*/, 2];
                     return [4 /*yield*/, (0, getLocale_1.default)()];
                 case 1:
-                    _b = (_c.sent());
-                    _c.label = 2;
+                    _b = (_g.sent());
+                    _g.label = 2;
                 case 2:
                     _a.language = _b;
                     if (!I18NConfig.requiresTranslation(options.language))
@@ -127,21 +128,26 @@ function tx(content_1) {
                     key = (0, internal_1.hashReactChildrenObjects)(options.context ? [content, options.context] : content);
                     return [4 /*yield*/, I18NConfig.getTranslations(options.language)];
                 case 3:
-                    translations = _c.sent();
+                    translations = _g.sent();
                     if ((translations === null || translations === void 0 ? void 0 : translations[options.id]) && translations[options.id].k === key)
                         return [2 /*return*/, (0, generaltranslation_1.renderContentToString)(translations[options.id].t, [options.language, I18NConfig.getDefaultLocale()], variables, variableOptions)];
-                    _c.label = 4;
+                    _g.label = 4;
                 case 4:
-                    if (!I18NConfig.translationEnabled()) return [3 /*break*/, 6];
+                    if (!I18NConfig.translationEnabled()) return [3 /*break*/, 7];
                     language = options.language, others = __rest(options, ["language"]);
-                    translationPromise = I18NConfig.translate({ content: content, targetLanguage: options.language, options: __assign(__assign(__assign({}, others), ((0, getMetadata_1.default)())), { hash: key }) });
+                    _d = (_c = I18NConfig).translate;
+                    _f = { content: content, targetLanguage: options.language };
+                    _e = [__assign({}, others)];
+                    return [4 /*yield*/, (0, getMetadata_1.default)()];
+                case 5:
+                    translationPromise = _d.apply(_c, [(_f.options = __assign.apply(void 0, [__assign.apply(void 0, _e.concat([(_g.sent())])), { hash: key }]), _f)]);
                     renderSettings = I18NConfig.getRenderSettings();
                     if (!(renderSettings.method !== "subtle" ||
                         !options.id) // because it is only saved if an id is present
-                    ) return [3 /*break*/, 6]; // because it is only saved if an id is present
+                    ) return [3 /*break*/, 7]; // because it is only saved if an id is present
                     return [4 /*yield*/, translationPromise];
-                case 5:
-                    translation = _c.sent();
+                case 6:
+                    translation = _g.sent();
                     try {
                         return [2 /*return*/, (0, generaltranslation_1.renderContentToString)(translation, [options.targetLanguage, I18NConfig.getDefaultLocale()], variables, variableOptions)];
                     }
@@ -149,8 +155,8 @@ function tx(content_1) {
                         console.error("gt-next string translation error. tx(\"".concat(content, "\")").concat(options.id ? " with id \"".concat(options.id, "\"") : '', " failed."), error);
                         return [2 /*return*/, ''];
                     }
-                    _c.label = 6;
-                case 6: return [2 /*return*/, (0, generaltranslation_1.renderContentToString)(contentAsArray, [options.targetLanguage, I18NConfig.getDefaultLocale()], variables, variableOptions)];
+                    _g.label = 7;
+                case 7: return [2 /*return*/, (0, generaltranslation_1.renderContentToString)(contentAsArray, [options.targetLanguage, I18NConfig.getDefaultLocale()], variables, variableOptions)];
             }
         });
     });

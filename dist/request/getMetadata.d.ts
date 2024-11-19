@@ -1,2 +1,2 @@
-export default function getMetadata(): Record<string, any>;
+export default function getMetadata(): Promise<Record<string, any>>;
 //# sourceMappingURL=getMetadata.d.ts.map

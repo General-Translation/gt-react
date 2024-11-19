@@ -2,7 +2,6 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = createNextMiddleware;
 var generaltranslation_1 = require("generaltranslation");
-var headers_1 = require("next/headers");
 var server_1 = require("next/server");
 var internal_1 = require("gt-react/internal");
 var cookies_1 = require("next/dist/compiled/@edge-runtime/cookies");
@@ -70,7 +69,7 @@ function createNextMiddleware(_a) {
     */
     function nextMiddleware(req) {
         var _a, _b, _c;
-        var headerList = (0, headers_1.headers)();
+        var headerList = new Headers(req.headers);
         var res = server_1.NextResponse.next();
         var userLocale = (0, generaltranslation_1.standardizeLanguageCode)(defaultLocale);
         if (localeRouting) {

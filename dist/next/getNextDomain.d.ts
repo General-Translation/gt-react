@@ -7,5 +7,5 @@
  * @returns {string | null} A promise that resolves to the value of the 'host' header,
  * or null if not available.
  */
-export declare function getNextDomain(): string | null;
+export declare function getNextDomain(): Promise<string | null>;
 //# sourceMappingURL=getNextDomain.d.ts.map

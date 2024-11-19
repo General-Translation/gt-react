@@ -54,7 +54,9 @@ exports.default = {
         method: "skeleton",
         timeout: null
     },
-    getMetadata: function () { return ({}); },
+    getMetadata: function () { return __awaiter(void 0, void 0, void 0, function () { return __generator(this, function (_a) {
+        return [2 /*return*/, ({})];
+    }); }); },
     _maxConcurrectRequests: 2,
     _batchInterval: 1000
 };
