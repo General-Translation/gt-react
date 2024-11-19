@@ -21,10 +21,10 @@ import getI18NConfig from "../utils/getI18NConfig";
  * @param {number} [n] - The number used to determine the plural form. This is required for pluralization to work.
  * @param {object} [branches] - An object containing possible plural branches, typically including `one` for singular
  * and `other` for plural forms, but it may vary depending on the locale.
- * @returns {JSX.Element} The rendered content corresponding to the plural form of `n`, or the fallback content.
+ * @returns {Promise<JSX.Element>} The rendered content corresponding to the plural form of `n`, or the fallback content.
  * @throws {Error} If `n` is not provided or not a valid number.
  */
-function Plural({
+async function Plural({
     children, n, ...props
 }: {
     children?: any;
@@ -33,7 +33,7 @@ function Plural({
     [key: string]: any
 }) {
     const { 'data-_gt': generaltranslation, ...branches } = props;
-    const locale = getLocale();
+    const locale = await getLocale();
     const defaultLocale = getI18NConfig().getDefaultLocale();
     const branch = (typeof n === 'number' ? getPluralBranch(n, [locale, defaultLocale], branches) : children) || children;
     return (

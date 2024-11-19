@@ -22,7 +22,7 @@ import getLocale from '../request/getLocale';
  * @param {Intl.NumberFormatOptions} [options] - Optional formatting options to customize how the currency is displayed.
  * @returns {JSX.Element} The formatted currency component.
  */
-function Currency({ 
+async function Currency({ 
     children, name = "cost", value, currency = "USD", options = {}, ...props 
 }: {
     children?: any;
@@ -31,10 +31,10 @@ function Currency({
     currency?: string;
     options?: Intl.NumberFormatOptions;
     'data-_gt'?: any
-}): JSX.Element {
+}): Promise<JSX.Element> {
     
     const I18NConfig = getI18NConfig();
-    const locales = [ getLocale(), I18NConfig.getDefaultLocale() ];
+    const locales = [await getLocale(), I18NConfig.getDefaultLocale() ];
 
     const { "data-_gt": generaltranslation } = props;
 

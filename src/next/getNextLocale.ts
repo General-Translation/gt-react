@@ -9,14 +9,14 @@ import { determineLanguage } from "generaltranslation";
  * headers function is available, it returns the primary language from the 'accept-language'
  * header. If the headers function or 'accept-language' header is not available, returns null.
  *
- * @returns {string | null} A promise that resolves to the primary language from the
+ * @returns {Promise<string | null>} A promise that resolves to the primary language from the
  * 'accept-language' header, or null if not available.
  */
-export function getNextLocale(defaultLocale: string = '', locales?: string[] | undefined): string {
-    const cookieStore = cookies();
+export async function getNextLocale(defaultLocale: string = '', locales?: string[] | undefined): Promise<string> {
+    const cookieStore = await cookies();
     const localeCookie = cookieStore.get(primitives.localeCookieName);
     if (localeCookie?.value) return localeCookie.value;
-    const headersList = headers();
+    const headersList = await headers();
     const acceptedLocales = headersList.get('accept-language')?.split(',').map(item => item.split(';')?.[0].trim());
     if (acceptedLocales && acceptedLocales.length) {
         if (locales) {

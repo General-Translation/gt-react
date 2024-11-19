@@ -1,7 +1,5 @@
 import {
-    useGT as getGT, 
-    useDefaultLocale as getDefaultLocale, 
-    useLocale as getLocale,
+    useGT as getGT,
     Var, Num, Currency, DateTime, T, Branch, Plural
 } from "gt-react";
 
@@ -18,7 +16,6 @@ function GTProvider(params: {
 
 export { 
     GTProvider, T,
-    getGT, 
-    getDefaultLocale, getLocale,
+    getGT,
     Var, Num, Currency, DateTime, Branch, Plural
 }

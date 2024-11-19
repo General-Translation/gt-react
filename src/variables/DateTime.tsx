@@ -19,18 +19,18 @@ import getLocale from '../request/getLocale';
  * @param {string} [name="date"] - Optional name for the date field, used for metadata purposes.
  * @param {string|number|Date} [value] - The default value for the date. Can be a string, number (timestamp), or `Date` object.
  * @param {Intl.DateTimeFormatOptions} [options={}] - Optional formatting options for the date, following `Intl.DateTimeFormatOptions` specifications.
- * @returns {JSX.Element} The formatted date or time component.
+ * @returns {Promise<JSX.Element>} The formatted date or time component.
  */
-function DateTime({ children, name = "date", value, options = {}, ...props }: {
+async function DateTime({ children, name = "date", value, options = {}, ...props }: {
     children?: any;
     name?: string;
     value?: any; // The default value which can be number, string, or Date
     options?: Intl.DateTimeFormatOptions; // Optional formatting options for the date
     'data-_gt'?: any
-}): JSX.Element {
+}): Promise<JSX.Element> {
 
     const I18NConfig = getI18NConfig();
-    const locales = [ getLocale(), I18NConfig.getDefaultLocale() ];
+    const locales = [await getLocale(), I18NConfig.getDefaultLocale() ];
 
     // Extract general translation data from props
     const { "data-_gt": generaltranslation } = props;

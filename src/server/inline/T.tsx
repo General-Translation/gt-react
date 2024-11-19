@@ -73,7 +73,7 @@ export default async function T({
     }
 
     const I18NConfig = getI18NConfig();
-    const locale = getLocale();
+    const locale = await getLocale();
     const defaultLocale = I18NConfig.getDefaultLocale();
     const translationRequired = I18NConfig.requiresTranslation(locale);
 

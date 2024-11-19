@@ -7,7 +7,7 @@ export default {
     baseURL: 'https://prod.gtx.dev',
     cacheURL: primitives.defaultCacheURL,
     defaultLocale: primitives.libraryDefaultLocale,
-    getLocale: () => primitives.libraryDefaultLocale,
+    getLocale: async () => primitives.libraryDefaultLocale,
     renderSettings: {
         method: "skeleton",
         timeout: null

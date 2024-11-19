@@ -56,7 +56,7 @@ export default async function tx(
 
     const contentAsArray = splitStringToContent(content);
     
-    options.language = options.language || getLocale();
+    options.language = options.language || await getLocale();
 
     if (!I18NConfig.requiresTranslation(options.language)) 
         return renderContentToString(contentAsArray, [options.language, I18NConfig.getDefaultLocale()], variables, variableOptions);

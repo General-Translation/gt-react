@@ -10,7 +10,7 @@ type InitGTProps = {
     // Locale info
     locales?: string[];
     defaultLocale?: string;
-    getLocale?: () => string;
+    getLocale?: () => Promise<string>;
     // Rendering
     renderSettings?: {
         method: "skeleton" | "replace" | "hang" | "subtle",

@@ -31,7 +31,7 @@ export default async function GTProvider({
         return id ? `${id}.${suffix}` : suffix;
     }
 
-    const locale = getLocale();
+    const locale = await getLocale();
     const additionalMetadata = getMetadata();
     const defaultLocale = I18NConfig.getDefaultLocale();
     const renderSettings = I18NConfig.getRenderSettings();
