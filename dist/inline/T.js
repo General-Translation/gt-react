@@ -24,6 +24,7 @@ var internal_1 = require("../internal");
 var GTContext_1 = __importDefault(require("../provider/GTContext"));
 var renderTranslatedChildren_1 = __importDefault(require("../provider/rendering/renderTranslatedChildren"));
 var react_2 = require("react");
+var renderVariable_1 = __importDefault(require("../provider/rendering/renderVariable"));
 /**
  * Translation component that handles rendering translated content, including plural forms.
  * Used with the required `id` parameter instead of `const t = useGT()`.
@@ -72,7 +73,8 @@ function T(_a) {
             children: taggedChildren,
             variables: variables,
             variablesOptions: variablesOptions,
-            defaultLocale: defaultLocale
+            defaultLocale: defaultLocale,
+            renderVariable: renderVariable_1.default
         });
     }
     // Do translation
@@ -97,7 +99,8 @@ function T(_a) {
             children: taggedChildren,
             variables: variables,
             variablesOptions: variablesOptions,
-            defaultLocale: defaultLocale
+            defaultLocale: defaultLocale,
+            renderVariable: renderVariable_1.default
         });
         // The suspense exists here for hydration reasons
         return ((0, jsx_runtime_1.jsx)(react_1.Suspense, { fallback: defaultChildren, children: defaultChildren }));
@@ -106,7 +109,8 @@ function T(_a) {
         source: taggedChildren, target: translation.t,
         variables: variables,
         variablesOptions: variablesOptions,
-        locales: [locale, defaultLocale]
+        locales: [locale, defaultLocale],
+        renderVariable: renderVariable_1.default
     });
 }
 //# sourceMappingURL=T.js.map

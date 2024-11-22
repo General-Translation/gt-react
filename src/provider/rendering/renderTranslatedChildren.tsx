@@ -1,30 +1,30 @@
-import React, { isValidElement, ReactElement, ReactNode } from "react";
+import React, { ReactElement, ReactNode } from "react";
 import { TranslatedChildren, TranslatedElement, VariableObject } from "../../types/types";
 import isVariableObject from "../helpers/isVariableObject";
 import getGTProp from "../helpers/getGTProp";
 import getVariableProps from "../../variables/_getVariableProps";
 import { getPluralBranch } from "../../internal";
 import renderDefaultChildren from "./renderDefaultChildren";
-import renderVariable from "./renderVariable";
-
 import { libraryDefaultLocale } from 'generaltranslation/internal'
-import { getFallbackVariableName } from "../../variables/getVariableName";
-
-/*
-
-
-*/
-
+import { baseVariablePrefix, getFallbackVariableName } from "../../variables/getVariableName";
 
 function renderTranslatedElement({
     sourceElement, targetElement, variables = {}, variablesOptions = {},
-    locales = [libraryDefaultLocale]
+    locales = [libraryDefaultLocale], renderVariable
 }: {
     sourceElement: ReactElement,
     targetElement: TranslatedElement,
     variables?: Record<string, any>,
     variablesOptions?: Record<string, any>,
-    locales: string[]
+    locales: string[],
+    renderVariable: ({
+        variableType, variableName, variableValue, variableOptions
+    }: {
+        variableType: "variable" | "number" | "datetime" | "currency"
+        variableName: string,
+        variableValue: any,
+        variableOptions: Intl.NumberFormatOptions | Intl.DateTimeFormatOptions
+    }) => JSX.Element
 }) {
 
     const { props } = sourceElement;
@@ -43,7 +43,7 @@ function renderTranslatedElement({
         return renderTranslatedChildren({ 
             source: sourceBranch, 
             target: targetBranch as TranslatedChildren,
-            variables, variablesOptions, locales
+            variables, variablesOptions, locales, renderVariable
         });
     }
 
@@ -56,7 +56,7 @@ function renderTranslatedElement({
         return renderTranslatedChildren({ 
             source: sourceBranch, 
             target: targetBranch,
-            variables, variablesOptions, locales
+            variables, variablesOptions, locales, renderVariable
         });
     }
 
@@ -67,7 +67,7 @@ function renderTranslatedElement({
             children: renderTranslatedChildren({ 
                 source: props.children, 
                 target: targetElement.props.children,
-                variables, variablesOptions, locales
+                variables, variablesOptions, locales, renderVariable
             } )
         });
     }
@@ -78,13 +78,21 @@ function renderTranslatedElement({
 
 export default function renderTranslatedChildren({
     source, target, variables = {}, variablesOptions = {},
-    locales = [libraryDefaultLocale]
+    locales = [libraryDefaultLocale], renderVariable
 }: {
     source: ReactNode,
     target: TranslatedChildren,
     variables?: Record<string, any>,
     variablesOptions?: Record<string, any>,
-    locales: string[]
+    locales: string[],
+    renderVariable: ({
+        variableType, variableName, variableValue, variableOptions
+    }: {
+        variableType: "variable" | "number" | "datetime" | "currency"
+        variableName: string,
+        variableValue: any,
+        variableOptions: Intl.NumberFormatOptions | Intl.DateTimeFormatOptions
+    }) => JSX.Element
 }): ReactNode {
 
     // Most straightforward case, return a valid React node
@@ -131,15 +139,17 @@ export default function renderTranslatedChildren({
             if (typeof targetChild === 'string') 
                 return <React.Fragment key={`string_${index}`}>{targetChild}</React.Fragment>;
             if (isVariableObject(targetChild)) {
-                
                 const variableName = targetChild.key;
                 const variableType = targetChild.variable || "variable";
                 const variableValue = (() => {
                     if (typeof variables[targetChild.key] !== 'undefined') 
                         return variables[targetChild.key];
-                    const fallbackVariableName = getFallbackVariableName(variableType);
-                    if (typeof variables[fallbackVariableName] !== 'undefined') {
-                        return variables[fallbackVariableName];
+                    
+                    if (variableName.startsWith(baseVariablePrefix)) {  // pain point: somewhat breakable logic
+                        const fallbackVariableName = getFallbackVariableName(variableType);
+                        if (typeof variables[fallbackVariableName] !== 'undefined') {
+                            return variables[fallbackVariableName];
+                        }
                     }
                     return undefined
                 })();
@@ -155,7 +165,7 @@ export default function renderTranslatedChildren({
             if (matchingSourceElement) return <React.Fragment key={`element_${index}`}>{renderTranslatedElement({
                 sourceElement: matchingSourceElement,
                 targetElement: targetChild,
-                variables, variablesOptions, locales
+                variables, variablesOptions, locales, renderVariable
             })}</React.Fragment>
         })
 
@@ -171,7 +181,7 @@ export default function renderTranslatedChildren({
             if (targetType === "element") {
                 return renderTranslatedElement({
                     sourceElement: source, targetElement: target as TranslatedElement,
-                    variables, variablesOptions, locales
+                    variables, variablesOptions, locales, renderVariable
                 })
             }
 
@@ -199,9 +209,11 @@ export default function renderTranslatedChildren({
             const variableValue = (() => {
                 if (typeof variables[targetVariable.key] !== 'undefined') 
                     return variables[targetVariable.key];
-                const fallbackVariableName = getFallbackVariableName(variableType);
-                if (typeof variables[fallbackVariableName] !== 'undefined') {
-                    return variables[fallbackVariableName];
+                if (variableName.startsWith(baseVariablePrefix)) { // pain point: somewhat breakable logic
+                    const fallbackVariableName = getFallbackVariableName(variableType);
+                    if (typeof variables[fallbackVariableName] !== 'undefined') {
+                        return variables[fallbackVariableName];
+                    }
                 }
                 return undefined
             })();
@@ -215,5 +227,5 @@ export default function renderTranslatedChildren({
  
     }
 
-    return renderDefaultChildren({ children: source, variables, variablesOptions, defaultLocale: locales[0] });
+    return renderDefaultChildren({ children: source, variables, variablesOptions, defaultLocale: locales[0], renderVariable });
 }

@@ -26,7 +26,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getFallbackVariableName = exports.getVariableName = exports.extractEntryMetadata = exports.getPluralBranch = exports.hashReactChildrenObjects = exports.getVariableProps = exports.getDictionaryEntry = exports.flattenDictionary = exports.isVariableObject = exports.writeChildrenAsObjects = exports.addGTIdentifier = void 0;
+exports.renderTranslatedChildren = exports.renderDefaultChildren = exports.getFallbackVariableName = exports.getVariableName = exports.extractEntryMetadata = exports.getPluralBranch = exports.hashReactChildrenObjects = exports.getVariableProps = exports.getDictionaryEntry = exports.flattenDictionary = exports.isVariableObject = exports.writeChildrenAsObjects = exports.addGTIdentifier = void 0;
 var hashReactChildrenObjects_1 = __importDefault(require("./internal/hashReactChildrenObjects"));
 exports.hashReactChildrenObjects = hashReactChildrenObjects_1.default;
 var flattenDictionary_1 = __importDefault(require("./internal/flattenDictionary"));
@@ -48,4 +48,8 @@ exports.isVariableObject = isVariableObject_1.default;
 var getVariableName_1 = __importStar(require("./variables/getVariableName"));
 exports.getVariableName = getVariableName_1.default;
 Object.defineProperty(exports, "getFallbackVariableName", { enumerable: true, get: function () { return getVariableName_1.getFallbackVariableName; } });
+var renderDefaultChildren_1 = __importDefault(require("./provider/rendering/renderDefaultChildren"));
+exports.renderDefaultChildren = renderDefaultChildren_1.default;
+var renderTranslatedChildren_1 = __importDefault(require("./provider/rendering/renderTranslatedChildren"));
+exports.renderTranslatedChildren = renderTranslatedChildren_1.default;
 //# sourceMappingURL=internal.js.map

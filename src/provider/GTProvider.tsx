@@ -12,6 +12,7 @@ import renderDefaultChildren from "./rendering/renderDefaultChildren";
 import renderTranslatedChildren from "./rendering/renderTranslatedChildren";
 
 import { defaultCacheURL, libraryDefaultLocale } from "generaltranslation/internal";
+import renderVariable from "./rendering/renderVariable";
 
 /**
  * Provides General Translation context to its children, which can then access `useGT`, `useLocale`, and `useDefaultLocale`.
@@ -117,7 +118,8 @@ export default function GTProvider({
                 )
             }
             return renderDefaultChildren({
-                children: taggedEntry, variables, variablesOptions, defaultLocale
+                children: taggedEntry, variables, variablesOptions, defaultLocale,
+                renderVariable
             })
         }
 
@@ -134,7 +136,8 @@ export default function GTProvider({
                 source: taggedEntry,
                 target: translation.t,
                 variables, variablesOptions,
-                locales: [locale, defaultLocale]
+                locales: [locale, defaultLocale],
+                renderVariable
             });
         }
     }, [dictionary, translations, translationRequired, defaultLocale]);

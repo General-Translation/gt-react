@@ -52,6 +52,7 @@ var extractEntryMetadata_1 = __importDefault(require("./helpers/extractEntryMeta
 var renderDefaultChildren_1 = __importDefault(require("./rendering/renderDefaultChildren"));
 var renderTranslatedChildren_1 = __importDefault(require("./rendering/renderTranslatedChildren"));
 var internal_2 = require("generaltranslation/internal");
+var renderVariable_1 = __importDefault(require("./rendering/renderVariable"));
 /**
  * Provides General Translation context to its children, which can then access `useGT`, `useLocale`, and `useDefaultLocale`.
  *
@@ -137,7 +138,8 @@ function GTProvider(_a) {
                 children: taggedEntry,
                 variables: variables,
                 variablesOptions: variablesOptions,
-                defaultLocale: defaultLocale
+                defaultLocale: defaultLocale,
+                renderVariable: renderVariable_1.default
             });
         }
         // If a translation is required
@@ -151,7 +153,8 @@ function GTProvider(_a) {
                 target: translation.t,
                 variables: variables,
                 variablesOptions: variablesOptions,
-                locales: [locale, defaultLocale]
+                locales: [locale, defaultLocale],
+                renderVariable: renderVariable_1.default
             });
         }
     }, [dictionary, translations, translationRequired, defaultLocale]);

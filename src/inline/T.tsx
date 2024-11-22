@@ -6,6 +6,7 @@ import { addGTIdentifier, hashReactChildrenObjects, writeChildrenAsObjects } fro
 import useGTContext from "../provider/GTContext";
 import renderTranslatedChildren from "../provider/rendering/renderTranslatedChildren";
 import { useMemo } from "react";
+import renderVariable from "../provider/rendering/renderVariable";
 
 /**
  * Translation component that handles rendering translated content, including plural forms.
@@ -67,7 +68,8 @@ export default function T({
     if (!translationRequired) {
         return renderDefaultChildren({
             children: taggedChildren,
-            variables, variablesOptions, defaultLocale
+            variables, variablesOptions, defaultLocale,
+            renderVariable
         }) as JSX.Element;
     }
 
@@ -97,7 +99,7 @@ export default function T({
         console.warn(`<T id="${id}"> is used in a client component without a valid corresponding translation.`);
         const defaultChildren = renderDefaultChildren({
             children: taggedChildren,
-            variables, variablesOptions, defaultLocale
+            variables, variablesOptions, defaultLocale, renderVariable
         }) as JSX.Element;
 
         // The suspense exists here for hydration reasons
@@ -109,7 +111,8 @@ export default function T({
     }
    
     return renderTranslatedChildren({
-        source: taggedChildren, target: translation.t,
-        variables, variablesOptions, locales: [locale, defaultLocale]
+        source: taggedChildren, target: translation.t, 
+        variables, variablesOptions, locales: [locale, defaultLocale],
+        renderVariable
     }) as JSX.Element;
 }

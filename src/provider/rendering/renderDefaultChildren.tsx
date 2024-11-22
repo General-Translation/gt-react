@@ -2,18 +2,25 @@ import React, { ReactElement, ReactNode } from "react";
 import getGTProp from "../helpers/getGTProp";
 import getVariableProps from "../../variables/_getVariableProps";
 import { getPluralBranch } from "../../internal";
-import renderVariable from "./renderVariable";
 import { libraryDefaultLocale } from 'generaltranslation/internal'
-import { getFallbackVariableName } from "../../variables/getVariableName";
+import { baseVariablePrefix, getFallbackVariableName } from "../../variables/getVariableName";
 
 export default function renderDefaultChildren({
     children, variables = {}, variablesOptions = {},
-    defaultLocale = libraryDefaultLocale
+    defaultLocale = libraryDefaultLocale, renderVariable
 }: {
     children: ReactNode,
     variables?: Record<string, any>
     variablesOptions?: Record<string, any>,
     defaultLocale: string
+    renderVariable: ({
+        variableType, variableName, variableValue, variableOptions
+    }: {
+        variableType: "variable" | "number" | "datetime" | "currency"
+        variableName: string,
+        variableValue: any,
+        variableOptions: Intl.NumberFormatOptions | Intl.DateTimeFormatOptions
+    }) => JSX.Element
 }) {
 
     const handleSingleChild = (child: ReactNode) => {
@@ -30,9 +37,12 @@ export default function renderDefaultChildren({
                     if (typeof variables[variableName] !== 'undefined') {
                         return variables[variableName]
                     }
-                    const fallbackVariableName = getFallbackVariableName(variableType);
-                    if (typeof variables[fallbackVariableName] !== 'undefined') {
-                        return variables[fallbackVariableName];
+                    if (variableValue) return variableValue;
+                    if (variableName.startsWith(baseVariablePrefix)) { // pain point: somewhat breakable logic
+                        const fallbackVariableName = getFallbackVariableName(variableType);
+                        if (typeof variables[fallbackVariableName] !== 'undefined') {
+                            return variables[fallbackVariableName];
+                        }
                     }
                     return undefined;
                 })();

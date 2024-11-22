@@ -22,16 +22,11 @@ var getGTProp_1 = __importDefault(require("../helpers/getGTProp"));
 var _getVariableProps_1 = __importDefault(require("../../variables/_getVariableProps"));
 var internal_1 = require("../../internal");
 var renderDefaultChildren_1 = __importDefault(require("./renderDefaultChildren"));
-var renderVariable_1 = __importDefault(require("./renderVariable"));
 var internal_2 = require("generaltranslation/internal");
 var getVariableName_1 = require("../../variables/getVariableName");
-/*
-
-
-*/
 function renderTranslatedElement(_a) {
     var _b;
-    var sourceElement = _a.sourceElement, targetElement = _a.targetElement, _c = _a.variables, variables = _c === void 0 ? {} : _c, _d = _a.variablesOptions, variablesOptions = _d === void 0 ? {} : _d, _e = _a.locales, locales = _e === void 0 ? [internal_2.libraryDefaultLocale] : _e;
+    var sourceElement = _a.sourceElement, targetElement = _a.targetElement, _c = _a.variables, variables = _c === void 0 ? {} : _c, _d = _a.variablesOptions, variablesOptions = _d === void 0 ? {} : _d, _e = _a.locales, locales = _e === void 0 ? [internal_2.libraryDefaultLocale] : _e, renderVariable = _a.renderVariable;
     var props = sourceElement.props;
     var generaltranslation = props["data-_gt"];
     var transformation = generaltranslation === null || generaltranslation === void 0 ? void 0 : generaltranslation["transformation"];
@@ -48,7 +43,8 @@ function renderTranslatedElement(_a) {
             target: targetBranch,
             variables: variables,
             variablesOptions: variablesOptions,
-            locales: locales
+            locales: locales,
+            renderVariable: renderVariable
         });
     }
     if (transformation === "branch") {
@@ -62,7 +58,8 @@ function renderTranslatedElement(_a) {
             target: targetBranch,
             variables: variables,
             variablesOptions: variablesOptions,
-            locales: locales
+            locales: locales,
+            renderVariable: renderVariable
         });
     }
     if ((props === null || props === void 0 ? void 0 : props.children) && ((_b = targetElement.props) === null || _b === void 0 ? void 0 : _b.children)) {
@@ -71,13 +68,14 @@ function renderTranslatedElement(_a) {
                 target: targetElement.props.children,
                 variables: variables,
                 variablesOptions: variablesOptions,
-                locales: locales
+                locales: locales,
+                renderVariable: renderVariable
             }) }));
     }
     return sourceElement;
 }
 function renderTranslatedChildren(_a) {
-    var source = _a.source, target = _a.target, _b = _a.variables, variables = _b === void 0 ? {} : _b, _c = _a.variablesOptions, variablesOptions = _c === void 0 ? {} : _c, _d = _a.locales, locales = _d === void 0 ? [internal_2.libraryDefaultLocale] : _d;
+    var source = _a.source, target = _a.target, _b = _a.variables, variables = _b === void 0 ? {} : _b, _c = _a.variablesOptions, variablesOptions = _c === void 0 ? {} : _c, _d = _a.locales, locales = _d === void 0 ? [internal_2.libraryDefaultLocale] : _d, renderVariable = _a.renderVariable;
     // Most straightforward case, return a valid React node
     if ((target === null || typeof target === 'undefined') && source)
         return source;
@@ -116,20 +114,22 @@ function renderTranslatedChildren(_a) {
             if (typeof targetChild === 'string')
                 return (0, jsx_runtime_1.jsx)(react_1.default.Fragment, { children: targetChild }, "string_".concat(index));
             if ((0, isVariableObject_1.default)(targetChild)) {
-                var variableName = targetChild.key;
+                var variableName_1 = targetChild.key;
                 var variableType_1 = targetChild.variable || "variable";
                 var variableValue = (function () {
                     if (typeof variables[targetChild.key] !== 'undefined')
                         return variables[targetChild.key];
-                    var fallbackVariableName = (0, getVariableName_1.getFallbackVariableName)(variableType_1);
-                    if (typeof variables[fallbackVariableName] !== 'undefined') {
-                        return variables[fallbackVariableName];
+                    if (variableName_1.startsWith(getVariableName_1.baseVariablePrefix)) { // pain point: somewhat breakable logic
+                        var fallbackVariableName = (0, getVariableName_1.getFallbackVariableName)(variableType_1);
+                        if (typeof variables[fallbackVariableName] !== 'undefined') {
+                            return variables[fallbackVariableName];
+                        }
                     }
                     return undefined;
                 })();
-                return (0, jsx_runtime_1.jsx)(react_1.default.Fragment, { children: (0, renderVariable_1.default)({
+                return (0, jsx_runtime_1.jsx)(react_1.default.Fragment, { children: renderVariable({
                         variableType: variableType_1,
-                        variableName: variableName,
+                        variableName: variableName_1,
                         variableValue: variableValue,
                         variableOptions: variablesOptions[targetChild.key]
                     }) }, "var_".concat(index));
@@ -141,7 +141,8 @@ function renderTranslatedChildren(_a) {
                         targetElement: targetChild,
                         variables: variables,
                         variablesOptions: variablesOptions,
-                        locales: locales
+                        locales: locales,
+                        renderVariable: renderVariable
                     }) }, "element_".concat(index));
         });
     }
@@ -153,7 +154,8 @@ function renderTranslatedChildren(_a) {
                     sourceElement: source, targetElement: target,
                     variables: variables,
                     variablesOptions: variablesOptions,
-                    locales: locales
+                    locales: locales,
+                    renderVariable: renderVariable
                 });
             }
             var generaltranslation = (0, getGTProp_1.default)(source);
@@ -167,25 +169,27 @@ function renderTranslatedChildren(_a) {
         }
         if (targetType === "variable") {
             var targetVariable_1 = target;
-            var variableName = targetVariable_1.key;
+            var variableName_2 = targetVariable_1.key;
             var variableType_2 = targetVariable_1.variable || "variable";
             var variableValue = (function () {
                 if (typeof variables[targetVariable_1.key] !== 'undefined')
                     return variables[targetVariable_1.key];
-                var fallbackVariableName = (0, getVariableName_1.getFallbackVariableName)(variableType_2);
-                if (typeof variables[fallbackVariableName] !== 'undefined') {
-                    return variables[fallbackVariableName];
+                if (variableName_2.startsWith(getVariableName_1.baseVariablePrefix)) { // pain point: somewhat breakable logic
+                    var fallbackVariableName = (0, getVariableName_1.getFallbackVariableName)(variableType_2);
+                    if (typeof variables[fallbackVariableName] !== 'undefined') {
+                        return variables[fallbackVariableName];
+                    }
                 }
                 return undefined;
             })();
-            return (0, renderVariable_1.default)({
+            return renderVariable({
                 variableType: variableType_2,
-                variableName: variableName,
+                variableName: variableName_2,
                 variableValue: variableValue,
                 variableOptions: variablesOptions[targetVariable_1.key] || {}
             });
         }
     }
-    return (0, renderDefaultChildren_1.default)({ children: source, variables: variables, variablesOptions: variablesOptions, defaultLocale: locales[0] });
+    return (0, renderDefaultChildren_1.default)({ children: source, variables: variables, variablesOptions: variablesOptions, defaultLocale: locales[0], renderVariable: renderVariable });
 }
 //# sourceMappingURL=renderTranslatedChildren.js.map
