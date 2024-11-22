@@ -22,5 +22,5 @@ export default function getVariableName(props: Record<string, any> = {}, variabl
     if (props.name) return props.name;
     if (props['data-_gt-variable-name']) return props['data-_gt-variable-name'];
     const baseVariableName = (defaultVariableNames as any)[variableType] || "value";
-    return `${baseVariablePrefix}${baseVariableName}_${props['data-_gt'].id}`
+    return `${baseVariablePrefix}${baseVariableName}_${props['data-_gt']?.id}`
 }
