@@ -1,18 +1,18 @@
-import React, { useLayoutEffect } from "react";
-import { determineLanguage, renderContentToString, requiresTranslation } from "generaltranslation";
+import React, { useMemo } from "react";
+import { determineLocale, renderContentToString, requiresTranslation } from "generaltranslation";
 import { ReactElement, useCallback, useEffect, useState } from "react";
 import useBrowserLocale from "../hooks/useBrowserLocale";
 
 import { GTContext } from "./GTContext";
-import { Dictionary, DictionaryEntry, Translation } from "../primitives/types";
+import { Dictionary, DictionaryEntry, Translation } from "../types/types";
 import getDictionaryEntry from "./helpers/getDictionaryEntry";
 import { addGTIdentifier } from "../internal";
 import extractEntryMetadata from "./helpers/extractEntryMetadata";
 import renderDefaultChildren from "./rendering/renderDefaultChildren";
 import renderTranslatedChildren from "./rendering/renderTranslatedChildren";
 
-import primitives from "../primitives/primitives";
-const { defaultDictionary, libraryDefaultLocale, localeCookieName } = primitives;
+import { defaultCacheURL, libraryDefaultLocale } from "generaltranslation/internal";
+import renderVariable from "./rendering/renderVariable";
 
 /**
  * Provides General Translation context to its children, which can then access `useGT`, `useLocale`, and `useDefaultLocale`.
@@ -30,11 +30,11 @@ const { defaultDictionary, libraryDefaultLocale, localeCookieName } = primitives
 export default function GTProvider({
     children, 
     projectID,
-    dictionary = defaultDictionary, 
+    dictionary = {}, 
     locales, 
     defaultLocale = locales?.[0] || libraryDefaultLocale, 
     locale, 
-    cacheURL = 'https://cache.gtx.dev'
+    cacheURL = defaultCacheURL
 }: {
     children?: any;
     projectID?: string;
@@ -45,17 +45,17 @@ export default function GTProvider({
     cacheURL?: string;
 }): JSX.Element {
 
-    if (!projectID && cacheURL === 'https://cache.gtx.dev') {
+    if (!projectID && cacheURL === defaultCacheURL) {
         throw new Error("gt-react Error: General Translation cloud services require a project ID! Find yours at www.generaltranslation.com/dashboard.")
     }
 
-    const browserLocale = useBrowserLocale(defaultLocale, localeCookieName, locales);
+    const browserLocale = useBrowserLocale(defaultLocale, locales);
     locale = locale || browserLocale;
     if (locales) {
-        locale = determineLanguage([locale, browserLocale], locales) || locale;
+        locale = determineLocale([locale, browserLocale], locales) || locale;
     }
 
-    const translationRequired = requiresTranslation(defaultLocale, locale, locales);
+    const translationRequired = useMemo(() => requiresTranslation(defaultLocale, locale, locales), [defaultLocale, locale, locales])
 
     const [translations, setTranslations] = useState<Record<string, Translation> | null>(
         cacheURL ? null : {}
@@ -118,7 +118,8 @@ export default function GTProvider({
                 )
             }
             return renderDefaultChildren({
-                children: taggedEntry, variables, variablesOptions, defaultLocale
+                children: taggedEntry, variables, variablesOptions, defaultLocale,
+                renderVariable
             })
         }
 
@@ -135,14 +136,18 @@ export default function GTProvider({
                 source: taggedEntry,
                 target: translation.t,
                 variables, variablesOptions,
-                locales: [locale, defaultLocale]
+                locales: [locale, defaultLocale],
+                renderVariable
             });
         }
     }, [dictionary, translations, translationRequired, defaultLocale]);
 
     return (
         <GTContext.Provider value={{
-            translate, locale, defaultLocale, translations
+            translate, 
+            locale, defaultLocale, 
+            translations, translationRequired,
+            projectID
         }}>
             {children}
         </GTContext.Provider>

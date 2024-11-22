@@ -15,13 +15,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = getVariableProps;
-var _defaultVariableNames_1 = __importDefault(require("./_defaultVariableNames"));
+var getVariableName_1 = __importDefault(require("./getVariableName"));
 function getVariableProps(props) {
     var _a;
     var variableType = ((_a = props['data-_gt']) === null || _a === void 0 ? void 0 : _a.variableType) || "variable";
     var result = {
         variableType: variableType,
-        variableName: props.name || props['data-_gt-variable-name'] || _defaultVariableNames_1.default[variableType],
+        variableName: (0, getVariableName_1.default)(props, variableType),
         variableValue: (function () {
             if (typeof props.value !== 'undefined')
                 return props.value;

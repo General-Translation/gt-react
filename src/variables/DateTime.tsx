@@ -28,7 +28,7 @@ function DateTime({ children, name = "date", value, options = {} }: {
     name?: string;
     value?: any; // The default value which can be string, number or Date
     options?: Intl.DateTimeFormatOptions; // Optional formatting options for the date
-} = { name: "date" }): JSX.Element {
+}): JSX.Element {
 
     const locales = [useLocale(), useDefaultLocale()]
 
@@ -44,7 +44,7 @@ function DateTime({ children, name = "date", value, options = {} }: {
         dateValue = defaultValue;
     }
     if (typeof dateValue !== 'undefined') {
-        final = (formatDateTime({ value: dateValue, languages: locales, options })).replace(/[\u200F\u202B\u202E]/g, '');
+        final = (formatDateTime({ value: dateValue, locales, options })).replace(/[\u200F\u202B\u202E]/g, '');
     }
 
     // Render the formatted date within a span element

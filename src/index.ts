@@ -1,5 +1,5 @@
 import T from "./inline/T";
-import useGT from "./hooks/useGT";
+import { useGT, gt } from "./hooks/useGT";
 import useDefaultLocale from "./hooks/useDefaultLocale";
 import useLocale from "./hooks/useLocale";
 import GTProvider from "./provider/GTProvider";
@@ -13,5 +13,5 @@ import Branch from "./branches/Branch";
 export {
     Var, Num, Currency, DateTime,
     T, GTProvider, Plural, Branch,
-    useGT, useDefaultLocale, useLocale
+    useGT, gt, useDefaultLocale, useLocale
 }

@@ -1,4 +1,4 @@
-import { hashString } from 'generaltranslation/internal';
+import { hashString } from 'generaltranslation/id';
 
 /**
  * Calculates a unique ID for the given children objects by hashing their sanitized JSON string representation.

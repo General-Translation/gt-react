@@ -1,9 +1,35 @@
 "use strict";
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.default = useGT;
+exports.useGT = useGT;
+exports.gt = gt;
+var jsx_runtime_1 = require("react/jsx-runtime");
+var react_1 = __importStar(require("react"));
 var GTContext_1 = __importDefault(require("../provider/GTContext"));
 /**
  * Gets the translation function `t` provided by `<GTProvider>`.
@@ -46,6 +72,55 @@ function useGT(id) {
             return translation;
         }
         return undefined;
+    }
+    ;
+    return t;
+}
+/**
+ * Flagship `gt()` hook which gets the translation function `t()` provided by `<GTProvider>`.
+ * `t()` returns only JSX elements. For returning strings as well, see `useGT()`.
+ *
+ * @param {string} [id] - Optional prefix to prepend to the translation keys.
+ * @returns {Function} A translation function that accepts a key string and returns the translated value.
+ *
+ * @example
+ * const t = gt('user');
+ * console.log(t('name')); // Translates item 'user.name'
+ *
+ * const t = gt();
+ * console.log(t('hello')); // Translates item 'hello'
+ */
+function gt(id) {
+    if (id === void 0) { id = ''; }
+    // Create a prefix for translation keys if an id is provided
+    var getID = function (suffix) {
+        return id ? "".concat(id, ".").concat(suffix) : suffix;
+    };
+    // Get the translation context
+    var translate = (0, GTContext_1.default)("gt('".concat(id, "'): No context provided. You're trying to get the t() function on the client, which can only be done inside a <GTProvider>.")).translate;
+    /**
+    * Translates a dictionary item based on its `id` and options.
+    * Always returns a JSX.Element. Returns a fragment if there is no translation.
+    *
+    * @param {string} [id=''] - The ID of the item in the dictionary to translate.
+    * @param {Record<string, any>} [options={}] - Variables or parameters (e.g., `n`) passed into the translation for dynamic content.
+    * @param {Function} [f] - `f` is executed with `options` as parameters, and its result is translated based on the dictionary value of `id`. You likely don't need this parameter unless you are using `gt-next`.
+    *
+    * @returns {JSX.Element}
+    */
+    function t(id, options, f) {
+        if (id === void 0) { id = ''; }
+        if (options === void 0) { options = {}; }
+        var prefixedID = getID(id);
+        if (translate) {
+            var translation = translate(prefixedID, options, f);
+            if (!translation)
+                console.warn("t('".concat(id, "') finding no translation for dictionary item ").concat(prefixedID, " !"));
+            if (!(0, react_1.isValidElement)(translation))
+                return (0, jsx_runtime_1.jsx)(react_1.default.Fragment, { children: translation });
+            return translation;
+        }
+        return (0, jsx_runtime_1.jsx)(react_1.default.Fragment, {});
     }
     ;
     return t;

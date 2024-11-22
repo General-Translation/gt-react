@@ -1,24 +1,30 @@
-import React, { isValidElement, ReactElement, ReactNode } from "react";
-import { TranslatedChildren, TranslatedElement, VariableObject } from "../../primitives/types";
+import React, { ReactElement, ReactNode } from "react";
+import { TranslatedChildren, TranslatedElement, VariableObject } from "../../types/types";
 import isVariableObject from "../helpers/isVariableObject";
 import getGTProp from "../helpers/getGTProp";
 import getVariableProps from "../../variables/_getVariableProps";
 import { getPluralBranch } from "../../internal";
 import renderDefaultChildren from "./renderDefaultChildren";
-import renderVariable from "./renderVariable";
-
-import primitives from '../../primitives/primitives';
-const { libraryDefaultLocale } = primitives;
+import { libraryDefaultLocale } from 'generaltranslation/internal'
+import { baseVariablePrefix, getFallbackVariableName } from "../../variables/getVariableName";
 
 function renderTranslatedElement({
     sourceElement, targetElement, variables = {}, variablesOptions = {},
-    locales = [libraryDefaultLocale]
+    locales = [libraryDefaultLocale], renderVariable
 }: {
     sourceElement: ReactElement,
     targetElement: TranslatedElement,
     variables?: Record<string, any>,
     variablesOptions?: Record<string, any>,
-    locales: string[]
+    locales: string[],
+    renderVariable: ({
+        variableType, variableName, variableValue, variableOptions
+    }: {
+        variableType: "variable" | "number" | "datetime" | "currency"
+        variableName: string,
+        variableValue: any,
+        variableOptions: Intl.NumberFormatOptions | Intl.DateTimeFormatOptions
+    }) => JSX.Element
 }) {
 
     const { props } = sourceElement;
@@ -37,7 +43,7 @@ function renderTranslatedElement({
         return renderTranslatedChildren({ 
             source: sourceBranch, 
             target: targetBranch as TranslatedChildren,
-            variables, variablesOptions, locales
+            variables, variablesOptions, locales, renderVariable
         });
     }
 
@@ -50,7 +56,7 @@ function renderTranslatedElement({
         return renderTranslatedChildren({ 
             source: sourceBranch, 
             target: targetBranch,
-            variables, variablesOptions, locales
+            variables, variablesOptions, locales, renderVariable
         });
     }
 
@@ -61,7 +67,7 @@ function renderTranslatedElement({
             children: renderTranslatedChildren({ 
                 source: props.children, 
                 target: targetElement.props.children,
-                variables, variablesOptions, locales
+                variables, variablesOptions, locales, renderVariable
             } )
         });
     }
@@ -72,13 +78,21 @@ function renderTranslatedElement({
 
 export default function renderTranslatedChildren({
     source, target, variables = {}, variablesOptions = {},
-    locales = [libraryDefaultLocale]
+    locales = [libraryDefaultLocale], renderVariable
 }: {
     source: ReactNode,
     target: TranslatedChildren,
     variables?: Record<string, any>,
     variablesOptions?: Record<string, any>,
-    locales: string[]
+    locales: string[],
+    renderVariable: ({
+        variableType, variableName, variableValue, variableOptions
+    }: {
+        variableType: "variable" | "number" | "datetime" | "currency"
+        variableName: string,
+        variableValue: any,
+        variableOptions: Intl.NumberFormatOptions | Intl.DateTimeFormatOptions
+    }) => JSX.Element
 }): ReactNode {
 
     // Most straightforward case, return a valid React node
@@ -125,10 +139,25 @@ export default function renderTranslatedChildren({
             if (typeof targetChild === 'string') 
                 return <React.Fragment key={`string_${index}`}>{targetChild}</React.Fragment>;
             if (isVariableObject(targetChild)) {
+                const variableName = targetChild.key;
+                const variableType = targetChild.variable || "variable";
+                const variableValue = (() => {
+                    if (typeof variables[targetChild.key] !== 'undefined') 
+                        return variables[targetChild.key];
+                    
+                    if (variableName.startsWith(baseVariablePrefix)) {  // pain point: somewhat breakable logic
+                        const fallbackVariableName = getFallbackVariableName(variableType);
+                        if (typeof variables[fallbackVariableName] !== 'undefined') {
+                            return variables[fallbackVariableName];
+                        }
+                    }
+                    return undefined
+                })();
+
                 return <React.Fragment key={`var_${index}`}>{renderVariable({
-                    variableType: targetChild.variable || "variable",
-                    variableName: targetChild.key,
-                    variableValue: variables[targetChild.key],
+                    variableType,
+                    variableName,
+                    variableValue,
                     variableOptions: variablesOptions[targetChild.key]
                 })}</React.Fragment>
             }
@@ -136,7 +165,7 @@ export default function renderTranslatedChildren({
             if (matchingSourceElement) return <React.Fragment key={`element_${index}`}>{renderTranslatedElement({
                 sourceElement: matchingSourceElement,
                 targetElement: targetChild,
-                variables, variablesOptions, locales
+                variables, variablesOptions, locales, renderVariable
             })}</React.Fragment>
         })
 
@@ -152,7 +181,7 @@ export default function renderTranslatedChildren({
             if (targetType === "element") {
                 return renderTranslatedElement({
                     sourceElement: source, targetElement: target as TranslatedElement,
-                    variables, variablesOptions, locales
+                    variables, variablesOptions, locales, renderVariable
                 })
             }
 
@@ -162,7 +191,7 @@ export default function renderTranslatedChildren({
                     variableName, 
                     variableValue,
                     variableOptions
-                } = getVariableProps(source.props)
+                } = getVariableProps(source.props);
                 if (typeof variables[variableName] === 'undefined') {
                     variables[variableName] = variableValue;
                 }
@@ -175,15 +204,28 @@ export default function renderTranslatedChildren({
 
         if (targetType === "variable") {
             const targetVariable = target as VariableObject;
+            const variableName = targetVariable.key;
+            const variableType = targetVariable.variable || "variable";
+            const variableValue = (() => {
+                if (typeof variables[targetVariable.key] !== 'undefined') 
+                    return variables[targetVariable.key];
+                if (variableName.startsWith(baseVariablePrefix)) { // pain point: somewhat breakable logic
+                    const fallbackVariableName = getFallbackVariableName(variableType);
+                    if (typeof variables[fallbackVariableName] !== 'undefined') {
+                        return variables[fallbackVariableName];
+                    }
+                }
+                return undefined
+            })();
             return renderVariable({ 
-                variableType: targetVariable.variable || "variable", 
-                variableName: targetVariable.key, 
-                variableValue: variables[targetVariable.key],
-                variableOptions: variablesOptions[targetVariable.key]
+                variableType, 
+                variableName, 
+                variableValue,
+                variableOptions: variablesOptions[targetVariable.key] || {}
             })
         }
  
     }
 
-    return renderDefaultChildren({ children: source, variables, variablesOptions, defaultLocale: locales[0] });
+    return renderDefaultChildren({ children: source, variables, variablesOptions, defaultLocale: locales[0], renderVariable });
 }

@@ -5,12 +5,7 @@ declare const primitives: {
         datetime: "date";
         currency: "cost";
     };
-    readonly localeCookieName: "generaltranslation-locale";
-    readonly libraryDefaultLocale: "en-US";
-    readonly pluralForms: readonly ["singular", "plural", "dual", "zero", "one", "two", "few", "many", "other"];
-    readonly defaultCacheURL: "https://cache.gtx.dev";
     readonly defaultDictionary: {};
 };
 export default primitives;
-export declare function isAcceptedPluralForm(form: string): form is (typeof primitives.pluralForms)[number];
 //# sourceMappingURL=primitives.d.ts.map

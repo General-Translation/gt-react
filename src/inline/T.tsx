@@ -1,5 +1,4 @@
 import React, { Suspense } from "react";
-import { isSameLanguage } from "generaltranslation";
 import useDefaultLocale from "../hooks/useDefaultLocale";
 import useLocale from "../hooks/useLocale";
 import renderDefaultChildren from "../provider/rendering/renderDefaultChildren";
@@ -7,6 +6,7 @@ import { addGTIdentifier, hashReactChildrenObjects, writeChildrenAsObjects } fro
 import useGTContext from "../provider/GTContext";
 import renderTranslatedChildren from "../provider/rendering/renderTranslatedChildren";
 import { useMemo } from "react";
+import renderVariable from "../provider/rendering/renderVariable";
 
 /**
  * Translation component that handles rendering translated content, including plural forms.
@@ -23,16 +23,18 @@ import { useMemo } from "react";
  * @example
  * ```jsx
  * // Basic usage:
- * <T id="welcome_message" variables={{ name: "John" }}>
- *  Hello, <Var name="name"/>!
+ * <T id="welcome_message">
+ *  Hello, <Var name="name">{name}</Var>!
  * </T>
  * ```
  * 
  * @example
  * ```jsx
  * // Using plural translations:
- * <T id="item_count" variables={{ n: 3 }} singular={"You have one item"}>
- *  You have <Num/> items
+ * <T id="item_count">
+ *  <Plural n={n} singular={<>You have <Num value={n}/> item</>}>
+ *      You have <Num value={n}/> items
+ *  </Plural>
  * </T>
  * ```
  * 
@@ -54,7 +56,7 @@ export default function T({
 
     const { variables, variablesOptions } = props;
 
-    const { translations } = useGTContext(
+    const { translations, translationRequired } = useGTContext(
         `<T id="${id}"> used on the client-side outside of <GTProvider>`
     );
 
@@ -63,16 +65,11 @@ export default function T({
 
     const taggedChildren = useMemo(() => addGTIdentifier(children), [children])
 
-    const translationRequired: boolean = (() => {
-        if (!locale) return false;
-        if (isSameLanguage(locale, defaultLocale)) return false;
-        return true;
-    })();
-
     if (!translationRequired) {
         return renderDefaultChildren({
             children: taggedChildren,
-            variables, variablesOptions, defaultLocale
+            variables, variablesOptions, defaultLocale,
+            renderVariable
         }) as JSX.Element;
     }
 
@@ -94,7 +91,7 @@ export default function T({
         if (process?.env.NODE_ENV === 'development' || process?.env.NODE_ENV === 'test') {
             throw new Error(
                 `<T id="${id}"> is used in a client component without a valid corresponding translation. This can cause Next.js hydration errors.`
-                + `\n\nYour current environment: "${process?.env.NODE_ENV}". In production, this error will display as a warning only, and content will be rendered in your default language.`
+                + `\n\nYour current environment: "${process?.env.NODE_ENV}". In production, this error will display as a warning only, and content will be rendered in your default locale.`
                 + `\n\nTo fix this error, consider using a getGT() dictionary pattern or pushing translations from the command line in advance.`
             );
         }
@@ -102,7 +99,7 @@ export default function T({
         console.warn(`<T id="${id}"> is used in a client component without a valid corresponding translation.`);
         const defaultChildren = renderDefaultChildren({
             children: taggedChildren,
-            variables, variablesOptions, defaultLocale
+            variables, variablesOptions, defaultLocale, renderVariable
         }) as JSX.Element;
 
         // The suspense exists here for hydration reasons
@@ -114,7 +111,8 @@ export default function T({
     }
    
     return renderTranslatedChildren({
-        source: taggedChildren, target: translation.t,
-        variables, variablesOptions, locales: [locale, defaultLocale]
+        source: taggedChildren, target: translation.t, 
+        variables, variablesOptions, locales: [locale, defaultLocale],
+        renderVariable
     }) as JSX.Element;
 }

@@ -16,7 +16,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = writeChildrenAsObjects;
 var react_1 = __importDefault(require("react"));
-var _defaultVariableNames_1 = __importDefault(require("../variables/_defaultVariableNames"));
+var getVariableName_1 = __importDefault(require("../variables/getVariableName"));
 /**
  * Gets the tag name of a React element.
  * @param {ReactElement} child - The React element.
@@ -53,8 +53,13 @@ var handleSingleChild = function (child) {
             var newGTProp = __assign({}, generaltranslation);
             var transformation = generaltranslation.transformation;
             if (transformation === "variable") {
-                var variableName = props.name || _defaultVariableNames_1.default[generaltranslation === null || generaltranslation === void 0 ? void 0 : generaltranslation.variableType] || "value";
-                return { variable: generaltranslation.variableType || "variable", key: variableName };
+                var variableType = generaltranslation.variableType || "variable";
+                var variableName = (0, getVariableName_1.default)(props, variableType);
+                return {
+                    variable: variableType,
+                    key: variableName,
+                    id: generaltranslation.id
+                };
             }
             if (transformation === "plural" && generaltranslation.branches) {
                 objectElement.type = 'Plural';

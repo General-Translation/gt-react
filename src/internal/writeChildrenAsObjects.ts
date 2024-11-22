@@ -1,5 +1,6 @@
 import React, { ReactElement } from 'react'
-import defaultVariableNames from '../variables/_defaultVariableNames';
+import defaultVariableNames from '../variables/getVariableName';
+import getVariableName from '../variables/getVariableName';
 
 /**
  * Gets the tag name of a React element.
@@ -35,8 +36,13 @@ const handleSingleChild = (child: any): any => {
 
             const transformation = generaltranslation.transformation;
             if (transformation === "variable") {
-                const variableName = props.name || (defaultVariableNames as any)[generaltranslation?.variableType] || "value";
-                return { variable:  generaltranslation.variableType || "variable", key: variableName };
+                const variableType = generaltranslation.variableType || "variable";
+                const variableName = getVariableName(props, variableType)
+                return { 
+                    variable: variableType, 
+                    key: variableName,
+                    id: generaltranslation.id
+                };
             }
             if (transformation === "plural" && generaltranslation.branches) {
                 objectElement.type = 'Plural';

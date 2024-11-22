@@ -1,11 +1,7 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = getLocaleCookie;
-var primitives_1 = __importDefault(require("../primitives/primitives"));
-var localeCookieName = primitives_1.default.localeCookieName;
+var internal_1 = require("generaltranslation/internal");
 /**
  * Function to get the value of a specific cookie by its name.
  *
@@ -13,7 +9,7 @@ var localeCookieName = primitives_1.default.localeCookieName;
  * @returns {string|null} - The value of the cookie, or null if not found.
  */
 function getLocaleCookie(name) {
-    if (name === void 0) { name = localeCookieName; }
+    if (name === void 0) { name = internal_1.localeCookieName; }
     var cookieString = document.cookie;
     // Split the cookies string by "; " to get an array of "key=value" strings
     var cookiesArray = cookieString.split("; ");

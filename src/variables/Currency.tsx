@@ -30,7 +30,7 @@ function Currency({ children, name = "cost", value, currency = "USD", options = 
     value?: any;
     currency?: string;
     options?: Intl.NumberFormatOptions;
-} = { name: "cost" }): JSX.Element {
+}): JSX.Element {
 
     const locales = [useLocale(), useDefaultLocale()]
 
@@ -38,7 +38,7 @@ function Currency({ children, name = "cost", value, currency = "USD", options = 
     renderedValue = (typeof renderedValue === 'string') ? parseFloat(renderedValue) : renderedValue;
     // Format the value using Intl.NumberFormat
     if (typeof renderedValue === 'number') {
-        renderedValue = formatCurrency({ value: renderedValue, languages: locales, currency, options });
+        renderedValue = formatCurrency({ value: renderedValue, locales, currency, options });
     }
 
     return (
