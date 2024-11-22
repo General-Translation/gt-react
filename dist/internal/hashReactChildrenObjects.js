@@ -23,7 +23,7 @@ var __rest = (this && this.__rest) || function (s, e) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = hashReactChildrenObjects;
-var internal_1 = require("generaltranslation/internal");
+var id_1 = require("generaltranslation/id");
 /**
  * Calculates a unique ID for the given children objects by hashing their sanitized JSON string representation.
  *
@@ -32,7 +32,7 @@ var internal_1 = require("generaltranslation/internal");
  */
 function hashReactChildrenObjects(childrenAsObjects) {
     var unhashedKey = JSON.stringify(sanitizeChildrenAsObjects(childrenAsObjects));
-    return (0, internal_1.hashString)(unhashedKey);
+    return (0, id_1.hashString)(unhashedKey);
 }
 function sanitizeChildrenAsObjects(childrenAsObjects) {
     var sanitizeChild = function (child) {

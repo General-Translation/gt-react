@@ -30,7 +30,7 @@ function Num({ children, name = "n", value, options = {} }: {
     name?: string;
     value?: any; // Optional default value for the number
     options?: Intl.NumberFormatOptions // Optional options for the number formatting
-} = { name: "n" }): JSX.Element {
+}): JSX.Element {
     
     const locales = [useLocale(), useDefaultLocale()]
 
@@ -39,7 +39,7 @@ function Num({ children, name = "n", value, options = {} }: {
     let formattedValue = renderedValue;
     if (typeof renderedValue === 'number') {
         // Using Intl.NumberFormat for consistent number formatting
-        formattedValue = formatNum({ value: renderedValue, languages: locales, options });
+        formattedValue = formatNum({ value: renderedValue, locales, options });
     }
 
     return (

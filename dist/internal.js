@@ -26,10 +26,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.isAcceptedPluralForm = exports.primitives = exports.extractEntryMetadata = exports.getPluralBranch = exports.hashReactChildrenObjects = exports.getVariableProps = exports.getDictionaryEntry = exports.flattenDictionary = exports.isVariableObject = exports.writeChildrenAsObjects = exports.addGTIdentifier = void 0;
-var primitives_1 = __importStar(require("./primitives/primitives"));
-exports.primitives = primitives_1.default;
-Object.defineProperty(exports, "isAcceptedPluralForm", { enumerable: true, get: function () { return primitives_1.isAcceptedPluralForm; } });
+exports.getFallbackVariableName = exports.getVariableName = exports.extractEntryMetadata = exports.getPluralBranch = exports.hashReactChildrenObjects = exports.getVariableProps = exports.getDictionaryEntry = exports.flattenDictionary = exports.isVariableObject = exports.writeChildrenAsObjects = exports.addGTIdentifier = void 0;
 var hashReactChildrenObjects_1 = __importDefault(require("./internal/hashReactChildrenObjects"));
 exports.hashReactChildrenObjects = hashReactChildrenObjects_1.default;
 var flattenDictionary_1 = __importDefault(require("./internal/flattenDictionary"));
@@ -48,4 +45,7 @@ var _getVariableProps_1 = __importDefault(require("./variables/_getVariableProps
 exports.getVariableProps = _getVariableProps_1.default;
 var isVariableObject_1 = __importDefault(require("./provider/helpers/isVariableObject"));
 exports.isVariableObject = isVariableObject_1.default;
+var getVariableName_1 = __importStar(require("./variables/getVariableName"));
+exports.getVariableName = getVariableName_1.default;
+Object.defineProperty(exports, "getFallbackVariableName", { enumerable: true, get: function () { return getVariableName_1.getFallbackVariableName; } });
 //# sourceMappingURL=internal.js.map

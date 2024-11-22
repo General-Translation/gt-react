@@ -28,7 +28,7 @@ var useDefaultLocale_1 = __importDefault(require("../hooks/useDefaultLocale"));
  * @returns {JSX.Element} The formatted date or time component.
  */
 function DateTime(_a) {
-    var _b = _a === void 0 ? { name: "date" } : _a, children = _b.children, _c = _b.name, name = _c === void 0 ? "date" : _c, value = _b.value, _d = _b.options, options = _d === void 0 ? {} : _d;
+    var children = _a.children, _b = _a.name, name = _b === void 0 ? "date" : _b, value = _a.value, _c = _a.options, options = _c === void 0 ? {} : _c;
     var locales = [(0, useLocale_1.default)(), (0, useDefaultLocale_1.default)()];
     var final;
     var dateValue;
@@ -43,7 +43,7 @@ function DateTime(_a) {
         dateValue = defaultValue;
     }
     if (typeof dateValue !== 'undefined') {
-        final = ((0, generaltranslation_1.formatDateTime)({ value: dateValue, languages: locales, options: options })).replace(/[\u200F\u202B\u202E]/g, '');
+        final = ((0, generaltranslation_1.formatDateTime)({ value: dateValue, locales: locales, options: options })).replace(/[\u200F\u202B\u202E]/g, '');
     }
     // Render the formatted date within a span element
     return ((0, jsx_runtime_1.jsx)("span", { "data-_gt-variable-name": name, "data-_gt-variable-type": "date", "data-_gt-variable-options": JSON.stringify(options), style: { display: 'contents' }, suppressHydrationWarning: true, children: final }));

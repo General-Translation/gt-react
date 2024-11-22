@@ -1,4 +1,4 @@
-import { Dictionary } from "../primitives/types";
+import { Dictionary } from "../types/types";
 /**
  * Provides General Translation context to its children, which can then access `useGT`, `useLocale`, and `useDefaultLocale`.
  *

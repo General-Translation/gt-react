@@ -1,5 +1,5 @@
 import React, { ReactNode, ReactElement, isValidElement } from 'react'
-import { isAcceptedPluralForm } from '../primitives/primitives';
+import { isAcceptedPluralForm } from 'generaltranslation/internal'
 
 type Child = ReactNode;
 type Children = Child[] | Child;
@@ -27,7 +27,7 @@ export default function addGTIdentifier(children: Children, outerID?: string | u
         try {
             transformation = typeof type === 'function' ? ((type as any).gtTransformation || '') : '';
         } catch (error) {
-            console.error(error)
+            // console.error(error)
             transformation = ''
         }
         if (transformation) {
@@ -60,6 +60,8 @@ export default function addGTIdentifier(children: Children, outerID?: string | u
     function handleSingleChild(child: any) {
         if (isValidElement(child)) {
             const { props } = child as ReactElement;
+            if (props['data-_gt']) 
+                throw new Error(`General Translation: data-_gt prop already in use on child ${child}. This usually occurs when you nest <T> components within the same file. Remove one of the <T> components to continue.`)
             // Create new props for the element, including the GT identifier and a key
             let generaltranslation = createGTProp(child);  
             let newProps = {

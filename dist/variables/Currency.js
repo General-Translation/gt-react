@@ -40,13 +40,13 @@ var useDefaultLocale_1 = __importDefault(require("../hooks/useDefaultLocale"));
  * @returns {JSX.Element} The formatted currency component.
  */
 function Currency(_a) {
-    var _b = _a === void 0 ? { name: "cost" } : _a, children = _b.children, _c = _b.name, name = _c === void 0 ? "cost" : _c, value = _b.value, _d = _b.currency, currency = _d === void 0 ? "USD" : _d, _e = _b.options, options = _e === void 0 ? {} : _e;
+    var children = _a.children, _b = _a.name, name = _b === void 0 ? "cost" : _b, value = _a.value, _c = _a.currency, currency = _c === void 0 ? "USD" : _c, _d = _a.options, options = _d === void 0 ? {} : _d;
     var locales = [(0, useLocale_1.default)(), (0, useDefaultLocale_1.default)()];
     var renderedValue = (typeof children !== 'undefined' && typeof value === 'undefined') ? children : value;
     renderedValue = (typeof renderedValue === 'string') ? parseFloat(renderedValue) : renderedValue;
     // Format the value using Intl.NumberFormat
     if (typeof renderedValue === 'number') {
-        renderedValue = (0, generaltranslation_1.formatCurrency)({ value: renderedValue, languages: locales, currency: currency, options: options });
+        renderedValue = (0, generaltranslation_1.formatCurrency)({ value: renderedValue, locales: locales, currency: currency, options: options });
     }
     return ((0, jsx_runtime_1.jsx)("span", { "data-_gt-variable-name": name, "data-_gt-variable-type": "currency", "data-_gt-variable-options": JSON.stringify(__assign({ style: 'currency', currency: currency }, options)), style: { display: 'contents' }, suppressHydrationWarning: true, children: renderedValue }));
 }

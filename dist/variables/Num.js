@@ -29,14 +29,14 @@ var useDefaultLocale_1 = __importDefault(require("../hooks/useDefaultLocale"));
  * @returns {JSX.Element} The formatted number component.
  */
 function Num(_a) {
-    var _b = _a === void 0 ? { name: "n" } : _a, children = _b.children, _c = _b.name, name = _c === void 0 ? "n" : _c, value = _b.value, _d = _b.options, options = _d === void 0 ? {} : _d;
+    var children = _a.children, _b = _a.name, name = _b === void 0 ? "n" : _b, value = _a.value, _c = _a.options, options = _c === void 0 ? {} : _c;
     var locales = [(0, useLocale_1.default)(), (0, useDefaultLocale_1.default)()];
     var renderedValue = (typeof children !== 'undefined') ? children : value;
     renderedValue = (typeof renderedValue === 'string') ? parseFloat(renderedValue) : renderedValue;
     var formattedValue = renderedValue;
     if (typeof renderedValue === 'number') {
         // Using Intl.NumberFormat for consistent number formatting
-        formattedValue = (0, generaltranslation_1.formatNum)({ value: renderedValue, languages: locales, options: options });
+        formattedValue = (0, generaltranslation_1.formatNum)({ value: renderedValue, locales: locales, options: options });
     }
     return ((0, jsx_runtime_1.jsx)("span", { "data-_gt-variable-name": name, "data-_gt-variable-type": "number", "data-_gt-variable-options": JSON.stringify(options), style: { display: 'contents' }, suppressHydrationWarning: true, children: formattedValue }));
 }

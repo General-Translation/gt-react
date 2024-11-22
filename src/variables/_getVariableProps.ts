@@ -1,4 +1,4 @@
-import defaultVariableNames from "./_defaultVariableNames";
+import getVariableName from "./getVariableName";
 
 export default function getVariableProps(props: { 
     'data-_gt'?: {
@@ -17,7 +17,7 @@ export default function getVariableProps(props: {
         variableOptions?: Intl.NumberFormatOptions | Intl.DateTimeFormatOptions
     } = {
         variableType,
-        variableName: props.name || props['data-_gt-variable-name'] || defaultVariableNames[variableType],
+        variableName: getVariableName(props, variableType),
         variableValue: (() => {
             if (typeof props.value !== 'undefined') return props.value;
             if (typeof props['data-_gt-unformatted-value'] !== 'undefined') return props['data-_gt-unformatted-value'];

@@ -31,22 +31,31 @@ var getGTProp_1 = __importDefault(require("../helpers/getGTProp"));
 var _getVariableProps_1 = __importDefault(require("../../variables/_getVariableProps"));
 var internal_1 = require("../../internal");
 var renderVariable_1 = __importDefault(require("./renderVariable"));
-var primitives_1 = __importDefault(require("../../primitives/primitives"));
-var libraryDefaultLocale = primitives_1.default.libraryDefaultLocale;
+var internal_2 = require("generaltranslation/internal");
+var getVariableName_1 = require("../../variables/getVariableName");
 function renderDefaultChildren(_a) {
-    var children = _a.children, _b = _a.variables, variables = _b === void 0 ? {} : _b, _c = _a.variablesOptions, variablesOptions = _c === void 0 ? {} : _c, _d = _a.defaultLocale, defaultLocale = _d === void 0 ? libraryDefaultLocale : _d;
+    var children = _a.children, _b = _a.variables, variables = _b === void 0 ? {} : _b, _c = _a.variablesOptions, variablesOptions = _c === void 0 ? {} : _c, _d = _a.defaultLocale, defaultLocale = _d === void 0 ? internal_2.libraryDefaultLocale : _d;
     var handleSingleChild = function (child) {
         if (react_1.default.isValidElement(child)) {
             var generaltranslation = (0, getGTProp_1.default)(child);
             if ((generaltranslation === null || generaltranslation === void 0 ? void 0 : generaltranslation.transformation) === "variable") {
-                var _a = (0, _getVariableProps_1.default)(child.props), variableName = _a.variableName, variableType = _a.variableType, variableValue = _a.variableValue, variableOptions = _a.variableOptions;
-                variableValue = (typeof variables[variableName] !== 'undefined') ?
-                    variables[variableName] : variableValue;
+                var _a = (0, _getVariableProps_1.default)(child.props), variableName_1 = _a.variableName, variableType_1 = _a.variableType, variableValue = _a.variableValue, variableOptions = _a.variableOptions;
+                variableValue = (function () {
+                    if (typeof variables[variableName_1] !== 'undefined') {
+                        return variables[variableName_1];
+                    }
+                    var fallbackVariableName = (0, getVariableName_1.getFallbackVariableName)(variableType_1);
+                    if (typeof variables[fallbackVariableName] !== 'undefined') {
+                        return variables[fallbackVariableName];
+                    }
+                    return undefined;
+                })();
+                variableOptions = __assign(__assign({}, variablesOptions[variableName_1]), variableOptions);
                 return (0, renderVariable_1.default)({
-                    variableName: variableName,
-                    variableType: variableType,
+                    variableName: variableName_1,
+                    variableType: variableType_1,
                     variableValue: variableValue,
-                    variableOptions: __assign(__assign({}, variablesOptions[variableName]), variableOptions)
+                    variableOptions: variableOptions
                 });
             }
             if ((generaltranslation === null || generaltranslation === void 0 ? void 0 : generaltranslation.transformation) === "plural") {

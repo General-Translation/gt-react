@@ -13,16 +13,18 @@
  * @example
  * ```jsx
  * // Basic usage:
- * <T id="welcome_message" variables={{ name: "John" }}>
- *  Hello, <Var name="name"/>!
+ * <T id="welcome_message">
+ *  Hello, <Var name="name">{name}</Var>!
  * </T>
  * ```
  *
  * @example
  * ```jsx
  * // Using plural translations:
- * <T id="item_count" variables={{ n: 3 }} singular={"You have one item"}>
- *  You have <Num/> items
+ * <T id="item_count">
+ *  <Plural n={n} singular={<>You have <Num value={n}/> item</>}>
+ *      You have <Num value={n}/> items
+ *  </Plural>
  * </T>
  * ```
  *

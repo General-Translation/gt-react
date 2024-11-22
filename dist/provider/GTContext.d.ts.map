@@ -1,1 +1,1 @@
-{"version":3,"file":"GTContext.d.ts","sourceRoot":"","sources":["../../src/provider/GTContext.ts"],"names":[],"mappings":"AAEA,KAAK,aAAa,GAAG;IACjB,CAAC,GAAG,EAAE,MAAM,GAAG,GAAG,CAAA;CACrB,CAAA;AAED,eAAO,MAAM,SAAS,oDAAsD,CAAC;AAE7E,MAAM,CAAC,OAAO,UAAU,YAAY,CAAC,WAAW,SAAuD,GAAG,aAAa,CAMtH"}
+{"version":3,"file":"GTContext.d.ts","sourceRoot":"","sources":["../../src/provider/GTContext.ts"],"names":[],"mappings":"AAIA,KAAK,aAAa,GAAG;IACjB,CAAC,GAAG,EAAE,MAAM,GAAG,GAAG,CAAA;CACrB,CAAA;AAED,eAAO,MAAM,SAAS,oDAAsD,CAAC;AAE7E,MAAM,CAAC,OAAO,UAAU,YAAY,CAAC,WAAW,SAAuD,GAAG,aAAa,CAMtH"}

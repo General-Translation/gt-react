@@ -23,11 +23,15 @@ var _getVariableProps_1 = __importDefault(require("../../variables/_getVariableP
 var internal_1 = require("../../internal");
 var renderDefaultChildren_1 = __importDefault(require("./renderDefaultChildren"));
 var renderVariable_1 = __importDefault(require("./renderVariable"));
-var primitives_1 = __importDefault(require("../../primitives/primitives"));
-var libraryDefaultLocale = primitives_1.default.libraryDefaultLocale;
+var internal_2 = require("generaltranslation/internal");
+var getVariableName_1 = require("../../variables/getVariableName");
+/*
+
+
+*/
 function renderTranslatedElement(_a) {
     var _b;
-    var sourceElement = _a.sourceElement, targetElement = _a.targetElement, _c = _a.variables, variables = _c === void 0 ? {} : _c, _d = _a.variablesOptions, variablesOptions = _d === void 0 ? {} : _d, _e = _a.locales, locales = _e === void 0 ? [libraryDefaultLocale] : _e;
+    var sourceElement = _a.sourceElement, targetElement = _a.targetElement, _c = _a.variables, variables = _c === void 0 ? {} : _c, _d = _a.variablesOptions, variablesOptions = _d === void 0 ? {} : _d, _e = _a.locales, locales = _e === void 0 ? [internal_2.libraryDefaultLocale] : _e;
     var props = sourceElement.props;
     var generaltranslation = props["data-_gt"];
     var transformation = generaltranslation === null || generaltranslation === void 0 ? void 0 : generaltranslation["transformation"];
@@ -73,7 +77,7 @@ function renderTranslatedElement(_a) {
     return sourceElement;
 }
 function renderTranslatedChildren(_a) {
-    var source = _a.source, target = _a.target, _b = _a.variables, variables = _b === void 0 ? {} : _b, _c = _a.variablesOptions, variablesOptions = _c === void 0 ? {} : _c, _d = _a.locales, locales = _d === void 0 ? [libraryDefaultLocale] : _d;
+    var source = _a.source, target = _a.target, _b = _a.variables, variables = _b === void 0 ? {} : _b, _c = _a.variablesOptions, variablesOptions = _c === void 0 ? {} : _c, _d = _a.locales, locales = _d === void 0 ? [internal_2.libraryDefaultLocale] : _d;
     // Most straightforward case, return a valid React node
     if ((target === null || typeof target === 'undefined') && source)
         return source;
@@ -112,10 +116,21 @@ function renderTranslatedChildren(_a) {
             if (typeof targetChild === 'string')
                 return (0, jsx_runtime_1.jsx)(react_1.default.Fragment, { children: targetChild }, "string_".concat(index));
             if ((0, isVariableObject_1.default)(targetChild)) {
+                var variableName = targetChild.key;
+                var variableType_1 = targetChild.variable || "variable";
+                var variableValue = (function () {
+                    if (typeof variables[targetChild.key] !== 'undefined')
+                        return variables[targetChild.key];
+                    var fallbackVariableName = (0, getVariableName_1.getFallbackVariableName)(variableType_1);
+                    if (typeof variables[fallbackVariableName] !== 'undefined') {
+                        return variables[fallbackVariableName];
+                    }
+                    return undefined;
+                })();
                 return (0, jsx_runtime_1.jsx)(react_1.default.Fragment, { children: (0, renderVariable_1.default)({
-                        variableType: targetChild.variable || "variable",
-                        variableName: targetChild.key,
-                        variableValue: variables[targetChild.key],
+                        variableType: variableType_1,
+                        variableName: variableName,
+                        variableValue: variableValue,
                         variableOptions: variablesOptions[targetChild.key]
                     }) }, "var_".concat(index));
             }
@@ -151,12 +166,23 @@ function renderTranslatedChildren(_a) {
             }
         }
         if (targetType === "variable") {
-            var targetVariable = target;
+            var targetVariable_1 = target;
+            var variableName = targetVariable_1.key;
+            var variableType_2 = targetVariable_1.variable || "variable";
+            var variableValue = (function () {
+                if (typeof variables[targetVariable_1.key] !== 'undefined')
+                    return variables[targetVariable_1.key];
+                var fallbackVariableName = (0, getVariableName_1.getFallbackVariableName)(variableType_2);
+                if (typeof variables[fallbackVariableName] !== 'undefined') {
+                    return variables[fallbackVariableName];
+                }
+                return undefined;
+            })();
             return (0, renderVariable_1.default)({
-                variableType: targetVariable.variable || "variable",
-                variableName: targetVariable.key,
-                variableValue: variables[targetVariable.key],
-                variableOptions: variablesOptions[targetVariable.key]
+                variableType: variableType_2,
+                variableName: variableName,
+                variableValue: variableValue,
+                variableOptions: variablesOptions[targetVariable_1.key] || {}
             });
         }
     }

@@ -3,9 +3,8 @@ import getGTProp from "../helpers/getGTProp";
 import getVariableProps from "../../variables/_getVariableProps";
 import { getPluralBranch } from "../../internal";
 import renderVariable from "./renderVariable";
-
-import primitives from '../../primitives/primitives';
-const { libraryDefaultLocale } = primitives;
+import { libraryDefaultLocale } from 'generaltranslation/internal'
+import { getFallbackVariableName } from "../../variables/getVariableName";
 
 export default function renderDefaultChildren({
     children, variables = {}, variablesOptions = {},
@@ -27,13 +26,22 @@ export default function renderDefaultChildren({
                     variableValue,
                     variableOptions
                 } = getVariableProps(child.props);
-                variableValue = (typeof variables[variableName] !== 'undefined') ?
-                    variables[variableName] : variableValue;
-                return renderVariable({
-                    variableName, variableType, variableValue, variableOptions: {
-                        ...variablesOptions[variableName],
-                        ...variableOptions
+                variableValue = (() => {
+                    if (typeof variables[variableName] !== 'undefined') {
+                        return variables[variableName]
                     }
+                    const fallbackVariableName = getFallbackVariableName(variableType);
+                    if (typeof variables[fallbackVariableName] !== 'undefined') {
+                        return variables[fallbackVariableName];
+                    }
+                    return undefined;
+                })();
+                variableOptions = {
+                    ...variablesOptions[variableName],
+                    ...variableOptions
+                } as Intl.NumberFormatOptions | Intl.DateTimeFormatOptions;
+                return renderVariable({
+                    variableName, variableType, variableValue, variableOptions
                 })
             }
             if (generaltranslation?.transformation === "plural") {

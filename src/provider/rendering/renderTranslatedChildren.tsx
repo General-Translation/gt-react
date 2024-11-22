@@ -1,5 +1,5 @@
 import React, { isValidElement, ReactElement, ReactNode } from "react";
-import { TranslatedChildren, TranslatedElement, VariableObject } from "../../primitives/types";
+import { TranslatedChildren, TranslatedElement, VariableObject } from "../../types/types";
 import isVariableObject from "../helpers/isVariableObject";
 import getGTProp from "../helpers/getGTProp";
 import getVariableProps from "../../variables/_getVariableProps";
@@ -7,8 +7,14 @@ import { getPluralBranch } from "../../internal";
 import renderDefaultChildren from "./renderDefaultChildren";
 import renderVariable from "./renderVariable";
 
-import primitives from '../../primitives/primitives';
-const { libraryDefaultLocale } = primitives;
+import { libraryDefaultLocale } from 'generaltranslation/internal'
+import { getFallbackVariableName } from "../../variables/getVariableName";
+
+/*
+
+
+*/
+
 
 function renderTranslatedElement({
     sourceElement, targetElement, variables = {}, variablesOptions = {},
@@ -125,10 +131,23 @@ export default function renderTranslatedChildren({
             if (typeof targetChild === 'string') 
                 return <React.Fragment key={`string_${index}`}>{targetChild}</React.Fragment>;
             if (isVariableObject(targetChild)) {
+                
+                const variableName = targetChild.key;
+                const variableType = targetChild.variable || "variable";
+                const variableValue = (() => {
+                    if (typeof variables[targetChild.key] !== 'undefined') 
+                        return variables[targetChild.key];
+                    const fallbackVariableName = getFallbackVariableName(variableType);
+                    if (typeof variables[fallbackVariableName] !== 'undefined') {
+                        return variables[fallbackVariableName];
+                    }
+                    return undefined
+                })();
+
                 return <React.Fragment key={`var_${index}`}>{renderVariable({
-                    variableType: targetChild.variable || "variable",
-                    variableName: targetChild.key,
-                    variableValue: variables[targetChild.key],
+                    variableType,
+                    variableName,
+                    variableValue,
                     variableOptions: variablesOptions[targetChild.key]
                 })}</React.Fragment>
             }
@@ -162,7 +181,7 @@ export default function renderTranslatedChildren({
                     variableName, 
                     variableValue,
                     variableOptions
-                } = getVariableProps(source.props)
+                } = getVariableProps(source.props);
                 if (typeof variables[variableName] === 'undefined') {
                     variables[variableName] = variableValue;
                 }
@@ -175,11 +194,22 @@ export default function renderTranslatedChildren({
 
         if (targetType === "variable") {
             const targetVariable = target as VariableObject;
+            const variableName = targetVariable.key;
+            const variableType = targetVariable.variable || "variable";
+            const variableValue = (() => {
+                if (typeof variables[targetVariable.key] !== 'undefined') 
+                    return variables[targetVariable.key];
+                const fallbackVariableName = getFallbackVariableName(variableType);
+                if (typeof variables[fallbackVariableName] !== 'undefined') {
+                    return variables[fallbackVariableName];
+                }
+                return undefined
+            })();
             return renderVariable({ 
-                variableType: targetVariable.variable || "variable", 
-                variableName: targetVariable.key, 
-                variableValue: variables[targetVariable.key],
-                variableOptions: variablesOptions[targetVariable.key]
+                variableType, 
+                variableName, 
+                variableValue,
+                variableOptions: variablesOptions[targetVariable.key] || {}
             })
         }
  

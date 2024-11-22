@@ -41,8 +41,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = GTProvider;
 var jsx_runtime_1 = require("react/jsx-runtime");
-var generaltranslation_1 = require("generaltranslation");
 var react_1 = require("react");
+var generaltranslation_1 = require("generaltranslation");
+var react_2 = require("react");
 var useBrowserLocale_1 = __importDefault(require("../hooks/useBrowserLocale"));
 var GTContext_1 = require("./GTContext");
 var getDictionaryEntry_1 = __importDefault(require("./helpers/getDictionaryEntry"));
@@ -50,8 +51,7 @@ var internal_1 = require("../internal");
 var extractEntryMetadata_1 = __importDefault(require("./helpers/extractEntryMetadata"));
 var renderDefaultChildren_1 = __importDefault(require("./rendering/renderDefaultChildren"));
 var renderTranslatedChildren_1 = __importDefault(require("./rendering/renderTranslatedChildren"));
-var primitives_1 = __importDefault(require("../primitives/primitives"));
-var defaultDictionary = primitives_1.default.defaultDictionary, libraryDefaultLocale = primitives_1.default.libraryDefaultLocale, localeCookieName = primitives_1.default.localeCookieName;
+var internal_2 = require("generaltranslation/internal");
 /**
  * Provides General Translation context to its children, which can then access `useGT`, `useLocale`, and `useDefaultLocale`.
  *
@@ -67,18 +67,18 @@ var defaultDictionary = primitives_1.default.defaultDictionary, libraryDefaultLo
  */
 function GTProvider(_a) {
     var _this = this;
-    var children = _a.children, projectID = _a.projectID, _b = _a.dictionary, dictionary = _b === void 0 ? defaultDictionary : _b, locales = _a.locales, _c = _a.defaultLocale, defaultLocale = _c === void 0 ? (locales === null || locales === void 0 ? void 0 : locales[0]) || libraryDefaultLocale : _c, locale = _a.locale, _d = _a.cacheURL, cacheURL = _d === void 0 ? 'https://cache.gtx.dev' : _d;
-    if (!projectID && cacheURL === 'https://cache.gtx.dev') {
+    var children = _a.children, projectID = _a.projectID, _b = _a.dictionary, dictionary = _b === void 0 ? {} : _b, locales = _a.locales, _c = _a.defaultLocale, defaultLocale = _c === void 0 ? (locales === null || locales === void 0 ? void 0 : locales[0]) || internal_2.libraryDefaultLocale : _c, locale = _a.locale, _d = _a.cacheURL, cacheURL = _d === void 0 ? internal_2.defaultCacheURL : _d;
+    if (!projectID && cacheURL === internal_2.defaultCacheURL) {
         throw new Error("gt-react Error: General Translation cloud services require a project ID! Find yours at www.generaltranslation.com/dashboard.");
     }
-    var browserLocale = (0, useBrowserLocale_1.default)(defaultLocale, localeCookieName, locales);
+    var browserLocale = (0, useBrowserLocale_1.default)(defaultLocale, locales);
     locale = locale || browserLocale;
     if (locales) {
-        locale = (0, generaltranslation_1.determineLanguage)([locale, browserLocale], locales) || locale;
+        locale = (0, generaltranslation_1.determineLocale)([locale, browserLocale], locales) || locale;
     }
-    var translationRequired = (0, generaltranslation_1.requiresTranslation)(defaultLocale, locale, locales);
-    var _e = (0, react_1.useState)(cacheURL ? null : {}), translations = _e[0], setTranslations = _e[1];
-    (0, react_1.useEffect)(function () {
+    var translationRequired = (0, react_1.useMemo)(function () { return (0, generaltranslation_1.requiresTranslation)(defaultLocale, locale, locales); }, [defaultLocale, locale, locales]);
+    var _e = (0, react_2.useState)(cacheURL ? null : {}), translations = _e[0], setTranslations = _e[1];
+    (0, react_2.useEffect)(function () {
         if (!translations) {
             if (!translationRequired) {
                 setTranslations({}); // no translation required
@@ -102,7 +102,7 @@ function GTProvider(_a) {
             }
         }
     }, [translations, translationRequired]);
-    var translate = (0, react_1.useCallback)(function (id, options, f) {
+    var translate = (0, react_2.useCallback)(function (id, options, f) {
         if (options === void 0) { options = {}; }
         // get the dictionary entry
         var _a = (0, extractEntryMetadata_1.default)((0, getDictionaryEntry_1.default)(dictionary, id)), entry = _a.entry, metadata = _a.metadata;
@@ -159,7 +159,9 @@ function GTProvider(_a) {
             translate: translate,
             locale: locale,
             defaultLocale: defaultLocale,
-            translations: translations
+            translations: translations,
+            translationRequired: translationRequired,
+            projectID: projectID
         }, children: children }));
 }
 //# sourceMappingURL=GTProvider.js.map

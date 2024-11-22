@@ -1,5 +1,5 @@
 import { ReactNode } from "react";
-import { TranslatedChildren } from "../../primitives/types";
+import { TranslatedChildren } from "../../types/types";
 export default function renderTranslatedChildren({ source, target, variables, variablesOptions, locales }: {
     source: ReactNode;
     target: TranslatedChildren;

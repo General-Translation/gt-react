@@ -1,5 +1,5 @@
 import React from "react";
-import { Dictionary, DictionaryEntry } from "../../primitives/types";
+import { Dictionary, DictionaryEntry } from "../../types/types";
 
 export default function getDictionaryEntry(
     dictionary: Dictionary,
