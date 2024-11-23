@@ -24,6 +24,7 @@ function renderTranslatedElement({
         variableName: string,
         variableValue: any,
         variableOptions: Intl.NumberFormatOptions | Intl.DateTimeFormatOptions
+        locales: string[]
     }) => JSX.Element
 }) {
 
@@ -91,7 +92,8 @@ export default function renderTranslatedChildren({
         variableType: "variable" | "number" | "datetime" | "currency"
         variableName: string,
         variableValue: any,
-        variableOptions: Intl.NumberFormatOptions | Intl.DateTimeFormatOptions
+        variableOptions: Intl.NumberFormatOptions | Intl.DateTimeFormatOptions,
+        locales: string[]
     }) => JSX.Element
 }): ReactNode {
 
@@ -162,7 +164,8 @@ export default function renderTranslatedChildren({
                     variableType,
                     variableName,
                     variableValue,
-                    variableOptions: variablesOptions[targetChild.key]
+                    variableOptions: variablesOptions[targetChild.key],
+                    locales
                 })}</React.Fragment>
             }
             const matchingSourceElement = findMatchingSourceElement(targetChild);
@@ -225,7 +228,8 @@ export default function renderTranslatedChildren({
                 variableType, 
                 variableName, 
                 variableValue,
-                variableOptions: variablesOptions[targetVariable.key] || {}
+                variableOptions: variablesOptions[targetVariable.key] || {},
+                locales
             })
         }
  

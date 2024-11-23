@@ -134,7 +134,8 @@ function renderTranslatedChildren(_a) {
                         variableType: variableType_1,
                         variableName: variableName_1,
                         variableValue: variableValue,
-                        variableOptions: variablesOptions[targetChild.key]
+                        variableOptions: variablesOptions[targetChild.key],
+                        locales: locales
                     }) }, "var_".concat(index));
             }
             var matchingSourceElement = findMatchingSourceElement_1(targetChild);
@@ -189,7 +190,8 @@ function renderTranslatedChildren(_a) {
                 variableType: variableType_2,
                 variableName: variableName_2,
                 variableValue: variableValue,
-                variableOptions: variablesOptions[targetVariable_1.key] || {}
+                variableOptions: variablesOptions[targetVariable_1.key] || {},
+                locales: locales
             });
         }
     }

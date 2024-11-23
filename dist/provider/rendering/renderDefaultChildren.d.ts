@@ -9,6 +9,7 @@ export default function renderDefaultChildren({ children, variables, variablesOp
         variableName: string;
         variableValue: any;
         variableOptions: Intl.NumberFormatOptions | Intl.DateTimeFormatOptions;
+        locales: string[];
     }) => JSX.Element;
 }): React.ReactNode;
 //# sourceMappingURL=renderDefaultChildren.d.ts.map
