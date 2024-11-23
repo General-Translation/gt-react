@@ -41,6 +41,7 @@ export type TranslatedElement = {
 
 export type VariableObject = {
     key: string,
+    id?: number,
     variable?: "variable" | "number" | "datetime" | "currency"
 }
 

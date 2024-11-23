@@ -2,14 +2,21 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = isVariableObject;
 function isVariableObject(obj) {
-    if (obj && typeof obj === 'object' && typeof obj.key === 'string') {
-        var keys = Object.keys(obj);
+    var variableObj = obj;
+    if (variableObj && typeof variableObj === 'object' && typeof variableObj.key === 'string') {
+        var keys = Object.keys(variableObj);
         if (keys.length === 1)
             return true;
         if (keys.length === 2) {
-            var variableObj = obj;
-            return (typeof variableObj.variable === 'string') &&
-                ["variable", "number", "date", "currency"].includes(variableObj.variable);
+            if (typeof variableObj.id === 'number')
+                return true;
+            if (typeof variableObj.variable === 'string')
+                return true;
+        }
+        if (keys.length === 3) {
+            if (typeof variableObj.variable === 'string' &&
+                typeof variableObj.id === 'number')
+                return true;
         }
     }
     return false;

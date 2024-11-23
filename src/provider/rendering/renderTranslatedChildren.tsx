@@ -109,11 +109,15 @@ export default function renderTranslatedChildren({
                     let {
                         variableName, 
                         variableValue,
-                        variableOptions
+                        variableOptions,
+                        variableType
                     } = getVariableProps(sourceChild.props as any)
                     if (typeof variables[variableName] === 'undefined') {
                         variables[variableName] = variableValue;
                     }
+                    const fallback = getFallbackVariableName(variableType);
+                    if (typeof variables[fallback] === 'undefined')
+                        variables[fallback] = variableValue;
                     variablesOptions[variableName] = {
                         ...variablesOptions[variableName], ...variableOptions
                     }

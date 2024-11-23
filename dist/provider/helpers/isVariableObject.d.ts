@@ -1,7 +1,3 @@
-type VariableObject = {
-    key: string;
-    variable?: "variable" | "number" | "datetime" | "currency";
-};
+import { VariableObject } from "../../types/types";
 export default function isVariableObject(obj: unknown): obj is VariableObject;
-export {};
 //# sourceMappingURL=isVariableObject.d.ts.map

@@ -87,10 +87,13 @@ function renderTranslatedChildren(_a) {
                 var generaltranslation = (0, getGTProp_1.default)(sourceChild);
                 (0, _getVariableProps_1.default)(sourceChild.props);
                 if ((generaltranslation === null || generaltranslation === void 0 ? void 0 : generaltranslation.transformation) === "variable") {
-                    var _a = (0, _getVariableProps_1.default)(sourceChild.props), variableName = _a.variableName, variableValue = _a.variableValue, variableOptions = _a.variableOptions;
+                    var _a = (0, _getVariableProps_1.default)(sourceChild.props), variableName = _a.variableName, variableValue = _a.variableValue, variableOptions = _a.variableOptions, variableType = _a.variableType;
                     if (typeof variables[variableName] === 'undefined') {
                         variables[variableName] = variableValue;
                     }
+                    var fallback = (0, getVariableName_1.getFallbackVariableName)(variableType);
+                    if (typeof variables[fallback] === 'undefined')
+                        variables[fallback] = variableValue;
                     variablesOptions[variableName] = __assign(__assign({}, variablesOptions[variableName]), variableOptions);
                 }
                 else {
