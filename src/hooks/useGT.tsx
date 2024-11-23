@@ -59,20 +59,21 @@ export function useGT(
 }
 
 /**
- * Flagship `gt()` hook which gets the translation function `t()` provided by `<GTProvider>`.
- * `t()` returns only JSX elements. For returning strings as well, see `useGT()`.
+ * `useElement()` hook which gets the translation function `t()` provided by `<GTProvider>`.
+ * 
+ * **`t()` returns only JSX elements.** For returning strings as well, see `useGT()`.
  *
  * @param {string} [id] - Optional prefix to prepend to the translation keys.
  * @returns {Function} A translation function that accepts a key string and returns the translated value.
  *
  * @example
- * const t = gt('user');
- * console.log(t('name')); // Translates item 'user.name'
+ * const t = useElement('user');
+ * console.log(t('name')); // Translates item 'user.name', returns it as a JSX element
  *
- * const t = gt();
- * console.log(t('hello')); // Translates item 'hello'
+ * const t = useElement();
+ * console.log(t('hello')); // Translates item 'hello', returns it as a JSX element
  */
-export function gt(
+export function useElement(
     id: string = ''
 ): (
     id: string,
@@ -87,7 +88,7 @@ export function gt(
 
     // Get the translation context
     const { translate } = useGTContext(
-        `gt('${id}'): No context provided. You're trying to get the t() function on the client, which can only be done inside a <GTProvider>.`
+        `useElement('${id}'): No context provided. You're trying to get the t() function on the client, which can only be done inside a <GTProvider>.`
     );
    
     /**
