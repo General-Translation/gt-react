@@ -19,11 +19,12 @@
  * @param {Intl.NumberFormatOptions} [options] - Optional formatting options to customize how the currency is displayed.
  * @returns {JSX.Element} The formatted currency component.
  */
-declare function Currency({ children, name, value, currency, options }: {
+declare function Currency({ children, value, currency, locales, options }: {
     children?: any;
     name?: string;
     value?: any;
     currency?: string;
+    locales?: string[];
     options?: Intl.NumberFormatOptions;
 }): JSX.Element;
 declare namespace Currency {

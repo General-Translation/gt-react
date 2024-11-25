@@ -72,13 +72,13 @@ function renderTranslatedElement(_a) {
                 renderVariable: renderVariable
             }) }));
     }
-    return sourceElement;
+    return (0, renderDefaultChildren_1.default)({ children: sourceElement, variables: variables, variablesOptions: variablesOptions, defaultLocale: locales[0], renderVariable: renderVariable });
 }
 function renderTranslatedChildren(_a) {
     var source = _a.source, target = _a.target, _b = _a.variables, variables = _b === void 0 ? {} : _b, _c = _a.variablesOptions, variablesOptions = _c === void 0 ? {} : _c, _d = _a.locales, locales = _d === void 0 ? [internal_2.libraryDefaultLocale] : _d, renderVariable = _a.renderVariable;
     // Most straightforward case, return a valid React node
     if ((target === null || typeof target === 'undefined') && source)
-        return source;
+        return (0, renderDefaultChildren_1.default)({ children: source, variables: variables, variablesOptions: variablesOptions, defaultLocale: locales[0], renderVariable: renderVariable });
     if (typeof target === 'string')
         return target;
     if (Array.isArray(source) && Array.isArray(target)) {

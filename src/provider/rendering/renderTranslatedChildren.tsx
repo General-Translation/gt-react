@@ -73,8 +73,7 @@ function renderTranslatedElement({
         });
     }
 
-    return sourceElement;
-
+    return renderDefaultChildren({ children: sourceElement, variables, variablesOptions, defaultLocale: locales[0], renderVariable })
 }
 
 export default function renderTranslatedChildren({
@@ -98,7 +97,7 @@ export default function renderTranslatedChildren({
 }): ReactNode {
 
     // Most straightforward case, return a valid React node
-    if ((target === null || typeof target === 'undefined') && source) return source;
+    if ((target === null || typeof target === 'undefined') && source) return renderDefaultChildren({ children: source, variables, variablesOptions, defaultLocale: locales[0], renderVariable });
     if (typeof target === 'string') return target;
 
     if (Array.isArray(source) && Array.isArray(target)) {
