@@ -24,6 +24,7 @@ function renderTranslatedElement({
         variableName: string,
         variableValue: any,
         variableOptions: Intl.NumberFormatOptions | Intl.DateTimeFormatOptions
+        locales: string[]
     }) => JSX.Element
 }) {
 
@@ -72,8 +73,7 @@ function renderTranslatedElement({
         });
     }
 
-    return sourceElement;
-
+    return renderDefaultChildren({ children: sourceElement, variables, variablesOptions, defaultLocale: locales[0], renderVariable })
 }
 
 export default function renderTranslatedChildren({
@@ -91,12 +91,13 @@ export default function renderTranslatedChildren({
         variableType: "variable" | "number" | "datetime" | "currency"
         variableName: string,
         variableValue: any,
-        variableOptions: Intl.NumberFormatOptions | Intl.DateTimeFormatOptions
+        variableOptions: Intl.NumberFormatOptions | Intl.DateTimeFormatOptions,
+        locales: string[]
     }) => JSX.Element
 }): ReactNode {
 
     // Most straightforward case, return a valid React node
-    if ((target === null || typeof target === 'undefined') && source) return source;
+    if ((target === null || typeof target === 'undefined') && source) return renderDefaultChildren({ children: source, variables, variablesOptions, defaultLocale: locales[0], renderVariable });
     if (typeof target === 'string') return target;
 
     if (Array.isArray(source) && Array.isArray(target)) {
@@ -109,11 +110,15 @@ export default function renderTranslatedChildren({
                     let {
                         variableName, 
                         variableValue,
-                        variableOptions
+                        variableOptions,
+                        variableType
                     } = getVariableProps(sourceChild.props as any)
                     if (typeof variables[variableName] === 'undefined') {
                         variables[variableName] = variableValue;
                     }
+                    const fallback = getFallbackVariableName(variableType);
+                    if (typeof variables[fallback] === 'undefined')
+                        variables[fallback] = variableValue;
                     variablesOptions[variableName] = {
                         ...variablesOptions[variableName], ...variableOptions
                     }
@@ -158,7 +163,8 @@ export default function renderTranslatedChildren({
                     variableType,
                     variableName,
                     variableValue,
-                    variableOptions: variablesOptions[targetChild.key]
+                    variableOptions: variablesOptions[targetChild.key],
+                    locales
                 })}</React.Fragment>
             }
             const matchingSourceElement = findMatchingSourceElement(targetChild);
@@ -221,7 +227,8 @@ export default function renderTranslatedChildren({
                 variableType, 
                 variableName, 
                 variableValue,
-                variableOptions: variablesOptions[targetVariable.key] || {}
+                variableOptions: variablesOptions[targetVariable.key] || {},
+                locales
             })
         }
  

@@ -25,14 +25,21 @@ import useDefaultLocale from '../hooks/useDefaultLocale';
  * @param {Intl.NumberFormatOptions} [options={}] - Optional formatting options for the number, following `Intl.NumberFormatOptions` specifications.
  * @returns {JSX.Element} The formatted number component.
  */
-function Num({ children, name = "n", value, options = {} }: {
+function Num({ 
+    children, 
+    value, 
+    locales,
+    options = {} 
+}: {
     children?: any;
     name?: string;
     value?: any; // Optional default value for the number
+    locales?: string[]
     options?: Intl.NumberFormatOptions // Optional options for the number formatting
 }): JSX.Element {
     
-    const locales = [useLocale(), useDefaultLocale()]
+    const providerLocales = [useLocale(), useDefaultLocale()]
+    locales ||= providerLocales;
 
     let renderedValue = (typeof children !== 'undefined') ? children : value;
     renderedValue = (typeof renderedValue === 'string') ? parseFloat(renderedValue) : renderedValue;

@@ -20,6 +20,7 @@ export default function renderDefaultChildren({
         variableName: string,
         variableValue: any,
         variableOptions: Intl.NumberFormatOptions | Intl.DateTimeFormatOptions
+        locales: string[]
     }) => JSX.Element
 }) {
 
@@ -51,7 +52,7 @@ export default function renderDefaultChildren({
                     ...variableOptions
                 } as Intl.NumberFormatOptions | Intl.DateTimeFormatOptions;
                 return renderVariable({
-                    variableName, variableType, variableValue, variableOptions
+                    variableName, variableType, variableValue, variableOptions, locales: [defaultLocale]
                 })
             }
             if (generaltranslation?.transformation === "plural") {

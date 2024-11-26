@@ -89,12 +89,8 @@ function T(_a) {
         throw new Error("<T id=\"".concat(id, "\">, \"").concat(id, "\" is also used as a key in the dictionary. Don't give <T> components the same ID as dictionary entries."));
     }
     if (!translation || !translation.t || translation.k !== key) {
-        if ((process === null || process === void 0 ? void 0 : process.env.NODE_ENV) === 'development' || (process === null || process === void 0 ? void 0 : process.env.NODE_ENV) === 'test') {
-            throw new Error("<T id=\"".concat(id, "\"> is used in a client component without a valid corresponding translation. This can cause Next.js hydration errors.")
-                + "\n\nYour current environment: \"".concat(process === null || process === void 0 ? void 0 : process.env.NODE_ENV, "\". In production, this error will display as a warning only, and content will be rendered in your default locale.")
-                + "\n\nTo fix this error, consider using a getGT() dictionary pattern or pushing translations from the command line in advance.");
-        }
-        console.warn("<T id=\"".concat(id, "\"> is used in a client component without a valid corresponding translation."));
+        console.error("<T id=\"".concat(id, "\"> is used in a client component without a valid saved translation. This can cause hydration errors.")
+            + "\n\nTo fix this error, consider using a dictionary with useGT() or pushing translations from the command line in advance.");
         var defaultChildren = (0, renderDefaultChildren_1.default)({
             children: taggedChildren,
             variables: variables,

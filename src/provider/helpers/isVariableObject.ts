@@ -1,18 +1,20 @@
-type VariableObject = {
-    key: string,
-    variable?: "variable" | "number" | "datetime" | "currency"
-}
+import { VariableObject } from "../../types/types";
 
 export default function isVariableObject(obj: unknown): obj is VariableObject {
-    if (obj && typeof obj === 'object' && typeof (obj as VariableObject).key === 'string') {
-        const keys = Object.keys(obj);
+    const variableObj = (obj as VariableObject);
+    if (variableObj && typeof variableObj === 'object' && typeof (variableObj as VariableObject).key === 'string') {
+        const keys = Object.keys(variableObj);
         if (keys.length === 1) return true;
         if (keys.length === 2) {
-            const variableObj = (obj as VariableObject);
-            return (typeof variableObj.variable === 'string') && 
-                ["variable", "number", "date", "currency"].includes(variableObj.variable)
+            if (typeof variableObj.id === 'number') return true;
+            if (typeof variableObj.variable === 'string') return true;
         }
-        
+        if (keys.length === 3) {
+            if (
+                typeof variableObj.variable === 'string' && 
+                typeof variableObj.id === 'number'
+            ) return true;
+        }
     }
    return false;
 }

@@ -88,15 +88,11 @@ export default function T({
     }
     if (!translation || !translation.t || translation.k !== key) {
         
-        if (process?.env.NODE_ENV === 'development' || process?.env.NODE_ENV === 'test') {
-            throw new Error(
-                `<T id="${id}"> is used in a client component without a valid corresponding translation. This can cause Next.js hydration errors.`
-                + `\n\nYour current environment: "${process?.env.NODE_ENV}". In production, this error will display as a warning only, and content will be rendered in your default locale.`
-                + `\n\nTo fix this error, consider using a getGT() dictionary pattern or pushing translations from the command line in advance.`
-            );
-        }
+        console.error(
+            `<T id="${id}"> is used in a client component without a valid saved translation. This can cause hydration errors.`
+            + `\n\nTo fix this error, consider using a dictionary with useGT() or pushing translations from the command line in advance.`
+        );
 
-        console.warn(`<T id="${id}"> is used in a client component without a valid corresponding translation.`);
         const defaultChildren = renderDefaultChildren({
             children: taggedChildren,
             variables, variablesOptions, defaultLocale, renderVariable

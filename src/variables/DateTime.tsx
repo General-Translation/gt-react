@@ -23,14 +23,21 @@ import useDefaultLocale from '../hooks/useDefaultLocale';
  * @param {Intl.DateTimeFormatOptions} [options={}] - Optional formatting options for the date, following `Intl.DateTimeFormatOptions` specifications.
  * @returns {JSX.Element} The formatted date or time component.
  */
-function DateTime({ children, name = "date", value, options = {} }: {
+function DateTime({ 
+    children, 
+    value, 
+    locales,
+    options = {} 
+}: {
     children?: any;
     name?: string;
     value?: any; // The default value which can be string, number or Date
+    locales?: string[]
     options?: Intl.DateTimeFormatOptions; // Optional formatting options for the date
 }): JSX.Element {
 
-    const locales = [useLocale(), useDefaultLocale()]
+    const providerLocales = [useLocale(), useDefaultLocale()]
+    locales ||= providerLocales;
 
     let final;
 

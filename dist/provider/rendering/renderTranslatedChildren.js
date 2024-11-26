@@ -72,13 +72,13 @@ function renderTranslatedElement(_a) {
                 renderVariable: renderVariable
             }) }));
     }
-    return sourceElement;
+    return (0, renderDefaultChildren_1.default)({ children: sourceElement, variables: variables, variablesOptions: variablesOptions, defaultLocale: locales[0], renderVariable: renderVariable });
 }
 function renderTranslatedChildren(_a) {
     var source = _a.source, target = _a.target, _b = _a.variables, variables = _b === void 0 ? {} : _b, _c = _a.variablesOptions, variablesOptions = _c === void 0 ? {} : _c, _d = _a.locales, locales = _d === void 0 ? [internal_2.libraryDefaultLocale] : _d, renderVariable = _a.renderVariable;
     // Most straightforward case, return a valid React node
     if ((target === null || typeof target === 'undefined') && source)
-        return source;
+        return (0, renderDefaultChildren_1.default)({ children: source, variables: variables, variablesOptions: variablesOptions, defaultLocale: locales[0], renderVariable: renderVariable });
     if (typeof target === 'string')
         return target;
     if (Array.isArray(source) && Array.isArray(target)) {
@@ -87,10 +87,13 @@ function renderTranslatedChildren(_a) {
                 var generaltranslation = (0, getGTProp_1.default)(sourceChild);
                 (0, _getVariableProps_1.default)(sourceChild.props);
                 if ((generaltranslation === null || generaltranslation === void 0 ? void 0 : generaltranslation.transformation) === "variable") {
-                    var _a = (0, _getVariableProps_1.default)(sourceChild.props), variableName = _a.variableName, variableValue = _a.variableValue, variableOptions = _a.variableOptions;
+                    var _a = (0, _getVariableProps_1.default)(sourceChild.props), variableName = _a.variableName, variableValue = _a.variableValue, variableOptions = _a.variableOptions, variableType = _a.variableType;
                     if (typeof variables[variableName] === 'undefined') {
                         variables[variableName] = variableValue;
                     }
+                    var fallback = (0, getVariableName_1.getFallbackVariableName)(variableType);
+                    if (typeof variables[fallback] === 'undefined')
+                        variables[fallback] = variableValue;
                     variablesOptions[variableName] = __assign(__assign({}, variablesOptions[variableName]), variableOptions);
                 }
                 else {
@@ -131,7 +134,8 @@ function renderTranslatedChildren(_a) {
                         variableType: variableType_1,
                         variableName: variableName_1,
                         variableValue: variableValue,
-                        variableOptions: variablesOptions[targetChild.key]
+                        variableOptions: variablesOptions[targetChild.key],
+                        locales: locales
                     }) }, "var_".concat(index));
             }
             var matchingSourceElement = findMatchingSourceElement_1(targetChild);
@@ -186,7 +190,8 @@ function renderTranslatedChildren(_a) {
                 variableType: variableType_2,
                 variableName: variableName_2,
                 variableValue: variableValue,
-                variableOptions: variablesOptions[targetVariable_1.key] || {}
+                variableOptions: variablesOptions[targetVariable_1.key] || {},
+                locales: locales
             });
         }
     }

@@ -11,6 +11,7 @@ export default function renderTranslatedChildren({ source, target, variables, va
         variableName: string;
         variableValue: any;
         variableOptions: Intl.NumberFormatOptions | Intl.DateTimeFormatOptions;
+        locales: string[];
     }) => JSX.Element;
 }): ReactNode;
 //# sourceMappingURL=renderTranslatedChildren.d.ts.map

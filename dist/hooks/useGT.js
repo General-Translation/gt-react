@@ -27,7 +27,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.useGT = useGT;
-exports.gt = gt;
+exports.useElement = useElement;
 var jsx_runtime_1 = require("react/jsx-runtime");
 var react_1 = __importStar(require("react"));
 var GTContext_1 = __importDefault(require("../provider/GTContext"));
@@ -77,27 +77,28 @@ function useGT(id) {
     return t;
 }
 /**
- * Flagship `gt()` hook which gets the translation function `t()` provided by `<GTProvider>`.
- * `t()` returns only JSX elements. For returning strings as well, see `useGT()`.
+ * `useElement()` hook which gets the translation function `t()` provided by `<GTProvider>`.
+ *
+ * **`t()` returns only JSX elements.** For returning strings as well, see `useGT()`.
  *
  * @param {string} [id] - Optional prefix to prepend to the translation keys.
  * @returns {Function} A translation function that accepts a key string and returns the translated value.
  *
  * @example
- * const t = gt('user');
- * console.log(t('name')); // Translates item 'user.name'
+ * const t = useElement('user');
+ * console.log(t('name')); // Translates item 'user.name', returns it as a JSX element
  *
- * const t = gt();
- * console.log(t('hello')); // Translates item 'hello'
+ * const t = useElement();
+ * console.log(t('hello')); // Translates item 'hello', returns it as a JSX element
  */
-function gt(id) {
+function useElement(id) {
     if (id === void 0) { id = ''; }
     // Create a prefix for translation keys if an id is provided
     var getID = function (suffix) {
         return id ? "".concat(id, ".").concat(suffix) : suffix;
     };
     // Get the translation context
-    var translate = (0, GTContext_1.default)("gt('".concat(id, "'): No context provided. You're trying to get the t() function on the client, which can only be done inside a <GTProvider>.")).translate;
+    var translate = (0, GTContext_1.default)("useElement('".concat(id, "'): No context provided. You're trying to get the t() function on the client, which can only be done inside a <GTProvider>.")).translate;
     /**
     * Translates a dictionary item based on its `id` and options.
     * Always returns a JSX.Element. Returns a fragment if there is no translation.

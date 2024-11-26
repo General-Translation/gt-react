@@ -58,7 +58,8 @@ function renderDefaultChildren(_a) {
                     variableName: variableName_1,
                     variableType: variableType_1,
                     variableValue: variableValue_1,
-                    variableOptions: variableOptions
+                    variableOptions: variableOptions,
+                    locales: [defaultLocale]
                 });
             }
             if ((generaltranslation === null || generaltranslation === void 0 ? void 0 : generaltranslation.transformation) === "plural") {

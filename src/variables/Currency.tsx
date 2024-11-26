@@ -24,15 +24,23 @@ import useDefaultLocale from '../hooks/useDefaultLocale';
  * @param {Intl.NumberFormatOptions} [options] - Optional formatting options to customize how the currency is displayed.
  * @returns {JSX.Element} The formatted currency component.
  */
-function Currency({ children, name = "cost", value, currency = "USD", options = {} }: {
+function Currency({ 
+    children, 
+    value, 
+    currency = "USD", 
+    locales,
+    options = {} 
+}: {
     children?: any;
     name?: string;
     value?: any;
     currency?: string;
+    locales?: string[]
     options?: Intl.NumberFormatOptions;
 }): JSX.Element {
 
-    const locales = [useLocale(), useDefaultLocale()]
+    const providerLocales = [useLocale(), useDefaultLocale()]
+    locales ||= providerLocales
 
     let renderedValue = (typeof children !== 'undefined' && typeof value === 'undefined') ? children : value;
     renderedValue = (typeof renderedValue === 'string') ? parseFloat(renderedValue) : renderedValue;
