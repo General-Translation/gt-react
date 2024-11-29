@@ -19,7 +19,7 @@
  * @param {Intl.NumberFormatOptions} [options={}] - Optional formatting options for the number, following `Intl.NumberFormatOptions` specifications.
  * @returns {JSX.Element} The formatted number component.
  */
-declare function Num({ children, value, locales, options }: {
+declare function Num({ children, value, name, locales, options }: {
     children?: any;
     name?: string;
     value?: any;

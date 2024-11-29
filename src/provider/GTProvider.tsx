@@ -13,6 +13,7 @@ import renderTranslatedChildren from "./rendering/renderTranslatedChildren";
 
 import { defaultCacheURL, libraryDefaultLocale } from "generaltranslation/internal";
 import renderVariable from "./rendering/renderVariable";
+import { createLibraryNoEntryWarning, createNoEntryWarning, projectIDMissingError } from "../errors/createErrors";
 
 /**
  * Provides General Translation context to its children, which can then access `useGT`, `useLocale`, and `useDefaultLocale`.
@@ -46,7 +47,7 @@ export default function GTProvider({
 }): JSX.Element {
 
     if (!projectID && cacheURL === defaultCacheURL) {
-        throw new Error("gt-react Error: General Translation cloud services require a project ID! Find yours at www.generaltranslation.com/dashboard.")
+        throw new Error(projectIDMissingError)
     }
 
     const browserLocale = useBrowserLocale(defaultLocale, locales);
@@ -87,8 +88,8 @@ export default function GTProvider({
         );
 
         if (entry === undefined || entry === null) {
-            console.warn(`Dictionary entry with id "${id}" is null or undefined`)
-            return;
+            console.warn(createLibraryNoEntryWarning(id))
+            return undefined;
         };
         
         // Get variables and variable options

@@ -2,6 +2,7 @@ import React from "react";
 import { getPluralBranch } from "../../internal";
 import useLocale from "../../hooks/useLocale";
 import useDefaultLocale from "../../hooks/useDefaultLocale";
+import { createPluralMissingError } from "../../errors/createErrors";
 
 /**
  * The `<Plural>` component dynamically renders content based on the plural form of the given number (`n`).
@@ -34,7 +35,7 @@ function Plural({
     const locale = useLocale();
     const defaultLocale = useDefaultLocale();
     if (typeof n !== 'number') 
-        throw new Error(`Plural with children "${children}" requires "n" option.`);
+        throw new Error(createPluralMissingError(children));
     const branch = getPluralBranch(n, [locale, defaultLocale], branches) || children;
     return (
         <span 

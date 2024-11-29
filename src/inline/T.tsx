@@ -7,6 +7,7 @@ import useGTContext from "../provider/GTContext";
 import renderTranslatedChildren from "../provider/rendering/renderTranslatedChildren";
 import { useMemo } from "react";
 import renderVariable from "../provider/rendering/renderVariable";
+import { createClientSideTDictionaryCollisionError, createClientSideTHydrationError, createClientSideTWithoutIDError } from "../errors/createErrors";
 
 /**
  * Translation component that handles rendering translated content, including plural forms.
@@ -51,7 +52,7 @@ export default function T({
     if (!children) return undefined;
     
     if (!id) {
-        throw new Error(`Client-side <T> with no provided 'id' prop. Children: ${children}`)
+        throw new Error(createClientSideTWithoutIDError(children))
     }
 
     const { variables, variablesOptions } = props;
@@ -84,13 +85,12 @@ export default function T({
     const translation = translations[id];
     
     if (translation?.promise) {
-        throw new Error(`<T id="${id}">, "${id}" is also used as a key in the dictionary. Don't give <T> components the same ID as dictionary entries.`)
+        throw new Error(createClientSideTDictionaryCollisionError(id))
     }
     if (!translation || !translation.t || translation.k !== key) {
         
         console.error(
-            `<T id="${id}"> is used in a client component without a valid saved translation. This can cause hydration errors.`
-            + `\n\nTo fix this error, consider using a dictionary with useGT() or pushing translations from the command line in advance.`
+            createClientSideTHydrationError(id)
         );
 
         const defaultChildren = renderDefaultChildren({

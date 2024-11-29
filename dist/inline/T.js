@@ -25,6 +25,7 @@ var GTContext_1 = __importDefault(require("../provider/GTContext"));
 var renderTranslatedChildren_1 = __importDefault(require("../provider/rendering/renderTranslatedChildren"));
 var react_2 = require("react");
 var renderVariable_1 = __importDefault(require("../provider/rendering/renderVariable"));
+var createErrors_1 = require("../errors/createErrors");
 /**
  * Translation component that handles rendering translated content, including plural forms.
  * Used with the required `id` parameter instead of `const t = useGT()`.
@@ -61,7 +62,7 @@ function T(_a) {
     if (!children)
         return undefined;
     if (!id) {
-        throw new Error("Client-side <T> with no provided 'id' prop. Children: ".concat(children));
+        throw new Error((0, createErrors_1.createClientSideTWithoutIDError)(children));
     }
     var variables = props.variables, variablesOptions = props.variablesOptions;
     var _b = (0, GTContext_1.default)("<T id=\"".concat(id, "\"> used on the client-side outside of <GTProvider>")), translations = _b.translations, translationRequired = _b.translationRequired;
@@ -86,11 +87,10 @@ function T(_a) {
     }, [context, taggedChildren]), childrenAsObjects = _c[0], key = _c[1];
     var translation = translations[id];
     if (translation === null || translation === void 0 ? void 0 : translation.promise) {
-        throw new Error("<T id=\"".concat(id, "\">, \"").concat(id, "\" is also used as a key in the dictionary. Don't give <T> components the same ID as dictionary entries."));
+        throw new Error((0, createErrors_1.createClientSideTDictionaryCollisionError)(id));
     }
     if (!translation || !translation.t || translation.k !== key) {
-        console.error("<T id=\"".concat(id, "\"> is used in a client component without a valid saved translation. This can cause hydration errors.")
-            + "\n\nTo fix this error, consider using a dictionary with useGT() or pushing translations from the command line in advance.");
+        console.error((0, createErrors_1.createClientSideTHydrationError)(id));
         var defaultChildren = (0, renderDefaultChildren_1.default)({
             children: taggedChildren,
             variables: variables,
