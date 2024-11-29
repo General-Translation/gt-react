@@ -28,7 +28,7 @@ var useDefaultLocale_1 = __importDefault(require("../hooks/useDefaultLocale"));
  * @returns {JSX.Element} The formatted date or time component.
  */
 function DateTime(_a) {
-    var children = _a.children, value = _a.value, locales = _a.locales, _b = _a.options, options = _b === void 0 ? {} : _b;
+    var children = _a.children, value = _a.value, name = _a.name, locales = _a.locales, _b = _a.options, options = _b === void 0 ? {} : _b;
     var providerLocales = [(0, useLocale_1.default)(), (0, useDefaultLocale_1.default)()];
     locales || (locales = providerLocales);
     var final;

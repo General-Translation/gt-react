@@ -40,7 +40,7 @@ var useDefaultLocale_1 = __importDefault(require("../hooks/useDefaultLocale"));
  * @returns {JSX.Element} The formatted currency component.
  */
 function Currency(_a) {
-    var children = _a.children, value = _a.value, _b = _a.currency, currency = _b === void 0 ? "USD" : _b, locales = _a.locales, _c = _a.options, options = _c === void 0 ? {} : _c;
+    var children = _a.children, value = _a.value, name = _a.name, _b = _a.currency, currency = _b === void 0 ? "USD" : _b, locales = _a.locales, _c = _a.options, options = _c === void 0 ? {} : _c;
     var providerLocales = [(0, useLocale_1.default)(), (0, useDefaultLocale_1.default)()];
     locales || (locales = providerLocales);
     var renderedValue = (typeof children !== 'undefined' && typeof value === 'undefined') ? children : value;

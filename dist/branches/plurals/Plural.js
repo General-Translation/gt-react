@@ -18,6 +18,7 @@ var jsx_runtime_1 = require("react/jsx-runtime");
 var internal_1 = require("../../internal");
 var useLocale_1 = __importDefault(require("../../hooks/useLocale"));
 var useDefaultLocale_1 = __importDefault(require("../../hooks/useDefaultLocale"));
+var createErrors_1 = require("../../errors/createErrors");
 /**
  * The `<Plural>` component dynamically renders content based on the plural form of the given number (`n`).
  * It determines which content to display by matching the value of `n` to the appropriate pluralization branch,
@@ -44,7 +45,7 @@ function Plural(_a) {
     var locale = (0, useLocale_1.default)();
     var defaultLocale = (0, useDefaultLocale_1.default)();
     if (typeof n !== 'number')
-        throw new Error("Plural with children \"".concat(children, "\" requires \"n\" option."));
+        throw new Error((0, createErrors_1.createPluralMissingError)(children));
     var branch = (0, internal_1.getPluralBranch)(n, [locale, defaultLocale], branches) || children;
     return ((0, jsx_runtime_1.jsx)("span", { "data-_gt": generaltranslation, "data-_gt-n": n, style: { display: 'contents' }, children: branch }));
 }

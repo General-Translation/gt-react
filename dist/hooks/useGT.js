@@ -31,6 +31,7 @@ exports.useElement = useElement;
 var jsx_runtime_1 = require("react/jsx-runtime");
 var react_1 = __importStar(require("react"));
 var GTContext_1 = __importDefault(require("../provider/GTContext"));
+var createErrors_1 = require("../errors/createErrors");
 /**
  * Gets the translation function `t` provided by `<GTProvider>`.
  *
@@ -68,7 +69,7 @@ function useGT(id) {
         if (translate) {
             var translation = translate(prefixedID, options, f);
             if (!translation)
-                console.warn("t('".concat(id, "') finding no translation for dictionary item ").concat(prefixedID, " !"));
+                console.warn((0, createErrors_1.createNoEntryWarning)(id, prefixedID));
             return translation;
         }
         return undefined;
@@ -116,7 +117,7 @@ function useElement(id) {
         if (translate) {
             var translation = translate(prefixedID, options, f);
             if (!translation)
-                console.warn("t('".concat(id, "') finding no translation for dictionary item ").concat(prefixedID, " !"));
+                console.warn((0, createErrors_1.createNoEntryWarning)(id, prefixedID));
             if (!(0, react_1.isValidElement)(translation))
                 return (0, jsx_runtime_1.jsx)(react_1.default.Fragment, { children: translation });
             return translation;

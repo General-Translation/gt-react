@@ -18,7 +18,7 @@
  * @param {Intl.DateTimeFormatOptions} [options={}] - Optional formatting options for the date, following `Intl.DateTimeFormatOptions` specifications.
  * @returns {JSX.Element} The formatted date or time component.
  */
-declare function DateTime({ children, value, locales, options }: {
+declare function DateTime({ children, value, name, locales, options }: {
     children?: any;
     name?: string;
     value?: any;

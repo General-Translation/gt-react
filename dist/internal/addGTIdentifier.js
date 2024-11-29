@@ -48,6 +48,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = addGTIdentifier;
 var react_1 = __importStar(require("react"));
 var internal_1 = require("generaltranslation/internal");
+var createErrors_1 = require("../errors/createErrors");
 function addGTIdentifier(children, outerID, startingIndex) {
     if (startingIndex === void 0) { startingIndex = 0; }
     // Object to keep track of the current index for GT IDs
@@ -66,7 +67,6 @@ function addGTIdentifier(children, outerID, startingIndex) {
             transformation = typeof type === 'function' ? (type.gtTransformation || '') : '';
         }
         catch (error) {
-            // console.error(error)
             transformation = '';
         }
         if (transformation) {
@@ -103,7 +103,7 @@ function addGTIdentifier(children, outerID, startingIndex) {
         if ((0, react_1.isValidElement)(child)) {
             var props = child.props;
             if (props['data-_gt'])
-                throw new Error("General Translation: data-_gt prop already in use on child ".concat(child, ". This usually occurs when you nest <T> components within the same file. Remove one of the <T> components to continue."));
+                throw new Error((0, createErrors_1.createNestedDataGTError)(child));
             // Create new props for the element, including the GT identifier and a key
             var generaltranslation = createGTProp(child);
             var newProps = __assign(__assign({}, props), { 'data-_gt': generaltranslation });

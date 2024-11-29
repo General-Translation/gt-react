@@ -26,6 +26,7 @@ import useDefaultLocale from '../hooks/useDefaultLocale';
 function DateTime({ 
     children, 
     value, 
+    name,
     locales,
     options = {} 
 }: {

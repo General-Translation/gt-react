@@ -53,6 +53,7 @@ var renderDefaultChildren_1 = __importDefault(require("./rendering/renderDefault
 var renderTranslatedChildren_1 = __importDefault(require("./rendering/renderTranslatedChildren"));
 var internal_2 = require("generaltranslation/internal");
 var renderVariable_1 = __importDefault(require("./rendering/renderVariable"));
+var createErrors_1 = require("../errors/createErrors");
 /**
  * Provides General Translation context to its children, which can then access `useGT`, `useLocale`, and `useDefaultLocale`.
  *
@@ -70,7 +71,7 @@ function GTProvider(_a) {
     var _this = this;
     var children = _a.children, projectID = _a.projectID, _b = _a.dictionary, dictionary = _b === void 0 ? {} : _b, locales = _a.locales, _c = _a.defaultLocale, defaultLocale = _c === void 0 ? (locales === null || locales === void 0 ? void 0 : locales[0]) || internal_2.libraryDefaultLocale : _c, locale = _a.locale, _d = _a.cacheURL, cacheURL = _d === void 0 ? internal_2.defaultCacheURL : _d;
     if (!projectID && cacheURL === internal_2.defaultCacheURL) {
-        throw new Error("gt-react Error: General Translation cloud services require a project ID! Find yours at www.generaltranslation.com/dashboard.");
+        throw new Error(createErrors_1.projectIDMissingError);
     }
     var browserLocale = (0, useBrowserLocale_1.default)(defaultLocale, locales);
     locale = locale || browserLocale;
@@ -108,8 +109,8 @@ function GTProvider(_a) {
         // get the dictionary entry
         var _a = (0, extractEntryMetadata_1.default)((0, getDictionaryEntry_1.default)(dictionary, id)), entry = _a.entry, metadata = _a.metadata;
         if (entry === undefined || entry === null) {
-            console.warn("Dictionary entry with id \"".concat(id, "\" is null or undefined"));
-            return;
+            console.warn((0, createErrors_1.createLibraryNoEntryWarning)(id));
+            return undefined;
         }
         ;
         // Get variables and variable options

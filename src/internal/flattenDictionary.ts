@@ -1,5 +1,7 @@
 import React from "react";
 
+const createDuplicateKeyError = (key: string) => `Duplicate key found in dictionary: "${key}"`
+
 /**
  * Flattens a nested dictionary by concatenating nested keys.
  * Throws an error if two keys result in the same flattened key.
@@ -17,13 +19,13 @@ export default function flattenDictionary(dictionary: Record<string, any>, prefi
                 const nestedFlattened = flattenDictionary(dictionary[key], newKey);
                 for (const flatKey in nestedFlattened) {
                     if (flattened.hasOwnProperty(flatKey)) {
-                        throw new Error(`Duplicate key found in dictionary: ${flatKey}`);
+                        throw new Error(createDuplicateKeyError(flatKey));
                     }
                     flattened[flatKey] = nestedFlattened[flatKey];
                 }
             } else {
                 if (flattened.hasOwnProperty(newKey)) {
-                    throw new Error(`Duplicate key found in dictionary: ${newKey}`);
+                    throw new Error(createDuplicateKeyError(newKey));
                 }
                 flattened[newKey] = dictionary[key];
             }

@@ -28,6 +28,7 @@ import useDefaultLocale from '../hooks/useDefaultLocale';
 function Num({ 
     children, 
     value, 
+    name,
     locales,
     options = {} 
 }: {

@@ -27,6 +27,7 @@ import useDefaultLocale from '../hooks/useDefaultLocale';
 function Currency({ 
     children, 
     value, 
+    name,
     currency = "USD", 
     locales,
     options = {} 

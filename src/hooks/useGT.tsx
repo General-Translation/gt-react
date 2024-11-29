@@ -1,5 +1,6 @@
 import React, { isValidElement } from "react";
 import useGTContext from "../provider/GTContext";
+import { createNoEntryWarning } from "../errors/createErrors";
 
 /**
  * Gets the translation function `t` provided by `<GTProvider>`.
@@ -49,7 +50,7 @@ export function useGT(
         const prefixedID = getID(id);
         if (translate) {
             const translation = translate(prefixedID, options, f);
-            if (!translation) console.warn(`t('${id}') finding no translation for dictionary item ${prefixedID} !`);
+            if (!translation) console.warn(createNoEntryWarning(id, prefixedID));
             return translation;
         }
         return undefined;
@@ -109,7 +110,7 @@ export function useElement(
         const prefixedID = getID(id);
         if (translate) {
             const translation = translate(prefixedID, options, f);
-            if (!translation) console.warn(`t('${id}') finding no translation for dictionary item ${prefixedID} !`);
+            if (!translation) console.warn(createNoEntryWarning(id, prefixedID));
             if (!isValidElement(translation)) return <React.Fragment>{translation}</React.Fragment>
             return translation;
         }
