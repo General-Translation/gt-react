@@ -13,13 +13,13 @@ import renderTranslatedChildren from "./rendering/renderTranslatedChildren";
 
 import { defaultCacheURL, libraryDefaultLocale } from "generaltranslation/internal";
 import renderVariable from "./rendering/renderVariable";
-import { createLibraryNoEntryWarning, createNoEntryWarning, projectIDMissingError } from "../errors/createErrors";
+import { createLibraryNoEntryWarning, projectIdMissingError } from "../errors/createErrors";
 
 /**
  * Provides General Translation context to its children, which can then access `useGT`, `useLocale`, and `useDefaultLocale`.
  *
  * @param {React.ReactNode} children - The children components that will use the translation context.
- * @param {string} [projectID] - The project ID required for General Translation cloud services.
+ * @param {string} [projectId] - The project ID required for General Translation cloud services.
  * @param {Dictionary} [dictionary=defaultDictionary] - The translation dictionary for the project.
  * @param {string[]} [locales] - The list of approved locales for the project.
  * @param {string} [defaultLocale=libraryDefaultLocale] - The default locale to use if no other locale is found.
@@ -30,7 +30,7 @@ import { createLibraryNoEntryWarning, createNoEntryWarning, projectIDMissingErro
  */
 export default function GTProvider({
     children, 
-    projectID,
+    projectId,
     dictionary = {}, 
     locales, 
     defaultLocale = locales?.[0] || libraryDefaultLocale, 
@@ -38,7 +38,7 @@ export default function GTProvider({
     cacheURL = defaultCacheURL
 }: {
     children?: any;
-    projectID?: string;
+    projectId?: string;
     dictionary?: Dictionary;
     locales?: string[];
     defaultLocale?: string;
@@ -46,8 +46,8 @@ export default function GTProvider({
     cacheURL?: string;
 }): JSX.Element {
 
-    if (!projectID && cacheURL === defaultCacheURL) {
-        throw new Error(projectIDMissingError)
+    if (!projectId && cacheURL === defaultCacheURL) {
+        throw new Error(projectIdMissingError)
     }
 
     const browserLocale = useBrowserLocale(defaultLocale, locales);
@@ -68,7 +68,7 @@ export default function GTProvider({
                 setTranslations({}); // no translation required
             } else {
                 (async () => {
-                    const response = await fetch(`${cacheURL}/${projectID}/${locale}`);
+                    const response = await fetch(`${cacheURL}/${projectId}/${locale}`);
                     const result = await response.json();
                     setTranslations(result);
                 })()
@@ -148,7 +148,7 @@ export default function GTProvider({
             translate, 
             locale, defaultLocale, 
             translations, translationRequired,
-            projectID
+            projectId
         }}>
             {children}
         </GTContext.Provider>

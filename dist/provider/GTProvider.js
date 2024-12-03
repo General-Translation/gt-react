@@ -58,7 +58,7 @@ var createErrors_1 = require("../errors/createErrors");
  * Provides General Translation context to its children, which can then access `useGT`, `useLocale`, and `useDefaultLocale`.
  *
  * @param {React.ReactNode} children - The children components that will use the translation context.
- * @param {string} [projectID] - The project ID required for General Translation cloud services.
+ * @param {string} [projectId] - The project ID required for General Translation cloud services.
  * @param {Dictionary} [dictionary=defaultDictionary] - The translation dictionary for the project.
  * @param {string[]} [locales] - The list of approved locales for the project.
  * @param {string} [defaultLocale=libraryDefaultLocale] - The default locale to use if no other locale is found.
@@ -69,9 +69,9 @@ var createErrors_1 = require("../errors/createErrors");
  */
 function GTProvider(_a) {
     var _this = this;
-    var children = _a.children, projectID = _a.projectID, _b = _a.dictionary, dictionary = _b === void 0 ? {} : _b, locales = _a.locales, _c = _a.defaultLocale, defaultLocale = _c === void 0 ? (locales === null || locales === void 0 ? void 0 : locales[0]) || internal_2.libraryDefaultLocale : _c, locale = _a.locale, _d = _a.cacheURL, cacheURL = _d === void 0 ? internal_2.defaultCacheURL : _d;
-    if (!projectID && cacheURL === internal_2.defaultCacheURL) {
-        throw new Error(createErrors_1.projectIDMissingError);
+    var children = _a.children, projectId = _a.projectId, _b = _a.dictionary, dictionary = _b === void 0 ? {} : _b, locales = _a.locales, _c = _a.defaultLocale, defaultLocale = _c === void 0 ? (locales === null || locales === void 0 ? void 0 : locales[0]) || internal_2.libraryDefaultLocale : _c, locale = _a.locale, _d = _a.cacheURL, cacheURL = _d === void 0 ? internal_2.defaultCacheURL : _d;
+    if (!projectId && cacheURL === internal_2.defaultCacheURL) {
+        throw new Error(createErrors_1.projectIdMissingError);
     }
     var browserLocale = (0, useBrowserLocale_1.default)(defaultLocale, locales);
     locale = locale || browserLocale;
@@ -90,7 +90,7 @@ function GTProvider(_a) {
                     var response, result;
                     return __generator(this, function (_a) {
                         switch (_a.label) {
-                            case 0: return [4 /*yield*/, fetch("".concat(cacheURL, "/").concat(projectID, "/").concat(locale))];
+                            case 0: return [4 /*yield*/, fetch("".concat(cacheURL, "/").concat(projectId, "/").concat(locale))];
                             case 1:
                                 response = _a.sent();
                                 return [4 /*yield*/, response.json()];
@@ -165,7 +165,7 @@ function GTProvider(_a) {
             defaultLocale: defaultLocale,
             translations: translations,
             translationRequired: translationRequired,
-            projectID: projectID
+            projectId: projectId
         }, children: children }));
 }
 //# sourceMappingURL=GTProvider.js.map

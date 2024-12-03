@@ -1,4 +1,4 @@
-export declare const projectIDMissingError = "gt-react Error: General Translation cloud services require a project ID! Find yours at www.generaltranslation.com/dashboard.";
+export declare const projectIdMissingError = "gt-react Error: General Translation cloud services require a project ID! Find yours at www.generaltranslation.com/dashboard.";
 export declare const createPluralMissingError: (children: any) => string;
 export declare const createClientSideTWithoutIDError: (children: any) => string;
 export declare const createStringTranslationError: (content: string, id?: string) => string;
