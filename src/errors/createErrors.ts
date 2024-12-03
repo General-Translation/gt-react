@@ -1,6 +1,6 @@
 // ---- ERRORS ---- //
 
-export const projectIDMissingError = 'gt-react Error: General Translation cloud services require a project ID! Find yours at www.generaltranslation.com/dashboard.'
+export const projectIdMissingError = 'gt-react Error: General Translation cloud services require a project ID! Find yours at www.generaltranslation.com/dashboard.'
 
 export const createPluralMissingError = (children: any) => `<Plural> component with children "${children}" requires "n" option.`
 

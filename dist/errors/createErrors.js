@@ -1,8 +1,8 @@
 "use strict";
 // ---- ERRORS ---- //
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.createNoEntryWarning = exports.createLibraryNoEntryWarning = exports.createNestedDataGTError = exports.createClientSideTHydrationError = exports.createClientSideTDictionaryCollisionError = exports.createStringTranslationError = exports.createClientSideTWithoutIDError = exports.createPluralMissingError = exports.projectIDMissingError = void 0;
-exports.projectIDMissingError = 'gt-react Error: General Translation cloud services require a project ID! Find yours at www.generaltranslation.com/dashboard.';
+exports.createNoEntryWarning = exports.createLibraryNoEntryWarning = exports.createNestedDataGTError = exports.createClientSideTHydrationError = exports.createClientSideTDictionaryCollisionError = exports.createStringTranslationError = exports.createClientSideTWithoutIDError = exports.createPluralMissingError = exports.projectIdMissingError = void 0;
+exports.projectIdMissingError = 'gt-react Error: General Translation cloud services require a project ID! Find yours at www.generaltranslation.com/dashboard.';
 var createPluralMissingError = function (children) { return "<Plural> component with children \"".concat(children, "\" requires \"n\" option."); };
 exports.createPluralMissingError = createPluralMissingError;
 var createClientSideTWithoutIDError = function (children) { return "Client-side <T> with no provided 'id' prop. Children: \"".concat(children, "\""); };
