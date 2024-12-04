@@ -63,18 +63,22 @@ export default function addGTIdentifier(children: Children, outerID?: string | u
             if (props['data-_gt']) 
                 throw new Error(createNestedDataGTError(child))
             // Create new props for the element, including the GT identifier and a key
-            let generaltranslation = createGTProp(child);  
+            let generaltranslation = createGTProp(child); 
             let newProps = {
                 ...props,
                 'data-_gt': generaltranslation
             };
-            if (outerID) {
+            /*if (outerID) {
                 newProps.key = outerID;
                 outerID = undefined;
-            }
+            }*/
             // Recursively add IDs to children
             if (props.children) {
                 newProps.children = handleChildren(props.children);
+            }
+            if (child.type === React.Fragment) {
+                const fragment = <span style={{ all: 'unset', display: 'contents' }} {...newProps} />;
+                return fragment;
             }
             return React.cloneElement(child, newProps);
         }
@@ -83,7 +87,7 @@ export default function addGTIdentifier(children: Children, outerID?: string | u
     
     function handleChildren(children: Children) {
         if (Array.isArray(children)) {
-            outerID = undefined;
+            // outerID = undefined;
             return React.Children.map(children, handleSingleChild)
         } else {
             return handleSingleChild(children);
