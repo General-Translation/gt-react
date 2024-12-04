@@ -111,10 +111,10 @@ export function useElement(
         if (translate) {
             const translation = translate(prefixedID, options, f);
             if (!translation) console.warn(createNoEntryWarning(id, prefixedID));
-            if (!isValidElement(translation)) return <React.Fragment>{translation}</React.Fragment>
+            if (!isValidElement(translation)) return <React.Fragment key={prefixedID}>{translation}</React.Fragment>
             return translation;
         }
-        return <React.Fragment />;
+        return <React.Fragment key={prefixedID}/>;
     };
 
     return t;

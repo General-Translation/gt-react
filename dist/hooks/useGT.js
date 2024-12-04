@@ -119,10 +119,10 @@ function useElement(id) {
             if (!translation)
                 console.warn((0, createErrors_1.createNoEntryWarning)(id, prefixedID));
             if (!(0, react_1.isValidElement)(translation))
-                return (0, jsx_runtime_1.jsx)(react_1.default.Fragment, { children: translation });
+                return (0, jsx_runtime_1.jsx)(react_1.default.Fragment, { children: translation }, prefixedID);
             return translation;
         }
-        return (0, jsx_runtime_1.jsx)(react_1.default.Fragment, {});
+        return (0, jsx_runtime_1.jsx)(react_1.default.Fragment, {}, prefixedID);
     }
     ;
     return t;

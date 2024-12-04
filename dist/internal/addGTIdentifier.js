@@ -46,6 +46,7 @@ var __rest = (this && this.__rest) || function (s, e) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = addGTIdentifier;
+var jsx_runtime_1 = require("react/jsx-runtime");
 var react_1 = __importStar(require("react"));
 var internal_1 = require("generaltranslation/internal");
 var createErrors_1 = require("../errors/createErrors");
@@ -107,13 +108,17 @@ function addGTIdentifier(children, outerID, startingIndex) {
             // Create new props for the element, including the GT identifier and a key
             var generaltranslation = createGTProp(child);
             var newProps = __assign(__assign({}, props), { 'data-_gt': generaltranslation });
-            if (outerID) {
+            /*if (outerID) {
                 newProps.key = outerID;
                 outerID = undefined;
-            }
+            }*/
             // Recursively add IDs to children
             if (props.children) {
                 newProps.children = handleChildren(props.children);
+            }
+            if (child.type === react_1.default.Fragment) {
+                var fragment = (0, jsx_runtime_1.jsx)("span", __assign({ style: { all: 'unset', display: 'contents' } }, newProps));
+                return fragment;
             }
             return react_1.default.cloneElement(child, newProps);
         }
@@ -121,7 +126,7 @@ function addGTIdentifier(children, outerID, startingIndex) {
     }
     function handleChildren(children) {
         if (Array.isArray(children)) {
-            outerID = undefined;
+            // outerID = undefined;
             return react_1.default.Children.map(children, handleSingleChild);
         }
         else {
