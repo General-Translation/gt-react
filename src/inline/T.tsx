@@ -87,6 +87,7 @@ export default function T({
     if (translation?.promise) {
         throw new Error(createClientSideTDictionaryCollisionError(id))
     }
+    
     if (!translation || !translation.t || translation.k !== key) {
         
         console.error(
@@ -100,7 +101,7 @@ export default function T({
 
         // The suspense exists here for hydration reasons
         return (
-            <Suspense fallback={defaultChildren}>
+            <Suspense fallback={<></>}>
                 {defaultChildren}
             </Suspense>
         );

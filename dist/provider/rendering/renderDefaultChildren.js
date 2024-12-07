@@ -43,7 +43,7 @@ function renderDefaultChildren(_a) {
                     if (typeof variables[variableName_1] !== 'undefined') {
                         return variables[variableName_1];
                     }
-                    if (variableValue_1)
+                    if (typeof variableValue_1 !== 'undefined')
                         return variableValue_1;
                     if (variableName_1.startsWith(getVariableName_1.baseVariablePrefix)) { // pain point: somewhat breakable logic
                         var fallbackVariableName = (0, getVariableName_1.getFallbackVariableName)(variableType_1);
@@ -66,6 +66,8 @@ function renderDefaultChildren(_a) {
                 var n = typeof variables.n === 'number' ? variables.n :
                     typeof child.props.n === 'number' ? child.props.n :
                         child.props['data-_gt-n'];
+                if (typeof n === 'number' && typeof variables.n === 'undefined')
+                    variables.n = n;
                 var branches = generaltranslation.branches || {};
                 return handleChildren((0, internal_1.getPluralBranch)(n, [defaultLocale], branches) || child.props.children);
             }

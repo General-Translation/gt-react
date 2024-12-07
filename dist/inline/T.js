@@ -99,7 +99,7 @@ function T(_a) {
             renderVariable: renderVariable_1.default
         });
         // The suspense exists here for hydration reasons
-        return ((0, jsx_runtime_1.jsx)(react_1.Suspense, { fallback: defaultChildren, children: defaultChildren }));
+        return ((0, jsx_runtime_1.jsx)(react_1.Suspense, { fallback: (0, jsx_runtime_1.jsx)(jsx_runtime_1.Fragment, {}), children: defaultChildren }));
     }
     return (0, renderTranslatedChildren_1.default)({
         source: taggedChildren, target: translation.t,
