@@ -14,7 +14,7 @@ exports.createClientSideTDictionaryCollisionError = createClientSideTDictionaryC
 var createClientSideTHydrationError = function (id) { return "<T id=\"".concat(id, "\"> is used in a client component without a valid saved translation. This can cause hydration errors.")
     + "\n\nTo fix this error, consider using a dictionary with useGT() or pushing translations from the command line in advance."; };
 exports.createClientSideTHydrationError = createClientSideTHydrationError;
-var createNestedDataGTError = function (child) { return "General Translation: data-_gt prop already in use on child \"".concat(child, "\". This usually occurs when you nest <T> components within the same file. Remove one of the <T> components to continue."); };
+var createNestedDataGTError = function (child) { return "General Translation already in use on child \"".concat(child, "\". This usually occurs when you nest <T> components within the same file. Remove one of the <T> components to continue."); };
 exports.createNestedDataGTError = createNestedDataGTError;
 // ---- WARNINGS ---- //
 var createLibraryNoEntryWarning = function (id) { return "gt-react: No dictionary entry found for id: \"".concat(id, "\""); };

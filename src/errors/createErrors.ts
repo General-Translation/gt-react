@@ -13,7 +13,7 @@ export const createClientSideTDictionaryCollisionError = (id: string) => `<T id=
 export const createClientSideTHydrationError = (id: string) => `<T id="${id}"> is used in a client component without a valid saved translation. This can cause hydration errors.`
     + `\n\nTo fix this error, consider using a dictionary with useGT() or pushing translations from the command line in advance.`
 
-export const createNestedDataGTError = (child: any) => `General Translation: data-_gt prop already in use on child "${child}". This usually occurs when you nest <T> components within the same file. Remove one of the <T> components to continue.`
+export const createNestedDataGTError = (child: any) => `General Translation already in use on child "${child}". This usually occurs when you nest <T> components within the same file. Remove one of the <T> components to continue.`
 
 // ---- WARNINGS ---- //
 

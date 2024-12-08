@@ -14,7 +14,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.default = T;
 var jsx_runtime_1 = require("react/jsx-runtime");
 var react_1 = require("react");
 var useDefaultLocale_1 = __importDefault(require("../hooks/useDefaultLocale"));
@@ -109,4 +108,6 @@ function T(_a) {
         renderVariable: renderVariable_1.default
     });
 }
+T.gtTransformation = "translate-client";
+exports.default = T;
 //# sourceMappingURL=T.js.map

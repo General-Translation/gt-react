@@ -32,6 +32,9 @@ export default function addGTIdentifier(children: Children, outerID?: string | u
         }
         if (transformation) {
             const transformationParts = transformation.split('-');
+            if (transformationParts[0] === "translate") {
+                throw new Error(createNestedDataGTError(child))
+            }
             if (transformationParts[0] === "variable") {
                 result.variableType = transformationParts?.[1] || "variable";
             } 

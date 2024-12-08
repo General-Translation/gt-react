@@ -40,7 +40,7 @@ import { createClientSideTDictionaryCollisionError, createClientSideTHydrationEr
  * ```
  * 
  */
-export default function T({
+function T({
     children, id, ...props
 }: {
     children?: any,
@@ -113,3 +113,7 @@ export default function T({
         renderVariable
     }) as JSX.Element;
 }
+
+T.gtTransformation = "translate-client";
+
+export default T;
