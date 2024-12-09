@@ -111,12 +111,7 @@ function addGTIdentifier(children, outerID, startingIndex) {
             // Create new props for the element, including the GT identifier and a key
             var generaltranslation = createGTProp(child);
             var newProps = __assign(__assign({}, props), { 'data-_gt': generaltranslation });
-            /*if (outerID) {
-                newProps.key = outerID;
-                outerID = undefined;
-            }*/
-            // Recursively add IDs to children
-            if (props.children) {
+            if (props.children && !generaltranslation.variableType) {
                 newProps.children = handleChildren(props.children);
             }
             if (child.type === react_1.default.Fragment) {

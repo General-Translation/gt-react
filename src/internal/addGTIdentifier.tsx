@@ -71,12 +71,7 @@ export default function addGTIdentifier(children: Children, outerID?: string | u
                 ...props,
                 'data-_gt': generaltranslation
             };
-            /*if (outerID) {
-                newProps.key = outerID;
-                outerID = undefined;
-            }*/
-            // Recursively add IDs to children
-            if (props.children) {
+            if (props.children && !generaltranslation.variableType) {
                 newProps.children = handleChildren(props.children);
             }
             if (child.type === React.Fragment) {

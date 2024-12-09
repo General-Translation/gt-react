@@ -30,12 +30,12 @@ export default function useBrowserLocale(
 ): string {
     const [locale, setLocale] = useState<string>('');
     useEffect(() => {
-        const browserLocales = structuredClone(
-            navigator.languages || 
-            [navigator.language] || 
-            [(navigator as any)?.userLanguage] || 
-            [defaultLocale]
-        ) as string[];
+        const browserLocales = (() => {
+            if (navigator?.languages) return navigator.languages;
+            if (navigator?.language) return [navigator.language];
+            if ((navigator as any)?.userLanguage) return [(navigator as any)?.userLanguage];
+            return [defaultLocale];
+        })() as string[];
         if (locales) {
             setLocale(determineLocale(browserLocales, locales) || defaultLocale);
         } else {
