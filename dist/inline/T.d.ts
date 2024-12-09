@@ -29,10 +29,14 @@
  * ```
  *
  */
-export default function T({ children, id, ...props }: {
+declare function T({ children, id, ...props }: {
     children?: any;
     id: string;
     context?: string;
     [key: string]: any;
 }): JSX.Element | undefined;
+declare namespace T {
+    var gtTransformation: string;
+}
+export default T;
 //# sourceMappingURL=T.d.ts.map

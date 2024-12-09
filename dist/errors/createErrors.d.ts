@@ -5,6 +5,7 @@ export declare const createStringTranslationError: (content: string, id?: string
 export declare const createClientSideTDictionaryCollisionError: (id: string) => string;
 export declare const createClientSideTHydrationError: (id: string) => string;
 export declare const createNestedDataGTError: (child: any) => string;
+export declare const createNestedTError: (child: any) => string;
 export declare const createLibraryNoEntryWarning: (id: string) => string;
 export declare const createNoEntryWarning: (id: string, prefixedID: string) => string;
 //# sourceMappingURL=createErrors.d.ts.map

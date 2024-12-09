@@ -38,6 +38,8 @@ function renderTranslatedElement(_a) {
         var sourceBranch = (0, internal_1.getPluralBranch)(n, locales, sourceBranches) || sourceElement.props.children;
         var targetBranches = targetElement.props["data-_gt"].branches || {};
         var targetBranch = (0, internal_1.getPluralBranch)(n, locales, targetBranches) || targetElement.props.children;
+        if (typeof n === 'number' && typeof variables.n === 'undefined')
+            variables.n = n;
         return renderTranslatedChildren({
             source: sourceBranch,
             target: targetBranch,

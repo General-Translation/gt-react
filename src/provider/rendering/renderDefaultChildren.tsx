@@ -23,7 +23,6 @@ export default function renderDefaultChildren({
         locales: string[]
     }) => JSX.Element
 }) {
-
     const handleSingleChild = (child: ReactNode) => {
         if (React.isValidElement(child)) {
             const generaltranslation = getGTProp(child)
@@ -38,7 +37,7 @@ export default function renderDefaultChildren({
                     if (typeof variables[variableName] !== 'undefined') {
                         return variables[variableName]
                     }
-                    if (variableValue) return variableValue;
+                    if (typeof variableValue !== 'undefined') return variableValue;
                     if (variableName.startsWith(baseVariablePrefix)) { // pain point: somewhat breakable logic
                         const fallbackVariableName = getFallbackVariableName(variableType);
                         if (typeof variables[fallbackVariableName] !== 'undefined') {
@@ -59,6 +58,8 @@ export default function renderDefaultChildren({
                 const n = typeof variables.n === 'number' ? variables.n :
                             typeof child.props.n === 'number' ?  child.props.n :
                                 child.props['data-_gt-n'];
+                if (typeof n === 'number' && typeof variables.n === 'undefined')
+                    variables.n = n;
                 const branches = generaltranslation.branches || {};
                 return handleChildren(getPluralBranch(n, [defaultLocale], branches) || child.props.children);
             }

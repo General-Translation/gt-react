@@ -54,6 +54,7 @@ var renderTranslatedChildren_1 = __importDefault(require("./rendering/renderTran
 var internal_2 = require("generaltranslation/internal");
 var renderVariable_1 = __importDefault(require("./rendering/renderVariable"));
 var createErrors_1 = require("../errors/createErrors");
+var supported_locales_1 = require("@generaltranslation/supported-locales");
 /**
  * Provides General Translation context to its children, which can then access `useGT`, `useLocale`, and `useDefaultLocale`.
  *
@@ -69,15 +70,19 @@ var createErrors_1 = require("../errors/createErrors");
  */
 function GTProvider(_a) {
     var _this = this;
-    var children = _a.children, projectId = _a.projectId, _b = _a.dictionary, dictionary = _b === void 0 ? {} : _b, locales = _a.locales, _c = _a.defaultLocale, defaultLocale = _c === void 0 ? (locales === null || locales === void 0 ? void 0 : locales[0]) || internal_2.libraryDefaultLocale : _c, locale = _a.locale, _d = _a.cacheURL, cacheURL = _d === void 0 ? internal_2.defaultCacheURL : _d;
+    var children = _a.children, projectId = _a.projectId, _b = _a.dictionary, dictionary = _b === void 0 ? {} : _b, locales = _a.locales, _c = _a.defaultLocale, defaultLocale = _c === void 0 ? internal_2.libraryDefaultLocale : _c, locale = _a.locale, _d = _a.cacheURL, cacheURL = _d === void 0 ? internal_2.defaultCacheURL : _d;
     if (!projectId && cacheURL === internal_2.defaultCacheURL) {
         throw new Error(createErrors_1.projectIdMissingError);
     }
+    var supportedLocales = (0, react_1.useMemo)(function () {
+        return (0, supported_locales_1.listSupportedLocales)();
+    }, []);
+    if (!locales) {
+        locales = supportedLocales;
+    }
     var browserLocale = (0, useBrowserLocale_1.default)(defaultLocale, locales);
     locale = locale || browserLocale;
-    if (locales) {
-        locale = (0, generaltranslation_1.determineLocale)([locale, browserLocale], locales) || locale;
-    }
+    locale = (0, generaltranslation_1.determineLocale)([locale, browserLocale], locales) || locale;
     var translationRequired = (0, react_1.useMemo)(function () { return (0, generaltranslation_1.requiresTranslation)(defaultLocale, locale, locales); }, [defaultLocale, locale, locales]);
     var _e = (0, react_2.useState)(cacheURL ? null : {}), translations = _e[0], setTranslations = _e[1];
     (0, react_2.useEffect)(function () {
