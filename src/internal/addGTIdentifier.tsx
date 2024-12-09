@@ -1,6 +1,6 @@
 import React, { ReactNode, ReactElement, isValidElement } from 'react'
 import { isAcceptedPluralForm } from 'generaltranslation/internal'
-import { createNestedDataGTError } from '../errors/createErrors';
+import { createNestedDataGTError, createNestedTError } from '../errors/createErrors';
 
 type Child = ReactNode;
 type Children = Child[] | Child;
@@ -33,7 +33,7 @@ export default function addGTIdentifier(children: Children, outerID?: string | u
         if (transformation) {
             const transformationParts = transformation.split('-');
             if (transformationParts[0] === "translate") {
-                throw new Error(createNestedDataGTError(child))
+                throw new Error(createNestedTError(child))
             }
             if (transformationParts[0] === "variable") {
                 result.variableType = transformationParts?.[1] || "variable";

@@ -14,6 +14,7 @@ import renderTranslatedChildren from "./rendering/renderTranslatedChildren";
 import { defaultCacheURL, libraryDefaultLocale } from "generaltranslation/internal";
 import renderVariable from "./rendering/renderVariable";
 import { createLibraryNoEntryWarning, projectIdMissingError } from "../errors/createErrors";
+import { listSupportedLocales } from "@generaltranslation/supported-locales";
 
 /**
  * Provides General Translation context to its children, which can then access `useGT`, `useLocale`, and `useDefaultLocale`.
@@ -33,7 +34,7 @@ export default function GTProvider({
     projectId,
     dictionary = {}, 
     locales, 
-    defaultLocale = locales?.[0] || libraryDefaultLocale, 
+    defaultLocale = libraryDefaultLocale, 
     locale, 
     cacheURL = defaultCacheURL
 }: {
@@ -50,11 +51,16 @@ export default function GTProvider({
         throw new Error(projectIdMissingError)
     }
 
+    const supportedLocales = useMemo(() => {
+        return listSupportedLocales();
+    }, []);
+    if (!locales) {
+        locales = supportedLocales;
+    }
+
     const browserLocale = useBrowserLocale(defaultLocale, locales);
     locale = locale || browserLocale;
-    if (locales) {
-        locale = determineLocale([locale, browserLocale], locales) || locale;
-    }
+    locale = determineLocale([locale, browserLocale], locales) || locale;
 
     const translationRequired = useMemo(() => requiresTranslation(defaultLocale, locale, locales), [defaultLocale, locale, locales])
 

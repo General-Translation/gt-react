@@ -73,7 +73,7 @@ function addGTIdentifier(children, outerID, startingIndex) {
         if (transformation) {
             var transformationParts = transformation.split('-');
             if (transformationParts[0] === "translate") {
-                throw new Error((0, createErrors_1.createNestedDataGTError)(child));
+                throw new Error((0, createErrors_1.createNestedTError)(child));
             }
             if (transformationParts[0] === "variable") {
                 result.variableType = (transformationParts === null || transformationParts === void 0 ? void 0 : transformationParts[1]) || "variable";
