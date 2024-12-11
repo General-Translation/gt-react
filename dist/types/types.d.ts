@@ -41,14 +41,5 @@ export type VariableObject = {
 export type Translation = {
     k: string;
     t: TranslatedChildren;
-    singular?: TranslatedChildren;
-    plural?: TranslatedChildren;
-    dual?: TranslatedChildren;
-    zero?: TranslatedChildren;
-    one?: TranslatedChildren;
-    two?: TranslatedChildren;
-    few?: TranslatedChildren;
-    many?: TranslatedChildren;
-    other?: TranslatedChildren;
 };
 //# sourceMappingURL=types.d.ts.map

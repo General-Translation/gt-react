@@ -1,5 +1,5 @@
 import React, { useMemo } from "react";
-import { determineLocale, renderContentToString, requiresTranslation } from "generaltranslation";
+import GT, { determineLocale, renderContentToString, requiresTranslation } from "generaltranslation";
 import { ReactElement, useCallback, useEffect, useState } from "react";
 import useBrowserLocale from "../hooks/useBrowserLocale";
 
@@ -11,10 +11,11 @@ import extractEntryMetadata from "./helpers/extractEntryMetadata";
 import renderDefaultChildren from "./rendering/renderDefaultChildren";
 import renderTranslatedChildren from "./rendering/renderTranslatedChildren";
 
-import { defaultCacheURL, libraryDefaultLocale } from "generaltranslation/internal";
+import { defaultBaseUrl, defaultCacheUrl, libraryDefaultLocale } from "generaltranslation/internal";
 import renderVariable from "./rendering/renderVariable";
 import { createLibraryNoEntryWarning, projectIdMissingError } from "../errors/createErrors";
 import { listSupportedLocales } from "@generaltranslation/supported-locales";
+import useDynamicTranslation from "./dynamic/useDynamicTranslation";
 
 /**
  * Provides General Translation context to its children, which can then access `useGT`, `useLocale`, and `useDefaultLocale`.
@@ -25,7 +26,7 @@ import { listSupportedLocales } from "@generaltranslation/supported-locales";
  * @param {string[]} [locales] - The list of approved locales for the project.
  * @param {string} [defaultLocale=libraryDefaultLocale] - The default locale to use if no other locale is found.
  * @param {string} [locale] - The current locale, if already set.
- * @param {string} [cacheURL='https://cache.gtx.dev'] - The URL of the cache service for fetching translations.
+ * @param {string} [cacheUrl='https://cache.gtx.dev'] - The URL of the cache service for fetching translations.
  * 
  * @returns {JSX.Element} The provider component for General Translation context.
  */
@@ -33,10 +34,13 @@ export default function GTProvider({
     children, 
     projectId,
     dictionary = {}, 
-    locales, 
+    locales = listSupportedLocales(), 
     defaultLocale = libraryDefaultLocale, 
-    locale, 
-    cacheURL = defaultCacheURL
+    locale = useBrowserLocale(defaultLocale, locales) || defaultLocale, 
+    cacheUrl = defaultCacheUrl,
+    baseUrl = defaultBaseUrl,
+    devApiKey,
+    ...metadata
 }: {
     children?: any;
     projectId?: string;
@@ -44,43 +48,40 @@ export default function GTProvider({
     locales?: string[];
     defaultLocale?: string;
     locale?: string;
-    cacheURL?: string;
+    cacheUrl?: string;
+    baseUrl?: string;
+    devApiKey?: string;
+    [key: string]: any
 }): JSX.Element {
 
-    if (!projectId && cacheURL === defaultCacheURL) {
+    if (!projectId && (cacheUrl === defaultCacheUrl || baseUrl === defaultBaseUrl)) {
         throw new Error(projectIdMissingError)
-    }
-
-    const supportedLocales = useMemo(() => {
-        return listSupportedLocales();
-    }, []);
-    if (!locales) {
-        locales = supportedLocales;
-    }
-
-    const browserLocale = useBrowserLocale(defaultLocale, locales);
-    locale = locale || browserLocale;
-    locale = determineLocale([locale, browserLocale], locales) || locale;
+    };
 
     const translationRequired = useMemo(() => requiresTranslation(defaultLocale, locale, locales), [defaultLocale, locale, locales])
 
     const [translations, setTranslations] = useState<Record<string, Translation> | null>(
-        cacheURL ? null : {}
-    )
-
+        cacheUrl ? null : {}
+    );
+    
     useEffect(() => {
         if (!translations) {
             if (!translationRequired) {
                 setTranslations({}); // no translation required
             } else {
                 (async () => {
-                    const response = await fetch(`${cacheURL}/${projectId}/${locale}`);
-                    const result = await response.json();
-                    setTranslations(result);
+                    try {
+                        const response = await fetch(`${cacheUrl}/${projectId}/${locale}`);
+                        const result = await response.json();
+                        setTranslations(result);
+                    } catch (error) {
+                        console.error(error);
+                        setTranslations({});
+                    }
                 })()
             }
         }
-    }, [translations, translationRequired])
+    }, [translationRequired, cacheUrl, projectId, locale])
 
     const translate = useCallback((
         id: string, 
@@ -149,9 +150,13 @@ export default function GTProvider({
         }
     }, [dictionary, translations, translationRequired, defaultLocale]);
 
+    const { translateChildren, translateContent } = useDynamicTranslation({
+        projectId, defaultLocale, devApiKey, baseUrl, setTranslations, ...metadata
+    });
+
     return (
         <GTContext.Provider value={{
-            translate, 
+            translate, translateContent, translateChildren,
             locale, defaultLocale, 
             translations, translationRequired,
             projectId

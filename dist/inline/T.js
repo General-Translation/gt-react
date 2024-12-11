@@ -64,7 +64,7 @@ function T(_a) {
         throw new Error((0, createErrors_1.createClientSideTWithoutIDError)(children));
     }
     var variables = props.variables, variablesOptions = props.variablesOptions;
-    var _b = (0, GTContext_1.default)("<T id=\"".concat(id, "\"> used on the client-side outside of <GTProvider>")), translations = _b.translations, translationRequired = _b.translationRequired;
+    var _b = (0, GTContext_1.default)("<T id=\"".concat(id, "\"> used on the client-side outside of <GTProvider>")), translations = _b.translations, translationRequired = _b.translationRequired, translateDynamic = _b.translateDynamic;
     var locale = (0, useLocale_1.default)();
     var defaultLocale = (0, useDefaultLocale_1.default)();
     var taggedChildren = (0, react_2.useMemo)(function () { return (0, internal_1.addGTIdentifier)(children); }, [children]);
@@ -96,6 +96,14 @@ function T(_a) {
             variablesOptions: variablesOptions,
             defaultLocale: defaultLocale,
             renderVariable: renderVariable_1.default
+        });
+        translateDynamic({
+            source: childrenAsObjects,
+            targetLocale: locale,
+            metadata: {
+                id: id,
+                hash: key
+            }
         });
         // The suspense exists here for hydration reasons
         return ((0, jsx_runtime_1.jsx)(react_1.Suspense, { fallback: (0, jsx_runtime_1.jsx)(jsx_runtime_1.Fragment, {}), children: defaultChildren }));

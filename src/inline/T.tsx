@@ -57,7 +57,7 @@ function T({
 
     const { variables, variablesOptions } = props;
 
-    const { translations, translationRequired } = useGTContext(
+    const { translations, translationRequired, translateDynamic } = useGTContext(
         `<T id="${id}"> used on the client-side outside of <GTProvider>`
     );
 
@@ -99,12 +99,20 @@ function T({
             variables, variablesOptions, defaultLocale, renderVariable
         }) as JSX.Element;
 
+        translateDynamic({
+            source: childrenAsObjects,
+            targetLocale: locale,
+            metadata: {
+                id, hash: key
+            }
+        });
+
         // The suspense exists here for hydration reasons
         return (
             <Suspense fallback={<></>}>
                 {defaultChildren}
             </Suspense>
-        );
+        )
     }
    
     return renderTranslatedChildren({

@@ -17,6 +17,10 @@ export const createNestedDataGTError = (child: any) => `General Translation alre
 
 export const createNestedTError = (child: any) => `General Translation: Nested <T> components. The inner <T> has the id: "${child?.props?.id}".`
 
+export const renderingError = 'General Translation: Rendering error.'
+
+export const dynamicTranslationError = "Error fetching batched translations:"
+
 // ---- WARNINGS ---- //
 
 export const createLibraryNoEntryWarning = (id: string) => `gt-react: No dictionary entry found for id: "${id}"`

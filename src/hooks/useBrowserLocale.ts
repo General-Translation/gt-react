@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { determineLocale } from 'generaltranslation';
 import { libraryDefaultLocale } from 'generaltranslation/internal';
+import { listSupportedLocales } from '@generaltranslation/supported-locales';
 
 /**
  * Hook to retrieve the browser's default locale, with support for a fallback and locale stored in a cookie.
@@ -26,7 +27,7 @@ import { libraryDefaultLocale } from 'generaltranslation/internal';
  */
 export default function useBrowserLocale(
     defaultLocale: string = libraryDefaultLocale, 
-    locales?: string[]
+    locales: string[] = listSupportedLocales()
 ): string {
     const [locale, setLocale] = useState<string>('');
     useEffect(() => {
@@ -36,11 +37,7 @@ export default function useBrowserLocale(
             if ((navigator as any)?.userLanguage) return [(navigator as any)?.userLanguage];
             return [defaultLocale];
         })() as string[];
-        if (locales) {
-            setLocale(determineLocale(browserLocales, locales) || defaultLocale);
-        } else {
-            setLocale(browserLocales[0] || defaultLocale);
-        }
+        setLocale(determineLocale(browserLocales, locales) || defaultLocale);
     }, [defaultLocale, locales]);
     return locale;
 }
