@@ -1,6 +1,7 @@
 import GT from "generaltranslation";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { dynamicTranslationError } from "../../errors/createErrors";
+import { defaultBaseUrl } from "generaltranslation/internal";
 
 export default function useDynamicTranslation({
     projectId, devApiKey,
@@ -16,6 +17,15 @@ export default function useDynamicTranslation({
 }) {
 
     const gt = useMemo(() => new GT({ devApiKey, projectId, baseUrl, defaultLocale: metadata.defaultLocale }), [ devApiKey, projectId, baseUrl, metadata.defaultLocale ])
+
+    const translationEnabled = (
+        baseUrl &&
+        projectId &&
+        (baseUrl === defaultBaseUrl ? gt.apiKey : true)
+        ? true
+        : false
+    );
+    if (!translationEnabled) return { translationEnabled };
 
     // Queue to store requested keys between renders.
     const requestQueueRef = useRef<Set<any>>(new Set());
@@ -54,9 +64,9 @@ export default function useDynamicTranslation({
                     setTranslations((prev: any) => {
                         const merged = { ...(prev || {}) };
                         results.forEach(result => {
-                            const { translation, reference } = result;
-                            if (reference && translation) {
-                                merged[reference.id] = { k: reference.key, t: translation }
+                            if (result?.translation && result?.reference) {
+                                const { translation, reference: { id, key } } = result;
+                                merged[id][key] = translation;
                             }
                         })
                         return merged;
@@ -71,5 +81,5 @@ export default function useDynamicTranslation({
         };
     }, [gt, fetchTrigger, setTranslations]);
 
-    return { translateContent, translateChildren };
+    return { translateContent, translateChildren, translationEnabled };
 }

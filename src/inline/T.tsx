@@ -7,7 +7,7 @@ import useGTContext from "../provider/GTContext";
 import renderTranslatedChildren from "../provider/rendering/renderTranslatedChildren";
 import { useMemo } from "react";
 import renderVariable from "../provider/rendering/renderVariable";
-import { createClientSideTDictionaryCollisionError, createClientSideTHydrationError, createClientSideTWithoutIDError } from "../errors/createErrors";
+import { createClientSideTDictionaryCollisionError, createClientSideTHydrationError, createClientSideTWithoutIdError } from "../errors/createErrors";
 
 /**
  * Translation component that handles rendering translated content, including plural forms.
@@ -51,9 +51,7 @@ function T({
 
     if (!children) return undefined;
     
-    if (!id) {
-        throw new Error(createClientSideTWithoutIDError(children))
-    }
+    if (!id) throw new Error(createClientSideTWithoutIdError(children))
 
     const { variables, variablesOptions } = props;
 
@@ -76,23 +74,17 @@ function T({
 
     // Do translation
     const context = props.context;
-    const [childrenAsObjects, key] = useMemo(() => {
+    const [childrenAsObjects, hash] = useMemo(() => {
         const childrenAsObjects = writeChildrenAsObjects(taggedChildren);
-        const key: string = hashReactChildrenObjects(context ? [childrenAsObjects, context] : childrenAsObjects);
-        return [childrenAsObjects, key];
+        const hash: string = hashReactChildrenObjects(context ? [childrenAsObjects, context] : childrenAsObjects);
+        return [childrenAsObjects, hash];
     }, [context, taggedChildren]);
 
     const translation = translations[id];
     
-    if (translation?.promise) {
-        throw new Error(createClientSideTDictionaryCollisionError(id))
-    }
-    
-    if (!translation || !translation.t || translation.k !== key) {
+    if (!translation || !translation[hash]) {
         
-        console.error(
-            createClientSideTHydrationError(id)
-        );
+        // console.error(createClientSideTHydrationError(id));
 
         const defaultChildren = renderDefaultChildren({
             children: taggedChildren,
@@ -103,7 +95,7 @@ function T({
             source: childrenAsObjects,
             targetLocale: locale,
             metadata: {
-                id, hash: key
+                id, hash
             }
         });
 
@@ -116,7 +108,7 @@ function T({
     }
    
     return renderTranslatedChildren({
-        source: taggedChildren, target: translation.t, 
+        source: taggedChildren, target: translation[hash], 
         variables, variablesOptions, locales: [locale, defaultLocale],
         renderVariable
     }) as JSX.Element;

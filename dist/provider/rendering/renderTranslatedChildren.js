@@ -108,9 +108,9 @@ function renderTranslatedChildren(_a) {
                 var _a, _b;
                 var generaltranslation = (0, getGTProp_1.default)(sourceChild);
                 if (typeof (generaltranslation === null || generaltranslation === void 0 ? void 0 : generaltranslation.id) !== 'undefined') {
-                    var sourceID = generaltranslation.id;
-                    var targetID = (_b = (_a = targetElement === null || targetElement === void 0 ? void 0 : targetElement.props) === null || _a === void 0 ? void 0 : _a['data-_gt']) === null || _b === void 0 ? void 0 : _b.id;
-                    return sourceID === targetID;
+                    var sourceId = generaltranslation.id;
+                    var targetId = (_b = (_a = targetElement === null || targetElement === void 0 ? void 0 : targetElement.props) === null || _a === void 0 ? void 0 : _a['data-_gt']) === null || _b === void 0 ? void 0 : _b.id;
+                    return sourceId === targetId;
                 }
                 return false;
             });

@@ -132,31 +132,20 @@ function GTProvider(_a) {
             }
         }
     }, [translationRequired, cacheUrl, projectId, locale]);
-    var translate = (0, react_2.useCallback)(function (id, options, f) {
+    var translate = (0, react_2.useCallback)(function (id, options) {
         if (options === void 0) { options = {}; }
         // get the dictionary entry
-        var _a = (0, extractEntryMetadata_1.default)((0, getDictionaryEntry_1.default)(dictionary, id)), entry = _a.entry, metadata = _a.metadata;
-        if (entry === undefined || entry === null) {
+        var dictionaryEntry = (0, getDictionaryEntry_1.default)(dictionary, id);
+        if (dictionaryEntry === undefined || dictionaryEntry === null ||
+            (typeof dictionaryEntry === 'object' && !Array.isArray(dictionaryEntry))) {
             console.warn((0, createErrors_1.createLibraryNoEntryWarning)(id));
             return undefined;
         }
         ;
+        var _a = (0, extractEntryMetadata_1.default)(dictionaryEntry), entry = _a.entry, metadata = _a.metadata;
         // Get variables and variable options
-        var variables;
-        var variablesOptions;
-        if (options) {
-            variables = options;
-            if (metadata === null || metadata === void 0 ? void 0 : metadata.variablesOptions) {
-                variablesOptions = metadata.variablesOptions;
-            }
-        }
-        // Handle if the entry is a function
-        if (typeof f === 'function') {
-            entry = f(options);
-        }
-        else if (typeof entry === 'function') {
-            entry = entry(options);
-        }
+        var variables = options;
+        var variablesOptions = metadata === null || metadata === void 0 ? void 0 : metadata.variablesOptions;
         var taggedEntry = (0, internal_1.addGTIdentifier)(entry, id);
         // If no translations are required
         if (!translationRequired) {
@@ -173,13 +162,16 @@ function GTProvider(_a) {
         }
         // If a translation is required
         if (translations) {
-            var translation = translations[id];
+            var context = metadata === null || metadata === void 0 ? void 0 : metadata.context;
+            var childrenAsObjects = (0, internal_1.writeChildrenAsObjects)(taggedEntry);
+            var hash = (0, internal_1.hashReactChildrenObjects)(context ? [childrenAsObjects, context] : childrenAsObjects);
+            var target = translations[id][hash];
             if (typeof taggedEntry === 'string') {
-                return (0, generaltranslation_1.renderContentToString)(translation.t, [locale, defaultLocale], variables, variablesOptions);
+                return (0, generaltranslation_1.renderContentToString)(target, [locale, defaultLocale], variables, variablesOptions);
             }
             return (0, renderTranslatedChildren_1.default)({
                 source: taggedEntry,
-                target: translation.t,
+                target: target,
                 variables: variables,
                 variablesOptions: variablesOptions,
                 locales: [locale, defaultLocale],
@@ -187,7 +179,7 @@ function GTProvider(_a) {
             });
         }
     }, [dictionary, translations, translationRequired, defaultLocale]);
-    var _j = (0, useDynamicTranslation_1.default)(__assign({ projectId: projectId, defaultLocale: defaultLocale, devApiKey: devApiKey, baseUrl: baseUrl, setTranslations: setTranslations }, metadata)), translateChildren = _j.translateChildren, translateContent = _j.translateContent;
+    var _j = (0, useDynamicTranslation_1.default)(__assign({ projectId: projectId, defaultLocale: defaultLocale, devApiKey: devApiKey, baseUrl: baseUrl, setTranslations: setTranslations }, metadata)), translateChildren = _j.translateChildren, translateContent = _j.translateContent, translationEnabled = _j.translationEnabled;
     return ((0, jsx_runtime_1.jsx)(GTContext_1.GTContext.Provider, { value: {
             translate: translate,
             translateContent: translateContent,
@@ -196,7 +188,8 @@ function GTProvider(_a) {
             defaultLocale: defaultLocale,
             translations: translations,
             translationRequired: translationRequired,
-            projectId: projectId
+            projectId: projectId,
+            translationEnabled: translationEnabled
         }, children: children }));
 }
 //# sourceMappingURL=GTProvider.js.map

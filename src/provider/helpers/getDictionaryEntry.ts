@@ -5,7 +5,7 @@ import { createLibraryNoEntryWarning } from "../../errors/createErrors";
 export default function getDictionaryEntry(
     dictionary: Dictionary,
     id: string
-): Dictionary | DictionaryEntry {
+): Dictionary | DictionaryEntry | undefined {
     if (!id || typeof id !== 'string') {
         console.error(createLibraryNoEntryWarning(id))
         return undefined;

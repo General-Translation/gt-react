@@ -5,6 +5,10 @@ export default function useDynamicTranslation({ projectId, devApiKey, baseUrl, s
     baseUrl?: string;
     setTranslations: React.Dispatch<React.SetStateAction<any>>;
 }): {
+    translationEnabled: boolean;
+    translateContent?: undefined;
+    translateChildren?: undefined;
+} | {
     translateContent: (params: {
         source: any;
         targetLocale: string;
@@ -15,5 +19,6 @@ export default function useDynamicTranslation({ projectId, devApiKey, baseUrl, s
         targetLocale: string;
         metadata: Record<string, any>;
     }) => void;
+    translationEnabled: boolean;
 };
 //# sourceMappingURL=useDynamicTranslation.d.ts.map

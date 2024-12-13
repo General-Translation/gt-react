@@ -65,10 +65,18 @@ exports.default = useDynamicTranslation;
 var generaltranslation_1 = __importDefault(require("generaltranslation"));
 var react_1 = require("react");
 var createErrors_1 = require("../../errors/createErrors");
+var internal_1 = require("generaltranslation/internal");
 function useDynamicTranslation(_a) {
     var _this = this;
     var projectId = _a.projectId, devApiKey = _a.devApiKey, baseUrl = _a.baseUrl, setTranslations = _a.setTranslations, metadata = __rest(_a, ["projectId", "devApiKey", "baseUrl", "setTranslations"]);
     var gt = (0, react_1.useMemo)(function () { return new generaltranslation_1.default({ devApiKey: devApiKey, projectId: projectId, baseUrl: baseUrl, defaultLocale: metadata.defaultLocale }); }, [devApiKey, projectId, baseUrl, metadata.defaultLocale]);
+    var translationEnabled = (baseUrl &&
+        projectId &&
+        (baseUrl === internal_1.defaultBaseUrl ? gt.apiKey : true)
+        ? true
+        : false);
+    if (!translationEnabled)
+        return { translationEnabled: translationEnabled };
     // Queue to store requested keys between renders.
     var requestQueueRef = (0, react_1.useRef)(new Set());
     // Trigger a fetch when keys have been added.
@@ -107,9 +115,9 @@ function useDynamicTranslation(_a) {
                             setTranslations(function (prev) {
                                 var merged = __assign({}, (prev || {}));
                                 results_1.forEach(function (result) {
-                                    var translation = result.translation, reference = result.reference;
-                                    if (reference && translation) {
-                                        merged[reference.id] = { k: reference.key, t: translation };
+                                    if ((result === null || result === void 0 ? void 0 : result.translation) && (result === null || result === void 0 ? void 0 : result.reference)) {
+                                        var translation = result.translation, _a = result.reference, id = _a.id, key = _a.key;
+                                        merged[id][key] = translation;
                                     }
                                 });
                                 return merged;
@@ -128,6 +136,6 @@ function useDynamicTranslation(_a) {
             isCancelled = true;
         };
     }, [gt, fetchTrigger, setTranslations]);
-    return { translateContent: translateContent, translateChildren: translateChildren };
+    return { translateContent: translateContent, translateChildren: translateChildren, translationEnabled: translationEnabled };
 }
 //# sourceMappingURL=useDynamicTranslation.js.map

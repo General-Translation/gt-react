@@ -50,7 +50,7 @@ var jsx_runtime_1 = require("react/jsx-runtime");
 var react_1 = __importStar(require("react"));
 var internal_1 = require("generaltranslation/internal");
 var createErrors_1 = require("../errors/createErrors");
-function addGTIdentifier(children, outerID, startingIndex) {
+function addGTIdentifier(children, outerId, startingIndex) {
     if (startingIndex === void 0) { startingIndex = 0; }
     // Object to keep track of the current index for GT IDs
     var index = startingIndex;
@@ -124,7 +124,7 @@ function addGTIdentifier(children, outerID, startingIndex) {
     }
     function handleChildren(children) {
         if (Array.isArray(children)) {
-            // outerID = undefined;
+            // outerId = undefined;
             return react_1.default.Children.map(children, handleSingleChild);
         }
         else {

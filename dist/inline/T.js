@@ -60,9 +60,8 @@ function T(_a) {
     var children = _a.children, id = _a.id, props = __rest(_a, ["children", "id"]);
     if (!children)
         return undefined;
-    if (!id) {
-        throw new Error((0, createErrors_1.createClientSideTWithoutIDError)(children));
-    }
+    if (!id)
+        throw new Error((0, createErrors_1.createClientSideTWithoutIdError)(children));
     var variables = props.variables, variablesOptions = props.variablesOptions;
     var _b = (0, GTContext_1.default)("<T id=\"".concat(id, "\"> used on the client-side outside of <GTProvider>")), translations = _b.translations, translationRequired = _b.translationRequired, translateDynamic = _b.translateDynamic;
     var locale = (0, useLocale_1.default)();
@@ -81,15 +80,12 @@ function T(_a) {
     var context = props.context;
     var _c = (0, react_2.useMemo)(function () {
         var childrenAsObjects = (0, internal_1.writeChildrenAsObjects)(taggedChildren);
-        var key = (0, internal_1.hashReactChildrenObjects)(context ? [childrenAsObjects, context] : childrenAsObjects);
-        return [childrenAsObjects, key];
-    }, [context, taggedChildren]), childrenAsObjects = _c[0], key = _c[1];
+        var hash = (0, internal_1.hashReactChildrenObjects)(context ? [childrenAsObjects, context] : childrenAsObjects);
+        return [childrenAsObjects, hash];
+    }, [context, taggedChildren]), childrenAsObjects = _c[0], hash = _c[1];
     var translation = translations[id];
-    if (translation === null || translation === void 0 ? void 0 : translation.promise) {
-        throw new Error((0, createErrors_1.createClientSideTDictionaryCollisionError)(id));
-    }
-    if (!translation || !translation.t || translation.k !== key) {
-        console.error((0, createErrors_1.createClientSideTHydrationError)(id));
+    if (!translation || !translation[hash]) {
+        // console.error(createClientSideTHydrationError(id));
         var defaultChildren = (0, renderDefaultChildren_1.default)({
             children: taggedChildren,
             variables: variables,
@@ -102,14 +98,14 @@ function T(_a) {
             targetLocale: locale,
             metadata: {
                 id: id,
-                hash: key
+                hash: hash
             }
         });
         // The suspense exists here for hydration reasons
         return ((0, jsx_runtime_1.jsx)(react_1.Suspense, { fallback: (0, jsx_runtime_1.jsx)(jsx_runtime_1.Fragment, {}), children: defaultChildren }));
     }
     return (0, renderTranslatedChildren_1.default)({
-        source: taggedChildren, target: translation.t,
+        source: taggedChildren, target: translation[hash],
         variables: variables,
         variablesOptions: variablesOptions,
         locales: [locale, defaultLocale],

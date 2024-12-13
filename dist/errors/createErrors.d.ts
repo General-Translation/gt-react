@@ -1,6 +1,6 @@
 export declare const projectIdMissingError = "gt-react Error: General Translation cloud services require a project ID! Find yours at www.generaltranslation.com/dashboard.";
 export declare const createPluralMissingError: (children: any) => string;
-export declare const createClientSideTWithoutIDError: (children: any) => string;
+export declare const createClientSideTWithoutIdError: (children: any) => string;
 export declare const createStringTranslationError: (content: string, id?: string) => string;
 export declare const createClientSideTDictionaryCollisionError: (id: string) => string;
 export declare const createClientSideTHydrationError: (id: string) => string;
@@ -9,5 +9,5 @@ export declare const createNestedTError: (child: any) => string;
 export declare const renderingError = "General Translation: Rendering error.";
 export declare const dynamicTranslationError = "Error fetching batched translations:";
 export declare const createLibraryNoEntryWarning: (id: string) => string;
-export declare const createNoEntryWarning: (id: string, prefixedID: string) => string;
+export declare const createNoEntryWarning: (id: string, prefixedId: string) => string;
 //# sourceMappingURL=createErrors.d.ts.map

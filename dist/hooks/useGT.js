@@ -48,7 +48,7 @@ var createErrors_1 = require("../errors/createErrors");
 function useGT(id) {
     if (id === void 0) { id = ''; }
     // Create a prefix for translation keys if an id is provided
-    var getID = function (suffix) {
+    var getId = function (suffix) {
         return id ? "".concat(id, ".").concat(suffix) : suffix;
     };
     // Get the translation context
@@ -58,18 +58,17 @@ function useGT(id) {
     *
     * @param {string} [id=''] - The ID of the item in the dictionary to translate.
     * @param {Record<string, any>} [options={}] - Variables or parameters (e.g., `n`) passed into the translation for dynamic content.
-    * @param {Function} [f] - `f` is executed with `options` as parameters, and its result is translated based on the dictionary value of `id`. You likely don't need this parameter unless you are using `gt-next`.
     *
     * @returns {string | JSX.Element}
     */
-    function t(id, options, f) {
+    function t(id, options) {
         if (id === void 0) { id = ''; }
         if (options === void 0) { options = {}; }
-        var prefixedID = getID(id);
+        var prefixedId = getId(id);
         if (translate) {
-            var translation = translate(prefixedID, options, f);
+            var translation = translate(prefixedId, options);
             if (!translation)
-                console.warn((0, createErrors_1.createNoEntryWarning)(id, prefixedID));
+                console.warn((0, createErrors_1.createNoEntryWarning)(id, prefixedId));
             return translation;
         }
         return undefined;
@@ -95,7 +94,7 @@ function useGT(id) {
 function useElement(id) {
     if (id === void 0) { id = ''; }
     // Create a prefix for translation keys if an id is provided
-    var getID = function (suffix) {
+    var getId = function (suffix) {
         return id ? "".concat(id, ".").concat(suffix) : suffix;
     };
     // Get the translation context
@@ -106,23 +105,22 @@ function useElement(id) {
     *
     * @param {string} [id=''] - The ID of the item in the dictionary to translate.
     * @param {Record<string, any>} [options={}] - Variables or parameters (e.g., `n`) passed into the translation for dynamic content.
-    * @param {Function} [f] - `f` is executed with `options` as parameters, and its result is translated based on the dictionary value of `id`. You likely don't need this parameter unless you are using `gt-next`.
     *
     * @returns {JSX.Element}
     */
-    function t(id, options, f) {
+    function t(id, options) {
         if (id === void 0) { id = ''; }
         if (options === void 0) { options = {}; }
-        var prefixedID = getID(id);
+        var prefixedId = getId(id);
         if (translate) {
-            var translation = translate(prefixedID, options, f);
+            var translation = translate(prefixedId, options);
             if (!translation)
-                console.warn((0, createErrors_1.createNoEntryWarning)(id, prefixedID));
+                console.warn((0, createErrors_1.createNoEntryWarning)(id, prefixedId));
             if (!(0, react_1.isValidElement)(translation))
-                return (0, jsx_runtime_1.jsx)(react_1.default.Fragment, { children: translation }, prefixedID);
+                return (0, jsx_runtime_1.jsx)(react_1.default.Fragment, { children: translation }, prefixedId);
             return translation;
         }
-        return (0, jsx_runtime_1.jsx)(react_1.default.Fragment, {}, prefixedID);
+        return (0, jsx_runtime_1.jsx)(react_1.default.Fragment, {}, prefixedId);
     }
     ;
     return t;

@@ -1,5 +1,5 @@
 import React, { ReactElement, ReactNode } from "react";
-import { TranslatedChildren, TranslatedElement, VariableObject } from "../../types/types";
+import { TranslatedChildren, TranslatedElement, Variable } from "../../types/types";
 import isVariableObject from "../helpers/isVariableObject";
 import getGTProp from "../helpers/getGTProp";
 import getVariableProps from "../../variables/_getVariableProps";
@@ -134,9 +134,9 @@ export default function renderTranslatedChildren({
             return sourceElements.find(sourceChild => {
                 const generaltranslation = getGTProp(sourceChild);
                 if (typeof generaltranslation?.id !== 'undefined') {
-                    const sourceID = generaltranslation.id;
-                    const targetID = targetElement?.props?.['data-_gt']?.id;
-                    return sourceID === targetID;
+                    const sourceId = generaltranslation.id;
+                    const targetId = targetElement?.props?.['data-_gt']?.id;
+                    return sourceId === targetId;
                 }
                 return false;
             });
@@ -211,7 +211,7 @@ export default function renderTranslatedChildren({
         }
 
         if (targetType === "variable") {
-            const targetVariable = target as VariableObject;
+            const targetVariable = target as Variable;
             const variableName = targetVariable.key;
             const variableType = targetVariable.variable || "variable";
             const variableValue = (() => {
