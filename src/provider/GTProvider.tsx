@@ -11,7 +11,7 @@ import extractEntryMetadata from "./helpers/extractEntryMetadata";
 import renderDefaultChildren from "./rendering/renderDefaultChildren";
 import renderTranslatedChildren from "./rendering/renderTranslatedChildren";
 
-import { defaultBaseUrl, defaultCacheUrl, libraryDefaultLocale } from "generaltranslation/internal";
+import { defaultBaseUrl, defaultCacheUrl, defaultRenderSettings, libraryDefaultLocale } from "generaltranslation/internal";
 import renderVariable from "./rendering/renderVariable";
 import { createLibraryNoEntryWarning, projectIdMissingError } from "../errors/createErrors";
 import { listSupportedLocales } from "@generaltranslation/supported-locales";
@@ -39,6 +39,7 @@ export default function GTProvider({
     locale = useBrowserLocale(defaultLocale, locales) || defaultLocale, 
     cacheUrl = defaultCacheUrl,
     baseUrl = defaultBaseUrl,
+    renderSettings = defaultRenderSettings,
     devApiKey,
     ...metadata
 }: {
@@ -51,6 +52,10 @@ export default function GTProvider({
     cacheUrl?: string;
     baseUrl?: string;
     devApiKey?: string;
+    renderSettings?: {
+        method: 'skeleton' | 'replace' | 'hang' | 'subtle';
+        timeout: number | null;
+      };
     [key: string]: any
 }): JSX.Element {
 
@@ -69,7 +74,7 @@ export default function GTProvider({
             if (!translationRequired) {
                 setTranslations({}); // no translation required
             } else {
-                (async () => {
+                (async () => { // check cache for translations
                     try {
                         const response = await fetch(`${cacheUrl}/${projectId}/${locale}`);
                         const result = await response.json();
@@ -78,7 +83,7 @@ export default function GTProvider({
                         console.error(error);
                         setTranslations({});
                     }
-                })()
+                })();
             }
         }
     }, [translationRequired, cacheUrl, projectId, locale])
@@ -151,7 +156,8 @@ export default function GTProvider({
             translate, translateContent, translateChildren,
             locale, defaultLocale, 
             translations, translationRequired,
-            projectId, translationEnabled
+            projectId, translationEnabled,
+            renderSettings
         }}>
             {children}
         </GTContext.Provider>

@@ -63,7 +63,7 @@ function T(_a) {
     if (!id)
         throw new Error((0, createErrors_1.createClientSideTWithoutIdError)(children));
     var variables = props.variables, variablesOptions = props.variablesOptions;
-    var _b = (0, GTContext_1.default)("<T id=\"".concat(id, "\"> used on the client-side outside of <GTProvider>")), translations = _b.translations, translationRequired = _b.translationRequired, translateDynamic = _b.translateDynamic;
+    var _b = (0, GTContext_1.default)("<T id=\"".concat(id, "\"> used on the client-side outside of <GTProvider>")), translations = _b.translations, translationRequired = _b.translationRequired, translateChildren = _b.translateChildren, renderSettings = _b.renderSettings;
     var locale = (0, useLocale_1.default)();
     var defaultLocale = (0, useDefaultLocale_1.default)();
     var taggedChildren = (0, react_2.useMemo)(function () { return (0, internal_1.addGTIdentifier)(children); }, [children]);
@@ -84,28 +84,62 @@ function T(_a) {
         return [childrenAsObjects, hash];
     }, [context, taggedChildren]), childrenAsObjects = _c[0], hash = _c[1];
     var translation = translations[id];
+    (0, react_1.useEffect)(function () {
+        if (!translation || !translation[hash]) {
+            if (typeof window !== 'undefined') {
+                console.log("client render t, translation", translation, hash);
+            }
+            else {
+                console.log("client (server) render t, translation", translation, hash);
+            }
+            console.log("client <T> do translation: source", childrenAsObjects, "hash", hash);
+            translateChildren({
+                source: childrenAsObjects,
+                targetLocale: locale,
+                metadata: {
+                    id: id,
+                    hash: hash
+                }
+            });
+        }
+    }, [translation, translation === null || translation === void 0 ? void 0 : translation[hash]]);
+    // handle no translation/waiting for translation
     if (!translation || !translation[hash]) {
-        // console.error(createClientSideTHydrationError(id));
-        var defaultChildren = (0, renderDefaultChildren_1.default)({
+        var loadingFallback = // Blank screen
+         void 0; // Blank screen
+        var defaultChildren = // Default locale fallback
+         void 0; // Default locale fallback
+        defaultChildren = (0, renderDefaultChildren_1.default)({
             children: taggedChildren,
             variables: variables,
             variablesOptions: variablesOptions,
             defaultLocale: defaultLocale,
             renderVariable: renderVariable_1.default
         });
-        translateDynamic({
-            source: childrenAsObjects,
-            targetLocale: locale,
-            metadata: {
-                id: id,
-                hash: hash
-            }
-        });
+        if (renderSettings.method === 'replace') {
+            loadingFallback = defaultChildren;
+        }
+        else if (renderSettings.method === 'skeleton') {
+            loadingFallback = (0, jsx_runtime_1.jsx)(jsx_runtime_1.Fragment, {}); // blank
+        }
+        // TODO: Hang logic
+        // if (renderSettings.method === 'hang') {
+        //   // Wait until the site is translated to return
+        //   return <Resolver children={promise} fallback={errorFallback} />;
+        // }
+        if (!['skeleton', 'replace'].includes(renderSettings.method) && !id) {
+            // If none of those, i.e. "subtle"
+            // return the children, with no special rendering
+            // a translation may be available from a cached translation dictionary next time the component is loaded
+            return defaultChildren;
+        }
+        // console.error(createClientSideTHydrationError(id));
         // The suspense exists here for hydration reasons
-        return ((0, jsx_runtime_1.jsx)(react_1.Suspense, { fallback: (0, jsx_runtime_1.jsx)(jsx_runtime_1.Fragment, {}), children: defaultChildren }));
+        return loadingFallback;
     }
     return (0, renderTranslatedChildren_1.default)({
-        source: taggedChildren, target: translation[hash],
+        source: taggedChildren,
+        target: translation[hash],
         variables: variables,
         variablesOptions: variablesOptions,
         locales: [locale, defaultLocale],

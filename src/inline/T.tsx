@@ -1,4 +1,4 @@
-import React, { Suspense } from "react";
+import React, { Suspense, useEffect } from "react";
 import useDefaultLocale from "../hooks/useDefaultLocale";
 import useLocale from "../hooks/useLocale";
 import renderDefaultChildren from "../provider/rendering/renderDefaultChildren";
@@ -55,7 +55,7 @@ function T({
 
     const { variables, variablesOptions } = props;
 
-    const { translations, translationRequired, translateDynamic } = useGTContext(
+    const { translations, translationRequired, translateChildren, renderSettings } = useGTContext(
         `<T id="${id}"> used on the client-side outside of <GTProvider>`
     );
 
@@ -81,37 +81,76 @@ function T({
     }, [context, taggedChildren]);
 
     const translation = translations[id];
-    
+
+    useEffect(() => {
+        if (!translation || !translation[hash]) {
+            if (typeof window !== 'undefined') {
+                console.log("client render t, translation", translation, hash);
+            } else {
+                console.log("client (server) render t, translation", translation, hash);
+            }
+            console.log("client <T> do translation: source", childrenAsObjects, "hash", hash);
+            translateChildren({
+                source: childrenAsObjects,
+                targetLocale: locale,
+                metadata: {
+                    id, hash
+                }
+            });
+        }
+    }, [translation, translation?.[hash]]);
+
+
+
+    // handle no translation/waiting for translation
     if (!translation || !translation[hash]) {
+
+        let loadingFallback; // Blank screen
+        let defaultChildren; // Default locale fallback
+    
+        defaultChildren = renderDefaultChildren({
+            children: taggedChildren,
+            variables,
+            variablesOptions,
+            defaultLocale,
+            renderVariable
+        }) as JSX.Element;
+
+        if (renderSettings.method === 'replace') {
+            loadingFallback = defaultChildren;
+        } else if (renderSettings.method === 'skeleton') {
+            loadingFallback = <></>; // blank
+        }
+
+        // TODO: Hang logic
+        // if (renderSettings.method === 'hang') {
+        //   // Wait until the site is translated to return
+        //   return <Resolver children={promise} fallback={errorFallback} />;
+        // }
+
+        if (!['skeleton', 'replace'].includes(renderSettings.method) && !id) {
+          // If none of those, i.e. "subtle"
+          // return the children, with no special rendering
+          // a translation may be available from a cached translation dictionary next time the component is loaded
+          return defaultChildren as JSX.Element;
+        }
         
         // console.error(createClientSideTHydrationError(id));
 
-        const defaultChildren = renderDefaultChildren({
-            children: taggedChildren,
-            variables, variablesOptions, defaultLocale, renderVariable
-        }) as JSX.Element;
-
-        translateDynamic({
-            source: childrenAsObjects,
-            targetLocale: locale,
-            metadata: {
-                id, hash
-            }
-        });
-
         // The suspense exists here for hydration reasons
-        return (
-            <Suspense fallback={<></>}>
-                {defaultChildren}
-            </Suspense>
-        )
-    }
-   
-    return renderTranslatedChildren({
-        source: taggedChildren, target: translation[hash], 
-        variables, variablesOptions, locales: [locale, defaultLocale],
-        renderVariable
-    }) as JSX.Element;
+        return loadingFallback as JSX.Element;
+        }
+
+    return (
+        renderTranslatedChildren({
+            source: taggedChildren,
+            target: translation[hash],
+            variables,
+            variablesOptions,
+            locales: [locale, defaultLocale],
+            renderVariable
+        }) as JSX.Element
+    );
 }
 
 T.gtTransformation = "translate-client";

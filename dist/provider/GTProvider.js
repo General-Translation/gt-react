@@ -93,13 +93,13 @@ var useDynamicTranslation_1 = __importDefault(require("./dynamic/useDynamicTrans
  */
 function GTProvider(_a) {
     var _this = this;
-    var children = _a.children, projectId = _a.projectId, _b = _a.dictionary, dictionary = _b === void 0 ? {} : _b, _c = _a.locales, locales = _c === void 0 ? (0, supported_locales_1.listSupportedLocales)() : _c, _d = _a.defaultLocale, defaultLocale = _d === void 0 ? internal_2.libraryDefaultLocale : _d, _e = _a.locale, locale = _e === void 0 ? (0, useBrowserLocale_1.default)(defaultLocale, locales) || defaultLocale : _e, _f = _a.cacheUrl, cacheUrl = _f === void 0 ? internal_2.defaultCacheUrl : _f, _g = _a.baseUrl, baseUrl = _g === void 0 ? internal_2.defaultBaseUrl : _g, devApiKey = _a.devApiKey, metadata = __rest(_a, ["children", "projectId", "dictionary", "locales", "defaultLocale", "locale", "cacheUrl", "baseUrl", "devApiKey"]);
+    var children = _a.children, projectId = _a.projectId, _b = _a.dictionary, dictionary = _b === void 0 ? {} : _b, _c = _a.locales, locales = _c === void 0 ? (0, supported_locales_1.listSupportedLocales)() : _c, _d = _a.defaultLocale, defaultLocale = _d === void 0 ? internal_2.libraryDefaultLocale : _d, _e = _a.locale, locale = _e === void 0 ? (0, useBrowserLocale_1.default)(defaultLocale, locales) || defaultLocale : _e, _f = _a.cacheUrl, cacheUrl = _f === void 0 ? internal_2.defaultCacheUrl : _f, _g = _a.baseUrl, baseUrl = _g === void 0 ? internal_2.defaultBaseUrl : _g, _h = _a.renderSettings, renderSettings = _h === void 0 ? internal_2.defaultRenderSettings : _h, devApiKey = _a.devApiKey, metadata = __rest(_a, ["children", "projectId", "dictionary", "locales", "defaultLocale", "locale", "cacheUrl", "baseUrl", "renderSettings", "devApiKey"]);
     if (!projectId && (cacheUrl === internal_2.defaultCacheUrl || baseUrl === internal_2.defaultBaseUrl)) {
         throw new Error(createErrors_1.projectIdMissingError);
     }
     ;
     var translationRequired = (0, react_1.useMemo)(function () { return (0, generaltranslation_1.requiresTranslation)(defaultLocale, locale, locales); }, [defaultLocale, locale, locales]);
-    var _h = (0, react_2.useState)(cacheUrl ? null : {}), translations = _h[0], setTranslations = _h[1];
+    var _j = (0, react_2.useState)(cacheUrl ? null : {}), translations = _j[0], setTranslations = _j[1];
     (0, react_2.useEffect)(function () {
         if (!translations) {
             if (!translationRequired) {
@@ -179,7 +179,7 @@ function GTProvider(_a) {
             });
         }
     }, [dictionary, translations, translationRequired, defaultLocale]);
-    var _j = (0, useDynamicTranslation_1.default)(__assign({ projectId: projectId, defaultLocale: defaultLocale, devApiKey: devApiKey, baseUrl: baseUrl, setTranslations: setTranslations }, metadata)), translateChildren = _j.translateChildren, translateContent = _j.translateContent, translationEnabled = _j.translationEnabled;
+    var _k = (0, useDynamicTranslation_1.default)(__assign({ projectId: projectId, defaultLocale: defaultLocale, devApiKey: devApiKey, baseUrl: baseUrl, setTranslations: setTranslations }, metadata)), translateChildren = _k.translateChildren, translateContent = _k.translateContent, translationEnabled = _k.translationEnabled;
     return ((0, jsx_runtime_1.jsx)(GTContext_1.GTContext.Provider, { value: {
             translate: translate,
             translateContent: translateContent,
@@ -189,7 +189,8 @@ function GTProvider(_a) {
             translations: translations,
             translationRequired: translationRequired,
             projectId: projectId,
-            translationEnabled: translationEnabled
+            translationEnabled: translationEnabled,
+            renderSettings: renderSettings
         }, children: children }));
 }
 //# sourceMappingURL=GTProvider.js.map

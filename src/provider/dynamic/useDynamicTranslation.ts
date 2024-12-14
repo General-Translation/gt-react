@@ -5,7 +5,7 @@ import { defaultBaseUrl } from "generaltranslation/internal";
 
 export default function useDynamicTranslation({
     projectId, devApiKey,
-    baseUrl,
+    baseUrl, defaultLocale,
     setTranslations,
     ...metadata
 }: {
@@ -14,9 +14,12 @@ export default function useDynamicTranslation({
     devApiKey?: string,
     baseUrl?: string,
     setTranslations: React.Dispatch<React.SetStateAction<any>>
+    [key: string]: any
 }) {
 
-    const gt = useMemo(() => new GT({ devApiKey, projectId, baseUrl, defaultLocale: metadata.defaultLocale }), [ devApiKey, projectId, baseUrl, metadata.defaultLocale ])
+    const gt = useMemo(() => new GT({ devApiKey, projectId, baseUrl, defaultLocale: defaultLocale }), [ devApiKey, projectId, baseUrl, metadata.defaultLocale ])
+    metadata = { ...metadata, projectId, defaultLocale  };
+
 
     const translationEnabled = (
         baseUrl &&
@@ -28,14 +31,14 @@ export default function useDynamicTranslation({
     if (!translationEnabled) return { translationEnabled };
 
     // Queue to store requested keys between renders.
-    const requestQueueRef = useRef<Set<any>>(new Set());
+    const requestQueueRef = useRef<Map<string, any>>(new Map());
     // Trigger a fetch when keys have been added.
     const [fetchTrigger, setFetchTrigger] = useState(0);
 
     const translateContent = useCallback((params: {
-        source: any, targetLocale: string, metadata: Record<string, any>
+        source: any, targetLocale: string, metadata: {hash: string} & Record<string, any>
     }) => {
-        requestQueueRef.current.add({ type: 'content', data: { ...params, metadata: { ...metadata, ...params.metadata } } });
+        requestQueueRef.current.set(metadata.hash, { type: 'content', data: { ...params, metadata: { ...metadata, ...params.metadata } } });
         setFetchTrigger((n) => n + 1);
     }, []);
 
@@ -44,9 +47,9 @@ export default function useDynamicTranslation({
      * Keys are batched and fetched in the next effect cycle.
      */
     const translateChildren = useCallback((params: {
-        source: any, targetLocale: string, metadata: Record<string, any>
+        source: any, targetLocale: string, metadata: {hash: string} & Record<string, any>
     }) => {
-        requestQueueRef.current.add({ type: 'jsx', data: { ...params, metadata: { ...metadata, ...params.metadata } } });
+        requestQueueRef.current.set(metadata.hash, { type: 'jsx', data: { ...params, metadata: { ...metadata, ...params.metadata } } });
         setFetchTrigger((n) => n + 1);
     }, []);
 
@@ -56,8 +59,7 @@ export default function useDynamicTranslation({
         }
         let isCancelled = false;
         (async () => {
-            const requests = Array.from(requestQueueRef.current);
-            requestQueueRef.current.clear();
+            const requests = Array.from(requestQueueRef.current.values());
             try {
                 const results = await gt.translateBatchFromClient(requests);
                 if (!isCancelled) {
@@ -66,14 +68,16 @@ export default function useDynamicTranslation({
                         results.forEach(result => {
                             if (result?.translation && result?.reference) {
                                 const { translation, reference: { id, key } } = result;
-                                merged[id][key] = translation;
+                                merged[id] = { [key]: translation };
                             }
-                        })
+                        });
                         return merged;
                     });
                 }
             } catch (error) {
                 console.error(dynamicTranslationError, error);
+            } finally {
+                requestQueueRef.current.clear();
             }
         })();
         return () => {

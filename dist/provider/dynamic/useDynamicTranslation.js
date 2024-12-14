@@ -68,8 +68,9 @@ var createErrors_1 = require("../../errors/createErrors");
 var internal_1 = require("generaltranslation/internal");
 function useDynamicTranslation(_a) {
     var _this = this;
-    var projectId = _a.projectId, devApiKey = _a.devApiKey, baseUrl = _a.baseUrl, setTranslations = _a.setTranslations, metadata = __rest(_a, ["projectId", "devApiKey", "baseUrl", "setTranslations"]);
-    var gt = (0, react_1.useMemo)(function () { return new generaltranslation_1.default({ devApiKey: devApiKey, projectId: projectId, baseUrl: baseUrl, defaultLocale: metadata.defaultLocale }); }, [devApiKey, projectId, baseUrl, metadata.defaultLocale]);
+    var projectId = _a.projectId, devApiKey = _a.devApiKey, baseUrl = _a.baseUrl, defaultLocale = _a.defaultLocale, setTranslations = _a.setTranslations, metadata = __rest(_a, ["projectId", "devApiKey", "baseUrl", "defaultLocale", "setTranslations"]);
+    var gt = (0, react_1.useMemo)(function () { return new generaltranslation_1.default({ devApiKey: devApiKey, projectId: projectId, baseUrl: baseUrl, defaultLocale: defaultLocale }); }, [devApiKey, projectId, baseUrl, metadata.defaultLocale]);
+    metadata = __assign(__assign({}, metadata), { projectId: projectId, defaultLocale: defaultLocale });
     var translationEnabled = (baseUrl &&
         projectId &&
         (baseUrl === internal_1.defaultBaseUrl ? gt.apiKey : true)
@@ -78,20 +79,22 @@ function useDynamicTranslation(_a) {
     if (!translationEnabled)
         return { translationEnabled: translationEnabled };
     // Queue to store requested keys between renders.
-    var requestQueueRef = (0, react_1.useRef)(new Set());
+    var requestQueueRef = (0, react_1.useRef)(new Map());
     // Trigger a fetch when keys have been added.
     var _b = (0, react_1.useState)(0), fetchTrigger = _b[0], setFetchTrigger = _b[1];
     var translateContent = (0, react_1.useCallback)(function (params) {
-        requestQueueRef.current.add({ type: 'content', data: __assign(__assign({}, params), { metadata: __assign(__assign({}, metadata), params.metadata) }) });
+        requestQueueRef.current.set(metadata.hash, { type: 'content', data: __assign(__assign({}, params), { metadata: __assign(__assign({}, metadata), params.metadata) }) });
         setFetchTrigger(function (n) { return n + 1; });
+        console.log('useDynamicTranslation translateContent', fetchTrigger, params.source, requestQueueRef.current.size);
     }, []);
     /**
      * Call this from <T> components to request a translation key.
      * Keys are batched and fetched in the next effect cycle.
      */
     var translateChildren = (0, react_1.useCallback)(function (params) {
-        requestQueueRef.current.add({ type: 'jsx', data: __assign(__assign({}, params), { metadata: __assign(__assign({}, metadata), params.metadata) }) });
+        requestQueueRef.current.set(metadata.hash, { type: 'jsx', data: __assign(__assign({}, params), { metadata: __assign(__assign({}, metadata), params.metadata) }) });
         setFetchTrigger(function (n) { return n + 1; });
+        console.log('useDynamicTranslation translateChildren', fetchTrigger, params.source, requestQueueRef.current.size);
     }, []);
     (0, react_1.useEffect)(function () {
         if (requestQueueRef.current.size === 0) {
@@ -103,11 +106,11 @@ function useDynamicTranslation(_a) {
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        requests = Array.from(requestQueueRef.current);
-                        requestQueueRef.current.clear();
+                        requests = Array.from(requestQueueRef.current.values());
                         _a.label = 1;
                     case 1:
-                        _a.trys.push([1, 3, , 4]);
+                        _a.trys.push([1, 3, 4, 5]);
+                        console.log('useDyamicTranslation requests', requests);
                         return [4 /*yield*/, gt.translateBatchFromClient(requests)];
                     case 2:
                         results_1 = _a.sent();
@@ -115,20 +118,24 @@ function useDynamicTranslation(_a) {
                             setTranslations(function (prev) {
                                 var merged = __assign({}, (prev || {}));
                                 results_1.forEach(function (result) {
+                                    var _a;
                                     if ((result === null || result === void 0 ? void 0 : result.translation) && (result === null || result === void 0 ? void 0 : result.reference)) {
-                                        var translation = result.translation, _a = result.reference, id = _a.id, key = _a.key;
-                                        merged[id][key] = translation;
+                                        var translation = result.translation, _b = result.reference, id = _b.id, key = _b.key;
+                                        merged[id] = (_a = {}, _a[key] = translation, _a);
                                     }
                                 });
                                 return merged;
                             });
                         }
-                        return [3 /*break*/, 4];
+                        return [3 /*break*/, 5];
                     case 3:
                         error_1 = _a.sent();
                         console.error(createErrors_1.dynamicTranslationError, error_1);
-                        return [3 /*break*/, 4];
-                    case 4: return [2 /*return*/];
+                        return [3 /*break*/, 5];
+                    case 4:
+                        requestQueueRef.current.clear();
+                        return [7 /*endfinally*/];
+                    case 5: return [2 /*return*/];
                 }
             });
         }); })();

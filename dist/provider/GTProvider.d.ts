@@ -12,7 +12,7 @@ import { Dictionary } from "../types/types";
  *
  * @returns {JSX.Element} The provider component for General Translation context.
  */
-export default function GTProvider({ children, projectId, dictionary, locales, defaultLocale, locale, cacheUrl, baseUrl, devApiKey, ...metadata }: {
+export default function GTProvider({ children, projectId, dictionary, locales, defaultLocale, locale, cacheUrl, baseUrl, renderSettings, devApiKey, ...metadata }: {
     children?: any;
     projectId?: string;
     dictionary?: Dictionary;
@@ -22,6 +22,10 @@ export default function GTProvider({ children, projectId, dictionary, locales, d
     cacheUrl?: string;
     baseUrl?: string;
     devApiKey?: string;
+    renderSettings?: {
+        method: 'skeleton' | 'replace' | 'hang' | 'subtle';
+        timeout: number | null;
+    };
     [key: string]: any;
 }): JSX.Element;
 //# sourceMappingURL=GTProvider.d.ts.map
