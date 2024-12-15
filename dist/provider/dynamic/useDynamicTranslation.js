@@ -85,7 +85,6 @@ function useDynamicTranslation(_a) {
     var translateContent = (0, react_1.useCallback)(function (params) {
         requestQueueRef.current.set(metadata.hash, { type: 'content', data: __assign(__assign({}, params), { metadata: __assign(__assign({}, metadata), params.metadata) }) });
         setFetchTrigger(function (n) { return n + 1; });
-        console.log('useDynamicTranslation translateContent', fetchTrigger, params.source, requestQueueRef.current.size);
     }, []);
     /**
      * Call this from <T> components to request a translation key.
@@ -94,7 +93,6 @@ function useDynamicTranslation(_a) {
     var translateChildren = (0, react_1.useCallback)(function (params) {
         requestQueueRef.current.set(metadata.hash, { type: 'jsx', data: __assign(__assign({}, params), { metadata: __assign(__assign({}, metadata), params.metadata) }) });
         setFetchTrigger(function (n) { return n + 1; });
-        console.log('useDynamicTranslation translateChildren', fetchTrigger, params.source, requestQueueRef.current.size);
     }, []);
     (0, react_1.useEffect)(function () {
         if (requestQueueRef.current.size === 0) {
@@ -110,7 +108,6 @@ function useDynamicTranslation(_a) {
                         _a.label = 1;
                     case 1:
                         _a.trys.push([1, 3, 4, 5]);
-                        console.log('useDyamicTranslation requests', requests);
                         return [4 /*yield*/, gt.translateBatchFromClient(requests)];
                     case 2:
                         results_1 = _a.sent();

@@ -10,5 +10,6 @@ import isVariableObject from './provider/helpers/isVariableObject';
 import getVariableName, { getFallbackVariableName } from "./variables/getVariableName";
 import renderDefaultChildren from "./provider/rendering/renderDefaultChildren";
 import renderTranslatedChildren from "./provider/rendering/renderTranslatedChildren";
-export { addGTIdentifier, writeChildrenAsObjects, isVariableObject, flattenDictionary, getDictionaryEntry, getVariableProps, hashReactChildrenObjects, getPluralBranch, extractEntryMetadata, getVariableName, getFallbackVariableName, renderDefaultChildren, renderTranslatedChildren };
+import { defaultRenderSettings } from "./provider/rendering/defaultRenderSettings";
+export { addGTIdentifier, writeChildrenAsObjects, isVariableObject, flattenDictionary, getDictionaryEntry, getVariableProps, hashReactChildrenObjects, getPluralBranch, extractEntryMetadata, getVariableName, getFallbackVariableName, renderDefaultChildren, renderTranslatedChildren, defaultRenderSettings };
 //# sourceMappingURL=internal.d.ts.map

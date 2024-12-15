@@ -78,6 +78,7 @@ var renderVariable_1 = __importDefault(require("./rendering/renderVariable"));
 var createErrors_1 = require("../errors/createErrors");
 var supported_locales_1 = require("@generaltranslation/supported-locales");
 var useDynamicTranslation_1 = __importDefault(require("./dynamic/useDynamicTranslation"));
+var defaultRenderSettings_1 = require("./rendering/defaultRenderSettings");
 /**
  * Provides General Translation context to its children, which can then access `useGT`, `useLocale`, and `useDefaultLocale`.
  *
@@ -93,7 +94,7 @@ var useDynamicTranslation_1 = __importDefault(require("./dynamic/useDynamicTrans
  */
 function GTProvider(_a) {
     var _this = this;
-    var children = _a.children, projectId = _a.projectId, _b = _a.dictionary, dictionary = _b === void 0 ? {} : _b, _c = _a.locales, locales = _c === void 0 ? (0, supported_locales_1.listSupportedLocales)() : _c, _d = _a.defaultLocale, defaultLocale = _d === void 0 ? internal_2.libraryDefaultLocale : _d, _e = _a.locale, locale = _e === void 0 ? (0, useBrowserLocale_1.default)(defaultLocale, locales) || defaultLocale : _e, _f = _a.cacheUrl, cacheUrl = _f === void 0 ? internal_2.defaultCacheUrl : _f, _g = _a.baseUrl, baseUrl = _g === void 0 ? internal_2.defaultBaseUrl : _g, _h = _a.renderSettings, renderSettings = _h === void 0 ? internal_2.defaultRenderSettings : _h, devApiKey = _a.devApiKey, metadata = __rest(_a, ["children", "projectId", "dictionary", "locales", "defaultLocale", "locale", "cacheUrl", "baseUrl", "renderSettings", "devApiKey"]);
+    var children = _a.children, projectId = _a.projectId, _b = _a.dictionary, dictionary = _b === void 0 ? {} : _b, _c = _a.locales, locales = _c === void 0 ? (0, supported_locales_1.listSupportedLocales)() : _c, _d = _a.defaultLocale, defaultLocale = _d === void 0 ? internal_2.libraryDefaultLocale : _d, _e = _a.locale, locale = _e === void 0 ? (0, useBrowserLocale_1.default)(defaultLocale, locales) || defaultLocale : _e, _f = _a.cacheUrl, cacheUrl = _f === void 0 ? internal_2.defaultCacheUrl : _f, _g = _a.baseUrl, baseUrl = _g === void 0 ? internal_2.defaultBaseUrl : _g, _h = _a.renderSettings, renderSettings = _h === void 0 ? defaultRenderSettings_1.defaultRenderSettings : _h, devApiKey = _a.devApiKey, metadata = __rest(_a, ["children", "projectId", "dictionary", "locales", "defaultLocale", "locale", "cacheUrl", "baseUrl", "renderSettings", "devApiKey"]);
     if (!projectId && (cacheUrl === internal_2.defaultCacheUrl || baseUrl === internal_2.defaultBaseUrl)) {
         throw new Error(createErrors_1.projectIdMissingError);
     }

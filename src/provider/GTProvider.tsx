@@ -1,21 +1,22 @@
 import { useMemo } from "react";
 import { renderContentToString, requiresTranslation } from "generaltranslation";
-import { ReactElement, useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import useBrowserLocale from "../hooks/useBrowserLocale";
 
 import { GTContext } from "./GTContext";
-import { Content, Dictionary, DictionaryEntry, TranslationsObject } from "../types/types";
+import { Content, Dictionary, TranslationsObject } from "../types/types";
 import getDictionaryEntry from "./helpers/getDictionaryEntry";
 import { addGTIdentifier, hashReactChildrenObjects, writeChildrenAsObjects } from "../internal";
 import extractEntryMetadata from "./helpers/extractEntryMetadata";
 import renderDefaultChildren from "./rendering/renderDefaultChildren";
 import renderTranslatedChildren from "./rendering/renderTranslatedChildren";
 
-import { defaultBaseUrl, defaultCacheUrl, defaultRenderSettings, libraryDefaultLocale } from "generaltranslation/internal";
+import { defaultBaseUrl, defaultCacheUrl, libraryDefaultLocale } from "generaltranslation/internal";
 import renderVariable from "./rendering/renderVariable";
 import { createLibraryNoEntryWarning, projectIdMissingError } from "../errors/createErrors";
 import { listSupportedLocales } from "@generaltranslation/supported-locales";
 import useDynamicTranslation from "./dynamic/useDynamicTranslation";
+import { defaultRenderSettings } from "./rendering/defaultRenderSettings";
 
 /**
  * Provides General Translation context to its children, which can then access `useGT`, `useLocale`, and `useDefaultLocale`.
