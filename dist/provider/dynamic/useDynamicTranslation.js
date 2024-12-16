@@ -83,7 +83,9 @@ function useDynamicTranslation(_a) {
     // Trigger a fetch when keys have been added.
     var _b = (0, react_1.useState)(0), fetchTrigger = _b[0], setFetchTrigger = _b[1];
     var translateContent = (0, react_1.useCallback)(function (params) {
-        requestQueueRef.current.set(metadata.hash, { type: 'content', data: __assign(__assign({}, params), { metadata: __assign(__assign({}, metadata), params.metadata) }) });
+        var key = "".concat(params.metadata.hash, "-").concat(params.targetLocale);
+        var data = __assign(__assign({}, params), { metadata: __assign(__assign({}, metadata), params.metadata) });
+        requestQueueRef.current.set(key, { type: 'content', data: data });
         setFetchTrigger(function (n) { return n + 1; });
     }, []);
     /**
@@ -91,7 +93,9 @@ function useDynamicTranslation(_a) {
      * Keys are batched and fetched in the next effect cycle.
      */
     var translateChildren = (0, react_1.useCallback)(function (params) {
-        requestQueueRef.current.set(metadata.hash, { type: 'jsx', data: __assign(__assign({}, params), { metadata: __assign(__assign({}, metadata), params.metadata) }) });
+        var key = "".concat(params.metadata.hash, "-").concat(params.targetLocale);
+        var data = __assign(__assign({}, params), { metadata: __assign(__assign({}, metadata), params.metadata) });
+        requestQueueRef.current.set(key, { type: 'jsx', data: data });
         setFetchTrigger(function (n) { return n + 1; });
     }, []);
     (0, react_1.useEffect)(function () {
@@ -114,11 +118,18 @@ function useDynamicTranslation(_a) {
                         if (!isCancelled) {
                             setTranslations(function (prev) {
                                 var merged = __assign({}, (prev || {}));
-                                results_1.forEach(function (result) {
+                                results_1.forEach(function (result, index) {
                                     var _a;
+                                    var _b;
+                                    var request = requests[index];
                                     if ((result === null || result === void 0 ? void 0 : result.translation) && (result === null || result === void 0 ? void 0 : result.reference)) {
-                                        var translation = result.translation, _b = result.reference, id = _b.id, key = _b.key;
+                                        var translation = result.translation, _c = result.reference, id = _c.id, key = _c.key;
                                         merged[id] = (_a = {}, _a[key] = translation, _a);
+                                    }
+                                    else {
+                                        merged[request.data.metadata.id || request.data.metadata.hash] = {
+                                            error: (_b = result === null || result === void 0 ? void 0 : result.error) !== null && _b !== void 0 ? _b : 500
+                                        };
                                     }
                                 });
                                 return merged;

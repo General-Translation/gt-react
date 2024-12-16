@@ -100,15 +100,10 @@ function T({
         }
     }, [translation, translation?.[hash]]);
 
-
-
     // handle no translation/waiting for translation
     if (!translation || !translation[hash]) {
 
-        let loadingFallback; // Blank screen
-        let defaultChildren; // Default locale fallback
-    
-        defaultChildren = renderDefaultChildren({
+        const rd = () => renderDefaultChildren({
             children: taggedChildren,
             variables,
             variablesOptions,
@@ -116,30 +111,23 @@ function T({
             renderVariable
         }) as JSX.Element;
 
-        if (renderSettings.method === 'replace') {
-            loadingFallback = defaultChildren;
-        } else if (renderSettings.method === 'skeleton') {
-            loadingFallback = <></>; // blank
+        if (translation.error) {
+            return rd()
         }
 
-        // TODO: Hang logic
-        // if (renderSettings.method === 'hang') {
-        //   // Wait until the site is translated to return
-        //   return <Resolver children={promise} fallback={errorFallback} />;
-        // }
+        let loadingFallback; // Blank screen
 
-        if (!['skeleton', 'replace'].includes(renderSettings.method) && !id) {
-          // If none of those, i.e. "subtle"
-          // return the children, with no special rendering
-          // a translation may be available from a cached translation dictionary next time the component is loaded
-          return defaultChildren as JSX.Element;
+        if (renderSettings.method === "skeleton") {
+            loadingFallback = <React.Fragment key={`skeleton_${id}`}/>
+        } else {
+            loadingFallback = rd();
         }
         
         // console.error(createClientSideTHydrationError(id));
 
         // The suspense exists here for hydration reasons
-        return loadingFallback as JSX.Element;
-        }
+        return <Suspense fallback={loadingFallback}>{loadingFallback}</Suspense>;
+    }
 
     return (
         renderTranslatedChildren({

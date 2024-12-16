@@ -1,4 +1,27 @@
 "use strict";
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
 var __rest = (this && this.__rest) || function (s, e) {
     var t = {};
     for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
@@ -15,7 +38,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var jsx_runtime_1 = require("react/jsx-runtime");
-var react_1 = require("react");
+var react_1 = __importStar(require("react"));
 var useDefaultLocale_1 = __importDefault(require("../hooks/useDefaultLocale"));
 var useLocale_1 = __importDefault(require("../hooks/useLocale"));
 var renderDefaultChildren_1 = __importDefault(require("../provider/rendering/renderDefaultChildren"));
@@ -105,37 +128,27 @@ function T(_a) {
     }, [translation, translation === null || translation === void 0 ? void 0 : translation[hash]]);
     // handle no translation/waiting for translation
     if (!translation || !translation[hash]) {
-        var loadingFallback = // Blank screen
-         void 0; // Blank screen
-        var defaultChildren = // Default locale fallback
-         void 0; // Default locale fallback
-        defaultChildren = (0, renderDefaultChildren_1.default)({
+        var rd = function () { return (0, renderDefaultChildren_1.default)({
             children: taggedChildren,
             variables: variables,
             variablesOptions: variablesOptions,
             defaultLocale: defaultLocale,
             renderVariable: renderVariable_1.default
-        });
-        if (renderSettings.method === 'replace') {
-            loadingFallback = defaultChildren;
+        }); };
+        if (translation.error) {
+            return rd();
         }
-        else if (renderSettings.method === 'skeleton') {
-            loadingFallback = (0, jsx_runtime_1.jsx)(jsx_runtime_1.Fragment, {}); // blank
+        var loadingFallback = // Blank screen
+         void 0; // Blank screen
+        if (renderSettings.method === "skeleton") {
+            loadingFallback = (0, jsx_runtime_1.jsx)(react_1.default.Fragment, {}, "skeleton_".concat(id));
         }
-        // TODO: Hang logic
-        // if (renderSettings.method === 'hang') {
-        //   // Wait until the site is translated to return
-        //   return <Resolver children={promise} fallback={errorFallback} />;
-        // }
-        if (!['skeleton', 'replace'].includes(renderSettings.method) && !id) {
-            // If none of those, i.e. "subtle"
-            // return the children, with no special rendering
-            // a translation may be available from a cached translation dictionary next time the component is loaded
-            return defaultChildren;
+        else {
+            loadingFallback = rd();
         }
         // console.error(createClientSideTHydrationError(id));
         // The suspense exists here for hydration reasons
-        return loadingFallback;
+        return (0, jsx_runtime_1.jsx)(react_1.Suspense, { fallback: loadingFallback, children: loadingFallback });
     }
     return (0, renderTranslatedChildren_1.default)({
         source: taggedChildren,

@@ -20,7 +20,6 @@ export default function useDynamicTranslation({
     const gt = useMemo(() => new GT({ devApiKey, projectId, baseUrl, defaultLocale: defaultLocale }), [ devApiKey, projectId, baseUrl, metadata.defaultLocale ])
     metadata = { ...metadata, projectId, defaultLocale  };
 
-
     const translationEnabled = (
         baseUrl &&
         projectId &&
@@ -36,9 +35,11 @@ export default function useDynamicTranslation({
     const [fetchTrigger, setFetchTrigger] = useState(0);
 
     const translateContent = useCallback((params: {
-        source: any, targetLocale: string, metadata: {hash: string} & Record<string, any>
+        source: any, targetLocale: string, metadata: { hash: string } & Record<string, any>
     }) => {
-        requestQueueRef.current.set(metadata.hash, { type: 'content', data: { ...params, metadata: { ...metadata, ...params.metadata } } });
+        const key = `${params.metadata.hash}-${params.targetLocale}`;
+        const data = { ...params, metadata: { ...metadata, ...params.metadata } };
+        requestQueueRef.current.set(key, { type: 'content', data });
         setFetchTrigger((n) => n + 1);
     }, []);
 
@@ -47,9 +48,11 @@ export default function useDynamicTranslation({
      * Keys are batched and fetched in the next effect cycle.
      */
     const translateChildren = useCallback((params: {
-        source: any, targetLocale: string, metadata: {hash: string} & Record<string, any>
+        source: any, targetLocale: string, metadata: { hash: string } & Record<string, any>
     }) => {
-        requestQueueRef.current.set(metadata.hash, { type: 'jsx', data: { ...params, metadata: { ...metadata, ...params.metadata } } });
+        const key = `${params.metadata.hash}-${params.targetLocale}`;
+        const data = { ...params, metadata: { ...metadata, ...params.metadata } };
+        requestQueueRef.current.set(key, { type: 'jsx', data });
         setFetchTrigger((n) => n + 1);
     }, []);
 
@@ -65,10 +68,15 @@ export default function useDynamicTranslation({
                 if (!isCancelled) {
                     setTranslations((prev: any) => {
                         const merged = { ...(prev || {}) };
-                        results.forEach(result => {
+                        results.forEach((result, index) => {
+                            const request = requests[index];
                             if (result?.translation && result?.reference) {
                                 const { translation, reference: { id, key } } = result;
                                 merged[id] = { [key]: translation };
+                            } else {
+                                merged[request.data.metadata.id || request.data.metadata.hash] = {
+                                    error: (result as any)?.error ?? 500
+                                }
                             }
                         });
                         return merged;
