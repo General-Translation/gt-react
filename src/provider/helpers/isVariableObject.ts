@@ -1,8 +1,8 @@
-import { VariableObject } from "../../types/types";
+import { Variable } from "../../types/types";
 
-export default function isVariableObject(obj: unknown): obj is VariableObject {
-    const variableObj = (obj as VariableObject);
-    if (variableObj && typeof variableObj === 'object' && typeof (variableObj as VariableObject).key === 'string') {
+export default function isVariableObject(obj: unknown): obj is Variable {
+    const variableObj = (obj as Variable);
+    if (variableObj && typeof variableObj === 'object' && typeof (variableObj as Variable).key === 'string') {
         const keys = Object.keys(variableObj);
         if (keys.length === 1) return true;
         if (keys.length === 2) {

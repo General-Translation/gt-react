@@ -10,7 +10,7 @@ type GTProp = {
     [key: string]: any;
 }
 
-export default function addGTIdentifier(children: Children, outerID?: string | undefined, startingIndex: number = 0): any {
+export default function addGTIdentifier(children: Children, outerId?: string | undefined, startingIndex: number = 0): any {
 
     // Object to keep track of the current index for GT IDs
     let index = startingIndex;
@@ -85,7 +85,7 @@ export default function addGTIdentifier(children: Children, outerID?: string | u
     
     function handleChildren(children: Children) {
         if (Array.isArray(children)) {
-            // outerID = undefined;
+            // outerId = undefined;
             return React.Children.map(children, handleSingleChild)
         } else {
             return handleSingleChild(children);

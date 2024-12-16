@@ -1,20 +1,22 @@
-import React, { useMemo } from "react";
-import { determineLocale, renderContentToString, requiresTranslation } from "generaltranslation";
-import { ReactElement, useCallback, useEffect, useState } from "react";
+import { useMemo } from "react";
+import { renderContentToString, requiresTranslation } from "generaltranslation";
+import { useCallback, useEffect, useState } from "react";
 import useBrowserLocale from "../hooks/useBrowserLocale";
 
 import { GTContext } from "./GTContext";
-import { Dictionary, DictionaryEntry, Translation } from "../types/types";
+import { Content, Dictionary, TranslationsObject } from "../types/types";
 import getDictionaryEntry from "./helpers/getDictionaryEntry";
-import { addGTIdentifier } from "../internal";
+import { addGTIdentifier, hashReactChildrenObjects, writeChildrenAsObjects } from "../internal";
 import extractEntryMetadata from "./helpers/extractEntryMetadata";
 import renderDefaultChildren from "./rendering/renderDefaultChildren";
 import renderTranslatedChildren from "./rendering/renderTranslatedChildren";
 
-import { defaultCacheURL, libraryDefaultLocale } from "generaltranslation/internal";
+import { defaultBaseUrl, defaultCacheUrl, libraryDefaultLocale } from "generaltranslation/internal";
 import renderVariable from "./rendering/renderVariable";
 import { createLibraryNoEntryWarning, projectIdMissingError } from "../errors/createErrors";
 import { listSupportedLocales } from "@generaltranslation/supported-locales";
+import useDynamicTranslation from "./dynamic/useDynamicTranslation";
+import { defaultRenderSettings } from "./rendering/defaultRenderSettings";
 
 /**
  * Provides General Translation context to its children, which can then access `useGT`, `useLocale`, and `useDefaultLocale`.
@@ -25,7 +27,7 @@ import { listSupportedLocales } from "@generaltranslation/supported-locales";
  * @param {string[]} [locales] - The list of approved locales for the project.
  * @param {string} [defaultLocale=libraryDefaultLocale] - The default locale to use if no other locale is found.
  * @param {string} [locale] - The current locale, if already set.
- * @param {string} [cacheURL='https://cache.gtx.dev'] - The URL of the cache service for fetching translations.
+ * @param {string} [cacheUrl='https://cache.gtx.dev'] - The URL of the cache service for fetching translations.
  * 
  * @returns {JSX.Element} The provider component for General Translation context.
  */
@@ -33,10 +35,14 @@ export default function GTProvider({
     children, 
     projectId,
     dictionary = {}, 
-    locales, 
+    locales = listSupportedLocales(), 
     defaultLocale = libraryDefaultLocale, 
-    locale, 
-    cacheURL = defaultCacheURL
+    locale = useBrowserLocale(defaultLocale, locales) || defaultLocale, 
+    cacheUrl = defaultCacheUrl,
+    baseUrl = defaultBaseUrl,
+    renderSettings = defaultRenderSettings,
+    devApiKey,
+    ...metadata
 }: {
     children?: any;
     projectId?: string;
@@ -44,75 +50,65 @@ export default function GTProvider({
     locales?: string[];
     defaultLocale?: string;
     locale?: string;
-    cacheURL?: string;
+    cacheUrl?: string;
+    baseUrl?: string;
+    devApiKey?: string;
+    renderSettings?: {
+        method: 'skeleton' | 'replace' | 'hang' | 'subtle';
+        timeout: number | null;
+      };
+    [key: string]: any
 }): JSX.Element {
 
-    if (!projectId && cacheURL === defaultCacheURL) {
+    if (!projectId && (cacheUrl === defaultCacheUrl || baseUrl === defaultBaseUrl)) {
         throw new Error(projectIdMissingError)
-    }
-
-    const supportedLocales = useMemo(() => {
-        return listSupportedLocales();
-    }, []);
-    if (!locales) {
-        locales = supportedLocales;
-    }
-
-    const browserLocale = useBrowserLocale(defaultLocale, locales);
-    locale = locale || browserLocale;
-    locale = determineLocale([locale, browserLocale], locales) || locale;
+    };
 
     const translationRequired = useMemo(() => requiresTranslation(defaultLocale, locale, locales), [defaultLocale, locale, locales])
 
-    const [translations, setTranslations] = useState<Record<string, Translation> | null>(
-        cacheURL ? null : {}
-    )
-
+    const [translations, setTranslations] = useState<TranslationsObject | null>(
+        cacheUrl ? null : {}
+    );
+    
     useEffect(() => {
         if (!translations) {
             if (!translationRequired) {
                 setTranslations({}); // no translation required
             } else {
-                (async () => {
-                    const response = await fetch(`${cacheURL}/${projectId}/${locale}`);
-                    const result = await response.json();
-                    setTranslations(result);
-                })()
+                (async () => { // check cache for translations
+                    try {
+                        const response = await fetch(`${cacheUrl}/${projectId}/${locale}`);
+                        const result = await response.json();
+                        setTranslations(result);
+                    } catch (error) {
+                        console.error(error);
+                        setTranslations({});
+                    }
+                })();
             }
         }
-    }, [translations, translationRequired])
+    }, [translationRequired, cacheUrl, projectId, locale])
 
     const translate = useCallback((
         id: string, 
-        options: Record<string, any> = {}, 
-        f?: Function
+        options: Record<string, any> = {}
     ) => {
         
         // get the dictionary entry
-        let { entry, metadata } = extractEntryMetadata(
-            getDictionaryEntry(dictionary, id) as DictionaryEntry
-        );
-
-        if (entry === undefined || entry === null) {
+        const dictionaryEntry = getDictionaryEntry(dictionary, id);
+        if (
+            dictionaryEntry === undefined || dictionaryEntry === null || 
+            (typeof dictionaryEntry === 'object' && !Array.isArray(dictionaryEntry))) 
+        {
             console.warn(createLibraryNoEntryWarning(id))
             return undefined;
         };
         
+        let { entry, metadata } = extractEntryMetadata(dictionaryEntry);
+        
         // Get variables and variable options
-        let variables; let variablesOptions;
-        if (options) {
-            variables = options;
-            if (metadata?.variablesOptions) {
-                variablesOptions = metadata.variablesOptions;
-            }
-        }
-
-        // Handle if the entry is a function
-        if (typeof f === 'function') {
-            entry = f(options) as ReactElement;
-        } else if (typeof entry === 'function') {
-            entry = entry(options) as ReactElement;
-        }
+        let variables = options; 
+        let variablesOptions = metadata?.variablesOptions;
 
         const taggedEntry = addGTIdentifier(entry, id);
 
@@ -129,19 +125,22 @@ export default function GTProvider({
                 renderVariable
             })
         }
-
+        
         // If a translation is required
         if (translations) {
-            const translation = translations[id];
+            const context = metadata?.context;
+            const childrenAsObjects = writeChildrenAsObjects(taggedEntry);
+            const hash: string = hashReactChildrenObjects(context ? [childrenAsObjects, context] : childrenAsObjects);
+            const target = translations[id][hash];
             if (typeof taggedEntry === 'string') {
                 return renderContentToString(
-                    translation.t as any, [locale, defaultLocale],
+                    target as Content, [locale, defaultLocale],
                     variables, variablesOptions
                 )
             }
             return renderTranslatedChildren({
                 source: taggedEntry,
-                target: translation.t,
+                target,
                 variables, variablesOptions,
                 locales: [locale, defaultLocale],
                 renderVariable
@@ -149,12 +148,17 @@ export default function GTProvider({
         }
     }, [dictionary, translations, translationRequired, defaultLocale]);
 
+    const { translateChildren, translateContent, translationEnabled } = useDynamicTranslation({
+        projectId, defaultLocale, devApiKey, baseUrl, setTranslations, ...metadata
+    });
+
     return (
         <GTContext.Provider value={{
-            translate, 
+            translate, translateContent, translateChildren,
             locale, defaultLocale, 
             translations, translationRequired,
-            projectId
+            projectId, translationEnabled,
+            renderSettings
         }}>
             {children}
         </GTContext.Provider>

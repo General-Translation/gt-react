@@ -1,6 +1,6 @@
 import React, { ReactElement } from 'react'
-import defaultVariableNames from '../variables/getVariableName';
 import getVariableName from '../variables/getVariableName';
+import { TranslatedChildren } from '../types/types';
 
 /**
  * Gets the tag name of a React element.
@@ -76,6 +76,6 @@ const handleSingleChild = (child: any): any => {
  * @param {Children} children - The children to process.
  * @returns {object} The processed children as objects.
 */
-export default function writeChildrenAsObjects(children: any): any {
+export default function writeChildrenAsObjects(children: any): TranslatedChildren {
     return Array.isArray(children) ? children.map(handleSingleChild): handleSingleChild(children);
 }

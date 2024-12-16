@@ -4,7 +4,7 @@ export const projectIdMissingError = 'gt-react Error: General Translation cloud 
 
 export const createPluralMissingError = (children: any) => `<Plural> component with children "${children}" requires "n" option.`
 
-export const createClientSideTWithoutIDError = (children: any) => `Client-side <T> with no provided 'id' prop. Children: "${children}"`
+export const createClientSideTWithoutIdError = (children: any) => `Client-side <T> with no provided 'id' prop. Children: "${children}"`
 
 export const createStringTranslationError = (content: string, id?: string) => `gt-next string translation error. tx("${content}")${id ? ` with id "${id}"` : '' } failed.`
 
@@ -17,8 +17,12 @@ export const createNestedDataGTError = (child: any) => `General Translation alre
 
 export const createNestedTError = (child: any) => `General Translation: Nested <T> components. The inner <T> has the id: "${child?.props?.id}".`
 
+export const renderingError = 'General Translation: Rendering error.'
+
+export const dynamicTranslationError = "Error fetching batched translations:"
+
 // ---- WARNINGS ---- //
 
 export const createLibraryNoEntryWarning = (id: string) => `gt-react: No dictionary entry found for id: "${id}"`
 
-export const createNoEntryWarning = (id: string, prefixedID: string) => `t('${id}') finding no translation for dictionary item ${prefixedID} !`
+export const createNoEntryWarning = (id: string, prefixedId: string) => `t('${id}') finding no translation for dictionary item ${prefixedId} !`

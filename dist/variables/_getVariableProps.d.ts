@@ -6,7 +6,7 @@ export default function getVariableProps(props: {
     [key: string]: any;
 }): {
     variableName: string;
-    variableType: "number" | "variable" | "currency" | "datetime";
+    variableType: "number" | "variable" | "datetime" | "currency";
     variableValue?: any;
     variableOptions?: Intl.NumberFormatOptions | Intl.DateTimeFormatOptions;
 };

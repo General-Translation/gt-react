@@ -1,4 +1,4 @@
-import React, { Suspense } from "react";
+import React, { Suspense, useEffect } from "react";
 import useDefaultLocale from "../hooks/useDefaultLocale";
 import useLocale from "../hooks/useLocale";
 import renderDefaultChildren from "../provider/rendering/renderDefaultChildren";
@@ -7,7 +7,7 @@ import useGTContext from "../provider/GTContext";
 import renderTranslatedChildren from "../provider/rendering/renderTranslatedChildren";
 import { useMemo } from "react";
 import renderVariable from "../provider/rendering/renderVariable";
-import { createClientSideTDictionaryCollisionError, createClientSideTHydrationError, createClientSideTWithoutIDError } from "../errors/createErrors";
+import { createClientSideTDictionaryCollisionError, createClientSideTHydrationError, createClientSideTWithoutIdError } from "../errors/createErrors";
 
 /**
  * Translation component that handles rendering translated content, including plural forms.
@@ -51,13 +51,11 @@ function T({
 
     if (!children) return undefined;
     
-    if (!id) {
-        throw new Error(createClientSideTWithoutIDError(children))
-    }
+    if (!id) throw new Error(createClientSideTWithoutIdError(children))
 
     const { variables, variablesOptions } = props;
 
-    const { translations, translationRequired } = useGTContext(
+    const { translations, translationRequired, translateChildren, renderSettings } = useGTContext(
         `<T id="${id}"> used on the client-side outside of <GTProvider>`
     );
 
@@ -76,42 +74,71 @@ function T({
 
     // Do translation
     const context = props.context;
-    const [childrenAsObjects, key] = useMemo(() => {
+    const [childrenAsObjects, hash] = useMemo(() => {
         const childrenAsObjects = writeChildrenAsObjects(taggedChildren);
-        const key: string = hashReactChildrenObjects(context ? [childrenAsObjects, context] : childrenAsObjects);
-        return [childrenAsObjects, key];
+        const hash: string = hashReactChildrenObjects(context ? [childrenAsObjects, context] : childrenAsObjects);
+        return [childrenAsObjects, hash];
     }, [context, taggedChildren]);
 
     const translation = translations[id];
-    
-    if (translation?.promise) {
-        throw new Error(createClientSideTDictionaryCollisionError(id))
-    }
-    
-    if (!translation || !translation.t || translation.k !== key) {
-        
-        console.error(
-            createClientSideTHydrationError(id)
-        );
 
-        const defaultChildren = renderDefaultChildren({
+    useEffect(() => {
+        if (!translation || !translation[hash]) {
+            if (typeof window !== 'undefined') {
+                console.log("client render t, translation", translation, hash);
+            } else {
+                console.log("client (server) render t, translation", translation, hash);
+            }
+            console.log("client <T> do translation: source", childrenAsObjects, "hash", hash);
+            translateChildren({
+                source: childrenAsObjects,
+                targetLocale: locale,
+                metadata: {
+                    id, hash
+                }
+            });
+        }
+    }, [translation, translation?.[hash]]);
+
+    // handle no translation/waiting for translation
+    if (!translation || !translation[hash]) {
+
+        const rd = () => renderDefaultChildren({
             children: taggedChildren,
-            variables, variablesOptions, defaultLocale, renderVariable
+            variables,
+            variablesOptions,
+            defaultLocale,
+            renderVariable
         }) as JSX.Element;
 
+        if (translation.error) {
+            return rd()
+        }
+
+        let loadingFallback; // Blank screen
+
+        if (renderSettings.method === "skeleton") {
+            loadingFallback = <React.Fragment key={`skeleton_${id}`}/>
+        } else {
+            loadingFallback = rd();
+        }
+        
+        // console.error(createClientSideTHydrationError(id));
+
         // The suspense exists here for hydration reasons
-        return (
-            <Suspense fallback={<></>}>
-                {defaultChildren}
-            </Suspense>
-        );
+        return <Suspense fallback={loadingFallback}>{loadingFallback}</Suspense>;
     }
-   
-    return renderTranslatedChildren({
-        source: taggedChildren, target: translation.t, 
-        variables, variablesOptions, locales: [locale, defaultLocale],
-        renderVariable
-    }) as JSX.Element;
+
+    return (
+        renderTranslatedChildren({
+            source: taggedChildren,
+            target: translation[hash],
+            variables,
+            variablesOptions,
+            locales: [locale, defaultLocale],
+            renderVariable
+        }) as JSX.Element
+    );
 }
 
 T.gtTransformation = "translate-client";

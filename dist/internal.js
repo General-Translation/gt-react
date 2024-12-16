@@ -26,7 +26,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.renderTranslatedChildren = exports.renderDefaultChildren = exports.getFallbackVariableName = exports.getVariableName = exports.extractEntryMetadata = exports.getPluralBranch = exports.hashReactChildrenObjects = exports.getVariableProps = exports.getDictionaryEntry = exports.flattenDictionary = exports.isVariableObject = exports.writeChildrenAsObjects = exports.addGTIdentifier = void 0;
+exports.defaultRenderSettings = exports.renderTranslatedChildren = exports.renderDefaultChildren = exports.getFallbackVariableName = exports.getVariableName = exports.extractEntryMetadata = exports.getPluralBranch = exports.hashReactChildrenObjects = exports.getVariableProps = exports.getDictionaryEntry = exports.flattenDictionary = exports.isVariableObject = exports.writeChildrenAsObjects = exports.addGTIdentifier = void 0;
 var hashReactChildrenObjects_1 = __importDefault(require("./internal/hashReactChildrenObjects"));
 exports.hashReactChildrenObjects = hashReactChildrenObjects_1.default;
 var flattenDictionary_1 = __importDefault(require("./internal/flattenDictionary"));
@@ -52,4 +52,6 @@ var renderDefaultChildren_1 = __importDefault(require("./provider/rendering/rend
 exports.renderDefaultChildren = renderDefaultChildren_1.default;
 var renderTranslatedChildren_1 = __importDefault(require("./provider/rendering/renderTranslatedChildren"));
 exports.renderTranslatedChildren = renderTranslatedChildren_1.default;
+var defaultRenderSettings_1 = require("./provider/rendering/defaultRenderSettings");
+Object.defineProperty(exports, "defaultRenderSettings", { enumerable: true, get: function () { return defaultRenderSettings_1.defaultRenderSettings; } });
 //# sourceMappingURL=internal.js.map

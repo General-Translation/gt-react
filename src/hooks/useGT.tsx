@@ -19,12 +19,11 @@ export function useGT(
     id: string = ''
 ): (
     id: string,
-    options?: Record<string, any>,
-    f?: Function
+    options?: Record<string, any>
 ) => JSX.Element | string | undefined {
 
     // Create a prefix for translation keys if an id is provided
-    const getID = (suffix: string) => {
+    const getId = (suffix: string) => {
         return id ? `${id}.${suffix}` : suffix;
     }
 
@@ -38,19 +37,17 @@ export function useGT(
     * 
     * @param {string} [id=''] - The ID of the item in the dictionary to translate.
     * @param {Record<string, any>} [options={}] - Variables or parameters (e.g., `n`) passed into the translation for dynamic content.
-    * @param {Function} [f] - `f` is executed with `options` as parameters, and its result is translated based on the dictionary value of `id`. You likely don't need this parameter unless you are using `gt-next`.
     * 
     * @returns {string | JSX.Element}
     */
     function t(
         id: string = '', 
-        options: Record<string, any> = {}, 
-        f?: Function
+        options: Record<string, any> = {}
     ): JSX.Element | string | undefined {
-        const prefixedID = getID(id);
+        const prefixedId = getId(id);
         if (translate) {
-            const translation = translate(prefixedID, options, f);
-            if (!translation) console.warn(createNoEntryWarning(id, prefixedID));
+            const translation = translate(prefixedId, options);
+            if (!translation) console.warn(createNoEntryWarning(id, prefixedId));
             return translation;
         }
         return undefined;
@@ -78,12 +75,11 @@ export function useElement(
     id: string = ''
 ): (
     id: string,
-    options?: Record<string, any>,
-    f?: Function
+    options?: Record<string, any>
 ) => JSX.Element {
 
     // Create a prefix for translation keys if an id is provided
-    const getID = (suffix: string) => {
+    const getId = (suffix: string) => {
         return id ? `${id}.${suffix}` : suffix;
     }
 
@@ -98,23 +94,21 @@ export function useElement(
     * 
     * @param {string} [id=''] - The ID of the item in the dictionary to translate.
     * @param {Record<string, any>} [options={}] - Variables or parameters (e.g., `n`) passed into the translation for dynamic content.
-    * @param {Function} [f] - `f` is executed with `options` as parameters, and its result is translated based on the dictionary value of `id`. You likely don't need this parameter unless you are using `gt-next`.
     * 
     * @returns {JSX.Element}
     */
     function t(
         id: string = '', 
-        options: Record<string, any> = {}, 
-        f?: Function
+        options: Record<string, any> = {}
     ): JSX.Element {
-        const prefixedID = getID(id);
+        const prefixedId = getId(id);
         if (translate) {
-            const translation = translate(prefixedID, options, f);
-            if (!translation) console.warn(createNoEntryWarning(id, prefixedID));
-            if (!isValidElement(translation)) return <React.Fragment key={prefixedID}>{translation}</React.Fragment>
+            const translation = translate(prefixedId, options);
+            if (!translation) console.warn(createNoEntryWarning(id, prefixedId));
+            if (!isValidElement(translation)) return <React.Fragment key={prefixedId}>{translation}</React.Fragment>
             return translation;
         }
-        return <React.Fragment key={prefixedID}/>;
+        return <React.Fragment key={prefixedId}/>;
     };
 
     return t;
