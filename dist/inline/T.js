@@ -126,25 +126,27 @@ function T(_a) {
             });
         }
     }, [translation, translation === null || translation === void 0 ? void 0 : translation[hash]]);
+    // for default/fallback rendering
+    var renderDefault = function () { return (0, renderDefaultChildren_1.default)({
+        children: taggedChildren,
+        variables: variables,
+        variablesOptions: variablesOptions,
+        defaultLocale: defaultLocale,
+        renderVariable: renderVariable_1.default
+    }); };
+    // handle translation error
+    if (translation === null || translation === void 0 ? void 0 : translation.error) {
+        return renderDefault();
+    }
     // handle no translation/waiting for translation
     if (!translation || !translation[hash]) {
-        var rd = function () { return (0, renderDefaultChildren_1.default)({
-            children: taggedChildren,
-            variables: variables,
-            variablesOptions: variablesOptions,
-            defaultLocale: defaultLocale,
-            renderVariable: renderVariable_1.default
-        }); };
-        if (translation.error) {
-            return rd();
-        }
         var loadingFallback = // Blank screen
          void 0; // Blank screen
         if (renderSettings.method === "skeleton") {
             loadingFallback = (0, jsx_runtime_1.jsx)(react_1.default.Fragment, {}, "skeleton_".concat(id));
         }
         else {
-            loadingFallback = rd();
+            loadingFallback = renderDefault();
         }
         // console.error(createClientSideTHydrationError(id));
         // The suspense exists here for hydration reasons

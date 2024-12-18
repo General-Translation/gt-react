@@ -84,12 +84,6 @@ function T({
 
     useEffect(() => {
         if (!translation || !translation[hash]) {
-            if (typeof window !== 'undefined') {
-                console.log("client render t, translation", translation, hash);
-            } else {
-                console.log("client (server) render t, translation", translation, hash);
-            }
-            console.log("client <T> do translation: source", childrenAsObjects, "hash", hash);
             translateChildren({
                 source: childrenAsObjects,
                 targetLocale: locale,
@@ -100,27 +94,29 @@ function T({
         }
     }, [translation, translation?.[hash]]);
 
+    // for default/fallback rendering
+    const renderDefault = () => renderDefaultChildren({
+        children: taggedChildren,
+        variables,
+        variablesOptions,
+        defaultLocale,
+        renderVariable
+    }) as JSX.Element;
+
+    // handle translation error
+    if (translation?.error) {
+        return renderDefault();
+    }
+
     // handle no translation/waiting for translation
     if (!translation || !translation[hash]) {
-
-        const rd = () => renderDefaultChildren({
-            children: taggedChildren,
-            variables,
-            variablesOptions,
-            defaultLocale,
-            renderVariable
-        }) as JSX.Element;
-
-        if (translation.error) {
-            return rd()
-        }
 
         let loadingFallback; // Blank screen
 
         if (renderSettings.method === "skeleton") {
             loadingFallback = <React.Fragment key={`skeleton_${id}`}/>
         } else {
-            loadingFallback = rd();
+            loadingFallback = renderDefault();
         }
         
         // console.error(createClientSideTHydrationError(id));
