@@ -7,7 +7,7 @@ import useGTContext from "../provider/GTContext";
 import renderTranslatedChildren from "../provider/rendering/renderTranslatedChildren";
 import { useMemo } from "react";
 import renderVariable from "../provider/rendering/renderVariable";
-import { createClientSideTDictionaryCollisionError, createClientSideTHydrationError, createClientSideTWithoutIdError } from "../errors/createErrors";
+import { createClientSideTWithoutIdError } from "../errors/createErrors";
 
 /**
  * Translation component that handles rendering translated content, including plural forms.
@@ -104,7 +104,7 @@ function T({
     }) as JSX.Element;
 
     // handle translation error
-    if (translation?.error) {
+    if (translation?.[hash].error) {
         return renderDefault();
     }
 

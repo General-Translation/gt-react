@@ -67,15 +67,19 @@ export default function useDynamicTranslation({
                 const results = await gt.translateBatchFromClient(requests);
                 if (!isCancelled) {
                     setTranslations((prev: any) => {
-                        const merged = { ...(prev || {}) };
+                        let merged: Record<string, any> = { ...(prev || {}) };
                         results.forEach((result, index) => {
                             const request = requests[index];
-                            if (result?.translation && result?.reference) {
+                            if (gt.isResultSuccessful(result) && result?.reference) {
                                 const { translation, reference: { id, key } } = result;
                                 merged[id] = { [key]: translation };
                             } else {
+                                // id defaults to hash if none provided
                                 merged[request.data.metadata.id || request.data.metadata.hash] = {
-                                    error: (result as any)?.error ?? 500
+                                    [request.data.metadata.hash]: {
+                                        error: (result as any)?.error ?? "A server side error occurred.",
+                                        code: (result as any)?.code ?? 500
+                                    }
                                 }
                             }
                         });

@@ -109,13 +109,6 @@ function T(_a) {
     var translation = translations[id];
     (0, react_1.useEffect)(function () {
         if (!translation || !translation[hash]) {
-            if (typeof window !== 'undefined') {
-                console.log("client render t, translation", translation, hash);
-            }
-            else {
-                console.log("client (server) render t, translation", translation, hash);
-            }
-            console.log("client <T> do translation: source", childrenAsObjects, "hash", hash);
             translateChildren({
                 source: childrenAsObjects,
                 targetLocale: locale,
@@ -135,7 +128,7 @@ function T(_a) {
         renderVariable: renderVariable_1.default
     }); };
     // handle translation error
-    if (translation === null || translation === void 0 ? void 0 : translation.error) {
+    if (translation === null || translation === void 0 ? void 0 : translation[hash].error) {
         return renderDefault();
     }
     // handle no translation/waiting for translation

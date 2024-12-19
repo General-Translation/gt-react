@@ -119,17 +119,21 @@ function useDynamicTranslation(_a) {
                             setTranslations(function (prev) {
                                 var merged = __assign({}, (prev || {}));
                                 results_1.forEach(function (result, index) {
-                                    var _a;
-                                    var _b;
+                                    var _a, _b;
+                                    var _c, _d;
                                     var request = requests[index];
-                                    if ((result === null || result === void 0 ? void 0 : result.translation) && (result === null || result === void 0 ? void 0 : result.reference)) {
-                                        var translation = result.translation, _c = result.reference, id = _c.id, key = _c.key;
+                                    if (gt.isResultSuccessful(result) && (result === null || result === void 0 ? void 0 : result.reference)) {
+                                        var translation = result.translation, _e = result.reference, id = _e.id, key = _e.key;
                                         merged[id] = (_a = {}, _a[key] = translation, _a);
                                     }
                                     else {
-                                        merged[request.data.metadata.id || request.data.metadata.hash] = {
-                                            error: (_b = result === null || result === void 0 ? void 0 : result.error) !== null && _b !== void 0 ? _b : 500
-                                        };
+                                        // id defaults to hash if none provided
+                                        merged[request.data.metadata.id || request.data.metadata.hash] = (_b = {},
+                                            _b[request.data.metadata.hash] = {
+                                                error: (_c = result === null || result === void 0 ? void 0 : result.error) !== null && _c !== void 0 ? _c : "A server side error occurred.",
+                                                code: (_d = result === null || result === void 0 ? void 0 : result.code) !== null && _d !== void 0 ? _d : 500
+                                            },
+                                            _b);
                                     }
                                 });
                                 return merged;
