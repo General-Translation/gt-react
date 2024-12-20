@@ -80,10 +80,10 @@ function T({
         return [childrenAsObjects, hash];
     }, [context, taggedChildren]);
 
-    const translation = translations[id];
+    const translation = translations[id ?? hash];
 
     useEffect(() => {
-        if (!translation || !translation[hash]) {
+        if (!translation || (!translation[hash] && !translation.error)) {
             translateChildren({
                 source: childrenAsObjects,
                 targetLocale: locale,
@@ -104,7 +104,7 @@ function T({
     }) as JSX.Element;
 
     // handle translation error
-    if (translation?.[hash].error) {
+    if (translation?.error) {
         return renderDefault();
     }
 
@@ -120,7 +120,6 @@ function T({
         }
         
         // console.error(createClientSideTHydrationError(id));
-
         // The suspense exists here for hydration reasons
         return <Suspense fallback={loadingFallback}>{loadingFallback}</Suspense>;
     }

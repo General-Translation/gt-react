@@ -106,9 +106,9 @@ function T(_a) {
         var hash = (0, internal_1.hashReactChildrenObjects)(context ? [childrenAsObjects, context] : childrenAsObjects);
         return [childrenAsObjects, hash];
     }, [context, taggedChildren]), childrenAsObjects = _c[0], hash = _c[1];
-    var translation = translations[id];
+    var translation = translations[id !== null && id !== void 0 ? id : hash];
     (0, react_1.useEffect)(function () {
-        if (!translation || !translation[hash]) {
+        if (!translation || (!translation[hash] && !translation.error)) {
             translateChildren({
                 source: childrenAsObjects,
                 targetLocale: locale,
@@ -128,7 +128,7 @@ function T(_a) {
         renderVariable: renderVariable_1.default
     }); };
     // handle translation error
-    if (translation === null || translation === void 0 ? void 0 : translation[hash].error) {
+    if (translation === null || translation === void 0 ? void 0 : translation.error) {
         return renderDefault();
     }
     // handle no translation/waiting for translation

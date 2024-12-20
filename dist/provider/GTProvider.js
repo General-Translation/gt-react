@@ -79,6 +79,7 @@ var createErrors_1 = require("../errors/createErrors");
 var supported_locales_1 = require("@generaltranslation/supported-locales");
 var useDynamicTranslation_1 = __importDefault(require("./dynamic/useDynamicTranslation"));
 var defaultRenderSettings_1 = require("./rendering/defaultRenderSettings");
+var react_3 = __importDefault(require("react"));
 /**
  * Provides General Translation context to its children, which can then access `useGT`, `useLocale`, and `useDefaultLocale`.
  *
@@ -123,7 +124,6 @@ function GTProvider(_a) {
                                 return [3 /*break*/, 4];
                             case 3:
                                 error_1 = _a.sent();
-                                console.error(error_1);
                                 setTranslations({});
                                 return [3 /*break*/, 4];
                             case 4: return [2 /*return*/];
@@ -134,6 +134,7 @@ function GTProvider(_a) {
         }
     }, [translationRequired, cacheUrl, projectId, locale]);
     var translate = (0, react_2.useCallback)(function (id, options) {
+        var _a;
         if (options === void 0) { options = {}; }
         // get the dictionary entry
         var dictionaryEntry = (0, getDictionaryEntry_1.default)(dictionary, id);
@@ -143,7 +144,7 @@ function GTProvider(_a) {
             return undefined;
         }
         ;
-        var _a = (0, extractEntryMetadata_1.default)(dictionaryEntry), entry = _a.entry, metadata = _a.metadata;
+        var _b = (0, extractEntryMetadata_1.default)(dictionaryEntry), entry = _b.entry, metadata = _b.metadata;
         // Get variables and variable options
         var variables = options;
         var variablesOptions = metadata === null || metadata === void 0 ? void 0 : metadata.variablesOptions;
@@ -166,7 +167,36 @@ function GTProvider(_a) {
             var context = metadata === null || metadata === void 0 ? void 0 : metadata.context;
             var childrenAsObjects = (0, internal_1.writeChildrenAsObjects)(taggedEntry);
             var hash = (0, internal_1.hashReactChildrenObjects)(context ? [childrenAsObjects, context] : childrenAsObjects);
+            if ((_a = translations === null || translations === void 0 ? void 0 : translations[id]) === null || _a === void 0 ? void 0 : _a.error) { // error behavior -> fallback to default language
+                if (typeof taggedEntry === 'string') {
+                    return (0, generaltranslation_1.renderContentToString)(taggedEntry, defaultLocale, variables, variablesOptions);
+                }
+                return (0, renderDefaultChildren_1.default)({
+                    children: taggedEntry,
+                    variables: variables,
+                    variablesOptions: variablesOptions,
+                    defaultLocale: defaultLocale,
+                    renderVariable: renderVariable_1.default
+                });
+            }
             var target = translations[id][hash];
+            if (!target) { // loading behavior
+                if (renderSettings.method === 'skeleton') { // skeleton behavior
+                    return (0, jsx_runtime_1.jsx)(react_3.default.Fragment, {}, "skeleton_".concat(id));
+                }
+                else { // default behavior
+                    if (typeof taggedEntry === 'string') {
+                        return (0, generaltranslation_1.renderContentToString)(taggedEntry, defaultLocale, variables, variablesOptions);
+                    }
+                    return (0, renderDefaultChildren_1.default)({
+                        children: taggedEntry,
+                        variables: variables,
+                        variablesOptions: variablesOptions,
+                        defaultLocale: defaultLocale,
+                        renderVariable: renderVariable_1.default
+                    });
+                }
+            }
             if (typeof taggedEntry === 'string') {
                 return (0, generaltranslation_1.renderContentToString)(target, [locale, defaultLocale], variables, variablesOptions);
             }

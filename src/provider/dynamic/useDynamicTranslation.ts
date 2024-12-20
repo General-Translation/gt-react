@@ -70,16 +70,20 @@ export default function useDynamicTranslation({
                         let merged: Record<string, any> = { ...(prev || {}) };
                         results.forEach((result, index) => {
                             const request = requests[index];
-                            if (gt.isResultSuccessful(result) && result?.reference) {
+                            if ('translation' in result && result.translation && result.reference) {
                                 const { translation, reference: { id, key } } = result;
                                 merged[id] = { [key]: translation };
+                            } else if ('error' in result && result.error && result.code) {
+                                merged[request.data.metadata.id || request.data.metadata.hash] = {
+                                    error: result.error,
+                                    code: result.code
+                                }
+                                console.error(`Translation failed${result?.reference?.id ? ` for id: ${result.reference.id}` : '' }`, result.code, result.error);
                             } else {
                                 // id defaults to hash if none provided
                                 merged[request.data.metadata.id || request.data.metadata.hash] = {
-                                    [request.data.metadata.hash]: {
-                                        error: (result as any)?.error ?? "A server side error occurred.",
-                                        code: (result as any)?.code ?? 500
-                                    }
+                                    error: "An error occurred.",
+                                    code: 500
                                 }
                             }
                         });
