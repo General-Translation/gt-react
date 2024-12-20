@@ -7,7 +7,7 @@ import useGTContext from "../provider/GTContext";
 import renderTranslatedChildren from "../provider/rendering/renderTranslatedChildren";
 import { useMemo } from "react";
 import renderVariable from "../provider/rendering/renderVariable";
-import { createClientSideTDictionaryCollisionError, createClientSideTHydrationError, createClientSideTWithoutIdError } from "../errors/createErrors";
+import { createClientSideTWithoutIdError } from "../errors/createErrors";
 
 /**
  * Translation component that handles rendering translated content, including plural forms.
@@ -80,16 +80,10 @@ function T({
         return [childrenAsObjects, hash];
     }, [context, taggedChildren]);
 
-    const translation = translations[id];
+    const translation = translations[id ?? hash];
 
     useEffect(() => {
-        if (!translation || !translation[hash]) {
-            if (typeof window !== 'undefined') {
-                console.log("client render t, translation", translation, hash);
-            } else {
-                console.log("client (server) render t, translation", translation, hash);
-            }
-            console.log("client <T> do translation: source", childrenAsObjects, "hash", hash);
+        if (!translation || (!translation[hash] && !translation.error)) {
             translateChildren({
                 source: childrenAsObjects,
                 targetLocale: locale,
@@ -100,31 +94,32 @@ function T({
         }
     }, [translation, translation?.[hash]]);
 
+    // for default/fallback rendering
+    const renderDefault = () => renderDefaultChildren({
+        children: taggedChildren,
+        variables,
+        variablesOptions,
+        defaultLocale,
+        renderVariable
+    }) as JSX.Element;
+
+    // handle translation error
+    if (translation?.error) {
+        return renderDefault();
+    }
+
     // handle no translation/waiting for translation
     if (!translation || !translation[hash]) {
-
-        const rd = () => renderDefaultChildren({
-            children: taggedChildren,
-            variables,
-            variablesOptions,
-            defaultLocale,
-            renderVariable
-        }) as JSX.Element;
-
-        if (translation.error) {
-            return rd()
-        }
 
         let loadingFallback; // Blank screen
 
         if (renderSettings.method === "skeleton") {
             loadingFallback = <React.Fragment key={`skeleton_${id}`}/>
         } else {
-            loadingFallback = rd();
+            loadingFallback = renderDefault();
         }
         
         // console.error(createClientSideTHydrationError(id));
-
         // The suspense exists here for hydration reasons
         return <Suspense fallback={loadingFallback}>{loadingFallback}</Suspense>;
     }

@@ -122,13 +122,22 @@ function useDynamicTranslation(_a) {
                                     var _a;
                                     var _b;
                                     var request = requests[index];
-                                    if ((result === null || result === void 0 ? void 0 : result.translation) && (result === null || result === void 0 ? void 0 : result.reference)) {
+                                    if ('translation' in result && result.translation && result.reference) {
                                         var translation = result.translation, _c = result.reference, id = _c.id, key = _c.key;
                                         merged[id] = (_a = {}, _a[key] = translation, _a);
                                     }
-                                    else {
+                                    else if ('error' in result && result.error && result.code) {
                                         merged[request.data.metadata.id || request.data.metadata.hash] = {
-                                            error: (_b = result === null || result === void 0 ? void 0 : result.error) !== null && _b !== void 0 ? _b : 500
+                                            error: result.error,
+                                            code: result.code
+                                        };
+                                        console.error("Translation failed".concat(((_b = result === null || result === void 0 ? void 0 : result.reference) === null || _b === void 0 ? void 0 : _b.id) ? " for id: ".concat(result.reference.id) : ''), result.code, result.error);
+                                    }
+                                    else {
+                                        // id defaults to hash if none provided
+                                        merged[request.data.metadata.id || request.data.metadata.hash] = {
+                                            error: "An error occurred.",
+                                            code: 500
                                         };
                                     }
                                 });

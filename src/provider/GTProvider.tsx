@@ -17,6 +17,8 @@ import { createLibraryNoEntryWarning, projectIdMissingError } from "../errors/cr
 import { listSupportedLocales } from "@generaltranslation/supported-locales";
 import useDynamicTranslation from "./dynamic/useDynamicTranslation";
 import { defaultRenderSettings } from "./rendering/defaultRenderSettings";
+import { render } from "react-dom";
+import React from "react";
 
 /**
  * Provides General Translation context to its children, which can then access `useGT`, `useLocale`, and `useDefaultLocale`.
@@ -81,7 +83,6 @@ export default function GTProvider({
                         const result = await response.json();
                         setTranslations(result);
                     } catch (error) {
-                        console.error(error);
                         setTranslations({});
                     }
                 })();
@@ -131,7 +132,36 @@ export default function GTProvider({
             const context = metadata?.context;
             const childrenAsObjects = writeChildrenAsObjects(taggedEntry);
             const hash: string = hashReactChildrenObjects(context ? [childrenAsObjects, context] : childrenAsObjects);
+            if (translations?.[id]?.error) {   // error behavior -> fallback to default language
+                if (typeof taggedEntry === 'string') {
+                    return renderContentToString(
+                        taggedEntry, defaultLocale, 
+                        variables, variablesOptions
+                    )
+                }
+                return renderDefaultChildren({
+                    children: taggedEntry, variables, variablesOptions, defaultLocale,
+                    renderVariable
+                });
+            }
             const target = translations[id][hash];
+            if (!target) { // loading behavior
+                if (renderSettings.method === 'skeleton') { // skeleton behavior
+                    return <React.Fragment key={`skeleton_${id}`}/>
+                } else { // default behavior
+                    if (typeof taggedEntry === 'string') {
+                        return renderContentToString(
+                            taggedEntry, defaultLocale, 
+                            variables, variablesOptions
+                        )
+                    }
+                    return renderDefaultChildren({
+                        children: taggedEntry, variables, variablesOptions, defaultLocale,
+                        renderVariable
+                    });
+                }
+
+            }
             if (typeof taggedEntry === 'string') {
                 return renderContentToString(
                     target as Content, [locale, defaultLocale],

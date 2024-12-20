@@ -106,16 +106,9 @@ function T(_a) {
         var hash = (0, internal_1.hashReactChildrenObjects)(context ? [childrenAsObjects, context] : childrenAsObjects);
         return [childrenAsObjects, hash];
     }, [context, taggedChildren]), childrenAsObjects = _c[0], hash = _c[1];
-    var translation = translations[id];
+    var translation = translations[id !== null && id !== void 0 ? id : hash];
     (0, react_1.useEffect)(function () {
-        if (!translation || !translation[hash]) {
-            if (typeof window !== 'undefined') {
-                console.log("client render t, translation", translation, hash);
-            }
-            else {
-                console.log("client (server) render t, translation", translation, hash);
-            }
-            console.log("client <T> do translation: source", childrenAsObjects, "hash", hash);
+        if (!translation || (!translation[hash] && !translation.error)) {
             translateChildren({
                 source: childrenAsObjects,
                 targetLocale: locale,
@@ -126,25 +119,27 @@ function T(_a) {
             });
         }
     }, [translation, translation === null || translation === void 0 ? void 0 : translation[hash]]);
+    // for default/fallback rendering
+    var renderDefault = function () { return (0, renderDefaultChildren_1.default)({
+        children: taggedChildren,
+        variables: variables,
+        variablesOptions: variablesOptions,
+        defaultLocale: defaultLocale,
+        renderVariable: renderVariable_1.default
+    }); };
+    // handle translation error
+    if (translation === null || translation === void 0 ? void 0 : translation.error) {
+        return renderDefault();
+    }
     // handle no translation/waiting for translation
     if (!translation || !translation[hash]) {
-        var rd = function () { return (0, renderDefaultChildren_1.default)({
-            children: taggedChildren,
-            variables: variables,
-            variablesOptions: variablesOptions,
-            defaultLocale: defaultLocale,
-            renderVariable: renderVariable_1.default
-        }); };
-        if (translation.error) {
-            return rd();
-        }
         var loadingFallback = // Blank screen
          void 0; // Blank screen
         if (renderSettings.method === "skeleton") {
             loadingFallback = (0, jsx_runtime_1.jsx)(react_1.default.Fragment, {}, "skeleton_".concat(id));
         }
         else {
-            loadingFallback = rd();
+            loadingFallback = renderDefault();
         }
         // console.error(createClientSideTHydrationError(id));
         // The suspense exists here for hydration reasons
