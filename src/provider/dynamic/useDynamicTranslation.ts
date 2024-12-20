@@ -17,7 +17,7 @@ export default function useDynamicTranslation({
     [key: string]: any
 }) {
 
-    const gt = useMemo(() => new GT({ devApiKey, projectId, baseUrl, defaultLocale: defaultLocale }), [ devApiKey, projectId, baseUrl, metadata.defaultLocale ])
+    const gt = useMemo(() => new GT({ devApiKey, projectId, baseUrl, sourceLocale: defaultLocale }), [ devApiKey, projectId, baseUrl, metadata.defaultLocale ])
     metadata = { ...metadata, projectId, defaultLocale  };
 
     const translationEnabled = (
@@ -73,12 +73,9 @@ export default function useDynamicTranslation({
                             if ('translation' in result && result.translation && result.reference) {
                                 const { translation, reference: { id, key } } = result;
                                 merged[id] = { [key]: translation };
-                            } else if ('error' in result && result.error && result.code) {
-                                merged[request.data.metadata.id || request.data.metadata.hash] = {
-                                    error: result.error,
-                                    code: result.code
-                                }
-                                console.error(`Translation failed${result?.reference?.id ? ` for id: ${result.reference.id}` : '' }`, result.code, result.error);
+                            } else if ('error' in result && result.error && (result as any).code) {
+                                merged[request.data.metadata.id || request.data.metadata.hash] = result;
+                                console.error(`Translation failed${result?.reference?.id ? ` for id: ${result.reference.id}` : '' }`, result);
                             } else {
                                 // id defaults to hash if none provided
                                 merged[request.data.metadata.id || request.data.metadata.hash] = {

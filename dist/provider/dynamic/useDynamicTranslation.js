@@ -69,7 +69,7 @@ var internal_1 = require("generaltranslation/internal");
 function useDynamicTranslation(_a) {
     var _this = this;
     var projectId = _a.projectId, devApiKey = _a.devApiKey, baseUrl = _a.baseUrl, defaultLocale = _a.defaultLocale, setTranslations = _a.setTranslations, metadata = __rest(_a, ["projectId", "devApiKey", "baseUrl", "defaultLocale", "setTranslations"]);
-    var gt = (0, react_1.useMemo)(function () { return new generaltranslation_1.default({ devApiKey: devApiKey, projectId: projectId, baseUrl: baseUrl, defaultLocale: defaultLocale }); }, [devApiKey, projectId, baseUrl, metadata.defaultLocale]);
+    var gt = (0, react_1.useMemo)(function () { return new generaltranslation_1.default({ devApiKey: devApiKey, projectId: projectId, baseUrl: baseUrl, sourceLocale: defaultLocale }); }, [devApiKey, projectId, baseUrl, metadata.defaultLocale]);
     metadata = __assign(__assign({}, metadata), { projectId: projectId, defaultLocale: defaultLocale });
     var translationEnabled = (baseUrl &&
         projectId &&
@@ -127,11 +127,8 @@ function useDynamicTranslation(_a) {
                                         merged[id] = (_a = {}, _a[key] = translation, _a);
                                     }
                                     else if ('error' in result && result.error && result.code) {
-                                        merged[request.data.metadata.id || request.data.metadata.hash] = {
-                                            error: result.error,
-                                            code: result.code
-                                        };
-                                        console.error("Translation failed".concat(((_b = result === null || result === void 0 ? void 0 : result.reference) === null || _b === void 0 ? void 0 : _b.id) ? " for id: ".concat(result.reference.id) : ''), result.code, result.error);
+                                        merged[request.data.metadata.id || request.data.metadata.hash] = result;
+                                        console.error("Translation failed".concat(((_b = result === null || result === void 0 ? void 0 : result.reference) === null || _b === void 0 ? void 0 : _b.id) ? " for id: ".concat(result.reference.id) : ''), result);
                                     }
                                     else {
                                         // id defaults to hash if none provided

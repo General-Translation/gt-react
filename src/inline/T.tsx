@@ -80,7 +80,7 @@ function T({
         return [childrenAsObjects, hash];
     }, [context, taggedChildren]);
 
-    const translation = translations[id ?? hash];
+    const translation = translations[id];
 
     useEffect(() => {
         if (!translation || (!translation[hash] && !translation.error)) {

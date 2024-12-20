@@ -106,7 +106,7 @@ function T(_a) {
         var hash = (0, internal_1.hashReactChildrenObjects)(context ? [childrenAsObjects, context] : childrenAsObjects);
         return [childrenAsObjects, hash];
     }, [context, taggedChildren]), childrenAsObjects = _c[0], hash = _c[1];
-    var translation = translations[id !== null && id !== void 0 ? id : hash];
+    var translation = translations[id];
     (0, react_1.useEffect)(function () {
         if (!translation || (!translation[hash] && !translation.error)) {
             translateChildren({
