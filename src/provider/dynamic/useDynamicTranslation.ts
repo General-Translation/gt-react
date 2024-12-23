@@ -1,7 +1,7 @@
 import GT from "generaltranslation";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { dynamicTranslationError } from "../../errors/createErrors";
-import { defaultBaseUrl } from "generaltranslation/internal";
+import { defaultClientBaseUrl } from "generaltranslation/internal";
 
 export default function useDynamicTranslation({
     projectId, devApiKey,
@@ -23,7 +23,7 @@ export default function useDynamicTranslation({
     const translationEnabled = (
         baseUrl &&
         projectId &&
-        (baseUrl === defaultBaseUrl ? gt.apiKey : true)
+        (baseUrl === defaultClientBaseUrl ? gt.apiKey : true)
         ? true
         : false
     );

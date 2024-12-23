@@ -73,7 +73,7 @@ function useDynamicTranslation(_a) {
     metadata = __assign(__assign({}, metadata), { projectId: projectId, defaultLocale: defaultLocale });
     var translationEnabled = (baseUrl &&
         projectId &&
-        (baseUrl === internal_1.defaultBaseUrl ? gt.apiKey : true)
+        (baseUrl === internal_1.defaultClientBaseUrl ? gt.apiKey : true)
         ? true
         : false);
     if (!translationEnabled)

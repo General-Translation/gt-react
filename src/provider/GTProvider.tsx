@@ -11,7 +11,7 @@ import extractEntryMetadata from "./helpers/extractEntryMetadata";
 import renderDefaultChildren from "./rendering/renderDefaultChildren";
 import renderTranslatedChildren from "./rendering/renderTranslatedChildren";
 
-import { defaultBaseUrl, defaultCacheUrl, libraryDefaultLocale } from "generaltranslation/internal";
+import { defaultClientBaseUrl, defaultCacheUrl, libraryDefaultLocale } from "generaltranslation/internal";
 import renderVariable from "./rendering/renderVariable";
 import { createLibraryNoEntryWarning, projectIdMissingError } from "../errors/createErrors";
 import { listSupportedLocales } from "@generaltranslation/supported-locales";
@@ -41,7 +41,7 @@ export default function GTProvider({
     defaultLocale = libraryDefaultLocale, 
     locale = useBrowserLocale(defaultLocale, locales) || defaultLocale, 
     cacheUrl = defaultCacheUrl,
-    baseUrl = defaultBaseUrl,
+    baseUrl = defaultClientBaseUrl,
     renderSettings = defaultRenderSettings,
     devApiKey,
     ...metadata
@@ -62,7 +62,7 @@ export default function GTProvider({
     [key: string]: any
 }): JSX.Element {
 
-    if (!projectId && (cacheUrl === defaultCacheUrl || baseUrl === defaultBaseUrl)) {
+    if (!projectId && (cacheUrl === defaultCacheUrl || baseUrl === defaultClientBaseUrl)) {
         throw new Error(projectIdMissingError)
     };
 
