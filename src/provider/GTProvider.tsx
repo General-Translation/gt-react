@@ -11,7 +11,7 @@ import extractEntryMetadata from "./helpers/extractEntryMetadata";
 import renderDefaultChildren from "./rendering/renderDefaultChildren";
 import renderTranslatedChildren from "./rendering/renderTranslatedChildren";
 
-import { defaultBaseUrl, defaultCacheUrl, libraryDefaultLocale } from "generaltranslation/internal";
+import { defaultBaseUrl, defaultCacheUrl, defaultRuntimeApiUrl, libraryDefaultLocale } from "generaltranslation/internal";
 import renderVariable from "./rendering/renderVariable";
 import { createLibraryNoEntryWarning, projectIdMissingError } from "../errors/createErrors";
 import { listSupportedLocales } from "@generaltranslation/supported-locales";
@@ -41,7 +41,7 @@ export default function GTProvider({
     defaultLocale = libraryDefaultLocale, 
     locale = useBrowserLocale(defaultLocale, locales) || defaultLocale, 
     cacheUrl = defaultCacheUrl,
-    baseUrl = defaultBaseUrl,
+    runtimeUrl = defaultRuntimeApiUrl,
     renderSettings = defaultRenderSettings,
     devApiKey,
     ...metadata
@@ -53,7 +53,7 @@ export default function GTProvider({
     defaultLocale?: string;
     locale?: string;
     cacheUrl?: string;
-    baseUrl?: string;
+    runtimeUrl?: string;
     devApiKey?: string;
     renderSettings?: {
         method: 'skeleton' | 'replace' | 'hang' | 'subtle';
@@ -62,7 +62,7 @@ export default function GTProvider({
     [key: string]: any
 }): JSX.Element {
 
-    if (!projectId && (cacheUrl === defaultCacheUrl || baseUrl === defaultBaseUrl)) {
+    if (!projectId && (cacheUrl === defaultCacheUrl || runtimeUrl === defaultRuntimeApiUrl)) {
         throw new Error(projectIdMissingError)
     };
 
@@ -179,7 +179,7 @@ export default function GTProvider({
     }, [dictionary, translations, translationRequired, defaultLocale]);
 
     const { translateChildren, translateContent, translationEnabled } = useDynamicTranslation({
-        projectId, defaultLocale, devApiKey, baseUrl, setTranslations, ...metadata
+        targetLocale: locale, projectId, defaultLocale, devApiKey, runtimeUrl, setTranslations, ...metadata
     });
 
     return (

@@ -1,12 +1,13 @@
-export default function useDynamicTranslation({ projectId, devApiKey, baseUrl, defaultLocale, setTranslations, ...metadata }: {
+export default function useDynamicTranslation({ targetLocale, projectId, devApiKey, runtimeUrl, defaultLocale, setTranslations, ...metadata }: {
+    targetLocale: string;
     projectId?: string;
     defaultLocale?: string;
     devApiKey?: string;
-    baseUrl?: string;
+    runtimeUrl?: string;
     setTranslations: React.Dispatch<React.SetStateAction<any>>;
     [key: string]: any;
 }): {
-    translationEnabled: boolean;
+    translationEnabled: string | undefined;
     translateContent?: undefined;
     translateChildren?: undefined;
 } | {
@@ -24,6 +25,6 @@ export default function useDynamicTranslation({ projectId, devApiKey, baseUrl, d
             hash: string;
         } & Record<string, any>;
     }) => void;
-    translationEnabled: boolean;
+    translationEnabled: string;
 };
 //# sourceMappingURL=useDynamicTranslation.d.ts.map
