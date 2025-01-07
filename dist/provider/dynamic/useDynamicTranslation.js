@@ -57,25 +57,16 @@ var __rest = (this && this.__rest) || function (s, e) {
         }
     return t;
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = useDynamicTranslation;
-var generaltranslation_1 = __importDefault(require("generaltranslation"));
 var react_1 = require("react");
 var createErrors_1 = require("../../errors/createErrors");
-var internal_1 = require("generaltranslation/internal");
 function useDynamicTranslation(_a) {
     var _this = this;
-    var projectId = _a.projectId, devApiKey = _a.devApiKey, baseUrl = _a.baseUrl, defaultLocale = _a.defaultLocale, setTranslations = _a.setTranslations, metadata = __rest(_a, ["projectId", "devApiKey", "baseUrl", "defaultLocale", "setTranslations"]);
-    var gt = (0, react_1.useMemo)(function () { return new generaltranslation_1.default({ devApiKey: devApiKey, projectId: projectId, baseUrl: baseUrl, defaultLocale: defaultLocale }); }, [devApiKey, projectId, baseUrl, metadata.defaultLocale]);
-    metadata = __assign(__assign({}, metadata), { projectId: projectId, defaultLocale: defaultLocale });
-    var translationEnabled = (baseUrl &&
-        projectId &&
-        (baseUrl === internal_1.defaultBaseUrl ? gt.apiKey : true)
-        ? true
-        : false);
+    var targetLocale = _a.targetLocale, projectId = _a.projectId, devApiKey = _a.devApiKey, runtimeUrl = _a.runtimeUrl, defaultLocale = _a.defaultLocale, setTranslations = _a.setTranslations, metadata = __rest(_a, ["targetLocale", "projectId", "devApiKey", "runtimeUrl", "defaultLocale", "setTranslations"]);
+    metadata = __assign(__assign({}, metadata), { projectId: projectId, sourceLocale: defaultLocale });
+    var translationEnabled = (runtimeUrl &&
+        projectId);
     if (!translationEnabled)
         return { translationEnabled: translationEnabled };
     // Queue to store requested keys between renders.
@@ -84,8 +75,7 @@ function useDynamicTranslation(_a) {
     var _b = (0, react_1.useState)(0), fetchTrigger = _b[0], setFetchTrigger = _b[1];
     var translateContent = (0, react_1.useCallback)(function (params) {
         var key = "".concat(params.metadata.hash, "-").concat(params.targetLocale);
-        var data = __assign(__assign({}, params), { metadata: __assign(__assign({}, metadata), params.metadata) });
-        requestQueueRef.current.set(key, { type: 'content', data: data });
+        requestQueueRef.current.set(key, { type: 'content', source: params.source, metadata: params.metadata });
         setFetchTrigger(function (n) { return n + 1; });
     }, []);
     /**
@@ -94,8 +84,7 @@ function useDynamicTranslation(_a) {
      */
     var translateChildren = (0, react_1.useCallback)(function (params) {
         var key = "".concat(params.metadata.hash, "-").concat(params.targetLocale);
-        var data = __assign(__assign({}, params), { metadata: __assign(__assign({}, metadata), params.metadata) });
-        requestQueueRef.current.set(key, { type: 'jsx', data: data });
+        requestQueueRef.current.set(key, { type: 'jsx', source: params.source, metadata: params.metadata });
         setFetchTrigger(function (n) { return n + 1; });
     }, []);
     (0, react_1.useEffect)(function () {
@@ -104,17 +93,32 @@ function useDynamicTranslation(_a) {
         }
         var isCancelled = false;
         (function () { return __awaiter(_this, void 0, void 0, function () {
-            var requests, results_1, error_1;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
+            var requests, response, _a, results_1, error_1;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
                     case 0:
                         requests = Array.from(requestQueueRef.current.values());
-                        _a.label = 1;
+                        _b.label = 1;
                     case 1:
-                        _a.trys.push([1, 3, 4, 5]);
-                        return [4 /*yield*/, gt.translateBatchFromClient(requests)];
+                        _b.trys.push([1, 6, 7, 8]);
+                        return [4 /*yield*/, fetch("".concat(runtimeUrl, "/v1/runtime/").concat(projectId, "/client"), {
+                                method: 'POST',
+                                headers: __assign({ 'Content-Type': 'application/json' }, (devApiKey && { 'x-gt-dev-api-key': devApiKey })),
+                                body: JSON.stringify({
+                                    requests: requests,
+                                    targetLocale: targetLocale,
+                                    metadata: metadata
+                                }),
+                            })];
                     case 2:
-                        results_1 = _a.sent();
+                        response = _b.sent();
+                        if (!!response.ok) return [3 /*break*/, 4];
+                        _a = Error.bind;
+                        return [4 /*yield*/, response.text()];
+                    case 3: throw new (_a.apply(Error, [void 0, _b.sent()]))();
+                    case 4: return [4 /*yield*/, response.json()];
+                    case 5:
+                        results_1 = _b.sent();
                         if (!isCancelled) {
                             setTranslations(function (prev) {
                                 var merged = __assign({}, (prev || {}));
@@ -127,11 +131,8 @@ function useDynamicTranslation(_a) {
                                         merged[id] = (_a = {}, _a[key] = translation, _a);
                                     }
                                     else if ('error' in result && result.error && result.code) {
-                                        merged[request.data.metadata.id || request.data.metadata.hash] = {
-                                            error: result.error,
-                                            code: result.code
-                                        };
-                                        console.error("Translation failed".concat(((_b = result === null || result === void 0 ? void 0 : result.reference) === null || _b === void 0 ? void 0 : _b.id) ? " for id: ".concat(result.reference.id) : ''), result.code, result.error);
+                                        merged[request.data.metadata.id || request.data.metadata.hash] = result;
+                                        console.error("Translation failed".concat(((_b = result === null || result === void 0 ? void 0 : result.reference) === null || _b === void 0 ? void 0 : _b.id) ? " for id: ".concat(result.reference.id) : ''), result);
                                     }
                                     else {
                                         // id defaults to hash if none provided
@@ -144,22 +145,22 @@ function useDynamicTranslation(_a) {
                                 return merged;
                             });
                         }
-                        return [3 /*break*/, 5];
-                    case 3:
-                        error_1 = _a.sent();
+                        return [3 /*break*/, 8];
+                    case 6:
+                        error_1 = _b.sent();
                         console.error(createErrors_1.dynamicTranslationError, error_1);
-                        return [3 /*break*/, 5];
-                    case 4:
+                        return [3 /*break*/, 8];
+                    case 7:
                         requestQueueRef.current.clear();
                         return [7 /*endfinally*/];
-                    case 5: return [2 /*return*/];
+                    case 8: return [2 /*return*/];
                 }
             });
         }); })();
         return function () {
             isCancelled = true;
         };
-    }, [gt, fetchTrigger, setTranslations]);
+    }, [fetchTrigger, setTranslations]);
     return { translateContent: translateContent, translateChildren: translateChildren, translationEnabled: translationEnabled };
 }
 //# sourceMappingURL=useDynamicTranslation.js.map

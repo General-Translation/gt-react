@@ -102,6 +102,9 @@ export default function renderTranslatedChildren({
     if ((target === null || typeof target === 'undefined') && source) return renderDefaultChildren({ children: source, variables, variablesOptions, defaultLocale: locales[0], renderVariable });
     if (typeof target === 'string') return target;
 
+    // Convert source to an array in case target has multiple children where source only has one
+    if (Array.isArray(target) && !Array.isArray(source) && source) source = [source];
+
     if (Array.isArray(source) && Array.isArray(target)) {
 
         const sourceElements: ReactElement[] = source.filter(sourceChild => {
@@ -233,7 +236,7 @@ export default function renderTranslatedChildren({
                 locales
             })
         }
- 
+
     }
 
     return renderDefaultChildren({ children: source, variables, variablesOptions, defaultLocale: locales[0], renderVariable });
