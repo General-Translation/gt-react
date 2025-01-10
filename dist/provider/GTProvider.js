@@ -79,6 +79,7 @@ var createErrors_1 = require("../errors/createErrors");
 var supported_locales_1 = require("@generaltranslation/supported-locales");
 var useDynamicTranslation_1 = __importDefault(require("./dynamic/useDynamicTranslation"));
 var defaultRenderSettings_1 = require("./rendering/defaultRenderSettings");
+var id_1 = require("generaltranslation/id");
 var react_3 = __importDefault(require("react"));
 /**
  * Provides General Translation context to its children, which can then access `useGT`, `useLocale`, and `useDefaultLocale`.
@@ -166,7 +167,7 @@ function GTProvider(_a) {
         if (translations) {
             var context = metadata === null || metadata === void 0 ? void 0 : metadata.context;
             var childrenAsObjects = (0, internal_1.writeChildrenAsObjects)(taggedEntry);
-            var hash = (0, internal_1.hashReactChildrenObjects)(context ? [childrenAsObjects, context] : childrenAsObjects);
+            var hash = (0, id_1.hashJsxChildren)(context ? [childrenAsObjects, context] : childrenAsObjects);
             if ((_a = translations === null || translations === void 0 ? void 0 : translations[id]) === null || _a === void 0 ? void 0 : _a.error) { // error behavior -> fallback to default language
                 if (typeof taggedEntry === 'string') {
                     return (0, generaltranslation_1.renderContentToString)(taggedEntry, defaultLocale, variables, variablesOptions);

@@ -6,7 +6,7 @@ import useBrowserLocale from "../hooks/useBrowserLocale";
 import { GTContext } from "./GTContext";
 import { Content, Dictionary, TranslationsObject } from "../types/types";
 import getDictionaryEntry from "./helpers/getDictionaryEntry";
-import { addGTIdentifier, hashReactChildrenObjects, writeChildrenAsObjects } from "../internal";
+import { addGTIdentifier, writeChildrenAsObjects } from "../internal";
 import extractEntryMetadata from "./helpers/extractEntryMetadata";
 import renderDefaultChildren from "./rendering/renderDefaultChildren";
 import renderTranslatedChildren from "./rendering/renderTranslatedChildren";
@@ -17,6 +17,7 @@ import { createLibraryNoEntryWarning, projectIdMissingError } from "../errors/cr
 import { listSupportedLocales } from "@generaltranslation/supported-locales";
 import useDynamicTranslation from "./dynamic/useDynamicTranslation";
 import { defaultRenderSettings } from "./rendering/defaultRenderSettings";
+import { hashJsxChildren } from 'generaltranslation/id'
 import React from "react";
 
 /**
@@ -130,7 +131,8 @@ export default function GTProvider({
         if (translations) {
             const context = metadata?.context;
             const childrenAsObjects = writeChildrenAsObjects(taggedEntry);
-            const hash: string = hashReactChildrenObjects(context ? [childrenAsObjects, context] : childrenAsObjects);
+            
+            const hash: string = hashJsxChildren(context ? [childrenAsObjects, context] : childrenAsObjects);
             if (translations?.[id]?.error) {   // error behavior -> fallback to default language
                 if (typeof taggedEntry === 'string') {
                     return renderContentToString(

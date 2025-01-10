@@ -2,12 +2,13 @@ import React, { Suspense, useEffect } from "react";
 import useDefaultLocale from "../hooks/useDefaultLocale";
 import useLocale from "../hooks/useLocale";
 import renderDefaultChildren from "../provider/rendering/renderDefaultChildren";
-import { addGTIdentifier, hashReactChildrenObjects, writeChildrenAsObjects } from "../internal";
+import { addGTIdentifier, writeChildrenAsObjects } from "../internal";
 import useGTContext from "../provider/GTContext";
 import renderTranslatedChildren from "../provider/rendering/renderTranslatedChildren";
 import { useMemo } from "react";
 import renderVariable from "../provider/rendering/renderVariable";
 import { createClientSideTWithoutIdError } from "../errors/createErrors";
+import { hashJsxChildren } from "generaltranslation/id";
 
 /**
  * Translation component that handles rendering translated content, including plural forms.
@@ -76,7 +77,7 @@ function T({
     const context = props.context;
     const [childrenAsObjects, hash] = useMemo(() => {
         const childrenAsObjects = writeChildrenAsObjects(taggedChildren);
-        const hash: string = hashReactChildrenObjects(context ? [childrenAsObjects, context] : childrenAsObjects);
+        const hash: string = hashJsxChildren(context ? [childrenAsObjects, context] : childrenAsObjects);
         return [childrenAsObjects, hash];
     }, [context, taggedChildren]);
 
