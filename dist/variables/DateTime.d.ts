@@ -1,3 +1,4 @@
+import React from "react";
 /**
  * The `<DateTime>` component renders a formatted date or time string, allowing customization of the name, default value, and formatting options.
  * It utilizes the current locale and optional format settings to display the date.
@@ -24,7 +25,7 @@ declare function DateTime({ children, value, name, locales, options }: {
     value?: any;
     locales?: string[];
     options?: Intl.DateTimeFormatOptions;
-}): JSX.Element;
+}): React.JSX.Element;
 declare namespace DateTime {
     var gtTransformation: string;
 }

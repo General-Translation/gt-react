@@ -41,50 +41,53 @@ var getTagName = function (child) {
         return "C".concat(props['data-_gt'].id);
     return 'function';
 };
+var handleSingleChildElement = function (child) {
+    var type = child.type, props = child.props;
+    var objectElement = {
+        type: getTagName(child),
+        props: {}
+    };
+    if (props['data-_gt']) {
+        var generaltranslation = props['data-_gt'];
+        var newGTProp = __assign({}, generaltranslation);
+        var transformation = generaltranslation.transformation;
+        if (transformation === "variable") {
+            var variableType = generaltranslation.variableType || "variable";
+            var variableName = (0, getVariableName_1.default)(props, variableType);
+            return {
+                variable: variableType,
+                key: variableName,
+                id: generaltranslation.id
+            };
+        }
+        if (transformation === "plural" && generaltranslation.branches) {
+            objectElement.type = 'Plural';
+            var newBranches_1 = {};
+            Object.entries(generaltranslation.branches).forEach(function (_a) {
+                var key = _a[0], value = _a[1];
+                newBranches_1[key] = writeChildrenAsObjects(value);
+            });
+            newGTProp = __assign(__assign({}, newGTProp), { branches: newBranches_1 });
+        }
+        if (transformation === "branch" && generaltranslation.branches) {
+            objectElement.type = 'Branch';
+            var newBranches_2 = {};
+            Object.entries(generaltranslation.branches).forEach(function (_a) {
+                var key = _a[0], value = _a[1];
+                newBranches_2[key] = writeChildrenAsObjects(value);
+            });
+            newGTProp = __assign(__assign({}, newGTProp), { branches: newBranches_2 });
+        }
+        objectElement.props['data-_gt'] = newGTProp;
+    }
+    if (props.children) {
+        objectElement.props.children = writeChildrenAsObjects(props.children);
+    }
+    return objectElement;
+};
 var handleSingleChild = function (child) {
     if (react_1.default.isValidElement(child)) {
-        var _a = child, type = _a.type, props = _a.props;
-        var objectElement = {
-            type: getTagName(child),
-            props: {}
-        };
-        if (props['data-_gt']) {
-            var generaltranslation = props['data-_gt'];
-            var newGTProp = __assign({}, generaltranslation);
-            var transformation = generaltranslation.transformation;
-            if (transformation === "variable") {
-                var variableType = generaltranslation.variableType || "variable";
-                var variableName = (0, getVariableName_1.default)(props, variableType);
-                return {
-                    variable: variableType,
-                    key: variableName,
-                    id: generaltranslation.id
-                };
-            }
-            if (transformation === "plural" && generaltranslation.branches) {
-                objectElement.type = 'Plural';
-                var newBranches_1 = {};
-                Object.entries(generaltranslation.branches).forEach(function (_a) {
-                    var key = _a[0], value = _a[1];
-                    newBranches_1[key] = writeChildrenAsObjects(value);
-                });
-                newGTProp = __assign(__assign({}, newGTProp), { branches: newBranches_1 });
-            }
-            if (transformation === "branch" && generaltranslation.branches) {
-                objectElement.type = 'Branch';
-                var newBranches_2 = {};
-                Object.entries(generaltranslation.branches).forEach(function (_a) {
-                    var key = _a[0], value = _a[1];
-                    newBranches_2[key] = writeChildrenAsObjects(value);
-                });
-                newGTProp = __assign(__assign({}, newGTProp), { branches: newBranches_2 });
-            }
-            objectElement.props['data-_gt'] = newGTProp;
-        }
-        if (props.children) {
-            objectElement.props.children = writeChildrenAsObjects(props.children);
-        }
-        return objectElement;
+        return handleSingleChildElement(child);
     }
     ;
     return child;

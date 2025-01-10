@@ -1,3 +1,4 @@
+import React from "react";
 /**
  * Gets the translation function `t` provided by `<GTProvider>`.
  *
@@ -11,7 +12,7 @@
  * const t = useGT();
  * console.log(t('hello')); // Translates item 'hello'
  */
-export declare function useGT(id?: string): (id: string, options?: Record<string, any>) => JSX.Element | string | undefined;
+export declare function useGT(id?: string): (id: string, options?: Record<string, any>) => React.JSX.Element | string | undefined;
 /**
  * `useElement()` hook which gets the translation function `t()` provided by `<GTProvider>`.
  *
@@ -27,5 +28,5 @@ export declare function useGT(id?: string): (id: string, options?: Record<string
  * const t = useElement();
  * console.log(t('hello')); // Translates item 'hello', returns it as a JSX element
  */
-export declare function useElement(id?: string): (id: string, options?: Record<string, any>) => JSX.Element;
+export declare function useElement(id?: string): (id: string, options?: Record<string, any>) => React.JSX.Element;
 //# sourceMappingURL=useGT.d.ts.map

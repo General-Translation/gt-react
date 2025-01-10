@@ -37,7 +37,7 @@ function Num({
     value?: any; // Optional default value for the number
     locales?: string[]
     options?: Intl.NumberFormatOptions // Optional options for the number formatting
-}): JSX.Element {
+}): React.JSX.Element {
     
     const providerLocales = [useLocale(), useDefaultLocale()]
     locales ||= providerLocales;

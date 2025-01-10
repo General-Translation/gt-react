@@ -38,7 +38,7 @@ function Currency({
     currency?: string;
     locales?: string[]
     options?: Intl.NumberFormatOptions;
-}): JSX.Element {
+}): React.JSX.Element {
 
     const providerLocales = [useLocale(), useDefaultLocale()]
     locales ||= providerLocales

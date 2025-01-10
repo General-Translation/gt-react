@@ -1,4 +1,4 @@
-import { ReactNode } from "react";
+import React, { ReactNode } from "react";
 import { TranslatedChildren } from "../../types/types";
 export default function renderTranslatedChildren({ source, target, variables, variablesOptions, locales, renderVariable }: {
     source: ReactNode;
@@ -12,6 +12,6 @@ export default function renderTranslatedChildren({ source, target, variables, va
         variableValue: any;
         variableOptions: Intl.NumberFormatOptions | Intl.DateTimeFormatOptions;
         locales: string[];
-    }) => JSX.Element;
+    }) => React.JSX.Element;
 }): ReactNode;
 //# sourceMappingURL=renderTranslatedChildren.d.ts.map

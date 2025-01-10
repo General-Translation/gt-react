@@ -1,4 +1,5 @@
 import { Dictionary } from "../types/types";
+import React from "react";
 /**
  * Provides General Translation context to its children, which can then access `useGT`, `useLocale`, and `useDefaultLocale`.
  *
@@ -27,5 +28,5 @@ export default function GTProvider({ children, projectId, dictionary, locales, d
         timeout: number | null;
     };
     [key: string]: any;
-}): JSX.Element;
+}): React.JSX.Element;
 //# sourceMappingURL=GTProvider.d.ts.map

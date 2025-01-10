@@ -35,7 +35,7 @@ function DateTime({
     value?: any; // The default value which can be string, number or Date
     locales?: string[]
     options?: Intl.DateTimeFormatOptions; // Optional formatting options for the date
-}): JSX.Element {
+}): React.JSX.Element {
 
     const providerLocales = [useLocale(), useDefaultLocale()]
     locales ||= providerLocales;

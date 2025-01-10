@@ -17,7 +17,6 @@ import { createLibraryNoEntryWarning, projectIdMissingError } from "../errors/cr
 import { listSupportedLocales } from "@generaltranslation/supported-locales";
 import useDynamicTranslation from "./dynamic/useDynamicTranslation";
 import { defaultRenderSettings } from "./rendering/defaultRenderSettings";
-import { render } from "react-dom";
 import React from "react";
 
 /**
@@ -60,7 +59,7 @@ export default function GTProvider({
         timeout: number | null;
       };
     [key: string]: any
-}): JSX.Element {
+}): React.JSX.Element {
 
     if (!projectId && (cacheUrl === defaultCacheUrl || runtimeUrl === defaultRuntimeApiUrl)) {
         throw new Error(projectIdMissingError)
