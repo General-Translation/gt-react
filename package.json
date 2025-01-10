@@ -74,6 +74,6 @@
   ],
   "dependencies": {
     "@generaltranslation/supported-locales": "^0.0.4",
-    "generaltranslation": "^5.0.3"
+    "generaltranslation": "^5.0.4"
   }
 }

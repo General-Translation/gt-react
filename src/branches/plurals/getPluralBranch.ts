@@ -1,4 +1,4 @@
-import { getPluralForm } from "generaltranslation";
+import { getPluralForm } from "generaltranslation/internal";
 
 /**
  * Main function to get the appropriate branch based on the provided number and branches.
