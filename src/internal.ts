@@ -1,4 +1,3 @@
-import hashReactChildrenObjects from "./internal/hashReactChildrenObjects";
 import flattenDictionary from "./internal/flattenDictionary";
 import addGTIdentifier from "./internal/addGTIdentifier";
 import writeChildrenAsObjects from "./internal/writeChildrenAsObjects";
@@ -14,7 +13,7 @@ import { defaultRenderSettings } from "./provider/rendering/defaultRenderSetting
 export {
     addGTIdentifier, writeChildrenAsObjects, isVariableObject,
     flattenDictionary, getDictionaryEntry, getVariableProps,
-    hashReactChildrenObjects, getPluralBranch, extractEntryMetadata,
+    getPluralBranch, extractEntryMetadata,
     getVariableName, getFallbackVariableName, renderDefaultChildren, renderTranslatedChildren,
     defaultRenderSettings
 } 

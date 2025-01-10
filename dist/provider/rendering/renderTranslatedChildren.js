@@ -83,6 +83,9 @@ function renderTranslatedChildren(_a) {
         return (0, renderDefaultChildren_1.default)({ children: source, variables: variables, variablesOptions: variablesOptions, defaultLocale: locales[0], renderVariable: renderVariable });
     if (typeof target === 'string')
         return target;
+    // Convert source to an array in case target has multiple children where source only has one
+    if (Array.isArray(target) && !Array.isArray(source) && source)
+        source = [source];
     if (Array.isArray(source) && Array.isArray(target)) {
         var sourceElements_1 = source.filter(function (sourceChild) {
             if (react_1.default.isValidElement(sourceChild)) {

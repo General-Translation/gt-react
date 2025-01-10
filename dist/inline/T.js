@@ -48,6 +48,7 @@ var renderTranslatedChildren_1 = __importDefault(require("../provider/rendering/
 var react_2 = require("react");
 var renderVariable_1 = __importDefault(require("../provider/rendering/renderVariable"));
 var createErrors_1 = require("../errors/createErrors");
+var id_1 = require("generaltranslation/id");
 /**
  * Translation component that handles rendering translated content, including plural forms.
  * Used with the required `id` parameter instead of `const t = useGT()`.
@@ -103,7 +104,7 @@ function T(_a) {
     var context = props.context;
     var _c = (0, react_2.useMemo)(function () {
         var childrenAsObjects = (0, internal_1.writeChildrenAsObjects)(taggedChildren);
-        var hash = (0, internal_1.hashReactChildrenObjects)(context ? [childrenAsObjects, context] : childrenAsObjects);
+        var hash = (0, id_1.hashJsxChildren)(context ? [childrenAsObjects, context] : childrenAsObjects);
         return [childrenAsObjects, hash];
     }, [context, taggedChildren]), childrenAsObjects = _c[0], hash = _c[1];
     var translation = translations[id];
