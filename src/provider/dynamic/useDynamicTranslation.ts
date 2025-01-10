@@ -1,5 +1,5 @@
 import GT from "generaltranslation";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { dynamicTranslationError } from "../../errors/createErrors";
 
 export default function useDynamicTranslation({
