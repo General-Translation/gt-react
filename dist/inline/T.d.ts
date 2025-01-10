@@ -1,3 +1,4 @@
+import React from "react";
 /**
  * Translation component that handles rendering translated content, including plural forms.
  * Used with the required `id` parameter instead of `const t = useGT()`.
@@ -34,7 +35,7 @@ declare function T({ children, id, ...props }: {
     id: string;
     context?: string;
     [key: string]: any;
-}): JSX.Element | undefined;
+}): React.JSX.Element | undefined;
 declare namespace T {
     var gtTransformation: string;
 }

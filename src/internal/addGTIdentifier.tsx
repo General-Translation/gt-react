@@ -20,7 +20,7 @@ export default function addGTIdentifier(children: Children, outerId?: string | u
      * @param child - The ReactElement for which the GTProp is created
      * @returns - The GTProp object
      */
-    const createGTProp = (child: ReactElement): GTProp => {
+    const createGTProp = (child: ReactElement<any>): GTProp => {
         const { type, props } = child;
         index += 1;
         let result: GTProp = { id: index };
@@ -60,25 +60,29 @@ export default function addGTIdentifier(children: Children, outerId?: string | u
         return result;
     }
 
+    function handleSingleChildElement(child: ReactElement<any>) {
+        const { props } = child;
+        if (props['data-_gt']) 
+            throw new Error(createNestedDataGTError(child))
+        // Create new props for the element, including the GT identifier and a key
+        let generaltranslation = createGTProp(child); 
+        let newProps = {
+            ...props,
+            'data-_gt': generaltranslation
+        };
+        if (props.children && !generaltranslation.variableType) {
+            newProps.children = handleChildren(props.children);
+        }
+        if (child.type === React.Fragment) {
+            const fragment = <span style={{ all: 'unset', display: 'contents' }} {...newProps} />;
+            return fragment;
+        }
+        return React.cloneElement(child, newProps);
+    }
+
     function handleSingleChild(child: any) {
         if (isValidElement(child)) {
-            const { props } = child as ReactElement;
-            if (props['data-_gt']) 
-                throw new Error(createNestedDataGTError(child))
-            // Create new props for the element, including the GT identifier and a key
-            let generaltranslation = createGTProp(child); 
-            let newProps = {
-                ...props,
-                'data-_gt': generaltranslation
-            };
-            if (props.children && !generaltranslation.variableType) {
-                newProps.children = handleChildren(props.children);
-            }
-            if (child.type === React.Fragment) {
-                const fragment = <span style={{ all: 'unset', display: 'contents' }} {...newProps} />;
-                return fragment;
-            }
-            return React.cloneElement(child, newProps);
+            return handleSingleChildElement(child);
         }
         return child;
     }

@@ -48,7 +48,7 @@ function T({
     id: string
     context?: string,
     [key: string]: any
-}): JSX.Element | undefined {
+}): React.JSX.Element | undefined {
 
     if (!children) return undefined;
     
@@ -70,7 +70,7 @@ function T({
             children: taggedChildren,
             variables, variablesOptions, defaultLocale,
             renderVariable
-        }) as JSX.Element;
+        }) as React.JSX.Element;
     }
 
     // Do translation
@@ -102,7 +102,7 @@ function T({
         variablesOptions,
         defaultLocale,
         renderVariable
-    }) as JSX.Element;
+    }) as React.JSX.Element;
 
     // handle translation error
     if (translation?.error) {
@@ -133,7 +133,7 @@ function T({
             variablesOptions,
             locales: [locale, defaultLocale],
             renderVariable
-        }) as JSX.Element
+        }) as React.JSX.Element
     );
 }
 

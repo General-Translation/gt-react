@@ -21,63 +21,67 @@ export default function renderDefaultChildren({
         variableValue: any,
         variableOptions: Intl.NumberFormatOptions | Intl.DateTimeFormatOptions
         locales: string[]
-    }) => JSX.Element
+    }) => React.JSX.Element
 }) {
+    const handleSingleChildElement = (child: ReactElement<any>) => {
+        const generaltranslation = getGTProp(child)
+        if (generaltranslation?.transformation === "variable") {
+            let { 
+                variableName,
+                variableType,
+                variableValue,
+                variableOptions
+            } = getVariableProps(child.props as any);
+            variableValue = (() => {
+                if (typeof variables[variableName] !== 'undefined') {
+                    return variables[variableName]
+                }
+                if (typeof variableValue !== 'undefined') return variableValue;
+                if (variableName.startsWith(baseVariablePrefix)) { // pain point: somewhat breakable logic
+                    const fallbackVariableName = getFallbackVariableName(variableType);
+                    if (typeof variables[fallbackVariableName] !== 'undefined') {
+                        return variables[fallbackVariableName];
+                    }
+                }
+                return undefined;
+            })();
+            variableOptions = {
+                ...variablesOptions[variableName],
+                ...variableOptions
+            } as Intl.NumberFormatOptions | Intl.DateTimeFormatOptions;
+            return renderVariable({
+                variableName, variableType, variableValue, variableOptions, locales: [defaultLocale]
+            })
+        }
+        if (generaltranslation?.transformation === "plural") {
+            const n = typeof variables.n === 'number' ? variables.n :
+                        typeof child.props.n === 'number' ?  child.props.n :
+                            child.props['data-_gt-n'];
+            if (typeof n === 'number' && typeof variables.n === 'undefined')
+                variables.n = n;
+            const branches = generaltranslation.branches || {};
+            return handleChildren(getPluralBranch(n, [defaultLocale], branches) || child.props.children);
+        }
+        if (generaltranslation?.transformation === "branch") {
+            let { children, name, branch, 'data-_gt': _gt, ...branches } = child.props;
+            name = name || child.props['data-_gt-name'] || "branch";
+            branch = variables[name] || branch || child.props['data-_gt-branch-name'];
+            branches = generaltranslation.branches || {};
+            return handleChildren(branches[branch] !== undefined ? branches[branch] : children);
+        }
+        if (child.props.children) {
+            return React.cloneElement(child, {
+                ...child.props,
+                'data-_gt': undefined,
+                children: handleChildren(child.props.children)
+            });
+        }
+        return React.cloneElement(child, { ...child.props, 'data-_gt': undefined });
+    }
+
     const handleSingleChild = (child: ReactNode) => {
-        if (React.isValidElement(child)) {
-            const generaltranslation = getGTProp(child)
-            if (generaltranslation?.transformation === "variable") {
-                let { 
-                    variableName,
-                    variableType,
-                    variableValue,
-                    variableOptions
-                } = getVariableProps(child.props);
-                variableValue = (() => {
-                    if (typeof variables[variableName] !== 'undefined') {
-                        return variables[variableName]
-                    }
-                    if (typeof variableValue !== 'undefined') return variableValue;
-                    if (variableName.startsWith(baseVariablePrefix)) { // pain point: somewhat breakable logic
-                        const fallbackVariableName = getFallbackVariableName(variableType);
-                        if (typeof variables[fallbackVariableName] !== 'undefined') {
-                            return variables[fallbackVariableName];
-                        }
-                    }
-                    return undefined;
-                })();
-                variableOptions = {
-                    ...variablesOptions[variableName],
-                    ...variableOptions
-                } as Intl.NumberFormatOptions | Intl.DateTimeFormatOptions;
-                return renderVariable({
-                    variableName, variableType, variableValue, variableOptions, locales: [defaultLocale]
-                })
-            }
-            if (generaltranslation?.transformation === "plural") {
-                const n = typeof variables.n === 'number' ? variables.n :
-                            typeof child.props.n === 'number' ?  child.props.n :
-                                child.props['data-_gt-n'];
-                if (typeof n === 'number' && typeof variables.n === 'undefined')
-                    variables.n = n;
-                const branches = generaltranslation.branches || {};
-                return handleChildren(getPluralBranch(n, [defaultLocale], branches) || child.props.children);
-            }
-            if (generaltranslation?.transformation === "branch") {
-                let { children, name, branch, 'data-_gt': _gt, ...branches } = child.props;
-                name = name || child.props['data-_gt-name'] || "branch";
-                branch = variables[name] || branch || child.props['data-_gt-branch-name'];
-                branches = generaltranslation.branches || {};
-                return handleChildren(branches[branch] !== undefined ? branches[branch] : children);
-            }
-            if (child.props.children) {
-                return React.cloneElement(child, {
-                    ...child.props,
-                    'data-_gt': undefined,
-                    children: handleChildren(child.props.children)
-                });
-            }
-            return React.cloneElement(child, { ...child.props, 'data-_gt': undefined });
+        if (React.isValidElement<any>(child)) {
+            return handleSingleChildElement(child);
         }
         return child;
     }

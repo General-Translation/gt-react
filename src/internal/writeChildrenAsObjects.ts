@@ -7,7 +7,7 @@ import { TranslatedChildren } from '../types/types';
  * @param {ReactElement} child - The React element.
  * @returns {string} - The tag name of the React element.
  */
-const getTagName = (child: ReactElement): string => {
+const getTagName = (child: ReactElement<any>): string => {
     if (!child) return '';
     const { type, props } = child;
     if (type && typeof type === 'function') {
@@ -20,53 +20,57 @@ const getTagName = (child: ReactElement): string => {
     return 'function';
 };
 
+const handleSingleChildElement = (child: ReactElement<any>): any => {
+    const { type, props } = child;
+    let objectElement: Record<string, any> = {
+        type: getTagName(child),
+        props: {}
+    };
+    if (props['data-_gt']) {
+
+        const generaltranslation = props['data-_gt'];
+        let newGTProp: Record<string, any> = {
+            ...generaltranslation
+        };
+
+        const transformation = generaltranslation.transformation;
+        if (transformation === "variable") {
+            const variableType = generaltranslation.variableType || "variable";
+            const variableName = getVariableName(props, variableType)
+            return { 
+                variable: variableType, 
+                key: variableName,
+                id: generaltranslation.id
+            };
+        }
+        if (transformation === "plural" && generaltranslation.branches) {
+            objectElement.type = 'Plural';
+            let newBranches: Record<string, any> = {};
+            Object.entries(generaltranslation.branches).forEach(([key, value]: any) => {
+                newBranches[key] = writeChildrenAsObjects(value);
+            });
+            newGTProp = { ...newGTProp, branches: newBranches }
+        }
+        if (transformation === "branch" && generaltranslation.branches) {
+            objectElement.type = 'Branch';
+            let newBranches: Record<string, any> = {};
+            Object.entries(generaltranslation.branches).forEach(([key, value]: any) => {
+                newBranches[key] = writeChildrenAsObjects(value);
+            });
+            newGTProp = { ...newGTProp, branches: newBranches }
+        }
+        
+        objectElement.props['data-_gt'] = newGTProp;
+    }
+    if (props.children) {
+        objectElement.props.children = writeChildrenAsObjects(props.children)
+    }
+    return objectElement;
+}
+
 const handleSingleChild = (child: any): any => {
     if (React.isValidElement(child)) {
-        const { type, props } = child as ReactElement;
-        let objectElement: Record<string, any> = {
-            type: getTagName(child),
-            props: {}
-        };
-        if (props['data-_gt']) {
-
-            const generaltranslation = props['data-_gt'];
-            let newGTProp: Record<string, any> = {
-                ...generaltranslation
-            };
-
-            const transformation = generaltranslation.transformation;
-            if (transformation === "variable") {
-                const variableType = generaltranslation.variableType || "variable";
-                const variableName = getVariableName(props, variableType)
-                return { 
-                    variable: variableType, 
-                    key: variableName,
-                    id: generaltranslation.id
-                };
-            }
-            if (transformation === "plural" && generaltranslation.branches) {
-                objectElement.type = 'Plural';
-                let newBranches: Record<string, any> = {};
-                Object.entries(generaltranslation.branches).forEach(([key, value]: any) => {
-                    newBranches[key] = writeChildrenAsObjects(value);
-                });
-                newGTProp = { ...newGTProp, branches: newBranches }
-            }
-            if (transformation === "branch" && generaltranslation.branches) {
-                objectElement.type = 'Branch';
-                let newBranches: Record<string, any> = {};
-                Object.entries(generaltranslation.branches).forEach(([key, value]: any) => {
-                    newBranches[key] = writeChildrenAsObjects(value);
-                });
-                newGTProp = { ...newGTProp, branches: newBranches }
-            }
-            
-            objectElement.props['data-_gt'] = newGTProp;
-        }
-        if (props.children) {
-            objectElement.props.children = writeChildrenAsObjects(props.children)
-        }
-        return objectElement;
+        return handleSingleChildElement(child);
     };
     return child;
 }

@@ -60,7 +60,7 @@ export default function GTProvider({
         timeout: number | null;
       };
     [key: string]: any
-}): JSX.Element {
+}): React.JSX.Element {
 
     if (!projectId && (cacheUrl === defaultCacheUrl || runtimeUrl === defaultRuntimeApiUrl)) {
         throw new Error(projectIdMissingError)

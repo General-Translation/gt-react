@@ -10,6 +10,6 @@ export default function renderDefaultChildren({ children, variables, variablesOp
         variableValue: any;
         variableOptions: Intl.NumberFormatOptions | Intl.DateTimeFormatOptions;
         locales: string[];
-    }) => JSX.Element;
+    }) => React.JSX.Element;
 }): React.ReactNode;
 //# sourceMappingURL=renderDefaultChildren.d.ts.map

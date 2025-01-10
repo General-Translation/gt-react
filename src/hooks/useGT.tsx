@@ -20,7 +20,7 @@ export function useGT(
 ): (
     id: string,
     options?: Record<string, any>
-) => JSX.Element | string | undefined {
+) => React.JSX.Element | string | undefined {
 
     // Create a prefix for translation keys if an id is provided
     const getId = (suffix: string) => {
@@ -38,12 +38,12 @@ export function useGT(
     * @param {string} [id=''] - The ID of the item in the dictionary to translate.
     * @param {Record<string, any>} [options={}] - Variables or parameters (e.g., `n`) passed into the translation for dynamic content.
     * 
-    * @returns {string | JSX.Element}
+    * @returns {string | React.JSX.Element}
     */
     function t(
         id: string = '', 
         options: Record<string, any> = {}
-    ): JSX.Element | string | undefined {
+    ): React.JSX.Element | string | undefined {
         const prefixedId = getId(id);
         if (translate) {
             const translation = translate(prefixedId, options);
@@ -76,7 +76,7 @@ export function useElement(
 ): (
     id: string,
     options?: Record<string, any>
-) => JSX.Element {
+) => React.JSX.Element {
 
     // Create a prefix for translation keys if an id is provided
     const getId = (suffix: string) => {
@@ -90,7 +90,7 @@ export function useElement(
    
     /**
     * Translates a dictionary item based on its `id` and options.
-    * Always returns a JSX.Element. Returns a fragment if there is no translation.
+    * Always returns a React.JSX.Element. Returns a fragment if there is no translation.
     * 
     * @param {string} [id=''] - The ID of the item in the dictionary to translate.
     * @param {Record<string, any>} [options={}] - Variables or parameters (e.g., `n`) passed into the translation for dynamic content.
@@ -100,7 +100,7 @@ export function useElement(
     function t(
         id: string = '', 
         options: Record<string, any> = {}
-    ): JSX.Element {
+    ): React.JSX.Element {
         const prefixedId = getId(id);
         if (translate) {
             const translation = translate(prefixedId, options);

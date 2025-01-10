@@ -12,7 +12,7 @@ function renderTranslatedElement({
     sourceElement, targetElement, variables = {}, variablesOptions = {},
     locales = [libraryDefaultLocale], renderVariable
 }: {
-    sourceElement: ReactElement,
+    sourceElement: ReactElement<any>,
     targetElement: TranslatedElement,
     variables?: Record<string, any>,
     variablesOptions?: Record<string, any>,
@@ -25,7 +25,7 @@ function renderTranslatedElement({
         variableValue: any,
         variableOptions: Intl.NumberFormatOptions | Intl.DateTimeFormatOptions
         locales: string[]
-    }) => JSX.Element
+    }) => React.JSX.Element
 }) {
 
     const { props } = sourceElement;
@@ -95,7 +95,7 @@ export default function renderTranslatedChildren({
         variableValue: any,
         variableOptions: Intl.NumberFormatOptions | Intl.DateTimeFormatOptions,
         locales: string[]
-    }) => JSX.Element
+    }) => React.JSX.Element
 }): ReactNode {
 
     // Most straightforward case, return a valid React node
@@ -202,7 +202,7 @@ export default function renderTranslatedChildren({
                     variableName, 
                     variableValue,
                     variableOptions
-                } = getVariableProps(source.props);
+                } = getVariableProps(source.props as any);
                 if (typeof variables[variableName] === 'undefined') {
                     variables[variableName] = variableValue;
                 }

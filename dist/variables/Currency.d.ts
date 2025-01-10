@@ -1,3 +1,4 @@
+import React from "react";
 /**
  * The `<Currency>` component renders a formatted currency string, allowing customization of name, default value, currency type, and formatting options.
  * Must be used inside a `<GTProvider>`.
@@ -26,7 +27,7 @@ declare function Currency({ children, value, name, currency, locales, options }:
     currency?: string;
     locales?: string[];
     options?: Intl.NumberFormatOptions;
-}): JSX.Element;
+}): React.JSX.Element;
 declare namespace Currency {
     var gtTransformation: string;
 }

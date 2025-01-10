@@ -22,7 +22,7 @@ function Var({ children, name, value }: {
     children?: any;
     name?: string;
     value?: any;
-}): JSX.Element {
+}): React.JSX.Element {
 
     let final = typeof children !== 'undefined' ? children : value;
     

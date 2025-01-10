@@ -1,3 +1,4 @@
+import React from "react";
 /**
  * The `<Num>` component renders a formatted number string, allowing customization of the name, default value, and formatting options.
  * It formats the number according to the current locale and optionally passed formatting options.
@@ -25,7 +26,7 @@ declare function Num({ children, value, name, locales, options }: {
     value?: any;
     locales?: string[];
     options?: Intl.NumberFormatOptions;
-}): JSX.Element;
+}): React.JSX.Element;
 declare namespace Num {
     var gtTransformation: string;
 }
