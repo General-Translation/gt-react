@@ -9,6 +9,7 @@ import { useMemo } from "react";
 import renderVariable from "../provider/rendering/renderVariable";
 import { createClientSideTWithoutIdError } from "../errors/createErrors";
 import { hashJsxChildren } from "generaltranslation/id";
+import renderSkeleton from "../provider/rendering/renderSkeleton";
 
 /**
  * Translation component that handles rendering translated content, including plural forms.
@@ -115,7 +116,12 @@ function T({
         let loadingFallback; // Blank screen
 
         if (renderSettings.method === "skeleton") {
-            loadingFallback = <React.Fragment key={`skeleton_${id}`}/>
+            loadingFallback = renderSkeleton({
+                children: taggedChildren,
+                variables,
+                defaultLocale,
+                renderVariable
+            });
         } else {
             loadingFallback = renderDefault();
         }

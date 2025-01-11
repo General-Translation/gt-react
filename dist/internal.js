@@ -36,7 +36,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.defaultRenderSettings = exports.renderTranslatedChildren = exports.renderDefaultChildren = exports.getFallbackVariableName = exports.getVariableName = exports.extractEntryMetadata = exports.getPluralBranch = exports.getVariableProps = exports.getDictionaryEntry = exports.flattenDictionary = exports.isVariableObject = exports.writeChildrenAsObjects = exports.addGTIdentifier = void 0;
+exports.defaultRenderSettings = exports.renderSkeleton = exports.renderTranslatedChildren = exports.renderDefaultChildren = exports.getFallbackVariableName = exports.getVariableName = exports.extractEntryMetadata = exports.getPluralBranch = exports.getVariableProps = exports.getDictionaryEntry = exports.flattenDictionary = exports.isVariableObject = exports.writeChildrenAsObjects = exports.addGTIdentifier = void 0;
 var flattenDictionary_1 = __importDefault(require("./internal/flattenDictionary"));
 exports.flattenDictionary = flattenDictionary_1.default;
 var addGTIdentifier_1 = __importDefault(require("./internal/addGTIdentifier"));
@@ -62,4 +62,6 @@ var renderTranslatedChildren_1 = __importDefault(require("./provider/rendering/r
 exports.renderTranslatedChildren = renderTranslatedChildren_1.default;
 var defaultRenderSettings_1 = require("./provider/rendering/defaultRenderSettings");
 Object.defineProperty(exports, "defaultRenderSettings", { enumerable: true, get: function () { return defaultRenderSettings_1.defaultRenderSettings; } });
+var renderSkeleton_1 = __importDefault(require("./provider/rendering/renderSkeleton"));
+exports.renderSkeleton = renderSkeleton_1.default;
 //# sourceMappingURL=internal.js.map

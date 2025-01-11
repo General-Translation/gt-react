@@ -80,7 +80,7 @@ var supported_locales_1 = require("@generaltranslation/supported-locales");
 var useDynamicTranslation_1 = __importDefault(require("./dynamic/useDynamicTranslation"));
 var defaultRenderSettings_1 = require("./rendering/defaultRenderSettings");
 var id_1 = require("generaltranslation/id");
-var react_3 = __importDefault(require("react"));
+var renderSkeleton_1 = __importDefault(require("./rendering/renderSkeleton"));
 /**
  * Provides General Translation context to its children, which can then access `useGT`, `useLocale`, and `useDefaultLocale`.
  *
@@ -183,7 +183,12 @@ function GTProvider(_a) {
             var target = translations[id][hash];
             if (!target) { // loading behavior
                 if (renderSettings.method === 'skeleton') { // skeleton behavior
-                    return (0, jsx_runtime_1.jsx)(react_3.default.Fragment, {}, "skeleton_".concat(id));
+                    return (0, renderSkeleton_1.default)({
+                        children: taggedEntry,
+                        variables: variables,
+                        defaultLocale: defaultLocale,
+                        renderVariable: renderVariable_1.default
+                    });
                 }
                 else { // default behavior
                     if (typeof taggedEntry === 'string') {

@@ -1,4 +1,4 @@
-import { Dictionary } from "../types/types";
+import { Dictionary, RenderMethod } from "../types/types";
 import React from "react";
 /**
  * Provides General Translation context to its children, which can then access `useGT`, `useLocale`, and `useDefaultLocale`.
@@ -24,7 +24,7 @@ export default function GTProvider({ children, projectId, dictionary, locales, d
     runtimeUrl?: string;
     devApiKey?: string;
     renderSettings?: {
-        method: 'skeleton' | 'replace' | 'hang' | 'subtle';
+        method: RenderMethod;
         timeout: number | null;
     };
     [key: string]: any;
