@@ -4,7 +4,7 @@ import { useCallback, useEffect, useState } from "react";
 import useBrowserLocale from "../hooks/useBrowserLocale";
 
 import { GTContext } from "./GTContext";
-import { Content, Dictionary, TranslationsObject } from "../types/types";
+import { Content, Dictionary, RenderMethod, TranslationsObject } from "../types/types";
 import getDictionaryEntry from "./helpers/getDictionaryEntry";
 import { addGTIdentifier, writeChildrenAsObjects } from "../internal";
 import extractEntryMetadata from "./helpers/extractEntryMetadata";
@@ -19,6 +19,7 @@ import useDynamicTranslation from "./dynamic/useDynamicTranslation";
 import { defaultRenderSettings } from "./rendering/defaultRenderSettings";
 import { hashJsxChildren } from 'generaltranslation/id'
 import React from "react";
+import renderSkeleton from "./rendering/renderSkeleton";
 
 /**
  * Provides General Translation context to its children, which can then access `useGT`, `useLocale`, and `useDefaultLocale`.
@@ -56,7 +57,7 @@ export default function GTProvider({
     runtimeUrl?: string;
     devApiKey?: string;
     renderSettings?: {
-        method: 'skeleton' | 'replace' | 'hang' | 'subtle';
+        method: RenderMethod;
         timeout: number | null;
       };
     [key: string]: any
@@ -148,7 +149,12 @@ export default function GTProvider({
             const target = translations[id][hash];
             if (!target) { // loading behavior
                 if (renderSettings.method === 'skeleton') { // skeleton behavior
-                    return <React.Fragment key={`skeleton_${id}`}/>
+                    return renderSkeleton({
+                        children: taggedEntry,
+                        variables,
+                        defaultLocale,
+                        renderVariable
+                    });
                 } else { // default behavior
                     if (typeof taggedEntry === 'string') {
                         return renderContentToString(
