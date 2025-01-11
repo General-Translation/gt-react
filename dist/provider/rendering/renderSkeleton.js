@@ -26,11 +26,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = renderSkeleton;
+var jsx_runtime_1 = require("react/jsx-runtime");
 var react_1 = __importDefault(require("react"));
 var getGTProp_1 = __importDefault(require("../helpers/getGTProp"));
 var internal_1 = require("../../internal");
 var internal_2 = require("generaltranslation/internal");
-var getVariableName_1 = require("../../variables/getVariableName");
 function replaceContentWithWhitespace(content) {
     if (typeof content === "number") {
         // Convert number to string and replace each non-whitespace character with a non-breaking space
@@ -57,25 +57,7 @@ function renderSkeleton(_a) {
     var handleSingleChildElement = function (child) {
         var generaltranslation = (0, getGTProp_1.default)(child);
         if ((generaltranslation === null || generaltranslation === void 0 ? void 0 : generaltranslation.transformation) === "variable") {
-            var _a = (0, internal_1.getVariableProps)(child.props), variableName_1 = _a.variableName, variableType_1 = _a.variableType, variableValue_1 = _a.variableValue;
-            variableValue_1 = (function () {
-                if (typeof variables[variableName_1] !== 'undefined') {
-                    return variables[variableName_1];
-                }
-                if (typeof variableValue_1 !== 'undefined')
-                    return variableValue_1;
-                if (variableName_1.startsWith(getVariableName_1.baseVariablePrefix)) { // pain point: somewhat breakable logic
-                    var fallbackVariableName = (0, internal_1.getFallbackVariableName)(variableType_1);
-                    if (typeof variables[fallbackVariableName] !== 'undefined') {
-                        return variables[fallbackVariableName];
-                    }
-                }
-                return undefined;
-            })();
-            if (variableValue_1 instanceof Date) {
-                variableValue_1 = variableValue_1.toISOString();
-            }
-            return handleChildren(variableValue_1);
+            return (0, jsx_runtime_1.jsx)(jsx_runtime_1.Fragment, {});
         }
         if ((generaltranslation === null || generaltranslation === void 0 ? void 0 : generaltranslation.transformation) === "plural") {
             var n = typeof variables.n === 'number' ? variables.n :
@@ -86,8 +68,8 @@ function renderSkeleton(_a) {
             var branches = generaltranslation.branches || {};
             return handleChildren((0, internal_1.getPluralBranch)(n, [defaultLocale], branches) || child.props.children);
         }
-        else if ((generaltranslation === null || generaltranslation === void 0 ? void 0 : generaltranslation.transformation) === "branch") {
-            var _b = child.props, children_1 = _b.children, name_1 = _b.name, branch = _b.branch, _gt = _b["data-_gt"], branches = __rest(_b, ["children", "name", "branch", 'data-_gt']);
+        if ((generaltranslation === null || generaltranslation === void 0 ? void 0 : generaltranslation.transformation) === "branch") {
+            var _a = child.props, children_1 = _a.children, name_1 = _a.name, branch = _a.branch, _gt = _a["data-_gt"], branches = __rest(_a, ["children", "name", "branch", 'data-_gt']);
             name_1 = name_1 || child.props['data-_gt-name'] || "branch";
             branch = variables[name_1] || branch || child.props['data-_gt-branch-name'];
             branches = generaltranslation.branches || {};
@@ -97,7 +79,6 @@ function renderSkeleton(_a) {
             return react_1.default.cloneElement(child, __assign(__assign({}, child.props), { 'data-_gt': undefined, children: handleChildren(child.props.children) }));
         }
         // empty element
-        console.log(child.type);
         return react_1.default.cloneElement(child, __assign(__assign({}, child.props), { 'data-_gt': undefined }));
     };
     var handleSingleChild = function (child) {

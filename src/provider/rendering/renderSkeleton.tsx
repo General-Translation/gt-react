@@ -47,28 +47,7 @@ export default function renderSkeleton({
     const handleSingleChildElement = (child: ReactElement<any>) => {
         const generaltranslation = getGTProp(child);
         if (generaltranslation?.transformation === "variable") {
-            let { 
-                variableName,
-                variableType,
-                variableValue,
-            } = getVariableProps(child.props as any);
-            variableValue = (() => {
-                if (typeof variables[variableName] !== 'undefined') {
-                    return variables[variableName]
-                }
-                if (typeof variableValue !== 'undefined') return variableValue;
-                if (variableName.startsWith(baseVariablePrefix)) { // pain point: somewhat breakable logic
-                    const fallbackVariableName = getFallbackVariableName(variableType);
-                    if (typeof variables[fallbackVariableName] !== 'undefined') {
-                        return variables[fallbackVariableName];
-                    }
-                }
-                return undefined;
-            })();
-            if (variableValue instanceof Date) {
-                variableValue = variableValue.toISOString();
-            }
-            return handleChildren(variableValue as ReactNode);
+            return <></>;
         }
         if (generaltranslation?.transformation === "plural") {
             const n = typeof variables.n === 'number' ? variables.n :
@@ -78,7 +57,8 @@ export default function renderSkeleton({
                 variables.n = n;
             const branches = generaltranslation.branches || {};
             return handleChildren(getPluralBranch(n, [defaultLocale], branches) || child.props.children);
-        } else if (generaltranslation?.transformation === "branch") {
+        }
+        if (generaltranslation?.transformation === "branch") {
             let { children, name, branch, 'data-_gt': _gt, ...branches } = child.props;
             name = name || child.props['data-_gt-name'] || "branch";
             branch = variables[name] || branch || child.props['data-_gt-branch-name'];
@@ -93,7 +73,6 @@ export default function renderSkeleton({
             });
         }
         // empty element
-        console.log(child.type);
         return React.cloneElement(child, { ...child.props,'data-_gt': undefined });
     }
 
