@@ -99,6 +99,18 @@ export default function useDynamicTranslation({
                 }
             } catch (error) {
                 console.error(dynamicTranslationError, error);
+                setTranslations((prev: any) => {
+                    let merged: Record<string, any> = { ...(prev || {}) };
+                    requests.forEach((request) => {
+                        // id defaults to hash if none provided
+                        merged[request.metadata.id || request.metadata.hash] = {
+                            error: "An error occurred.",
+                            code: 500
+                        }
+                    });
+                    return merged;
+                });
+                
             } finally {
                 requestQueueRef.current.clear();
             }
