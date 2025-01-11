@@ -149,6 +149,17 @@ function useDynamicTranslation(_a) {
                     case 6:
                         error_1 = _b.sent();
                         console.error(createErrors_1.dynamicTranslationError, error_1);
+                        setTranslations(function (prev) {
+                            var merged = __assign({}, (prev || {}));
+                            requests.forEach(function (request) {
+                                // id defaults to hash if none provided
+                                merged[request.metadata.id || request.metadata.hash] = {
+                                    error: "An error occurred.",
+                                    code: 500
+                                };
+                            });
+                            return merged;
+                        });
                         return [3 /*break*/, 8];
                     case 7:
                         requestQueueRef.current.clear();
