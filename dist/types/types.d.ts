@@ -41,5 +41,5 @@ export type TranslationsObject = {
         [hash: string]: TranslatedChildren;
     };
 };
-export type RenderMethod = 'skeleton' | 'replace' | 'hang' | 'subtle';
+export type RenderMethod = 'skeleton' | 'replace' | 'hang' | 'subtle' | 'default';
 //# sourceMappingURL=types.d.ts.map

@@ -97,11 +97,17 @@ var renderSkeleton_1 = __importDefault(require("./rendering/renderSkeleton"));
 function GTProvider(_a) {
     var _this = this;
     var children = _a.children, projectId = _a.projectId, _b = _a.dictionary, dictionary = _b === void 0 ? {} : _b, _c = _a.locales, locales = _c === void 0 ? (0, supported_locales_1.listSupportedLocales)() : _c, _d = _a.defaultLocale, defaultLocale = _d === void 0 ? internal_2.libraryDefaultLocale : _d, _e = _a.locale, locale = _e === void 0 ? (0, useBrowserLocale_1.default)(defaultLocale, locales) || defaultLocale : _e, _f = _a.cacheUrl, cacheUrl = _f === void 0 ? internal_2.defaultCacheUrl : _f, _g = _a.runtimeUrl, runtimeUrl = _g === void 0 ? internal_2.defaultRuntimeApiUrl : _g, _h = _a.renderSettings, renderSettings = _h === void 0 ? defaultRenderSettings_1.defaultRenderSettings : _h, devApiKey = _a.devApiKey, metadata = __rest(_a, ["children", "projectId", "dictionary", "locales", "defaultLocale", "locale", "cacheUrl", "runtimeUrl", "renderSettings", "devApiKey"]);
+    console.log(supported_locales_1.listSupportedLocales);
     if (!projectId && (cacheUrl === internal_2.defaultCacheUrl || runtimeUrl === internal_2.defaultRuntimeApiUrl)) {
         throw new Error(createErrors_1.projectIdMissingError);
     }
     ;
-    var translationRequired = (0, react_1.useMemo)(function () { return (0, generaltranslation_1.requiresTranslation)(defaultLocale, locale, locales); }, [defaultLocale, locale, locales]);
+    var regionalTranslationRequired = (0, react_1.useMemo)(function () {
+        return (0, generaltranslation_1.isSameLanguage)(defaultLocale, locale) && !(0, generaltranslation_1.isSameDialect)(defaultLocale, locale);
+    }, [defaultLocale, locale]);
+    var translationRequired = (0, react_1.useMemo)(function () {
+        return (0, generaltranslation_1.requiresTranslation)(defaultLocale, locale, locales) || regionalTranslationRequired;
+    }, [defaultLocale, locale, locales, regionalTranslationRequired]);
     var _j = (0, react_2.useState)(cacheUrl ? null : {}), translations = _j[0], setTranslations = _j[1];
     (0, react_2.useEffect)(function () {
         if (!translations) {
@@ -150,8 +156,8 @@ function GTProvider(_a) {
         var variables = options;
         var variablesOptions = metadata === null || metadata === void 0 ? void 0 : metadata.variablesOptions;
         var taggedEntry = (0, internal_1.addGTIdentifier)(entry, id);
-        // If no translations are required
-        if (!translationRequired) {
+        // render default locale
+        function renderDefault() {
             if (typeof taggedEntry === 'string') {
                 return (0, generaltranslation_1.renderContentToString)(taggedEntry, defaultLocale, variables, variablesOptions);
             }
@@ -163,46 +169,61 @@ function GTProvider(_a) {
                 renderVariable: renderVariable_1.default
             });
         }
+        // render skeleton
+        function renderLoadingSkeleton() {
+            if (typeof taggedEntry === 'string') {
+                return '';
+            }
+            return (0, renderSkeleton_1.default)({
+                children: taggedEntry,
+                variables: variables,
+                defaultLocale: defaultLocale,
+                renderVariable: renderVariable_1.default
+            });
+        }
+        // If no translations are required
+        if (!translationRequired) {
+            return renderDefault();
+        }
         // If a translation is required
         if (translations) {
             var context = metadata === null || metadata === void 0 ? void 0 : metadata.context;
             var childrenAsObjects = (0, internal_1.writeChildrenAsObjects)(taggedEntry);
+            // get hash
             var hash = (0, id_1.hashJsxChildren)(context ? [childrenAsObjects, context] : childrenAsObjects);
-            if ((_a = translations === null || translations === void 0 ? void 0 : translations[id]) === null || _a === void 0 ? void 0 : _a.error) { // error behavior -> fallback to default language
-                if (typeof taggedEntry === 'string') {
-                    return (0, generaltranslation_1.renderContentToString)(taggedEntry, defaultLocale, variables, variablesOptions);
+            // loading behavior
+            if (!translations[id][hash]) {
+                if (renderSettings.method === 'skeleton') {
+                    return renderLoadingSkeleton();
                 }
-                return (0, renderDefaultChildren_1.default)({
-                    children: taggedEntry,
-                    variables: variables,
-                    variablesOptions: variablesOptions,
-                    defaultLocale: defaultLocale,
-                    renderVariable: renderVariable_1.default
-                });
-            }
-            var target = translations[id][hash];
-            if (!target) { // loading behavior
-                if (renderSettings.method === 'skeleton') { // skeleton behavior
-                    return (0, renderSkeleton_1.default)({
-                        children: taggedEntry,
-                        variables: variables,
-                        defaultLocale: defaultLocale,
-                        renderVariable: renderVariable_1.default
-                    });
+                else if (renderSettings.method === 'replace') {
+                    return renderDefault();
                 }
-                else { // default behavior
-                    if (typeof taggedEntry === 'string') {
-                        return (0, generaltranslation_1.renderContentToString)(taggedEntry, defaultLocale, variables, variablesOptions);
+                else if (renderSettings.method === 'default') {
+                    if (regionalTranslationRequired) {
+                        return renderDefault();
                     }
-                    return (0, renderDefaultChildren_1.default)({
-                        children: taggedEntry,
-                        variables: variables,
-                        variablesOptions: variablesOptions,
-                        defaultLocale: defaultLocale,
-                        renderVariable: renderVariable_1.default
-                    });
+                    else {
+                        return renderLoadingSkeleton();
+                    }
                 }
+                if (renderSettings.method === 'hang') {
+                    // TODO: Remove this error
+                    throw new Error("gt-react GTProvider Provider JSX/STRING hang should not be invoked while waiting for translation");
+                }
+                if (renderSettings.method === 'subtle') {
+                    // TODO: Remove this error
+                    throw new Error("gt-react GTProvider Provider JSX/STRING subtle should not be invoked while waiting for translation");
+                }
+                // TODO: Remove this error
+                throw new Error("gt-react GTProvider Provider JSX/STRING should not be invoked while waiting for translation");
             }
+            // error behavior -> fallback to default language
+            if ((_a = translations === null || translations === void 0 ? void 0 : translations[id]) === null || _a === void 0 ? void 0 : _a.error) {
+                return renderDefault();
+            }
+            // render translated content
+            var target = translations[id][hash];
             if (typeof taggedEntry === 'string') {
                 return (0, generaltranslation_1.renderContentToString)(target, [locale, defaultLocale], variables, variablesOptions);
             }
@@ -225,6 +246,7 @@ function GTProvider(_a) {
             defaultLocale: defaultLocale,
             translations: translations,
             translationRequired: translationRequired,
+            regionalTranslationRequired: regionalTranslationRequired,
             projectId: projectId,
             translationEnabled: translationEnabled,
             renderSettings: renderSettings

@@ -57,13 +57,12 @@ function T({
 
     const { variables, variablesOptions } = props;
 
-    const { translations, translationRequired, translateChildren, renderSettings } = useGTContext(
+    const { translations, translationRequired, regionalTranslationRequired, translateChildren, renderSettings } = useGTContext(
         `<T id="${id}"> used on the client-side outside of <GTProvider>`
     );
 
     const locale = useLocale();
     const defaultLocale = useDefaultLocale();
-
     const taggedChildren = useMemo(() => addGTIdentifier(children), [children])
 
     if (!translationRequired) {
@@ -97,13 +96,24 @@ function T({
     }, [translation, translation?.[hash]]);
 
     // for default/fallback rendering
-    const renderDefault = () => renderDefaultChildren({
-        children: taggedChildren,
-        variables,
-        variablesOptions,
-        defaultLocale,
-        renderVariable
-    }) as React.JSX.Element;
+    function renderDefault() {
+        return renderDefaultChildren({
+            children: taggedChildren,
+            variables,
+            variablesOptions,
+            defaultLocale,
+            renderVariable
+        }) as React.JSX.Element;
+    }
+
+    function renderLoadingSkeleton() {
+        return renderSkeleton({
+            children: taggedChildren,
+            variables,
+            defaultLocale,
+            renderVariable
+        });
+    }
 
     // handle translation error
     if (translation?.error) {
@@ -111,22 +121,25 @@ function T({
     }
 
     // handle no translation/waiting for translation
-    if (!translation || !translation[hash]) {
-
+    if (!translation?.[hash]) {
         let loadingFallback; // Blank screen
 
         if (renderSettings.method === "skeleton") {
-            loadingFallback = renderSkeleton({
-                children: taggedChildren,
-                variables,
-                defaultLocale,
-                renderVariable
-            });
-        } else {
+            loadingFallback = renderLoadingSkeleton();
+        } else if (renderSettings.method === "replace") {
+            loadingFallback = renderDefault();
+        } else if (renderSettings.method === "default") {
+            if (regionalTranslationRequired) {
+                loadingFallback = renderDefault();
+            } else {
+                loadingFallback = renderLoadingSkeleton();
+            }
+        } else if (renderSettings.method === 'hang') {
+            loadingFallback = undefined;
+        } else if (renderSettings.method === 'subtle') {
             loadingFallback = renderDefault();
         }
         
-        // console.error(createClientSideTHydrationError(id));
         // The suspense exists here for hydration reasons
         return <Suspense fallback={loadingFallback}>{loadingFallback}</Suspense>;
     }

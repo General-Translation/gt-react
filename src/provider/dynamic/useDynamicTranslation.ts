@@ -34,7 +34,8 @@ export default function useDynamicTranslation({
     const translateContent = useCallback((params: {
         source: any, targetLocale: string, metadata: { hash: string } & Record<string, any>
     }) => {
-        const key = `${params.metadata.hash}-${params.targetLocale}`;
+        const id = params.metadata.id ? `${params.metadata.id}-` : '';
+        const key = `${id}${params.metadata.hash}-${params.targetLocale}`;
         requestQueueRef.current.set(key, { type: 'content', source: params.source, metadata: params.metadata });
         setFetchTrigger((n) => n + 1);
     }, []);
@@ -46,7 +47,8 @@ export default function useDynamicTranslation({
     const translateChildren = useCallback((params: {
         source: any, targetLocale: string, metadata: { hash: string } & Record<string, any>
     }) => {
-        const key = `${params.metadata.hash}-${params.targetLocale}`;
+        const id = params.metadata.id ? `${params.metadata.id}-` : '';
+        const key = `${id}${params.metadata.hash}-${params.targetLocale}`;
         requestQueueRef.current.set(key, { type: 'jsx', source: params.source, metadata: params.metadata });
         setFetchTrigger((n) => n + 1);
     }, []);

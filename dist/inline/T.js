@@ -65,7 +65,7 @@ function T(_a) {
     if (!id)
         throw new Error((0, createErrors_1.createClientSideTWithoutIdError)(children));
     var variables = props.variables, variablesOptions = props.variablesOptions;
-    var _b = (0, GTContext_1.default)("<T id=\"".concat(id, "\"> used on the client-side outside of <GTProvider>")), translations = _b.translations, translationRequired = _b.translationRequired, translateChildren = _b.translateChildren, renderSettings = _b.renderSettings;
+    var _b = (0, GTContext_1.default)("<T id=\"".concat(id, "\"> used on the client-side outside of <GTProvider>")), translations = _b.translations, translationRequired = _b.translationRequired, regionalTranslationRequired = _b.regionalTranslationRequired, translateChildren = _b.translateChildren, renderSettings = _b.renderSettings;
     var locale = (0, useLocale_1.default)();
     var defaultLocale = (0, useDefaultLocale_1.default)();
     var taggedChildren = (0, react_2.useMemo)(function () { return (0, internal_1.addGTIdentifier)(children); }, [children]);
@@ -99,33 +99,51 @@ function T(_a) {
         }
     }, [translation, translation === null || translation === void 0 ? void 0 : translation[hash]]);
     // for default/fallback rendering
-    var renderDefault = function () { return (0, renderDefaultChildren_1.default)({
-        children: taggedChildren,
-        variables: variables,
-        variablesOptions: variablesOptions,
-        defaultLocale: defaultLocale,
-        renderVariable: renderVariable_1.default
-    }); };
+    function renderDefault() {
+        return (0, renderDefaultChildren_1.default)({
+            children: taggedChildren,
+            variables: variables,
+            variablesOptions: variablesOptions,
+            defaultLocale: defaultLocale,
+            renderVariable: renderVariable_1.default
+        });
+    }
+    function renderLoadingSkeleton() {
+        return (0, renderSkeleton_1.default)({
+            children: taggedChildren,
+            variables: variables,
+            defaultLocale: defaultLocale,
+            renderVariable: renderVariable_1.default
+        });
+    }
     // handle translation error
     if (translation === null || translation === void 0 ? void 0 : translation.error) {
         return renderDefault();
     }
     // handle no translation/waiting for translation
-    if (!translation || !translation[hash]) {
+    if (!(translation === null || translation === void 0 ? void 0 : translation[hash])) {
         var loadingFallback = // Blank screen
          void 0; // Blank screen
         if (renderSettings.method === "skeleton") {
-            loadingFallback = (0, renderSkeleton_1.default)({
-                children: taggedChildren,
-                variables: variables,
-                defaultLocale: defaultLocale,
-                renderVariable: renderVariable_1.default
-            });
+            loadingFallback = renderLoadingSkeleton();
         }
-        else {
+        else if (renderSettings.method === "replace") {
             loadingFallback = renderDefault();
         }
-        // console.error(createClientSideTHydrationError(id));
+        else if (renderSettings.method === "default") {
+            if (regionalTranslationRequired) {
+                loadingFallback = renderDefault();
+            }
+            else {
+                loadingFallback = renderLoadingSkeleton();
+            }
+        }
+        else if (renderSettings.method === 'hang') {
+            loadingFallback = undefined;
+        }
+        else if (renderSettings.method === 'subtle') {
+            loadingFallback = renderDefault();
+        }
         // The suspense exists here for hydration reasons
         return (0, jsx_runtime_1.jsx)(react_1.Suspense, { fallback: loadingFallback, children: loadingFallback });
     }

@@ -74,7 +74,8 @@ function useDynamicTranslation(_a) {
     // Trigger a fetch when keys have been added.
     var _b = (0, react_1.useState)(0), fetchTrigger = _b[0], setFetchTrigger = _b[1];
     var translateContent = (0, react_1.useCallback)(function (params) {
-        var key = "".concat(params.metadata.hash, "-").concat(params.targetLocale);
+        var id = params.metadata.id ? "".concat(params.metadata.id, "-") : '';
+        var key = "".concat(id).concat(params.metadata.hash, "-").concat(params.targetLocale);
         requestQueueRef.current.set(key, { type: 'content', source: params.source, metadata: params.metadata });
         setFetchTrigger(function (n) { return n + 1; });
     }, []);
@@ -83,7 +84,8 @@ function useDynamicTranslation(_a) {
      * Keys are batched and fetched in the next effect cycle.
      */
     var translateChildren = (0, react_1.useCallback)(function (params) {
-        var key = "".concat(params.metadata.hash, "-").concat(params.targetLocale);
+        var id = params.metadata.id ? "".concat(params.metadata.id, "-") : '';
+        var key = "".concat(id).concat(params.metadata.hash, "-").concat(params.targetLocale);
         requestQueueRef.current.set(key, { type: 'jsx', source: params.source, metadata: params.metadata });
         setFetchTrigger(function (n) { return n + 1; });
     }, []);
