@@ -75,14 +75,16 @@ function T(_a) {
             variables: variables,
             variablesOptions: variablesOptions,
             defaultLocale: defaultLocale,
-            renderVariable: renderVariable_1.default
+            renderVariable: renderVariable_1.default,
         });
     }
     // Do translation
     var context = props.context;
     var _c = (0, react_2.useMemo)(function () {
         var childrenAsObjects = (0, internal_1.writeChildrenAsObjects)(taggedChildren);
-        var hash = (0, id_1.hashJsxChildren)(context ? [childrenAsObjects, context] : childrenAsObjects);
+        var hash = (0, id_1.hashJsxChildren)(context
+            ? { source: childrenAsObjects, context: context }
+            : { source: childrenAsObjects });
         return [childrenAsObjects, hash];
     }, [context, taggedChildren]), childrenAsObjects = _c[0], hash = _c[1];
     var translation = translations[id];
@@ -93,19 +95,21 @@ function T(_a) {
                 targetLocale: locale,
                 metadata: {
                     id: id,
-                    hash: hash
-                }
+                    hash: hash,
+                },
             });
         }
     }, [translation, translation === null || translation === void 0 ? void 0 : translation[hash]]);
     // for default/fallback rendering
-    var renderDefault = function () { return (0, renderDefaultChildren_1.default)({
-        children: taggedChildren,
-        variables: variables,
-        variablesOptions: variablesOptions,
-        defaultLocale: defaultLocale,
-        renderVariable: renderVariable_1.default
-    }); };
+    var renderDefault = function () {
+        return (0, renderDefaultChildren_1.default)({
+            children: taggedChildren,
+            variables: variables,
+            variablesOptions: variablesOptions,
+            defaultLocale: defaultLocale,
+            renderVariable: renderVariable_1.default,
+        });
+    };
     // handle translation error
     if (translation === null || translation === void 0 ? void 0 : translation.error) {
         return renderDefault();
@@ -119,7 +123,7 @@ function T(_a) {
                 children: taggedChildren,
                 variables: variables,
                 defaultLocale: defaultLocale,
-                renderVariable: renderVariable_1.default
+                renderVariable: renderVariable_1.default,
             });
         }
         else {
@@ -135,7 +139,7 @@ function T(_a) {
         variables: variables,
         variablesOptions: variablesOptions,
         locales: [locale, defaultLocale],
-        renderVariable: renderVariable_1.default
+        renderVariable: renderVariable_1.default,
     });
 }
 T.gtTransformation = "translate-client";
