@@ -97,10 +97,10 @@ var renderSkeleton_1 = __importDefault(require("./rendering/renderSkeleton"));
 function GTProvider(_a) {
     var _this = this;
     var children = _a.children, projectId = _a.projectId, _b = _a.dictionary, dictionary = _b === void 0 ? {} : _b, _c = _a.locales, locales = _c === void 0 ? (0, supported_locales_1.listSupportedLocales)() : _c, _d = _a.defaultLocale, defaultLocale = _d === void 0 ? internal_2.libraryDefaultLocale : _d, _e = _a.locale, locale = _e === void 0 ? (0, useBrowserLocale_1.default)(defaultLocale, locales) || defaultLocale : _e, _f = _a.cacheUrl, cacheUrl = _f === void 0 ? internal_2.defaultCacheUrl : _f, _g = _a.runtimeUrl, runtimeUrl = _g === void 0 ? internal_2.defaultRuntimeApiUrl : _g, _h = _a.renderSettings, renderSettings = _h === void 0 ? defaultRenderSettings_1.defaultRenderSettings : _h, devApiKey = _a.devApiKey, metadata = __rest(_a, ["children", "projectId", "dictionary", "locales", "defaultLocale", "locale", "cacheUrl", "runtimeUrl", "renderSettings", "devApiKey"]);
-    if (!projectId && (cacheUrl === internal_2.defaultCacheUrl || runtimeUrl === internal_2.defaultRuntimeApiUrl)) {
+    if (!projectId &&
+        (cacheUrl === internal_2.defaultCacheUrl || runtimeUrl === internal_2.defaultRuntimeApiUrl)) {
         throw new Error(createErrors_1.projectIdMissingError);
     }
-    ;
     var translationRequired = (0, react_1.useMemo)(function () { return (0, generaltranslation_1.requiresTranslation)(defaultLocale, locale, locales); }, [defaultLocale, locale, locales]);
     var _j = (0, react_2.useState)(cacheUrl ? null : {}), translations = _j[0], setTranslations = _j[1];
     (0, react_2.useEffect)(function () {
@@ -139,12 +139,12 @@ function GTProvider(_a) {
         if (options === void 0) { options = {}; }
         // get the dictionary entry
         var dictionaryEntry = (0, getDictionaryEntry_1.default)(dictionary, id);
-        if (dictionaryEntry === undefined || dictionaryEntry === null ||
-            (typeof dictionaryEntry === 'object' && !Array.isArray(dictionaryEntry))) {
+        if (dictionaryEntry === undefined ||
+            dictionaryEntry === null ||
+            (typeof dictionaryEntry === "object" && !Array.isArray(dictionaryEntry))) {
             console.warn((0, createErrors_1.createLibraryNoEntryWarning)(id));
             return undefined;
         }
-        ;
         var _b = (0, extractEntryMetadata_1.default)(dictionaryEntry), entry = _b.entry, metadata = _b.metadata;
         // Get variables and variable options
         var variables = options;
@@ -152,7 +152,7 @@ function GTProvider(_a) {
         var taggedEntry = (0, internal_1.addGTIdentifier)(entry, id);
         // If no translations are required
         if (!translationRequired) {
-            if (typeof taggedEntry === 'string') {
+            if (typeof taggedEntry === "string") {
                 return (0, generaltranslation_1.renderContentToString)(taggedEntry, defaultLocale, variables, variablesOptions);
             }
             return (0, renderDefaultChildren_1.default)({
@@ -160,16 +160,19 @@ function GTProvider(_a) {
                 variables: variables,
                 variablesOptions: variablesOptions,
                 defaultLocale: defaultLocale,
-                renderVariable: renderVariable_1.default
+                renderVariable: renderVariable_1.default,
             });
         }
         // If a translation is required
         if (translations) {
             var context = metadata === null || metadata === void 0 ? void 0 : metadata.context;
             var childrenAsObjects = (0, internal_1.writeChildrenAsObjects)(taggedEntry);
-            var hash = (0, id_1.hashJsxChildren)(context ? [childrenAsObjects, context] : childrenAsObjects);
-            if ((_a = translations === null || translations === void 0 ? void 0 : translations[id]) === null || _a === void 0 ? void 0 : _a.error) { // error behavior -> fallback to default language
-                if (typeof taggedEntry === 'string') {
+            var hash = (0, id_1.hashJsxChildren)(context
+                ? { source: childrenAsObjects, context: context }
+                : { source: childrenAsObjects });
+            if ((_a = translations === null || translations === void 0 ? void 0 : translations[id]) === null || _a === void 0 ? void 0 : _a.error) {
+                // error behavior -> fallback to default language
+                if (typeof taggedEntry === "string") {
                     return (0, generaltranslation_1.renderContentToString)(taggedEntry, defaultLocale, variables, variablesOptions);
                 }
                 return (0, renderDefaultChildren_1.default)({
@@ -177,21 +180,24 @@ function GTProvider(_a) {
                     variables: variables,
                     variablesOptions: variablesOptions,
                     defaultLocale: defaultLocale,
-                    renderVariable: renderVariable_1.default
+                    renderVariable: renderVariable_1.default,
                 });
             }
             var target = translations[id][hash];
-            if (!target) { // loading behavior
-                if (renderSettings.method === 'skeleton') { // skeleton behavior
+            if (!target) {
+                // loading behavior
+                if (renderSettings.method === "skeleton") {
+                    // skeleton behavior
                     return (0, renderSkeleton_1.default)({
                         children: taggedEntry,
                         variables: variables,
                         defaultLocale: defaultLocale,
-                        renderVariable: renderVariable_1.default
+                        renderVariable: renderVariable_1.default,
                     });
                 }
-                else { // default behavior
-                    if (typeof taggedEntry === 'string') {
+                else {
+                    // default behavior
+                    if (typeof taggedEntry === "string") {
                         return (0, generaltranslation_1.renderContentToString)(taggedEntry, defaultLocale, variables, variablesOptions);
                     }
                     return (0, renderDefaultChildren_1.default)({
@@ -199,11 +205,11 @@ function GTProvider(_a) {
                         variables: variables,
                         variablesOptions: variablesOptions,
                         defaultLocale: defaultLocale,
-                        renderVariable: renderVariable_1.default
+                        renderVariable: renderVariable_1.default,
                     });
                 }
             }
-            if (typeof taggedEntry === 'string') {
+            if (typeof taggedEntry === "string") {
                 return (0, generaltranslation_1.renderContentToString)(target, [locale, defaultLocale], variables, variablesOptions);
             }
             return (0, renderTranslatedChildren_1.default)({
@@ -212,7 +218,7 @@ function GTProvider(_a) {
                 variables: variables,
                 variablesOptions: variablesOptions,
                 locales: [locale, defaultLocale],
-                renderVariable: renderVariable_1.default
+                renderVariable: renderVariable_1.default,
             });
         }
     }, [dictionary, translations, translationRequired, defaultLocale]);
@@ -227,7 +233,7 @@ function GTProvider(_a) {
             translationRequired: translationRequired,
             projectId: projectId,
             translationEnabled: translationEnabled,
-            renderSettings: renderSettings
+            renderSettings: renderSettings,
         }, children: children }));
 }
 //# sourceMappingURL=GTProvider.js.map

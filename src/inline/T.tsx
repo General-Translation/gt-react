@@ -14,15 +14,15 @@ import renderSkeleton from "../provider/rendering/renderSkeleton";
 /**
  * Translation component that handles rendering translated content, including plural forms.
  * Used with the required `id` parameter instead of `const t = useGT()`.
- * 
+ *
  * @param {string} [id] - Required identifier for the translation string.
  * @param {React.ReactNode} children - The content to be translated or displayed.
  * @param {any} [context] - Additional context used for translation.
  * @param {Object} [props] - Additional props for the component.
  * @returns {JSX.Element} The rendered translation or fallback content based on the provided configuration.
- * 
+ *
  * @throws {Error} If a plural translation is requested but the `n` option is not provided.
- * 
+ *
  * @example
  * ```jsx
  * // Basic usage:
@@ -30,7 +30,7 @@ import renderSkeleton from "../provider/rendering/renderSkeleton";
  *  Hello, <Var name="name">{name}</Var>!
  * </T>
  * ```
- * 
+ *
  * @example
  * ```jsx
  * // Using plural translations:
@@ -40,107 +40,118 @@ import renderSkeleton from "../provider/rendering/renderSkeleton";
  *  </Plural>
  * </T>
  * ```
- * 
+ *
  */
 function T({
-    children, id, ...props
+  children,
+  id,
+  ...props
 }: {
-    children?: any,
-    id: string
-    context?: string,
-    [key: string]: any
+  children?: any;
+  id: string;
+  context?: string;
+  [key: string]: any;
 }): React.JSX.Element | undefined {
+  if (!children) return undefined;
 
-    if (!children) return undefined;
-    
-    if (!id) throw new Error(createClientSideTWithoutIdError(children))
+  if (!id) throw new Error(createClientSideTWithoutIdError(children));
 
-    const { variables, variablesOptions } = props;
+  const { variables, variablesOptions } = props;
 
-    const { translations, translationRequired, translateChildren, renderSettings } = useGTContext(
-        `<T id="${id}"> used on the client-side outside of <GTProvider>`
+  const {
+    translations,
+    translationRequired,
+    translateChildren,
+    renderSettings,
+  } = useGTContext(
+    `<T id="${id}"> used on the client-side outside of <GTProvider>`
+  );
+
+  const locale = useLocale();
+  const defaultLocale = useDefaultLocale();
+
+  const taggedChildren = useMemo(() => addGTIdentifier(children), [children]);
+
+  if (!translationRequired) {
+    return renderDefaultChildren({
+      children: taggedChildren,
+      variables,
+      variablesOptions,
+      defaultLocale,
+      renderVariable,
+    }) as React.JSX.Element;
+  }
+
+  // Do translation
+  const context = props.context;
+  const [childrenAsObjects, hash] = useMemo(() => {
+    const childrenAsObjects = writeChildrenAsObjects(taggedChildren);
+    const hash: string = hashJsxChildren(
+      context
+        ? { source: childrenAsObjects, context }
+        : { source: childrenAsObjects }
     );
+    return [childrenAsObjects, hash];
+  }, [context, taggedChildren]);
 
-    const locale = useLocale();
-    const defaultLocale = useDefaultLocale();
+  const translation = translations[id];
 
-    const taggedChildren = useMemo(() => addGTIdentifier(children), [children])
-
-    if (!translationRequired) {
-        return renderDefaultChildren({
-            children: taggedChildren,
-            variables, variablesOptions, defaultLocale,
-            renderVariable
-        }) as React.JSX.Element;
+  useEffect(() => {
+    if (!translation || (!translation[hash] && !translation.error)) {
+      translateChildren({
+        source: childrenAsObjects,
+        targetLocale: locale,
+        metadata: {
+          id,
+          hash,
+        },
+      });
     }
+  }, [translation, translation?.[hash]]);
 
-    // Do translation
-    const context = props.context;
-    const [childrenAsObjects, hash] = useMemo(() => {
-        const childrenAsObjects = writeChildrenAsObjects(taggedChildren);
-        const hash: string = hashJsxChildren(context ? [childrenAsObjects, context] : childrenAsObjects);
-        return [childrenAsObjects, hash];
-    }, [context, taggedChildren]);
-
-    const translation = translations[id];
-
-    useEffect(() => {
-        if (!translation || (!translation[hash] && !translation.error)) {
-            translateChildren({
-                source: childrenAsObjects,
-                targetLocale: locale,
-                metadata: {
-                    id, hash
-                }
-            });
-        }
-    }, [translation, translation?.[hash]]);
-
-    // for default/fallback rendering
-    const renderDefault = () => renderDefaultChildren({
-        children: taggedChildren,
-        variables,
-        variablesOptions,
-        defaultLocale,
-        renderVariable
+  // for default/fallback rendering
+  const renderDefault = () =>
+    renderDefaultChildren({
+      children: taggedChildren,
+      variables,
+      variablesOptions,
+      defaultLocale,
+      renderVariable,
     }) as React.JSX.Element;
 
-    // handle translation error
-    if (translation?.error) {
-        return renderDefault();
+  // handle translation error
+  if (translation?.error) {
+    return renderDefault();
+  }
+
+  // handle no translation/waiting for translation
+  if (!translation || !translation[hash]) {
+    let loadingFallback; // Blank screen
+
+    if (renderSettings.method === "skeleton") {
+      loadingFallback = renderSkeleton({
+        children: taggedChildren,
+        variables,
+        defaultLocale,
+        renderVariable,
+      });
+    } else {
+      loadingFallback = renderDefault();
     }
 
-    // handle no translation/waiting for translation
-    if (!translation || !translation[hash]) {
+    // console.error(createClientSideTHydrationError(id));
+    // The suspense exists here for hydration reasons
+    return <Suspense fallback={loadingFallback}>{loadingFallback}</Suspense>;
+  }
 
-        let loadingFallback; // Blank screen
-
-        if (renderSettings.method === "skeleton") {
-            loadingFallback = renderSkeleton({
-                children: taggedChildren,
-                variables,
-                defaultLocale,
-                renderVariable
-            });
-        } else {
-            loadingFallback = renderDefault();
-        }
-        
-        // console.error(createClientSideTHydrationError(id));
-        // The suspense exists here for hydration reasons
-        return <Suspense fallback={loadingFallback}>{loadingFallback}</Suspense>;
-    }
-
-    return (
-        renderTranslatedChildren({
-            source: taggedChildren,
-            target: translation[hash],
-            variables,
-            variablesOptions,
-            locales: [locale, defaultLocale],
-            renderVariable
-        }) as React.JSX.Element
-    );
+  return renderTranslatedChildren({
+    source: taggedChildren,
+    target: translation[hash],
+    variables,
+    variablesOptions,
+    locales: [locale, defaultLocale],
+    renderVariable,
+  }) as React.JSX.Element;
 }
 
 T.gtTransformation = "translate-client";
