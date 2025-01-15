@@ -64,24 +64,24 @@ function T(_a) {
     var locale = useLocale();
     var defaultLocale = useDefaultLocale();
     var taggedChildren = useMemo(function () { return addGTIdentifier(children); }, [children]);
-    if (!translationRequired) {
-        return renderDefaultChildren({
-            children: taggedChildren,
-            variables: variables,
-            variablesOptions: variablesOptions,
-            defaultLocale: defaultLocale,
-            renderVariable: renderVariable
-        });
-    }
     // Do translation
     var context = props.context;
     var _c = useMemo(function () {
-        var childrenAsObjects = writeChildrenAsObjects(taggedChildren);
-        var hash = hashJsxChildren(context ? [childrenAsObjects, context] : childrenAsObjects);
-        return [childrenAsObjects, hash];
-    }, [context, taggedChildren]), childrenAsObjects = _c[0], hash = _c[1];
-    var translation = translations[id];
+        if (translationRequired) {
+            var childrenAsObjects_1 = writeChildrenAsObjects(taggedChildren);
+            var hash_1 = hashJsxChildren(context
+                ? { source: childrenAsObjects_1, context: context }
+                : { source: childrenAsObjects_1 });
+            return [childrenAsObjects_1, hash_1];
+        }
+        else {
+            return [undefined, ''];
+        }
+    }, [context, taggedChildren, translationRequired]), childrenAsObjects = _c[0], hash = _c[1];
+    var translation = translations === null || translations === void 0 ? void 0 : translations[id];
     useEffect(function () {
+        if (!translationRequired)
+            return;
         if (!translation || (!translation[hash] && !translation.error)) {
             translateChildren({
                 source: childrenAsObjects,
@@ -92,7 +92,7 @@ function T(_a) {
                 }
             });
         }
-    }, [translation, translation === null || translation === void 0 ? void 0 : translation[hash]]);
+    }, [translation, translation === null || translation === void 0 ? void 0 : translation[hash], translationRequired]);
     // for default/fallback rendering
     function renderDefault() {
         return renderDefaultChildren({
@@ -110,6 +110,9 @@ function T(_a) {
             defaultLocale: defaultLocale,
             renderVariable: renderVariable
         });
+    }
+    if (!translationRequired) {
+        return renderDefault();
     }
     // handle translation error
     if (translation === null || translation === void 0 ? void 0 : translation.error) {

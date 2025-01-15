@@ -67,13 +67,13 @@ import { addGTIdentifier, writeChildrenAsObjects } from "../internal";
 import extractEntryMetadata from "./helpers/extractEntryMetadata";
 import renderDefaultChildren from "./rendering/renderDefaultChildren";
 import renderTranslatedChildren from "./rendering/renderTranslatedChildren";
-import { defaultCacheUrl, defaultRuntimeApiUrl, libraryDefaultLocale } from "generaltranslation/internal";
+import { defaultCacheUrl, defaultRuntimeApiUrl, libraryDefaultLocale, } from "generaltranslation/internal";
 import renderVariable from "./rendering/renderVariable";
-import { createLibraryNoEntryWarning, projectIdMissingError } from "../errors/createErrors";
+import { createLibraryNoEntryWarning, projectIdMissingError, } from "../errors/createErrors";
 import { listSupportedLocales } from "@generaltranslation/supported-locales";
 import useDynamicTranslation from "./dynamic/useDynamicTranslation";
 import { defaultRenderSettings } from "./rendering/defaultRenderSettings";
-import { hashJsxChildren } from 'generaltranslation/id';
+import { hashJsxChildren } from "generaltranslation/id";
 import renderSkeleton from "./rendering/renderSkeleton";
 /**
  * Provides General Translation context to its children, which can then access `useGT`, `useLocale`, and `useDefaultLocale`.
@@ -95,12 +95,14 @@ export default function GTProvider(_a) {
         throw new Error(projectIdMissingError);
     }
     ;
+    // get tx required info
     var regionalTranslationRequired = useMemo(function () {
         return isSameLanguage(defaultLocale, locale) && !isSameDialect(defaultLocale, locale);
     }, [defaultLocale, locale]);
     var translationRequired = useMemo(function () {
         return requiresTranslation(defaultLocale, locale, locales) || regionalTranslationRequired;
     }, [defaultLocale, locale, locales, regionalTranslationRequired]);
+    // tracking translations
     var _j = useState(cacheUrl ? null : {}), translations = _j[0], setTranslations = _j[1];
     useEffect(function () {
         if (!translations) {
@@ -133,25 +135,26 @@ export default function GTProvider(_a) {
             }
         }
     }, [translationRequired, cacheUrl, projectId, locale]);
+    // central translate function
     var translate = useCallback(function (id, options) {
         var _a;
         if (options === void 0) { options = {}; }
         // get the dictionary entry
         var dictionaryEntry = getDictionaryEntry(dictionary, id);
-        if (dictionaryEntry === undefined || dictionaryEntry === null ||
-            (typeof dictionaryEntry === 'object' && !Array.isArray(dictionaryEntry))) {
+        if (dictionaryEntry === undefined ||
+            dictionaryEntry === null ||
+            (typeof dictionaryEntry === "object" && !Array.isArray(dictionaryEntry))) {
             console.warn(createLibraryNoEntryWarning(id));
             return undefined;
         }
-        ;
         var _b = extractEntryMetadata(dictionaryEntry), entry = _b.entry, metadata = _b.metadata;
         // Get variables and variable options
         var variables = options;
         var variablesOptions = metadata === null || metadata === void 0 ? void 0 : metadata.variablesOptions;
         var taggedEntry = addGTIdentifier(entry, id);
-        // render default locale
-        function renderDefault() {
-            if (typeof taggedEntry === 'string') {
+        // If no translations are required
+        if (!translationRequired) {
+            if (typeof taggedEntry === "string") {
                 return renderContentToString(taggedEntry, defaultLocale, variables, variablesOptions);
             }
             return renderDefaultChildren({
@@ -159,75 +162,93 @@ export default function GTProvider(_a) {
                 variables: variables,
                 variablesOptions: variablesOptions,
                 defaultLocale: defaultLocale,
-                renderVariable: renderVariable
+                renderVariable: renderVariable,
             });
-        }
-        // render skeleton
-        function renderLoadingSkeleton() {
-            if (typeof taggedEntry === 'string') {
-                return '';
-            }
-            return renderSkeleton({
-                children: taggedEntry,
-                variables: variables,
-                defaultLocale: defaultLocale,
-                renderVariable: renderVariable
-            });
-        }
-        // If no translations are required
-        if (!translationRequired) {
-            return renderDefault();
         }
         // If a translation is required
         if (translations) {
-            var context = metadata === null || metadata === void 0 ? void 0 : metadata.context;
-            var childrenAsObjects = writeChildrenAsObjects(taggedEntry);
-            // get hash
-            var hash = hashJsxChildren(context ? [childrenAsObjects, context] : childrenAsObjects);
-            // loading behavior
-            if (!translations[id][hash]) {
-                if (renderSettings.method === 'skeleton') {
-                    return renderLoadingSkeleton();
+            // render default locale
+            var renderDefault = function () {
+                if (typeof taggedEntry === 'string') {
+                    return renderContentToString(taggedEntry, defaultLocale, variables, variablesOptions);
                 }
-                else if (renderSettings.method === 'replace') {
-                    return renderDefault();
+                return renderDefaultChildren({
+                    children: taggedEntry,
+                    variables: variables,
+                    variablesOptions: variablesOptions,
+                    defaultLocale: defaultLocale,
+                    renderVariable: renderVariable
+                });
+            };
+            // render skeleton
+            var renderLoadingSkeleton = function () {
+                if (typeof taggedEntry === 'string') {
+                    return '';
                 }
-                else if (renderSettings.method === 'default') {
-                    if (regionalTranslationRequired) {
-                        return renderDefault();
-                    }
-                    else {
-                        return renderLoadingSkeleton();
-                    }
-                }
-                if (renderSettings.method === 'hang') {
-                    // TODO: Remove this error
-                    throw new Error("gt-react GTProvider Provider JSX/STRING hang should not be invoked while waiting for translation");
-                }
-                if (renderSettings.method === 'subtle') {
-                    // TODO: Remove this error
-                    throw new Error("gt-react GTProvider Provider JSX/STRING subtle should not be invoked while waiting for translation");
-                }
-                // TODO: Remove this error
-                throw new Error("gt-react GTProvider Provider JSX/STRING should not be invoked while waiting for translation");
-            }
-            // error behavior -> fallback to default language
-            if ((_a = translations === null || translations === void 0 ? void 0 : translations[id]) === null || _a === void 0 ? void 0 : _a.error) {
+                return renderSkeleton({
+                    children: taggedEntry,
+                    variables: variables,
+                    defaultLocale: defaultLocale,
+                    renderVariable: renderVariable
+                });
+            };
+            // If no translations are required
+            if (!translationRequired) {
                 return renderDefault();
             }
-            // render translated content
-            var target = translations[id][hash];
-            if (typeof taggedEntry === 'string') {
-                return renderContentToString(target, [locale, defaultLocale], variables, variablesOptions);
+            // If a translation is required
+            if (translations) {
+                // get hash
+                var context = metadata === null || metadata === void 0 ? void 0 : metadata.context;
+                var childrenAsObjects = writeChildrenAsObjects(taggedEntry);
+                var hash = hashJsxChildren(context
+                    ? { source: childrenAsObjects, context: context }
+                    : { source: childrenAsObjects });
+                // loading behavior
+                if (!translations[id][hash]) {
+                    if (renderSettings.method === 'skeleton') {
+                        return renderLoadingSkeleton();
+                    }
+                    else if (renderSettings.method === 'replace') {
+                        return renderDefault();
+                    }
+                    else if (renderSettings.method === 'default') {
+                        if (regionalTranslationRequired) {
+                            return renderDefault();
+                        }
+                        else {
+                            return renderLoadingSkeleton();
+                        }
+                    }
+                    if (renderSettings.method === 'hang') {
+                        // TODO: Remove this error
+                        throw new Error("gt-react GTProvider Provider JSX/STRING hang should not be invoked while waiting for translation");
+                    }
+                    if (renderSettings.method === 'subtle') {
+                        // TODO: Remove this error
+                        throw new Error("gt-react GTProvider Provider JSX/STRING subtle should not be invoked while waiting for translation");
+                    }
+                    // TODO: Remove this error
+                    throw new Error("gt-react GTProvider Provider JSX/STRING should not be invoked while waiting for translation");
+                }
+                // error behavior -> fallback to default language
+                if ((_a = translations === null || translations === void 0 ? void 0 : translations[id]) === null || _a === void 0 ? void 0 : _a.error) {
+                    return renderDefault();
+                }
+                // render translated content
+                var target = translations[id][hash];
+                if (typeof taggedEntry === 'string') {
+                    return renderContentToString(target, [locale, defaultLocale], variables, variablesOptions);
+                }
+                return renderTranslatedChildren({
+                    source: taggedEntry,
+                    target: target,
+                    variables: variables,
+                    variablesOptions: variablesOptions,
+                    locales: [locale, defaultLocale],
+                    renderVariable: renderVariable
+                });
             }
-            return renderTranslatedChildren({
-                source: taggedEntry,
-                target: target,
-                variables: variables,
-                variablesOptions: variablesOptions,
-                locales: [locale, defaultLocale],
-                renderVariable: renderVariable
-            });
         }
     }, [dictionary, translations, translationRequired, defaultLocale]);
     var _k = useDynamicTranslation(__assign({ targetLocale: locale, projectId: projectId, defaultLocale: defaultLocale, devApiKey: devApiKey, runtimeUrl: runtimeUrl, setTranslations: setTranslations }, metadata)), translateChildren = _k.translateChildren, translateContent = _k.translateContent, translationEnabled = _k.translationEnabled;
