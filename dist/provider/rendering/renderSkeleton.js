@@ -1,3 +1,4 @@
+"use strict";
 var __assign = (this && this.__assign) || function () {
     __assign = Object.assign || function(t) {
         for (var s, i = 1, n = arguments.length; i < n; i++) {
@@ -20,11 +21,16 @@ var __rest = (this && this.__rest) || function (s, e) {
         }
     return t;
 };
-import { Fragment as _Fragment, jsx as _jsx } from "react/jsx-runtime";
-import React from "react";
-import getGTProp from "../helpers/getGTProp";
-import { getPluralBranch } from "../../internal";
-import { libraryDefaultLocale } from 'generaltranslation/internal';
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = renderSkeleton;
+var jsx_runtime_1 = require("react/jsx-runtime");
+var react_1 = __importDefault(require("react"));
+var getGTProp_1 = __importDefault(require("../helpers/getGTProp"));
+var internal_1 = require("../../internal");
+var internal_2 = require("generaltranslation/internal");
 function replaceContentWithWhitespace(content) {
     if (typeof content === "number") {
         // Convert number to string and replace each non-whitespace character with a non-breaking space
@@ -46,12 +52,12 @@ function replaceContentWithWhitespace(content) {
  * @param defaultLocale the default locale to be used
  * @returns
  */
-export default function renderSkeleton(_a) {
-    var children = _a.children, _b = _a.variables, variables = _b === void 0 ? {} : _b, _c = _a.defaultLocale, defaultLocale = _c === void 0 ? libraryDefaultLocale : _c, renderVariable = _a.renderVariable;
+function renderSkeleton(_a) {
+    var children = _a.children, _b = _a.variables, variables = _b === void 0 ? {} : _b, _c = _a.defaultLocale, defaultLocale = _c === void 0 ? internal_2.libraryDefaultLocale : _c, renderVariable = _a.renderVariable;
     var handleSingleChildElement = function (child) {
-        var generaltranslation = getGTProp(child);
+        var generaltranslation = (0, getGTProp_1.default)(child);
         if ((generaltranslation === null || generaltranslation === void 0 ? void 0 : generaltranslation.transformation) === "variable") {
-            return _jsx(_Fragment, {});
+            return (0, jsx_runtime_1.jsx)(jsx_runtime_1.Fragment, {});
         }
         if ((generaltranslation === null || generaltranslation === void 0 ? void 0 : generaltranslation.transformation) === "plural") {
             var n = typeof variables.n === 'number' ? variables.n :
@@ -60,7 +66,7 @@ export default function renderSkeleton(_a) {
             if (typeof n === 'number' && typeof variables.n === 'undefined')
                 variables.n = n;
             var branches = generaltranslation.branches || {};
-            return handleChildren(getPluralBranch(n, [defaultLocale], branches) || child.props.children);
+            return handleChildren((0, internal_1.getPluralBranch)(n, [defaultLocale], branches) || child.props.children);
         }
         if ((generaltranslation === null || generaltranslation === void 0 ? void 0 : generaltranslation.transformation) === "branch") {
             var _a = child.props, children_1 = _a.children, name_1 = _a.name, branch = _a.branch, _gt = _a["data-_gt"], branches = __rest(_a, ["children", "name", "branch", 'data-_gt']);
@@ -70,13 +76,13 @@ export default function renderSkeleton(_a) {
             return handleChildren(branches[branch] !== undefined ? branches[branch] : children_1);
         }
         if (child.props.children) {
-            return React.cloneElement(child, __assign(__assign({}, child.props), { 'data-_gt': undefined, children: handleChildren(child.props.children) }));
+            return react_1.default.cloneElement(child, __assign(__assign({}, child.props), { 'data-_gt': undefined, children: handleChildren(child.props.children) }));
         }
         // empty element
-        return React.cloneElement(child, __assign(__assign({}, child.props), { 'data-_gt': undefined }));
+        return react_1.default.cloneElement(child, __assign(__assign({}, child.props), { 'data-_gt': undefined }));
     };
     var handleSingleChild = function (child) {
-        if (React.isValidElement(child)) {
+        if (react_1.default.isValidElement(child)) {
             return handleSingleChildElement(child);
         }
         else if (typeof child === "number" || typeof child === "string") {
@@ -85,7 +91,7 @@ export default function renderSkeleton(_a) {
         return child;
     };
     var handleChildren = function (children) {
-        return Array.isArray(children) ? React.Children.map(children, handleSingleChild) : handleSingleChild(children);
+        return Array.isArray(children) ? react_1.default.Children.map(children, handleSingleChild) : handleSingleChild(children);
     };
     return handleChildren(children);
 }
