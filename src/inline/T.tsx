@@ -82,7 +82,6 @@ function T({
     }, [context, taggedChildren]);
 
     const translation = translations[id];
-
     useEffect(() => {
         if (!translation || (!translation[hash] && !translation.error)) {
             translateChildren({

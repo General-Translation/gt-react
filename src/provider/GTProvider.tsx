@@ -63,7 +63,6 @@ export default function GTProvider({
     [key: string]: any
 }): React.JSX.Element {
 
-    console.log(listSupportedLocales)
 
     if (!projectId && (cacheUrl === defaultCacheUrl || runtimeUrl === defaultRuntimeApiUrl)) {
         throw new Error(projectIdMissingError)
