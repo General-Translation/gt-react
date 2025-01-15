@@ -1,11 +1,8 @@
-"use strict";
 'use client';
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.default = useBrowserLocale;
-var react_1 = require("react");
-var generaltranslation_1 = require("generaltranslation");
-var internal_1 = require("generaltranslation/internal");
-var supported_locales_1 = require("@generaltranslation/supported-locales");
+import { useState, useEffect } from 'react';
+import { determineLocale } from 'generaltranslation';
+import { libraryDefaultLocale } from 'generaltranslation/internal';
+import { listSupportedLocales } from '@generaltranslation/supported-locales';
 /**
  * Hook to retrieve the browser's default locale, with support for a fallback and locale stored in a cookie.
  *
@@ -26,11 +23,11 @@ var supported_locales_1 = require("@generaltranslation/supported-locales");
  * it will take precedence. If not, it falls back to the `navigator.language` or `navigator.userLanguage`. If none of these are available,
  * the provided `defaultLocale` is used.
  */
-function useBrowserLocale(defaultLocale, locales) {
-    if (defaultLocale === void 0) { defaultLocale = internal_1.libraryDefaultLocale; }
-    if (locales === void 0) { locales = (0, supported_locales_1.listSupportedLocales)(); }
-    var _a = (0, react_1.useState)(''), locale = _a[0], setLocale = _a[1];
-    (0, react_1.useEffect)(function () {
+export default function useBrowserLocale(defaultLocale, locales) {
+    if (defaultLocale === void 0) { defaultLocale = libraryDefaultLocale; }
+    if (locales === void 0) { locales = listSupportedLocales(); }
+    var _a = useState(''), locale = _a[0], setLocale = _a[1];
+    useEffect(function () {
         var browserLocales = (function () {
             if (navigator === null || navigator === void 0 ? void 0 : navigator.languages)
                 return navigator.languages;
@@ -40,7 +37,7 @@ function useBrowserLocale(defaultLocale, locales) {
                 return [navigator === null || navigator === void 0 ? void 0 : navigator.userLanguage];
             return [defaultLocale];
         })();
-        setLocale((0, generaltranslation_1.determineLocale)(browserLocales, locales) || defaultLocale);
+        setLocale(determineLocale(browserLocales, locales) || defaultLocale);
     }, [defaultLocale, locales]);
     return locale;
 }

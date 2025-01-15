@@ -1,4 +1,3 @@
-"use strict";
 var __assign = (this && this.__assign) || function () {
     __assign = Object.assign || function(t) {
         for (var s, i = 1, n = arguments.length; i < n; i++) {
@@ -57,30 +56,25 @@ var __rest = (this && this.__rest) || function (s, e) {
         }
     return t;
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.default = GTProvider;
-var jsx_runtime_1 = require("react/jsx-runtime");
-var react_1 = require("react");
-var generaltranslation_1 = require("generaltranslation");
-var react_2 = require("react");
-var useBrowserLocale_1 = __importDefault(require("../hooks/useBrowserLocale"));
-var GTContext_1 = require("./GTContext");
-var getDictionaryEntry_1 = __importDefault(require("./helpers/getDictionaryEntry"));
-var internal_1 = require("../internal");
-var extractEntryMetadata_1 = __importDefault(require("./helpers/extractEntryMetadata"));
-var renderDefaultChildren_1 = __importDefault(require("./rendering/renderDefaultChildren"));
-var renderTranslatedChildren_1 = __importDefault(require("./rendering/renderTranslatedChildren"));
-var internal_2 = require("generaltranslation/internal");
-var renderVariable_1 = __importDefault(require("./rendering/renderVariable"));
-var createErrors_1 = require("../errors/createErrors");
-var supported_locales_1 = require("@generaltranslation/supported-locales");
-var useDynamicTranslation_1 = __importDefault(require("./dynamic/useDynamicTranslation"));
-var defaultRenderSettings_1 = require("./rendering/defaultRenderSettings");
-var id_1 = require("generaltranslation/id");
-var renderSkeleton_1 = __importDefault(require("./rendering/renderSkeleton"));
+import { jsx as _jsx } from "react/jsx-runtime";
+import { useMemo } from "react";
+import { isSameDialect, isSameLanguage, renderContentToString, requiresTranslation } from "generaltranslation";
+import { useCallback, useEffect, useState } from "react";
+import useBrowserLocale from "../hooks/useBrowserLocale";
+import { GTContext } from "./GTContext";
+import getDictionaryEntry from "./helpers/getDictionaryEntry";
+import { addGTIdentifier, writeChildrenAsObjects } from "../internal";
+import extractEntryMetadata from "./helpers/extractEntryMetadata";
+import renderDefaultChildren from "./rendering/renderDefaultChildren";
+import renderTranslatedChildren from "./rendering/renderTranslatedChildren";
+import { defaultCacheUrl, defaultRuntimeApiUrl, libraryDefaultLocale, } from "generaltranslation/internal";
+import renderVariable from "./rendering/renderVariable";
+import { createLibraryNoEntryWarning, projectIdMissingError, } from "../errors/createErrors";
+import { listSupportedLocales } from "@generaltranslation/supported-locales";
+import useDynamicTranslation from "./dynamic/useDynamicTranslation";
+import { defaultRenderSettings } from "./rendering/defaultRenderSettings";
+import { hashJsxChildren } from "generaltranslation/id";
+import renderSkeleton from "./rendering/renderSkeleton";
 /**
  * Provides General Translation context to its children, which can then access `useGT`, `useLocale`, and `useDefaultLocale`.
  *
@@ -94,16 +88,23 @@ var renderSkeleton_1 = __importDefault(require("./rendering/renderSkeleton"));
  *
  * @returns {JSX.Element} The provider component for General Translation context.
  */
-function GTProvider(_a) {
+export default function GTProvider(_a) {
     var _this = this;
-    var children = _a.children, projectId = _a.projectId, _b = _a.dictionary, dictionary = _b === void 0 ? {} : _b, _c = _a.locales, locales = _c === void 0 ? (0, supported_locales_1.listSupportedLocales)() : _c, _d = _a.defaultLocale, defaultLocale = _d === void 0 ? internal_2.libraryDefaultLocale : _d, _e = _a.locale, locale = _e === void 0 ? (0, useBrowserLocale_1.default)(defaultLocale, locales) || defaultLocale : _e, _f = _a.cacheUrl, cacheUrl = _f === void 0 ? internal_2.defaultCacheUrl : _f, _g = _a.runtimeUrl, runtimeUrl = _g === void 0 ? internal_2.defaultRuntimeApiUrl : _g, _h = _a.renderSettings, renderSettings = _h === void 0 ? defaultRenderSettings_1.defaultRenderSettings : _h, devApiKey = _a.devApiKey, metadata = __rest(_a, ["children", "projectId", "dictionary", "locales", "defaultLocale", "locale", "cacheUrl", "runtimeUrl", "renderSettings", "devApiKey"]);
-    if (!projectId &&
-        (cacheUrl === internal_2.defaultCacheUrl || runtimeUrl === internal_2.defaultRuntimeApiUrl)) {
-        throw new Error(createErrors_1.projectIdMissingError);
+    var children = _a.children, projectId = _a.projectId, _b = _a.dictionary, dictionary = _b === void 0 ? {} : _b, _c = _a.locales, locales = _c === void 0 ? listSupportedLocales() : _c, _d = _a.defaultLocale, defaultLocale = _d === void 0 ? libraryDefaultLocale : _d, _e = _a.locale, locale = _e === void 0 ? useBrowserLocale(defaultLocale, locales) || defaultLocale : _e, _f = _a.cacheUrl, cacheUrl = _f === void 0 ? defaultCacheUrl : _f, _g = _a.runtimeUrl, runtimeUrl = _g === void 0 ? defaultRuntimeApiUrl : _g, _h = _a.renderSettings, renderSettings = _h === void 0 ? defaultRenderSettings : _h, devApiKey = _a.devApiKey, metadata = __rest(_a, ["children", "projectId", "dictionary", "locales", "defaultLocale", "locale", "cacheUrl", "runtimeUrl", "renderSettings", "devApiKey"]);
+    if (!projectId && (cacheUrl === defaultCacheUrl || runtimeUrl === defaultRuntimeApiUrl)) {
+        throw new Error(projectIdMissingError);
     }
-    var translationRequired = (0, react_1.useMemo)(function () { return (0, generaltranslation_1.requiresTranslation)(defaultLocale, locale, locales); }, [defaultLocale, locale, locales]);
-    var _j = (0, react_2.useState)(cacheUrl ? null : {}), translations = _j[0], setTranslations = _j[1];
-    (0, react_2.useEffect)(function () {
+    ;
+    // get tx required info
+    var regionalTranslationRequired = useMemo(function () {
+        return isSameLanguage(defaultLocale, locale) && !isSameDialect(defaultLocale, locale);
+    }, [defaultLocale, locale]);
+    var translationRequired = useMemo(function () {
+        return requiresTranslation(defaultLocale, locale, locales) || regionalTranslationRequired;
+    }, [defaultLocale, locale, locales, regionalTranslationRequired]);
+    // tracking translations
+    var _j = useState(cacheUrl ? null : {}), translations = _j[0], setTranslations = _j[1];
+    useEffect(function () {
         if (!translations) {
             if (!translationRequired) {
                 setTranslations({}); // no translation required
@@ -134,96 +135,124 @@ function GTProvider(_a) {
             }
         }
     }, [translationRequired, cacheUrl, projectId, locale]);
-    var translate = (0, react_2.useCallback)(function (id, options) {
+    // central translate function
+    var translate = useCallback(function (id, options) {
         var _a;
         if (options === void 0) { options = {}; }
         // get the dictionary entry
-        var dictionaryEntry = (0, getDictionaryEntry_1.default)(dictionary, id);
+        var dictionaryEntry = getDictionaryEntry(dictionary, id);
         if (dictionaryEntry === undefined ||
             dictionaryEntry === null ||
             (typeof dictionaryEntry === "object" && !Array.isArray(dictionaryEntry))) {
-            console.warn((0, createErrors_1.createLibraryNoEntryWarning)(id));
+            console.warn(createLibraryNoEntryWarning(id));
             return undefined;
         }
-        var _b = (0, extractEntryMetadata_1.default)(dictionaryEntry), entry = _b.entry, metadata = _b.metadata;
+        var _b = extractEntryMetadata(dictionaryEntry), entry = _b.entry, metadata = _b.metadata;
         // Get variables and variable options
         var variables = options;
         var variablesOptions = metadata === null || metadata === void 0 ? void 0 : metadata.variablesOptions;
-        var taggedEntry = (0, internal_1.addGTIdentifier)(entry, id);
+        var taggedEntry = addGTIdentifier(entry, id);
         // If no translations are required
         if (!translationRequired) {
             if (typeof taggedEntry === "string") {
-                return (0, generaltranslation_1.renderContentToString)(taggedEntry, defaultLocale, variables, variablesOptions);
+                return renderContentToString(taggedEntry, defaultLocale, variables, variablesOptions);
             }
-            return (0, renderDefaultChildren_1.default)({
+            return renderDefaultChildren({
                 children: taggedEntry,
                 variables: variables,
                 variablesOptions: variablesOptions,
                 defaultLocale: defaultLocale,
-                renderVariable: renderVariable_1.default,
+                renderVariable: renderVariable,
             });
         }
         // If a translation is required
         if (translations) {
-            var context = metadata === null || metadata === void 0 ? void 0 : metadata.context;
-            var childrenAsObjects = (0, internal_1.writeChildrenAsObjects)(taggedEntry);
-            var hash = (0, id_1.hashJsxChildren)(context
-                ? { source: childrenAsObjects, context: context }
-                : { source: childrenAsObjects });
-            if ((_a = translations === null || translations === void 0 ? void 0 : translations[id]) === null || _a === void 0 ? void 0 : _a.error) {
-                // error behavior -> fallback to default language
-                if (typeof taggedEntry === "string") {
-                    return (0, generaltranslation_1.renderContentToString)(taggedEntry, defaultLocale, variables, variablesOptions);
+            // render default locale
+            var renderDefault = function () {
+                if (typeof taggedEntry === 'string') {
+                    return renderContentToString(taggedEntry, defaultLocale, variables, variablesOptions);
                 }
-                return (0, renderDefaultChildren_1.default)({
+                return renderDefaultChildren({
                     children: taggedEntry,
                     variables: variables,
                     variablesOptions: variablesOptions,
                     defaultLocale: defaultLocale,
-                    renderVariable: renderVariable_1.default,
+                    renderVariable: renderVariable
+                });
+            };
+            // render skeleton
+            var renderLoadingSkeleton = function () {
+                if (typeof taggedEntry === 'string') {
+                    return '';
+                }
+                return renderSkeleton({
+                    children: taggedEntry,
+                    variables: variables,
+                    defaultLocale: defaultLocale,
+                    renderVariable: renderVariable
+                });
+            };
+            // If no translations are required
+            if (!translationRequired) {
+                return renderDefault();
+            }
+            // If a translation is required
+            if (translations) {
+                // get hash
+                var context = metadata === null || metadata === void 0 ? void 0 : metadata.context;
+                var childrenAsObjects = writeChildrenAsObjects(taggedEntry);
+                var hash = hashJsxChildren(context
+                    ? { source: childrenAsObjects, context: context }
+                    : { source: childrenAsObjects });
+                // loading behavior
+                if (!translations[id][hash]) {
+                    if (renderSettings.method === 'skeleton') {
+                        return renderLoadingSkeleton();
+                    }
+                    else if (renderSettings.method === 'replace') {
+                        return renderDefault();
+                    }
+                    else if (renderSettings.method === 'default') {
+                        if (regionalTranslationRequired) {
+                            return renderDefault();
+                        }
+                        else {
+                            return renderLoadingSkeleton();
+                        }
+                    }
+                    if (renderSettings.method === 'hang') {
+                        // TODO: Remove this error
+                        throw new Error("gt-react GTProvider Provider JSX/STRING hang should not be invoked while waiting for translation");
+                    }
+                    if (renderSettings.method === 'subtle') {
+                        // TODO: Remove this error
+                        throw new Error("gt-react GTProvider Provider JSX/STRING subtle should not be invoked while waiting for translation");
+                    }
+                    // TODO: Remove this error
+                    throw new Error("gt-react GTProvider Provider JSX/STRING should not be invoked while waiting for translation");
+                }
+                // error behavior -> fallback to default language
+                if ((_a = translations === null || translations === void 0 ? void 0 : translations[id]) === null || _a === void 0 ? void 0 : _a.error) {
+                    return renderDefault();
+                }
+                // render translated content
+                var target = translations[id][hash];
+                if (typeof taggedEntry === 'string') {
+                    return renderContentToString(target, [locale, defaultLocale], variables, variablesOptions);
+                }
+                return renderTranslatedChildren({
+                    source: taggedEntry,
+                    target: target,
+                    variables: variables,
+                    variablesOptions: variablesOptions,
+                    locales: [locale, defaultLocale],
+                    renderVariable: renderVariable
                 });
             }
-            var target = translations[id][hash];
-            if (!target) {
-                // loading behavior
-                if (renderSettings.method === "skeleton") {
-                    // skeleton behavior
-                    return (0, renderSkeleton_1.default)({
-                        children: taggedEntry,
-                        variables: variables,
-                        defaultLocale: defaultLocale,
-                        renderVariable: renderVariable_1.default,
-                    });
-                }
-                else {
-                    // default behavior
-                    if (typeof taggedEntry === "string") {
-                        return (0, generaltranslation_1.renderContentToString)(taggedEntry, defaultLocale, variables, variablesOptions);
-                    }
-                    return (0, renderDefaultChildren_1.default)({
-                        children: taggedEntry,
-                        variables: variables,
-                        variablesOptions: variablesOptions,
-                        defaultLocale: defaultLocale,
-                        renderVariable: renderVariable_1.default,
-                    });
-                }
-            }
-            if (typeof taggedEntry === "string") {
-                return (0, generaltranslation_1.renderContentToString)(target, [locale, defaultLocale], variables, variablesOptions);
-            }
-            return (0, renderTranslatedChildren_1.default)({
-                source: taggedEntry,
-                target: target,
-                variables: variables,
-                variablesOptions: variablesOptions,
-                locales: [locale, defaultLocale],
-                renderVariable: renderVariable_1.default,
-            });
         }
     }, [dictionary, translations, translationRequired, defaultLocale]);
-    var _k = (0, useDynamicTranslation_1.default)(__assign({ targetLocale: locale, projectId: projectId, defaultLocale: defaultLocale, devApiKey: devApiKey, runtimeUrl: runtimeUrl, setTranslations: setTranslations }, metadata)), translateChildren = _k.translateChildren, translateContent = _k.translateContent, translationEnabled = _k.translationEnabled;
-    return ((0, jsx_runtime_1.jsx)(GTContext_1.GTContext.Provider, { value: {
+    var _k = useDynamicTranslation(__assign({ targetLocale: locale, projectId: projectId, defaultLocale: defaultLocale, devApiKey: devApiKey, runtimeUrl: runtimeUrl, setTranslations: setTranslations }, metadata)), translateChildren = _k.translateChildren, translateContent = _k.translateContent, translationEnabled = _k.translationEnabled;
+    return (_jsx(GTContext.Provider, { value: {
             translate: translate,
             translateContent: translateContent,
             translateChildren: translateChildren,
@@ -231,9 +260,10 @@ function GTProvider(_a) {
             defaultLocale: defaultLocale,
             translations: translations,
             translationRequired: translationRequired,
+            regionalTranslationRequired: regionalTranslationRequired,
             projectId: projectId,
             translationEnabled: translationEnabled,
-            renderSettings: renderSettings,
+            renderSettings: renderSettings
         }, children: children }));
 }
 //# sourceMappingURL=GTProvider.js.map

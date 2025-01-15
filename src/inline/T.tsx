@@ -10,6 +10,7 @@ import renderVariable from "../provider/rendering/renderVariable";
 import { createClientSideTWithoutIdError } from "../errors/createErrors";
 import { hashJsxChildren } from "generaltranslation/id";
 import renderSkeleton from "../provider/rendering/renderSkeleton";
+import { requiresTranslation } from "generaltranslation";
 
 /**
  * Translation component that handles rendering translated content, including plural forms.
@@ -43,14 +44,14 @@ import renderSkeleton from "../provider/rendering/renderSkeleton";
  *
  */
 function T({
-  children,
-  id,
-  ...props
+    children,
+    id,
+    ...props
 }: {
-  children?: any;
-  id: string;
-  context?: string;
-  [key: string]: any;
+    children?: any;
+    id: string;
+    context?: string;
+    [key: string]: any;
 }): React.JSX.Element | undefined {
   if (!children) return undefined;
 
@@ -58,100 +59,109 @@ function T({
 
   const { variables, variablesOptions } = props;
 
-  const {
-    translations,
-    translationRequired,
-    translateChildren,
-    renderSettings,
-  } = useGTContext(
-    `<T id="${id}"> used on the client-side outside of <GTProvider>`
+  const { translations, translationRequired, regionalTranslationRequired, translateChildren, renderSettings } = useGTContext(
+      `<T id="${id}"> used on the client-side outside of <GTProvider>`
   );
 
   const locale = useLocale();
   const defaultLocale = useDefaultLocale();
-
-  const taggedChildren = useMemo(() => addGTIdentifier(children), [children]);
-
-  if (!translationRequired) {
-    return renderDefaultChildren({
-      children: taggedChildren,
-      variables,
-      variablesOptions,
-      defaultLocale,
-      renderVariable,
-    }) as React.JSX.Element;
-  }
+  const taggedChildren = useMemo(() => addGTIdentifier(children), [children])
 
   // Do translation
   const context = props.context;
   const [childrenAsObjects, hash] = useMemo(() => {
-    const childrenAsObjects = writeChildrenAsObjects(taggedChildren);
-    const hash: string = hashJsxChildren(
-      context
-        ? { source: childrenAsObjects, context }
-        : { source: childrenAsObjects }
-    );
-    return [childrenAsObjects, hash];
-  }, [context, taggedChildren]);
+    if (translationRequired) {
+      const childrenAsObjects = writeChildrenAsObjects(taggedChildren);
+      const hash: string = hashJsxChildren(
+        context
+          ? { source: childrenAsObjects, context }
+          : { source: childrenAsObjects }
+      );
+      return [childrenAsObjects, hash];
+    } else {
+      return [undefined, ''];
+    }
+  }, [context, taggedChildren, translationRequired]);
 
-  const translation = translations[id];
 
+  const translation = translations?.[id];
   useEffect(() => {
+    if (!translationRequired) return;
     if (!translation || (!translation[hash] && !translation.error)) {
       translateChildren({
-        source: childrenAsObjects,
-        targetLocale: locale,
-        metadata: {
-          id,
-          hash,
-        },
+          source: childrenAsObjects,
+          targetLocale: locale,
+          metadata: {
+              id, hash
+          }
       });
     }
-  }, [translation, translation?.[hash]]);
+  }, [translation, translation?.[hash], translationRequired]);
+
 
   // for default/fallback rendering
-  const renderDefault = () =>
-    renderDefaultChildren({
-      children: taggedChildren,
-      variables,
-      variablesOptions,
-      defaultLocale,
-      renderVariable,
+  function renderDefault() {
+    return renderDefaultChildren({
+        children: taggedChildren,
+        variables,
+        variablesOptions,
+        defaultLocale,
+        renderVariable
     }) as React.JSX.Element;
+  }
+
+    function renderLoadingSkeleton() {
+        return renderSkeleton({
+            children: taggedChildren,
+            variables,
+            defaultLocale,
+            renderVariable
+        });
+    }
+
+
+  if (!translationRequired) {
+      return renderDefault();
+  }
 
   // handle translation error
   if (translation?.error) {
     return renderDefault();
   }
-
   // handle no translation/waiting for translation
-  if (!translation || !translation[hash]) {
-    let loadingFallback; // Blank screen
+  if (!translation?.[hash]) {
+      let loadingFallback; // Blank screen
 
-    if (renderSettings.method === "skeleton") {
-      loadingFallback = renderSkeleton({
-        children: taggedChildren,
-        variables,
-        defaultLocale,
-        renderVariable,
-      });
-    } else {
-      loadingFallback = renderDefault();
+      if (renderSettings.method === "skeleton") {
+          loadingFallback = renderLoadingSkeleton();
+      } else if (renderSettings.method === "replace") {
+          loadingFallback = renderDefault();
+      } else if (renderSettings.method === "default") {
+          if (regionalTranslationRequired) {
+              loadingFallback = renderDefault();
+          } else {
+              loadingFallback = renderLoadingSkeleton();
+          }
+      } else if (renderSettings.method === 'hang') {
+          loadingFallback = undefined;
+      } else if (renderSettings.method === 'subtle') {
+          loadingFallback = renderDefault();
+      }
+      // The suspense exists here for hydration reasons
+      return <Suspense fallback={loadingFallback}>{loadingFallback}</Suspense>;
     }
 
-    // console.error(createClientSideTHydrationError(id));
-    // The suspense exists here for hydration reasons
-    return <Suspense fallback={loadingFallback}>{loadingFallback}</Suspense>;
-  }
+  return (
+      renderTranslatedChildren({
+          source: taggedChildren,
+          target: translation[hash],
+          variables,
+          variablesOptions,
+          locales: [locale, defaultLocale],
+          renderVariable
+      }) as React.JSX.Element
+  );
 
-  return renderTranslatedChildren({
-    source: taggedChildren,
-    target: translation[hash],
-    variables,
-    variablesOptions,
-    locales: [locale, defaultLocale],
-    renderVariable,
-  }) as React.JSX.Element;
 }
 
 T.gtTransformation = "translate-client";

@@ -45,4 +45,4 @@ export type TranslationsObject = {
     }
 }
 
-export type RenderMethod = 'skeleton' | 'replace' | 'hang' | 'subtle';
+export type RenderMethod = 'skeleton' | 'replace' | 'hang' | 'subtle' | 'default';

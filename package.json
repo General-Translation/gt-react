@@ -1,11 +1,10 @@
 {
   "name": "gt-react",
-  "version": "8.0.0",
+  "version": "8.0.1",
   "description": "A React library for automatic internationalization.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "peerDependencies": {
-    "react": ">=16.8.0 <20.0.0",
     "react-dom": ">=16.8.0 <20.0.0"
   },
   "scripts": {
@@ -28,7 +27,7 @@
     "@types/node": ">=20.0.0 <23.0.0",
     "@types/react": ">=18.0.0 <20.0.0",
     "@types/react-dom": ">=18.0.0 <20.0.0",
-    "gt-react-cli": "^1.1.8",
+    "gt-react-cli": "^1.1.11",
     "typescript": "^5.7.3"
   },
   "exports": {

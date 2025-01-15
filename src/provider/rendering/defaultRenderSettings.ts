@@ -1,5 +1,5 @@
 export const defaultRenderSettings = {
-    method: "skeleton",
+    method: "default",
     timeout: (() => { 
       const NODE_ENV = typeof process !== 'undefined' ? process.env.NODE_ENV : ''; 
       return NODE_ENV === "development" || NODE_ENV === "test"; 

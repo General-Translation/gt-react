@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { renderContentToString, requiresTranslation } from "generaltranslation";
+import { isSameDialect, isSameLanguage, renderContentToString, requiresTranslation } from "generaltranslation";
 import { useCallback, useEffect, useState } from "react";
 import useBrowserLocale from "../hooks/useBrowserLocale";
 
@@ -47,6 +47,7 @@ import renderSkeleton from "./rendering/renderSkeleton";
  *
  * @returns {JSX.Element} The provider component for General Translation context.
  */
+
 export default function GTProvider({
   children,
   projectId,
@@ -60,56 +61,58 @@ export default function GTProvider({
   devApiKey,
   ...metadata
 }: {
-  children?: any;
-  projectId?: string;
-  dictionary?: Dictionary;
-  locales?: string[];
-  defaultLocale?: string;
-  locale?: string;
-  cacheUrl?: string;
-  runtimeUrl?: string;
-  devApiKey?: string;
-  renderSettings?: {
-    method: RenderMethod;
-    timeout: number | null;
-  };
-  [key: string]: any;
+    children?: any;
+    projectId?: string;
+    dictionary?: Dictionary;
+    locales?: string[];
+    defaultLocale?: string;
+    locale?: string;
+    cacheUrl?: string;
+    runtimeUrl?: string;
+    devApiKey?: string;
+    renderSettings?: {
+        method: RenderMethod;
+        timeout?: number | null;
+    };
+    [key: string]: any
 }): React.JSX.Element {
-  if (
-    !projectId &&
-    (cacheUrl === defaultCacheUrl || runtimeUrl === defaultRuntimeApiUrl)
-  ) {
-    throw new Error(projectIdMissingError);
-  }
 
-  const translationRequired = useMemo(
-    () => requiresTranslation(defaultLocale, locale, locales),
-    [defaultLocale, locale, locales]
-  );
+    if (!projectId && (cacheUrl === defaultCacheUrl || runtimeUrl === defaultRuntimeApiUrl)) {
+        throw new Error(projectIdMissingError)
+    };
 
-  const [translations, setTranslations] = useState<TranslationsObject | null>(
-    cacheUrl ? null : {}
-  );
-
-  useEffect(() => {
-    if (!translations) {
-      if (!translationRequired) {
-        setTranslations({}); // no translation required
-      } else {
-        (async () => {
-          // check cache for translations
-          try {
-            const response = await fetch(`${cacheUrl}/${projectId}/${locale}`);
-            const result = await response.json();
-            setTranslations(result);
-          } catch (error) {
-            setTranslations({});
-          }
-        })();
+    // get tx required info
+    const regionalTranslationRequired = useMemo(() => {
+            return isSameLanguage(defaultLocale, locale) && !isSameDialect(defaultLocale, locale)
+        }, [defaultLocale, locale]);
+    const translationRequired = useMemo(() => {
+        return requiresTranslation(defaultLocale, locale, locales) || regionalTranslationRequired
+    }, [defaultLocale, locale, locales, regionalTranslationRequired]);
+    
+    // tracking translations
+    const [translations, setTranslations] = useState<TranslationsObject | null>(
+        cacheUrl ? null : {}
+    );
+    useEffect(() => {
+      if (!translations) {
+        if (!translationRequired) {
+            setTranslations({}); // no translation required
+        } else {
+            (async () => {
+            // check cache for translations
+            try {
+                const response = await fetch(`${cacheUrl}/${projectId}/${locale}`);
+                const result = await response.json();
+                setTranslations(result);
+            } catch (error) {
+                setTranslations({});
+            }
+            })();
+        }
       }
-    }
-  }, [translationRequired, cacheUrl, projectId, locale]);
+    }, [translationRequired, cacheUrl, projectId, locale]);
 
+  // central translate function
   const translate = useCallback(
     (id: string, options: Record<string, any> = {}) => {
       // get the dictionary entry
@@ -152,79 +155,103 @@ export default function GTProvider({
 
       // If a translation is required
       if (translations) {
-        const context = metadata?.context;
-        const childrenAsObjects = writeChildrenAsObjects(taggedEntry);
 
-        const hash: string = hashJsxChildren(
-          context
-            ? { source: childrenAsObjects, context }
-            : { source: childrenAsObjects }
-        );
-        if (translations?.[id]?.error) {
-          // error behavior -> fallback to default language
-          if (typeof taggedEntry === "string") {
-            return renderContentToString(
-              taggedEntry,
-              defaultLocale,
-              variables,
-              variablesOptions
-            );
-          }
-          return renderDefaultChildren({
-            children: taggedEntry,
-            variables,
-            variablesOptions,
-            defaultLocale,
-            renderVariable,
-          });
-        }
-        const target = translations[id][hash];
-        if (!target) {
-          // loading behavior
-          if (renderSettings.method === "skeleton") {
-            // skeleton behavior
-            return renderSkeleton({
-              children: taggedEntry,
-              variables,
-              defaultLocale,
-              renderVariable,
-            });
-          } else {
-            // default behavior
-            if (typeof taggedEntry === "string") {
-              return renderContentToString(
-                taggedEntry,
-                defaultLocale,
-                variables,
-                variablesOptions
-              );
+
+        // render default locale
+        const renderDefault = () => {
+            if (typeof taggedEntry === 'string') {
+                return renderContentToString(
+                    taggedEntry,
+                    defaultLocale, 
+                    variables,
+                    variablesOptions
+                )
             }
             return renderDefaultChildren({
-              children: taggedEntry,
-              variables,
-              variablesOptions,
-              defaultLocale,
-              renderVariable,
+                children: taggedEntry,
+                variables,
+                variablesOptions,
+                defaultLocale,
+                renderVariable
+            })
+        }
+
+        // render skeleton
+        const renderLoadingSkeleton = () => {
+            if (typeof taggedEntry === 'string') {
+                return '';
+            }
+            return renderSkeleton({ // render skeleton for jsx
+                children: taggedEntry,
+                variables,
+                defaultLocale,
+                renderVariable
+            });
+        }
+
+        // If no translations are required
+        if (!translationRequired) {
+            return renderDefault();
+        }
+        
+        // If a translation is required
+        if (translations) {
+            // get hash
+            const context = metadata?.context;
+            const childrenAsObjects = writeChildrenAsObjects(taggedEntry);
+            const hash: string = hashJsxChildren(
+              context
+                ? { source: childrenAsObjects, context }
+                : { source: childrenAsObjects }
+            );
+            
+            // loading behavior
+            if (!translations[id][hash]) {
+                if (renderSettings.method === 'skeleton') {
+                    return renderLoadingSkeleton();
+                } else if (renderSettings.method === 'replace' ) {
+                    return renderDefault();
+                } else if (renderSettings.method === 'default') {
+                    if (regionalTranslationRequired) {
+                        return renderDefault();
+                    } else {
+                        return renderLoadingSkeleton();
+                    }
+                }
+                if (renderSettings.method === 'hang') {
+                  // TODO: Remove this error
+                  throw new Error("gt-react GTProvider Provider JSX/STRING hang should not be invoked while waiting for translation");
+                }
+                if (renderSettings.method === 'subtle') {
+                  // TODO: Remove this error
+                  throw new Error("gt-react GTProvider Provider JSX/STRING subtle should not be invoked while waiting for translation");
+                }
+                // TODO: Remove this error
+                throw new Error("gt-react GTProvider Provider JSX/STRING should not be invoked while waiting for translation");
+            }
+
+            // error behavior -> fallback to default language
+            if (translations?.[id]?.error) {
+                return renderDefault();
+            }
+
+            // render translated content
+            const target = translations[id][hash];
+            if (typeof taggedEntry === 'string') {
+                return renderContentToString(
+                    target as Content, [locale, defaultLocale],
+                    variables, variablesOptions
+                )
+            }
+            return renderTranslatedChildren({
+                source: taggedEntry,
+                target,
+                variables, variablesOptions,
+                locales: [locale, defaultLocale],
+                renderVariable
             });
           }
         }
-        if (typeof taggedEntry === "string") {
-          return renderContentToString(
-            target as Content,
-            [locale, defaultLocale],
-            variables,
-            variablesOptions
-          );
-        }
-        return renderTranslatedChildren({
-          source: taggedEntry,
-          target,
-          variables,
-          variablesOptions,
-          locales: [locale, defaultLocale],
-          renderVariable,
-        });
-      }
     },
     [dictionary, translations, translationRequired, defaultLocale]
   );
@@ -240,22 +267,16 @@ export default function GTProvider({
       ...metadata,
     });
 
-  return (
-    <GTContext.Provider
-      value={{
-        translate,
-        translateContent,
-        translateChildren,
-        locale,
-        defaultLocale,
-        translations,
-        translationRequired,
-        projectId,
-        translationEnabled,
-        renderSettings,
-      }}
-    >
-      {children}
-    </GTContext.Provider>
-  );
+    return (
+        <GTContext.Provider value={{
+            translate, translateContent, translateChildren,
+            locale, defaultLocale, 
+            translations, translationRequired, regionalTranslationRequired,
+            projectId, translationEnabled,
+            renderSettings
+        }}>
+            {children}
+        </GTContext.Provider>
+    )
+
 }

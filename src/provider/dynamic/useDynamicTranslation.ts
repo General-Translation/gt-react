@@ -1,4 +1,3 @@
-import GT from "generaltranslation";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { dynamicTranslationError } from "../../errors/createErrors";
 
@@ -34,7 +33,8 @@ export default function useDynamicTranslation({
     const translateContent = useCallback((params: {
         source: any, targetLocale: string, metadata: { hash: string } & Record<string, any>
     }) => {
-        const key = `${params.metadata.hash}-${params.targetLocale}`;
+        const id = params.metadata.id ? `${params.metadata.id}-` : '';
+        const key = `${id}${params.metadata.hash}-${params.targetLocale}`;
         requestQueueRef.current.set(key, { type: 'content', source: params.source, metadata: params.metadata });
         setFetchTrigger((n) => n + 1);
     }, []);
@@ -46,7 +46,8 @@ export default function useDynamicTranslation({
     const translateChildren = useCallback((params: {
         source: any, targetLocale: string, metadata: { hash: string } & Record<string, any>
     }) => {
-        const key = `${params.metadata.hash}-${params.targetLocale}`;
+        const id = params.metadata.id ? `${params.metadata.id}-` : '';
+        const key = `${id}${params.metadata.hash}-${params.targetLocale}`;
         requestQueueRef.current.set(key, { type: 'jsx', source: params.source, metadata: params.metadata });
         setFetchTrigger((n) => n + 1);
     }, []);
@@ -84,11 +85,11 @@ export default function useDynamicTranslation({
                                 const { translation, reference: { id, key } } = result;
                                 merged[id] = { [key]: translation };
                             } else if ('error' in result && result.error && (result as any).code) {
-                                merged[request.data.metadata.id || request.data.metadata.hash] = result;
+                                merged[request?.data?.metadata?.id || request?.data?.metadata?.hash] = result;
                                 console.error(`Translation failed${result?.reference?.id ? ` for id: ${result.reference.id}` : '' }`, result);
                             } else {
                                 // id defaults to hash if none provided
-                                merged[request.data.metadata.id || request.data.metadata.hash] = {
+                                merged[request?.data?.metadata?.id || request?.data?.metadata?.hash] = {
                                     error: "An error occurred.",
                                     code: 500
                                 }
@@ -103,7 +104,7 @@ export default function useDynamicTranslation({
                     let merged: Record<string, any> = { ...(prev || {}) };
                     requests.forEach((request) => {
                         // id defaults to hash if none provided
-                        merged[request.metadata.id || request.metadata.hash] = {
+                        merged[request?.metadata?.id || request?.metadata?.hash] = {
                             error: "An error occurred.",
                             code: 500
                         }
