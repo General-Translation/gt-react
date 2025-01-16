@@ -83,7 +83,8 @@ function T(_a) {
     useEffect(function () {
         if (!translationRequired)
             return;
-        if (!translation || !translationEntry) {
+        // note have to recover from mis-matching hashing functions on client and server, if API returns wrong hash, then should fail gracefully
+        if (!translation && !translationEntry) {
             translateChildren({
                 source: childrenAsObjects,
                 targetLocale: locale,
