@@ -96,14 +96,12 @@ export default function GTProvider(_a) {
     }
     ;
     // get tx required info
-    var regionalTranslationRequired = useMemo(function () {
-        return requiresRegionalTranslation(defaultLocale, locale, locales);
-    }, [defaultLocale, locale, locales]);
-    var translationRequired = useMemo(function () {
-        return requiresTranslation(defaultLocale, locale, locales) || regionalTranslationRequired;
-    }, [defaultLocale, locale, locales, regionalTranslationRequired]);
+    var _j = useMemo(function () {
+        var regionalTranslation = requiresRegionalTranslation(defaultLocale, locale, locales);
+        return [requiresTranslation(defaultLocale, locale, locales) || regionalTranslation, regionalTranslation];
+    }, [defaultLocale, locale, locales]), translationRequired = _j[0], regionalTranslationRequired = _j[1];
     // tracking translations
-    var _j = useState(cacheUrl ? null : {}), translations = _j[0], setTranslations = _j[1];
+    var _k = useState(cacheUrl ? null : {}), translations = _k[0], setTranslations = _k[1];
     // fetch from cache
     useEffect(function () {
         if (!translations) {
@@ -237,7 +235,7 @@ export default function GTProvider(_a) {
         var target = translations[id][hash];
         return renderTranslation(target);
     }, [dictionary, translations, translationRequired, defaultLocale]);
-    var _k = useDynamicTranslation(__assign({ targetLocale: locale, projectId: projectId, defaultLocale: defaultLocale, devApiKey: devApiKey, runtimeUrl: runtimeUrl, setTranslations: setTranslations }, metadata)), translateChildren = _k.translateChildren, translateContent = _k.translateContent, translationEnabled = _k.translationEnabled;
+    var _l = useDynamicTranslation(__assign({ targetLocale: locale, projectId: projectId, defaultLocale: defaultLocale, devApiKey: devApiKey, runtimeUrl: runtimeUrl, setTranslations: setTranslations }, metadata)), translateChildren = _l.translateChildren, translateContent = _l.translateContent, translationEnabled = _l.translationEnabled;
     return (_jsx(GTContext.Provider, { value: {
             translate: translate,
             translateContent: translateContent,

@@ -1,11 +1,10 @@
-import { Suspense, useMemo } from "react";
+import { useMemo } from "react";
 import { renderContentToString, requiresRegionalTranslation, requiresTranslation } from "generaltranslation";
 import { useCallback, useEffect, useState } from "react";
 import useBrowserLocale from "../hooks/useBrowserLocale";
 
 import { GTContext } from "./GTContext";
 import {
-  Content,
   Dictionary,
   RenderMethod,
   TranslatedChildren,
@@ -78,40 +77,38 @@ export default function GTProvider({
     [key: string]: any
 }): React.JSX.Element {
 
-    if (!projectId && (cacheUrl === defaultCacheUrl || runtimeUrl === defaultRuntimeApiUrl)) {
-        throw new Error(projectIdMissingError)
-    };
+  if (!projectId && (cacheUrl === defaultCacheUrl || runtimeUrl === defaultRuntimeApiUrl)) {
+      throw new Error(projectIdMissingError)
+  };
 
-    // get tx required info
-    const regionalTranslationRequired = useMemo(() => {
-            return requiresRegionalTranslation(defaultLocale, locale, locales);
-        }, [defaultLocale, locale, locales]);
-    const translationRequired = useMemo(() => {
-        return requiresTranslation(defaultLocale, locale, locales) || regionalTranslationRequired
-    }, [defaultLocale, locale, locales, regionalTranslationRequired]);
-    
-    // tracking translations
-    const [translations, setTranslations] = useState<TranslationsObject | null>(cacheUrl ? null : {});
+  // get tx required info
+  const [translationRequired, regionalTranslationRequired] = useMemo(() => {
+    const regionalTranslation = requiresRegionalTranslation(defaultLocale, locale, locales)
+    return [requiresTranslation(defaultLocale, locale, locales) || regionalTranslation, regionalTranslation]
+  }, [defaultLocale, locale, locales]);
 
-    // fetch from cache
-    useEffect(() => {
-      if (!translations) {
-        if (!translationRequired) {
-            setTranslations({}); // no translation required
-        } else {
-            (async () => {
-            // check cache for translations
-            try {
-                const response = await fetch(`${cacheUrl}/${projectId}/${locale}`);
-                const result = await response.json();
-                setTranslations(result);
-            } catch (error) {
-                setTranslations({}); // not classified as a tx error, bc we can still fetch from API
-            }
-            })();
+  // tracking translations
+  const [translations, setTranslations] = useState<TranslationsObject | null>(cacheUrl ? null : {});
+
+  // fetch from cache
+  useEffect(() => {
+    if (!translations) {
+      if (!translationRequired) {
+        setTranslations({}); // no translation required
+      } else {
+        (async () => {
+        // check cache for translations
+        try {
+          const response = await fetch(`${cacheUrl}/${projectId}/${locale}`);
+          const result = await response.json();
+          setTranslations(result);
+        } catch (error) {
+          setTranslations({}); // not classified as a tx error, bc we can still fetch from API
         }
+        })();
       }
-    }, [translationRequired, cacheUrl, projectId, locale]);
+    }
+  }, [translationRequired, cacheUrl, projectId, locale]);
 
   // translate function for dictionaries
   const translate = useCallback(
