@@ -17,8 +17,8 @@ export default function useDynamicTranslation({
     [key: string]: any
 }): {
     translationEnabled: boolean
-    translateContent: (params: { source: any, targetLocale: string, metadata: { hash: string } & Record<string, any> }) => void,
-    translateChildren: (params: { source: any, targetLocale: string, metadata: { hash: string } & Record<string, any> }) => void,
+    translateContent: (params: { source: any, targetLocale: string, metadata: { hash: string, context?: string } & Record<string, any> }) => void,
+    translateChildren: (params: { source: any, targetLocale: string, metadata: { hash: string, context?: string } & Record<string, any> }) => void,
 } {
 
     metadata = { ...metadata, projectId, sourceLocale: defaultLocale };
@@ -32,7 +32,7 @@ export default function useDynamicTranslation({
     const [fetchTrigger, setFetchTrigger] = useState(0);
 
     const translateContent = useCallback((params: {
-        source: any, targetLocale: string, metadata: { hash: string } & Record<string, any>
+        source: any, targetLocale: string, metadata: { hash: string, context?: string } & Record<string, any>
     }) => {
         const id = params.metadata.id ? `${params.metadata.id}-` : '';
         const key = `${id}${params.metadata.hash}-${params.targetLocale}`;
@@ -45,7 +45,7 @@ export default function useDynamicTranslation({
      * Keys are batched and fetched in the next effect cycle.
      */
     const translateChildren = useCallback((params: {
-        source: any, targetLocale: string, metadata: { hash: string } & Record<string, any>
+        source: any, targetLocale: string, metadata: { hash: string, context?: string } & Record<string, any>
     }) => {
         const id = params.metadata.id ? `${params.metadata.id}-` : '';
         const key = `${id}${params.metadata.hash}-${params.targetLocale}`;
@@ -87,7 +87,7 @@ export default function useDynamicTranslation({
                                 if (id !== request?.metadata?.id || key !== request?.metadata?.hash) {
                                     console.warn(`Mismatching ids or hashes! Expected id: ${request?.metadata?.id}, hash: ${request?.metadata?.hash}, but got id: ${id}, hash: ${key}. We will still render your translation, but make sure to update to the newest version: www.generaltranslation.com/docs`);
                                 }
-                                merged[id] = { [key]: translation };
+                                merged[id] = { [request?.metadata?.hash || key]: translation };
                             } else if ('error' in result && result.error && (result as any).code) {
                                 merged[request?.data?.metadata?.id || request?.data?.metadata?.hash] = {
                                     error: result.error || "An error occurred.",

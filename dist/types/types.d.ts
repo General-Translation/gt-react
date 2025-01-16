@@ -57,6 +57,7 @@ export type GTContextType = {
         targetLocale: string;
         metadata: {
             hash: string;
+            context?: string;
         } & Record<string, any>;
     }) => void;
     translateChildren: (params: {
@@ -64,6 +65,7 @@ export type GTContextType = {
         targetLocale: string;
         metadata: {
             hash: string;
+            context?: string;
         } & Record<string, any>;
     }) => void;
     locale: string;

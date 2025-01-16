@@ -57,8 +57,8 @@ export type RenderMethod = 'skeleton' | 'replace' | 'hang' | 'subtle' | 'default
 
 export type GTContextType = {
     translate: (id: string, options?: Record<string, any>) => React.ReactNode,
-    translateContent: (params: { source: any, targetLocale: string, metadata: { hash: string } & Record<string, any> }) => void,
-    translateChildren: (params: { source: any, targetLocale: string, metadata: { hash: string } & Record<string, any> }) => void,
+    translateContent: (params: { source: any, targetLocale: string, metadata: { hash: string, context?: string } & Record<string, any> }) => void,
+    translateChildren: (params: { source: any, targetLocale: string, metadata: { hash: string, context?: string } & Record<string, any> }) => void,
     locale: string,
     defaultLocale: string, 
     translations: TranslationsObject | null,

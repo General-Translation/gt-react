@@ -101,11 +101,11 @@ function T({
         source: childrenAsObjects,
         targetLocale: locale,
         metadata: {
-            id, hash
+            id, hash, context
         }
       });
     }
-  }, [translation, translationEntry, translationRequired]);
+  }, [translation, translationEntry, translationRequired, id, hash, context]);
 
   // ----- RENDER METHODS ----- // 
 

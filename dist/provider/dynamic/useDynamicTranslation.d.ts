@@ -13,6 +13,7 @@ export default function useDynamicTranslation({ targetLocale, projectId, devApiK
         targetLocale: string;
         metadata: {
             hash: string;
+            context?: string;
         } & Record<string, any>;
     }) => void;
     translateChildren: (params: {
@@ -20,6 +21,7 @@ export default function useDynamicTranslation({ targetLocale, projectId, devApiK
         targetLocale: string;
         metadata: {
             hash: string;
+            context?: string;
         } & Record<string, any>;
     }) => void;
 };

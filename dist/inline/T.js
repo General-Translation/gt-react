@@ -95,11 +95,12 @@ function T(_a) {
                 targetLocale: locale,
                 metadata: {
                     id: id,
-                    hash: hash
+                    hash: hash,
+                    context: context
                 }
             });
         }
-    }, [translation, translationEntry, translationRequired]);
+    }, [translation, translationEntry, translationRequired, id, hash, context]);
     // ----- RENDER METHODS ----- // 
     // for default/fallback rendering
     var renderDefaultLocale = function () {
