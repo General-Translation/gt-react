@@ -1,3 +1,4 @@
+"use strict";
 var __rest = (this && this.__rest) || function (s, e) {
     var t = {};
     for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
@@ -9,19 +10,23 @@ var __rest = (this && this.__rest) || function (s, e) {
         }
     return t;
 };
-import { jsx as _jsx } from "react/jsx-runtime";
-import { Suspense, useEffect } from "react";
-import useDefaultLocale from "../hooks/useDefaultLocale";
-import useLocale from "../hooks/useLocale";
-import renderDefaultChildren from "../provider/rendering/renderDefaultChildren";
-import { addGTIdentifier, isTranslationError, writeChildrenAsObjects } from "../internal";
-import useGTContext from "../provider/GTContext";
-import renderTranslatedChildren from "../provider/rendering/renderTranslatedChildren";
-import { useMemo } from "react";
-import renderVariable from "../provider/rendering/renderVariable";
-import { createClientSideTWithoutIdError } from "../errors/createErrors";
-import { hashJsxChildren } from "generaltranslation/id";
-import renderSkeleton from "../provider/rendering/renderSkeleton";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+var jsx_runtime_1 = require("react/jsx-runtime");
+var react_1 = require("react");
+var useDefaultLocale_1 = __importDefault(require("../hooks/useDefaultLocale"));
+var useLocale_1 = __importDefault(require("../hooks/useLocale"));
+var renderDefaultChildren_1 = __importDefault(require("../provider/rendering/renderDefaultChildren"));
+var internal_1 = require("../internal");
+var GTContext_1 = __importDefault(require("../provider/GTContext"));
+var renderTranslatedChildren_1 = __importDefault(require("../provider/rendering/renderTranslatedChildren"));
+var react_2 = require("react");
+var renderVariable_1 = __importDefault(require("../provider/rendering/renderVariable"));
+var createErrors_1 = require("../errors/createErrors");
+var id_1 = require("generaltranslation/id");
+var renderSkeleton_1 = __importDefault(require("../provider/rendering/renderSkeleton"));
 /**
  * Translation component that handles rendering translated content, including plural forms.
  * Used with the required `id` parameter instead of `const t = useGT()`.
@@ -58,18 +63,18 @@ function T(_a) {
     if (!children)
         return undefined;
     if (!id)
-        throw new Error(createClientSideTWithoutIdError(children));
+        throw new Error((0, createErrors_1.createClientSideTWithoutIdError)(children));
     var variables = props.variables, variablesOptions = props.variablesOptions;
-    var _b = useGTContext("<T id=\"".concat(id, "\"> used on the client-side outside of <GTProvider>")), translations = _b.translations, translationRequired = _b.translationRequired, regionalTranslationRequired = _b.regionalTranslationRequired, translateChildren = _b.translateChildren, renderSettings = _b.renderSettings;
-    var locale = useLocale();
-    var defaultLocale = useDefaultLocale();
-    var taggedChildren = useMemo(function () { return addGTIdentifier(children); }, [children]);
+    var _b = (0, GTContext_1.default)("<T id=\"".concat(id, "\"> used on the client-side outside of <GTProvider>")), translations = _b.translations, translationRequired = _b.translationRequired, regionalTranslationRequired = _b.regionalTranslationRequired, translateChildren = _b.translateChildren, renderSettings = _b.renderSettings;
+    var locale = (0, useLocale_1.default)();
+    var defaultLocale = (0, useDefaultLocale_1.default)();
+    var taggedChildren = (0, react_2.useMemo)(function () { return (0, internal_1.addGTIdentifier)(children); }, [children]);
     // ----- FETCH TRANSLATION ----- //
     var context = props.context;
-    var _c = useMemo(function () {
+    var _c = (0, react_2.useMemo)(function () {
         if (translationRequired) {
-            var childrenAsObjects_1 = writeChildrenAsObjects(taggedChildren);
-            var hash_1 = hashJsxChildren(context
+            var childrenAsObjects_1 = (0, internal_1.writeChildrenAsObjects)(taggedChildren);
+            var hash_1 = (0, id_1.hashJsxChildren)(context
                 ? { source: childrenAsObjects_1, context: context }
                 : { source: childrenAsObjects_1 });
             return [childrenAsObjects_1, hash_1];
@@ -79,8 +84,8 @@ function T(_a) {
         }
     }, [context, taggedChildren, translationRequired]), childrenAsObjects = _c[0], hash = _c[1];
     var translation = translations === null || translations === void 0 ? void 0 : translations[id];
-    var translationEntry = !isTranslationError(translation) && (translation === null || translation === void 0 ? void 0 : translation[hash]);
-    useEffect(function () {
+    var translationEntry = !(0, internal_1.isTranslationError)(translation) && (translation === null || translation === void 0 ? void 0 : translation[hash]);
+    (0, react_1.useEffect)(function () {
         if (!translationRequired)
             return;
         // note have to recover from mis-matching hashing functions on client and server, if API returns wrong hash, then should fail gracefully
@@ -98,20 +103,20 @@ function T(_a) {
     // ----- RENDER METHODS ----- // 
     // for default/fallback rendering
     var renderDefaultLocale = function () {
-        return renderDefaultChildren({
+        return (0, renderDefaultChildren_1.default)({
             children: taggedChildren,
             variables: variables,
             variablesOptions: variablesOptions,
             defaultLocale: defaultLocale,
-            renderVariable: renderVariable
+            renderVariable: renderVariable_1.default
         });
     };
     var renderLoadingSkeleton = function () {
-        return renderSkeleton({
+        return (0, renderSkeleton_1.default)({
             children: taggedChildren,
             variables: variables,
             defaultLocale: defaultLocale,
-            renderVariable: renderVariable
+            renderVariable: renderVariable_1.default
         });
     };
     var renderLoadingDefault = function () {
@@ -121,13 +126,13 @@ function T(_a) {
         return renderLoadingSkeleton();
     };
     var renderTranslation = function (target) {
-        return renderTranslatedChildren({
+        return (0, renderTranslatedChildren_1.default)({
             source: taggedChildren,
             target: target,
             variables: variables,
             variablesOptions: variablesOptions,
             locales: [locale, defaultLocale],
-            renderVariable: renderVariable
+            renderVariable: renderVariable_1.default
         });
     };
     // ----- RENDER BEHAVIOR ----- //
@@ -136,7 +141,7 @@ function T(_a) {
         return renderDefaultLocale();
     }
     // handle translation error
-    if (isTranslationError(translation)) {
+    if ((0, internal_1.isTranslationError)(translation)) {
         return renderDefaultLocale();
     }
     // loading behavior
@@ -158,11 +163,11 @@ function T(_a) {
             loadingFallback = renderLoadingDefault();
         }
         // The suspense exists here for hydration reasons
-        return _jsx(Suspense, { fallback: loadingFallback, children: loadingFallback });
+        return (0, jsx_runtime_1.jsx)(react_1.Suspense, { fallback: loadingFallback, children: loadingFallback });
     }
     // render translated content
     return renderTranslation(translationEntry);
 }
 T.gtTransformation = "translate-client";
-export default T;
+exports.default = T;
 //# sourceMappingURL=T.js.map

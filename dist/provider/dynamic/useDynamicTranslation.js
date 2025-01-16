@@ -1,3 +1,4 @@
+"use strict";
 var __assign = (this && this.__assign) || function () {
     __assign = Object.assign || function(t) {
         for (var s, i = 1, n = arguments.length; i < n; i++) {
@@ -56,9 +57,11 @@ var __rest = (this && this.__rest) || function (s, e) {
         }
     return t;
 };
-import { useCallback, useEffect, useRef, useState } from "react";
-import { dynamicTranslationError } from "../../errors/createErrors";
-export default function useDynamicTranslation(_a) {
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = useDynamicTranslation;
+var react_1 = require("react");
+var createErrors_1 = require("../../errors/createErrors");
+function useDynamicTranslation(_a) {
     var _this = this;
     var targetLocale = _a.targetLocale, projectId = _a.projectId, devApiKey = _a.devApiKey, runtimeUrl = _a.runtimeUrl, defaultLocale = _a.defaultLocale, setTranslations = _a.setTranslations, metadata = __rest(_a, ["targetLocale", "projectId", "devApiKey", "runtimeUrl", "defaultLocale", "setTranslations"]);
     metadata = __assign(__assign({}, metadata), { projectId: projectId, sourceLocale: defaultLocale });
@@ -66,10 +69,10 @@ export default function useDynamicTranslation(_a) {
     if (!translationEnabled)
         return { translationEnabled: translationEnabled, translateContent: function () { }, translateChildren: function () { } };
     // Queue to store requested keys between renders.
-    var requestQueueRef = useRef(new Map());
+    var requestQueueRef = (0, react_1.useRef)(new Map());
     // Trigger a fetch when keys have been added.
-    var _b = useState(0), fetchTrigger = _b[0], setFetchTrigger = _b[1];
-    var translateContent = useCallback(function (params) {
+    var _b = (0, react_1.useState)(0), fetchTrigger = _b[0], setFetchTrigger = _b[1];
+    var translateContent = (0, react_1.useCallback)(function (params) {
         var id = params.metadata.id ? "".concat(params.metadata.id, "-") : '';
         var key = "".concat(id).concat(params.metadata.hash, "-").concat(params.targetLocale);
         requestQueueRef.current.set(key, { type: 'content', source: params.source, metadata: params.metadata });
@@ -79,13 +82,13 @@ export default function useDynamicTranslation(_a) {
      * Call this from <T> components to request a translation key.
      * Keys are batched and fetched in the next effect cycle.
      */
-    var translateChildren = useCallback(function (params) {
+    var translateChildren = (0, react_1.useCallback)(function (params) {
         var id = params.metadata.id ? "".concat(params.metadata.id, "-") : '';
         var key = "".concat(id).concat(params.metadata.hash, "-").concat(params.targetLocale);
         requestQueueRef.current.set(key, { type: 'jsx', source: params.source, metadata: params.metadata });
         setFetchTrigger(function (n) { return n + 1; });
     }, []);
-    useEffect(function () {
+    (0, react_1.useEffect)(function () {
         if (requestQueueRef.current.size === 0) {
             return;
         }
@@ -152,7 +155,7 @@ export default function useDynamicTranslation(_a) {
                         return [3 /*break*/, 8];
                     case 6:
                         error_1 = _b.sent();
-                        console.error(dynamicTranslationError, error_1);
+                        console.error(createErrors_1.dynamicTranslationError, error_1);
                         setTranslations(function (prev) {
                             var merged = __assign({}, (prev || {}));
                             requests.forEach(function (request) {

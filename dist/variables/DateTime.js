@@ -1,7 +1,12 @@
-import { jsx as _jsx } from "react/jsx-runtime";
-import { formatDateTime } from 'generaltranslation';
-import useLocale from '../hooks/useLocale';
-import useDefaultLocale from '../hooks/useDefaultLocale';
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+var jsx_runtime_1 = require("react/jsx-runtime");
+var generaltranslation_1 = require("generaltranslation");
+var useLocale_1 = __importDefault(require("../hooks/useLocale"));
+var useDefaultLocale_1 = __importDefault(require("../hooks/useDefaultLocale"));
 /**
  * The `<DateTime>` component renders a formatted date or time string, allowing customization of the name, default value, and formatting options.
  * It utilizes the current locale and optional format settings to display the date.
@@ -24,7 +29,7 @@ import useDefaultLocale from '../hooks/useDefaultLocale';
  */
 function DateTime(_a) {
     var children = _a.children, value = _a.value, name = _a.name, locales = _a.locales, _b = _a.options, options = _b === void 0 ? {} : _b;
-    var providerLocales = [useLocale(), useDefaultLocale()];
+    var providerLocales = [(0, useLocale_1.default)(), (0, useDefaultLocale_1.default)()];
     locales || (locales = providerLocales);
     var final;
     var dateValue;
@@ -39,13 +44,13 @@ function DateTime(_a) {
         dateValue = defaultValue;
     }
     if (typeof dateValue !== 'undefined') {
-        final = (formatDateTime({ value: dateValue, locales: locales, options: options })).replace(/[\u200F\u202B\u202E]/g, '');
+        final = ((0, generaltranslation_1.formatDateTime)({ value: dateValue, locales: locales, options: options })).replace(/[\u200F\u202B\u202E]/g, '');
     }
     // Render the formatted date within a span element
-    return (_jsx("span", { "data-_gt-variable-name": name, "data-_gt-variable-type": "date", "data-_gt-variable-options": JSON.stringify(options), style: { display: 'contents' }, suppressHydrationWarning: true, children: final }));
+    return ((0, jsx_runtime_1.jsx)("span", { "data-_gt-variable-name": name, "data-_gt-variable-type": "date", "data-_gt-variable-options": JSON.stringify(options), style: { display: 'contents' }, suppressHydrationWarning: true, children: final }));
 }
 ;
 // Static property for transformation type
 DateTime.gtTransformation = "variable-datetime";
-export default DateTime;
+exports.default = DateTime;
 //# sourceMappingURL=DateTime.js.map
