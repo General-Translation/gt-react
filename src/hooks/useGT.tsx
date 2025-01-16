@@ -20,7 +20,7 @@ export function useGT(
 ): (
     id: string,
     options?: Record<string, any>
-) => React.JSX.Element | string | undefined {
+) => React.ReactNode {
 
     // Create a prefix for translation keys if an id is provided
     const getId = (suffix: string) => {
@@ -38,12 +38,12 @@ export function useGT(
     * @param {string} [id=''] - The ID of the item in the dictionary to translate.
     * @param {Record<string, any>} [options={}] - Variables or parameters (e.g., `n`) passed into the translation for dynamic content.
     * 
-    * @returns {string | React.JSX.Element}
+    * @returns {React.ReactNode}
     */
     function t(
         id: string = '', 
         options: Record<string, any> = {}
-    ): React.JSX.Element | string | undefined {
+    ): React.ReactNode {
         const prefixedId = getId(id);
         if (translate) {
             const translation = translate(prefixedId, options);

@@ -26,7 +26,7 @@ function renderTranslatedElement({
         variableOptions: Intl.NumberFormatOptions | Intl.DateTimeFormatOptions
         locales: string[]
     }) => React.JSX.Element
-}) {
+}): React.ReactNode {
 
     const { props } = sourceElement;
 

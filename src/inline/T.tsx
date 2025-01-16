@@ -2,7 +2,7 @@ import React, { Suspense, useEffect } from "react";
 import useDefaultLocale from "../hooks/useDefaultLocale";
 import useLocale from "../hooks/useLocale";
 import renderDefaultChildren from "../provider/rendering/renderDefaultChildren";
-import { addGTIdentifier, writeChildrenAsObjects } from "../internal";
+import { addGTIdentifier, isTranslationError, writeChildrenAsObjects } from "../internal";
 import useGTContext from "../provider/GTContext";
 import renderTranslatedChildren from "../provider/rendering/renderTranslatedChildren";
 import { useMemo } from "react";
@@ -10,7 +10,7 @@ import renderVariable from "../provider/rendering/renderVariable";
 import { createClientSideTWithoutIdError } from "../errors/createErrors";
 import { hashJsxChildren } from "generaltranslation/id";
 import renderSkeleton from "../provider/rendering/renderSkeleton";
-import { requiresTranslation } from "generaltranslation";
+import { TranslatedChildren, TranslatedContent } from "../types/types";
 
 /**
  * Translation component that handles rendering translated content, including plural forms.
@@ -59,7 +59,13 @@ function T({
 
   const { variables, variablesOptions } = props;
 
-  const { translations, translationRequired, regionalTranslationRequired, translateChildren, renderSettings } = useGTContext(
+  const {
+    translations,
+    translationRequired,
+    regionalTranslationRequired,
+    translateChildren,
+    renderSettings
+  } = useGTContext(
       `<T id="${id}"> used on the client-side outside of <GTProvider>`
   );
 
@@ -67,7 +73,8 @@ function T({
   const defaultLocale = useDefaultLocale();
   const taggedChildren = useMemo(() => addGTIdentifier(children), [children])
 
-  // Do translation
+  // ----- FETCH TRANSLATION ----- //
+
   const context = props.context;
   const [childrenAsObjects, hash] = useMemo(() => {
     if (translationRequired) {
@@ -85,22 +92,24 @@ function T({
 
 
   const translation = translations?.[id];
+  const translationEntry = !isTranslationError(translation) && translation?.[hash];
   useEffect(() => {
     if (!translationRequired) return;
-    if (!translation || (!translation[hash] && !translation.error)) {
+    if (!translation || !translationEntry) {
       translateChildren({
-          source: childrenAsObjects,
-          targetLocale: locale,
-          metadata: {
-              id, hash
-          }
+        source: childrenAsObjects,
+        targetLocale: locale,
+        metadata: {
+            id, hash
+        }
       });
     }
-  }, [translation, translation?.[hash], translationRequired]);
+  }, [translation, translationEntry, translationRequired]);
 
+  // ----- RENDER METHODS ----- // 
 
   // for default/fallback rendering
-  function renderDefault() {
+  const renderDefaultLocale = () => {
     return renderDefaultChildren({
         children: taggedChildren,
         variables,
@@ -110,57 +119,64 @@ function T({
     }) as React.JSX.Element;
   }
 
-    function renderLoadingSkeleton() {
-        return renderSkeleton({
-            children: taggedChildren,
-            variables,
-            defaultLocale,
-            renderVariable
-        });
+  const renderLoadingSkeleton = () => {
+      return renderSkeleton({
+          children: taggedChildren,
+          variables,
+          defaultLocale,
+          renderVariable
+      });
+  }
+
+  const renderLoadingDefault = () => {
+    if (regionalTranslationRequired) {
+        return renderDefaultLocale();
     }
+    return renderLoadingSkeleton();
+  }
 
+  const renderTranslation = (target: TranslatedChildren) => {
+    return renderTranslatedChildren({
+      source: taggedChildren,
+      target,
+      variables,
+      variablesOptions,
+      locales: [locale, defaultLocale],
+      renderVariable
+    }) as React.JSX.Element
+  }
 
+  // ----- RENDER BEHAVIOR ----- //
+
+  // fallback to default locale if no tx required
   if (!translationRequired) {
-      return renderDefault();
+      return renderDefaultLocale();
   }
 
   // handle translation error
-  if (translation?.error) {
-    return renderDefault();
+  if (isTranslationError(translation)) {
+    return renderDefaultLocale();
   }
-  // handle no translation/waiting for translation
-  if (!translation?.[hash]) {
-      let loadingFallback; // Blank screen
-
-      if (renderSettings.method === "skeleton") {
-          loadingFallback = renderLoadingSkeleton();
-      } else if (renderSettings.method === "replace") {
-          loadingFallback = renderDefault();
-      } else if (renderSettings.method === "default") {
-          if (regionalTranslationRequired) {
-              loadingFallback = renderDefault();
-          } else {
-              loadingFallback = renderLoadingSkeleton();
-          }
-      } else if (renderSettings.method === 'hang') {
-          loadingFallback = undefined;
-      } else if (renderSettings.method === 'subtle') {
-          loadingFallback = renderDefault();
-      }
-      // The suspense exists here for hydration reasons
-      return <Suspense fallback={loadingFallback}>{loadingFallback}</Suspense>;
+  // loading behavior
+  if (!translationEntry) {
+    let loadingFallback;
+    if (renderSettings.method === "skeleton") {
+        loadingFallback = renderLoadingSkeleton();
+    } else if (renderSettings.method === "replace") {
+        loadingFallback = renderDefaultLocale();
+    } else if (renderSettings.method === 'hang') {
+        loadingFallback = undefined; // Blank screen
+    } else if (renderSettings.method === 'subtle') {
+        loadingFallback = renderDefaultLocale(); // TODO: implement subtle behavior for client-side rendering
+    } else { // default behavior
+      loadingFallback = renderLoadingDefault();
     }
+    // The suspense exists here for hydration reasons
+    return <Suspense fallback={loadingFallback}>{loadingFallback}</Suspense>;
+  }
 
-  return (
-      renderTranslatedChildren({
-          source: taggedChildren,
-          target: translation[hash],
-          variables,
-          variablesOptions,
-          locales: [locale, defaultLocale],
-          renderVariable
-      }) as React.JSX.Element
-  );
+  // render translated content
+  return renderTranslation(translationEntry as TranslatedChildren);
 
 }
 

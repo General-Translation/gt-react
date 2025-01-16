@@ -4,5 +4,5 @@ export default function renderVariable({ variableType, variableName, variableVal
     variableValue: any;
     variableOptions: Intl.NumberFormatOptions | Intl.DateTimeFormatOptions;
     locales: string[];
-}): import("react/jsx-runtime").JSX.Element;
+}): React.JSX.Element;
 //# sourceMappingURL=renderVariable.d.ts.map

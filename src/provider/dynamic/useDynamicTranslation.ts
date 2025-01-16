@@ -15,15 +15,16 @@ export default function useDynamicTranslation({
     runtimeUrl?: string,
     setTranslations: React.Dispatch<React.SetStateAction<any>>
     [key: string]: any
-}) {
+}): {
+    translationEnabled: boolean
+    translateContent: (params: { source: any, targetLocale: string, metadata: { hash: string } & Record<string, any> }) => void,
+    translateChildren: (params: { source: any, targetLocale: string, metadata: { hash: string } & Record<string, any> }) => void,
+} {
 
     metadata = { ...metadata, projectId, sourceLocale: defaultLocale };
 
-    const translationEnabled = (
-        runtimeUrl &&
-        projectId
-    );
-    if (!translationEnabled) return { translationEnabled };
+    const translationEnabled = !!(runtimeUrl && projectId);
+    if (!translationEnabled) return { translationEnabled, translateContent: () => {}, translateChildren: () => {} };
 
     // Queue to store requested keys between renders.
     const requestQueueRef = useRef<Map<string, any>>(new Map());
@@ -85,7 +86,10 @@ export default function useDynamicTranslation({
                                 const { translation, reference: { id, key } } = result;
                                 merged[id] = { [key]: translation };
                             } else if ('error' in result && result.error && (result as any).code) {
-                                merged[request?.data?.metadata?.id || request?.data?.metadata?.hash] = result;
+                                merged[request?.data?.metadata?.id || request?.data?.metadata?.hash] = {
+                                    error: result.error || "An error occurred.",
+                                    code: (result as any).code || 500
+                                };
                                 console.error(`Translation failed${result?.reference?.id ? ` for id: ${result.reference.id}` : '' }`, result);
                             } else {
                                 // id defaults to hash if none provided

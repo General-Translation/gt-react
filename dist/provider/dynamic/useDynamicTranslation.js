@@ -62,10 +62,9 @@ export default function useDynamicTranslation(_a) {
     var _this = this;
     var targetLocale = _a.targetLocale, projectId = _a.projectId, devApiKey = _a.devApiKey, runtimeUrl = _a.runtimeUrl, defaultLocale = _a.defaultLocale, setTranslations = _a.setTranslations, metadata = __rest(_a, ["targetLocale", "projectId", "devApiKey", "runtimeUrl", "defaultLocale", "setTranslations"]);
     metadata = __assign(__assign({}, metadata), { projectId: projectId, sourceLocale: defaultLocale });
-    var translationEnabled = (runtimeUrl &&
-        projectId);
+    var translationEnabled = !!(runtimeUrl && projectId);
     if (!translationEnabled)
-        return { translationEnabled: translationEnabled };
+        return { translationEnabled: translationEnabled, translateContent: function () { }, translateChildren: function () { } };
     // Queue to store requested keys between renders.
     var requestQueueRef = useRef(new Map());
     // Trigger a fetch when keys have been added.
@@ -130,7 +129,10 @@ export default function useDynamicTranslation(_a) {
                                         merged[id] = (_a = {}, _a[key] = translation, _a);
                                     }
                                     else if ('error' in result && result.error && result.code) {
-                                        merged[((_c = (_b = request === null || request === void 0 ? void 0 : request.data) === null || _b === void 0 ? void 0 : _b.metadata) === null || _c === void 0 ? void 0 : _c.id) || ((_e = (_d = request === null || request === void 0 ? void 0 : request.data) === null || _d === void 0 ? void 0 : _d.metadata) === null || _e === void 0 ? void 0 : _e.hash)] = result;
+                                        merged[((_c = (_b = request === null || request === void 0 ? void 0 : request.data) === null || _b === void 0 ? void 0 : _b.metadata) === null || _c === void 0 ? void 0 : _c.id) || ((_e = (_d = request === null || request === void 0 ? void 0 : request.data) === null || _d === void 0 ? void 0 : _d.metadata) === null || _e === void 0 ? void 0 : _e.hash)] = {
+                                            error: result.error || "An error occurred.",
+                                            code: result.code || 500
+                                        };
                                         console.error("Translation failed".concat(((_f = result === null || result === void 0 ? void 0 : result.reference) === null || _f === void 0 ? void 0 : _f.id) ? " for id: ".concat(result.reference.id) : ''), result);
                                     }
                                     else {

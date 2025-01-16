@@ -1,7 +1,4 @@
-type GTContextType = {
-    [key: string]: any;
-};
+import { GTContextType } from "../types/types";
 export declare const GTContext: import("react").Context<GTContextType | undefined>;
 export default function useGTContext(errorString?: string): GTContextType;
-export {};
 //# sourceMappingURL=GTContext.d.ts.map

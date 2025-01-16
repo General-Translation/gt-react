@@ -12,7 +12,7 @@ import React from "react";
  * const t = useGT();
  * console.log(t('hello')); // Translates item 'hello'
  */
-export declare function useGT(id?: string): (id: string, options?: Record<string, any>) => React.JSX.Element | string | undefined;
+export declare function useGT(id?: string): (id: string, options?: Record<string, any>) => React.ReactNode;
 /**
  * `useElement()` hook which gets the translation function `t()` provided by `<GTProvider>`.
  *

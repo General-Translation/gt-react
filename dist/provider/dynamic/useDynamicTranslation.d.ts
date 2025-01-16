@@ -7,10 +7,7 @@ export default function useDynamicTranslation({ targetLocale, projectId, devApiK
     setTranslations: React.Dispatch<React.SetStateAction<any>>;
     [key: string]: any;
 }): {
-    translationEnabled: string | undefined;
-    translateContent?: undefined;
-    translateChildren?: undefined;
-} | {
+    translationEnabled: boolean;
     translateContent: (params: {
         source: any;
         targetLocale: string;
@@ -25,6 +22,5 @@ export default function useDynamicTranslation({ targetLocale, projectId, devApiK
             hash: string;
         } & Record<string, any>;
     }) => void;
-    translationEnabled: string;
 };
 //# sourceMappingURL=useDynamicTranslation.d.ts.map

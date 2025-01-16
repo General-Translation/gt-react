@@ -58,12 +58,12 @@ var __rest = (this && this.__rest) || function (s, e) {
 };
 import { jsx as _jsx } from "react/jsx-runtime";
 import { useMemo } from "react";
-import { isSameDialect, isSameLanguage, renderContentToString, requiresTranslation } from "generaltranslation";
+import { renderContentToString, requiresRegionalTranslation, requiresTranslation } from "generaltranslation";
 import { useCallback, useEffect, useState } from "react";
 import useBrowserLocale from "../hooks/useBrowserLocale";
 import { GTContext } from "./GTContext";
 import getDictionaryEntry from "./helpers/getDictionaryEntry";
-import { addGTIdentifier, writeChildrenAsObjects } from "../internal";
+import { addGTIdentifier, isTranslationError, writeChildrenAsObjects } from "../internal";
 import extractEntryMetadata from "./helpers/extractEntryMetadata";
 import renderDefaultChildren from "./rendering/renderDefaultChildren";
 import renderTranslatedChildren from "./rendering/renderTranslatedChildren";
@@ -97,13 +97,14 @@ export default function GTProvider(_a) {
     ;
     // get tx required info
     var regionalTranslationRequired = useMemo(function () {
-        return isSameLanguage(defaultLocale, locale) && !isSameDialect(defaultLocale, locale);
-    }, [defaultLocale, locale]);
+        return requiresRegionalTranslation(defaultLocale, locale, locales);
+    }, [defaultLocale, locale, locales]);
     var translationRequired = useMemo(function () {
         return requiresTranslation(defaultLocale, locale, locales) || regionalTranslationRequired;
     }, [defaultLocale, locale, locales, regionalTranslationRequired]);
     // tracking translations
     var _j = useState(cacheUrl ? null : {}), translations = _j[0], setTranslations = _j[1];
+    // fetch from cache
     useEffect(function () {
         if (!translations) {
             if (!translationRequired) {
@@ -126,7 +127,7 @@ export default function GTProvider(_a) {
                                 return [3 /*break*/, 4];
                             case 3:
                                 error_1 = _a.sent();
-                                setTranslations({});
+                                setTranslations({}); // not classified as a tx error, bc we can still fetch from API
                                 return [3 /*break*/, 4];
                             case 4: return [2 /*return*/];
                         }
@@ -135,7 +136,7 @@ export default function GTProvider(_a) {
             }
         }
     }, [translationRequired, cacheUrl, projectId, locale]);
-    // central translate function
+    // translate function for dictionaries
     var translate = useCallback(function (id, options) {
         var _a;
         if (options === void 0) { options = {}; }
@@ -152,104 +153,89 @@ export default function GTProvider(_a) {
         var variables = options;
         var variablesOptions = metadata === null || metadata === void 0 ? void 0 : metadata.variablesOptions;
         var taggedEntry = addGTIdentifier(entry, id);
-        // If no translations are required
-        if (!translationRequired) {
-            if (typeof taggedEntry === "string") {
+        // ----- RENDER METHODS ----- //
+        // render default locale
+        var renderDefaultLocale = function () {
+            if (typeof taggedEntry === 'string')
                 return renderContentToString(taggedEntry, defaultLocale, variables, variablesOptions);
-            }
             return renderDefaultChildren({
                 children: taggedEntry,
                 variables: variables,
                 variablesOptions: variablesOptions,
                 defaultLocale: defaultLocale,
-                renderVariable: renderVariable,
+                renderVariable: renderVariable
             });
+        };
+        // render skeleton
+        var renderLoadingSkeleton = function () {
+            if (typeof taggedEntry === 'string')
+                return '';
+            return renderSkeleton({
+                children: taggedEntry,
+                variables: variables,
+                defaultLocale: defaultLocale,
+                renderVariable: renderVariable
+            });
+        };
+        // hang behavior
+        var renderLoadingHang = function () {
+            if (typeof taggedEntry === 'string')
+                return '';
+            return undefined;
+        };
+        // default behavior (skeleton except when language is same ie en-US -> en-GB)
+        var renderDefault = function () {
+            if (regionalTranslationRequired)
+                return renderDefaultLocale();
+            return renderLoadingSkeleton();
+        };
+        // render translated content
+        var renderTranslation = function (target) {
+            if (typeof taggedEntry === 'string')
+                return renderContentToString(target, [locale, defaultLocale], variables, variablesOptions);
+            return renderTranslatedChildren({
+                source: taggedEntry,
+                target: target,
+                variables: variables,
+                variablesOptions: variablesOptions,
+                locales: [locale, defaultLocale],
+                renderVariable: renderVariable
+            });
+        };
+        // ----- RENDER LOGIC ----- // 
+        // If no translations are required
+        if (!translationRequired) {
+            renderDefaultLocale();
         }
-        // If a translation is required
-        if (translations) {
-            // render default locale
-            var renderDefault = function () {
-                if (typeof taggedEntry === 'string') {
-                    return renderContentToString(taggedEntry, defaultLocale, variables, variablesOptions);
-                }
-                return renderDefaultChildren({
-                    children: taggedEntry,
-                    variables: variables,
-                    variablesOptions: variablesOptions,
-                    defaultLocale: defaultLocale,
-                    renderVariable: renderVariable
-                });
-            };
-            // render skeleton
-            var renderLoadingSkeleton = function () {
-                if (typeof taggedEntry === 'string') {
-                    return '';
-                }
-                return renderSkeleton({
-                    children: taggedEntry,
-                    variables: variables,
-                    defaultLocale: defaultLocale,
-                    renderVariable: renderVariable
-                });
-            };
-            // If no translations are required
-            if (!translationRequired) {
-                return renderDefault();
-            }
-            // If a translation is required
-            if (translations) {
-                // get hash
-                var context = metadata === null || metadata === void 0 ? void 0 : metadata.context;
-                var childrenAsObjects = writeChildrenAsObjects(taggedEntry);
-                var hash = hashJsxChildren(context
-                    ? { source: childrenAsObjects, context: context }
-                    : { source: childrenAsObjects });
-                // loading behavior
-                if (!translations[id][hash]) {
-                    if (renderSettings.method === 'skeleton') {
-                        return renderLoadingSkeleton();
-                    }
-                    else if (renderSettings.method === 'replace') {
-                        return renderDefault();
-                    }
-                    else if (renderSettings.method === 'default') {
-                        if (regionalTranslationRequired) {
-                            return renderDefault();
-                        }
-                        else {
-                            return renderLoadingSkeleton();
-                        }
-                    }
-                    if (renderSettings.method === 'hang') {
-                        // TODO: Remove this error
-                        throw new Error("gt-react GTProvider Provider JSX/STRING hang should not be invoked while waiting for translation");
-                    }
-                    if (renderSettings.method === 'subtle') {
-                        // TODO: Remove this error
-                        throw new Error("gt-react GTProvider Provider JSX/STRING subtle should not be invoked while waiting for translation");
-                    }
-                    // TODO: Remove this error
-                    throw new Error("gt-react GTProvider Provider JSX/STRING should not be invoked while waiting for translation");
-                }
-                // error behavior -> fallback to default language
-                if ((_a = translations === null || translations === void 0 ? void 0 : translations[id]) === null || _a === void 0 ? void 0 : _a.error) {
-                    return renderDefault();
-                }
-                // render translated content
-                var target = translations[id][hash];
-                if (typeof taggedEntry === 'string') {
-                    return renderContentToString(target, [locale, defaultLocale], variables, variablesOptions);
-                }
-                return renderTranslatedChildren({
-                    source: taggedEntry,
-                    target: target,
-                    variables: variables,
-                    variablesOptions: variablesOptions,
-                    locales: [locale, defaultLocale],
-                    renderVariable: renderVariable
-                });
-            }
+        // get hash
+        var context = metadata === null || metadata === void 0 ? void 0 : metadata.context;
+        var childrenAsObjects = writeChildrenAsObjects(taggedEntry);
+        var hash = hashJsxChildren(context
+            ? { source: childrenAsObjects, context: context }
+            : { source: childrenAsObjects });
+        // error behavior -> fallback to default language
+        if (isTranslationError(translations === null || translations === void 0 ? void 0 : translations[id])) {
+            return renderDefaultLocale();
         }
+        // loading
+        if (!translations || !((_a = translations[id]) === null || _a === void 0 ? void 0 : _a[hash])) {
+            if (renderSettings.method === 'skeleton') {
+                return renderLoadingSkeleton();
+            }
+            if (renderSettings.method === 'replace') {
+                return renderDefaultLocale(); // replace
+            }
+            if (renderSettings.method === 'hang') {
+                return renderLoadingHang();
+            }
+            if (renderSettings.method === 'subtle') {
+                return renderDefaultLocale(); // TODO: implement subtle behavior for client-side rendering
+            }
+            return renderDefault(); // default rendering behavior (not to be confused with default locale)
+        }
+        // render translated content
+        var target = translations[id][hash];
+        return renderTranslation(target);
     }, [dictionary, translations, translationRequired, defaultLocale]);
     var _k = useDynamicTranslation(__assign({ targetLocale: locale, projectId: projectId, defaultLocale: defaultLocale, devApiKey: devApiKey, runtimeUrl: runtimeUrl, setTranslations: setTranslations }, metadata)), translateChildren = _k.translateChildren, translateContent = _k.translateContent, translationEnabled = _k.translationEnabled;
     return (_jsx(GTContext.Provider, { value: {

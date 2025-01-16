@@ -15,7 +15,7 @@ import React from "react";
  */
 export default function GTProvider({ children, projectId, dictionary, locales, defaultLocale, locale, cacheUrl, runtimeUrl, renderSettings, devApiKey, ...metadata }: {
     children?: any;
-    projectId?: string;
+    projectId: string;
     dictionary?: Dictionary;
     locales?: string[];
     defaultLocale?: string;

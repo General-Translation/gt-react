@@ -29,7 +29,7 @@ export function useGT(id) {
     * @param {string} [id=''] - The ID of the item in the dictionary to translate.
     * @param {Record<string, any>} [options={}] - Variables or parameters (e.g., `n`) passed into the translation for dynamic content.
     *
-    * @returns {string | React.JSX.Element}
+    * @returns {React.ReactNode}
     */
     function t(id, options) {
         if (id === void 0) { id = ''; }

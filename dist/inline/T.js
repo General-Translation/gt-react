@@ -14,7 +14,7 @@ import { Suspense, useEffect } from "react";
 import useDefaultLocale from "../hooks/useDefaultLocale";
 import useLocale from "../hooks/useLocale";
 import renderDefaultChildren from "../provider/rendering/renderDefaultChildren";
-import { addGTIdentifier, writeChildrenAsObjects } from "../internal";
+import { addGTIdentifier, isTranslationError, writeChildrenAsObjects } from "../internal";
 import useGTContext from "../provider/GTContext";
 import renderTranslatedChildren from "../provider/rendering/renderTranslatedChildren";
 import { useMemo } from "react";
@@ -64,7 +64,7 @@ function T(_a) {
     var locale = useLocale();
     var defaultLocale = useDefaultLocale();
     var taggedChildren = useMemo(function () { return addGTIdentifier(children); }, [children]);
-    // Do translation
+    // ----- FETCH TRANSLATION ----- //
     var context = props.context;
     var _c = useMemo(function () {
         if (translationRequired) {
@@ -79,10 +79,11 @@ function T(_a) {
         }
     }, [context, taggedChildren, translationRequired]), childrenAsObjects = _c[0], hash = _c[1];
     var translation = translations === null || translations === void 0 ? void 0 : translations[id];
+    var translationEntry = !isTranslationError(translation) && (translation === null || translation === void 0 ? void 0 : translation[hash]);
     useEffect(function () {
         if (!translationRequired)
             return;
-        if (!translation || (!translation[hash] && !translation.error)) {
+        if (!translation || !translationEntry) {
             translateChildren({
                 source: childrenAsObjects,
                 targetLocale: locale,
@@ -92,9 +93,10 @@ function T(_a) {
                 }
             });
         }
-    }, [translation, translation === null || translation === void 0 ? void 0 : translation[hash], translationRequired]);
+    }, [translation, translationEntry, translationRequired]);
+    // ----- RENDER METHODS ----- // 
     // for default/fallback rendering
-    function renderDefault() {
+    var renderDefaultLocale = function () {
         return renderDefaultChildren({
             children: taggedChildren,
             variables: variables,
@@ -102,57 +104,63 @@ function T(_a) {
             defaultLocale: defaultLocale,
             renderVariable: renderVariable
         });
-    }
-    function renderLoadingSkeleton() {
+    };
+    var renderLoadingSkeleton = function () {
         return renderSkeleton({
             children: taggedChildren,
             variables: variables,
             defaultLocale: defaultLocale,
             renderVariable: renderVariable
         });
-    }
+    };
+    var renderLoadingDefault = function () {
+        if (regionalTranslationRequired) {
+            return renderDefaultLocale();
+        }
+        return renderLoadingSkeleton();
+    };
+    var renderTranslation = function (target) {
+        return renderTranslatedChildren({
+            source: taggedChildren,
+            target: target,
+            variables: variables,
+            variablesOptions: variablesOptions,
+            locales: [locale, defaultLocale],
+            renderVariable: renderVariable
+        });
+    };
+    // ----- RENDER BEHAVIOR ----- //
+    // fallback to default locale if no tx required
     if (!translationRequired) {
-        return renderDefault();
+        return renderDefaultLocale();
     }
     // handle translation error
-    if (translation === null || translation === void 0 ? void 0 : translation.error) {
-        return renderDefault();
+    if (isTranslationError(translation)) {
+        return renderDefaultLocale();
     }
-    // handle no translation/waiting for translation
-    if (!(translation === null || translation === void 0 ? void 0 : translation[hash])) {
-        var loadingFallback = // Blank screen
-         void 0; // Blank screen
+    // loading behavior
+    if (!translationEntry) {
+        var loadingFallback = void 0;
         if (renderSettings.method === "skeleton") {
             loadingFallback = renderLoadingSkeleton();
         }
         else if (renderSettings.method === "replace") {
-            loadingFallback = renderDefault();
-        }
-        else if (renderSettings.method === "default") {
-            if (regionalTranslationRequired) {
-                loadingFallback = renderDefault();
-            }
-            else {
-                loadingFallback = renderLoadingSkeleton();
-            }
+            loadingFallback = renderDefaultLocale();
         }
         else if (renderSettings.method === 'hang') {
-            loadingFallback = undefined;
+            loadingFallback = undefined; // Blank screen
         }
         else if (renderSettings.method === 'subtle') {
-            loadingFallback = renderDefault();
+            loadingFallback = renderDefaultLocale(); // TODO: implement subtle behavior for client-side rendering
+        }
+        else { // default behavior
+            loadingFallback = renderLoadingDefault();
         }
         // The suspense exists here for hydration reasons
         return _jsx(Suspense, { fallback: loadingFallback, children: loadingFallback });
     }
-    return renderTranslatedChildren({
-        source: taggedChildren,
-        target: translation[hash],
-        variables: variables,
-        variablesOptions: variablesOptions,
-        locales: [locale, defaultLocale],
-        renderVariable: renderVariable
-    });
+    // render translated content
+    return renderTranslation(translationEntry);
 }
 T.gtTransformation = "translate-client";
 export default T;
