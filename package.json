@@ -1,8 +1,9 @@
 {
   "name": "gt-react",
-  "version": "8.2.2",
+  "version": "8.2.3",
   "description": "A React library for automatic internationalization.",
-  "main": "dist/index.js",
+  "main": "./dist/cjs/index.js",
+  "module": "./dist/esm/index.js",
   "types": "dist/index.d.ts",
   "peerDependencies": {
     "react": ">=16.8.0 <20.0.0",
@@ -11,7 +12,9 @@
   "scripts": {
     "patch": "npm version patch",
     "transpile": "tsc",
-    "build": "npm run transpile",
+    "build": "npm run build:esm && npm run build:cjs",
+    "build:esm": "tsc -p tsconfig.esm.json",
+    "build:cjs": "tsc -p tsconfig.cjs.json",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -32,16 +35,19 @@
   },
   "exports": {
     ".": {
-      "types": "./dist/index.d.ts",
-      "default": "./dist/index.js"
+      "import": "./dist/esm/index.js",
+      "require": "./dist/cjs/index.js",
+      "types": "./dist/index.d.ts"
     },
     "./internal": {
-      "types": "./dist/internal.d.ts",
-      "default": "./dist/internal.js"
+      "import": "./dist/esm/internal.js",
+      "require": "./dist/cjs/internal.js",
+      "types": "./dist/internal.d.ts"
     },
     "./client": {
-      "types": "./dist/client.d.ts",
-      "default": "./dist/client.js"
+      "import": "./dist/esm/client.js",
+      "require": "./dist/cjs/client.js",
+      "types": "./dist/client.d.ts"
     }
   },
   "typesVersions": {
