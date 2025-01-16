@@ -17,8 +17,8 @@ export default function useDynamicTranslation({
     [key: string]: any
 }): {
     translationEnabled: boolean
-    translateContent: (params: { source: any, targetLocale: string, metadata: { hash: string } & Record<string, any> }) => void,
-    translateChildren: (params: { source: any, targetLocale: string, metadata: { hash: string } & Record<string, any> }) => void,
+    translateContent: (params: { source: any, targetLocale: string, metadata: { hash: string, context?: string } & Record<string, any> }) => void,
+    translateChildren: (params: { source: any, targetLocale: string, metadata: { hash: string, context?: string } & Record<string, any> }) => void,
 } {
 
     metadata = { ...metadata, projectId, sourceLocale: defaultLocale };
@@ -32,7 +32,7 @@ export default function useDynamicTranslation({
     const [fetchTrigger, setFetchTrigger] = useState(0);
 
     const translateContent = useCallback((params: {
-        source: any, targetLocale: string, metadata: { hash: string } & Record<string, any>
+        source: any, targetLocale: string, metadata: { hash: string, context?: string } & Record<string, any>
     }) => {
         const id = params.metadata.id ? `${params.metadata.id}-` : '';
         const key = `${id}${params.metadata.hash}-${params.targetLocale}`;
@@ -45,7 +45,7 @@ export default function useDynamicTranslation({
      * Keys are batched and fetched in the next effect cycle.
      */
     const translateChildren = useCallback((params: {
-        source: any, targetLocale: string, metadata: { hash: string } & Record<string, any>
+        source: any, targetLocale: string, metadata: { hash: string, context?: string } & Record<string, any>
     }) => {
         const id = params.metadata.id ? `${params.metadata.id}-` : '';
         const key = `${id}${params.metadata.hash}-${params.targetLocale}`;
