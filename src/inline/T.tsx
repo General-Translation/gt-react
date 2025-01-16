@@ -101,7 +101,7 @@ function T({
         source: childrenAsObjects,
         targetLocale: locale,
         metadata: {
-            id, hash,
+            id, hash, context
         }
       });
     }

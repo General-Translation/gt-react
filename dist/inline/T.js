@@ -96,6 +96,7 @@ function T(_a) {
                 metadata: {
                     id: id,
                     hash: hash,
+                    context: context
                 }
             });
         }
