@@ -1,4 +1,3 @@
-"use strict";
 var __assign = (this && this.__assign) || function () {
     __assign = Object.assign || function(t) {
         for (var s, i = 1, n = arguments.length; i < n; i++) {
@@ -10,13 +9,8 @@ var __assign = (this && this.__assign) || function () {
     };
     return __assign.apply(this, arguments);
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.default = writeChildrenAsObjects;
-var react_1 = __importDefault(require("react"));
-var getVariableName_1 = __importDefault(require("../variables/getVariableName"));
+import React from 'react';
+import getVariableName from '../variables/getVariableName';
 /**
  * Gets the tag name of a React element.
  * @param {ReactElement} child - The React element.
@@ -53,7 +47,7 @@ var handleSingleChildElement = function (child) {
         var transformation = generaltranslation.transformation;
         if (transformation === "variable") {
             var variableType = generaltranslation.variableType || "variable";
-            var variableName = (0, getVariableName_1.default)(props, variableType);
+            var variableName = getVariableName(props, variableType);
             return {
                 variable: variableType,
                 key: variableName,
@@ -86,7 +80,7 @@ var handleSingleChildElement = function (child) {
     return objectElement;
 };
 var handleSingleChild = function (child) {
-    if (react_1.default.isValidElement(child)) {
+    if (React.isValidElement(child)) {
         return handleSingleChildElement(child);
     }
     ;
@@ -97,7 +91,7 @@ var handleSingleChild = function (child) {
  * @param {Children} children - The children to process.
  * @returns {object} The processed children as objects.
 */
-function writeChildrenAsObjects(children) {
+export default function writeChildrenAsObjects(children) {
     return Array.isArray(children) ? children.map(handleSingleChild) : handleSingleChild(children);
 }
 //# sourceMappingURL=writeChildrenAsObjects.js.map

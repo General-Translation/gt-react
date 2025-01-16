@@ -1,8 +1,4 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.isTranslationError = isTranslationError;
-exports.isTranslatedContent = isTranslatedContent;
-function isTranslationError(target) {
+export function isTranslationError(target) {
     if (typeof target !== 'object' || target === null) {
         return false;
     }
@@ -10,7 +6,7 @@ function isTranslationError(target) {
     var hasCode = 'code' in target ? typeof target.code === 'number' : true;
     return hasError && hasCode;
 }
-function isTranslatedContent(target) {
+export function isTranslatedContent(target) {
     if (typeof target === 'string') {
         return true;
     }

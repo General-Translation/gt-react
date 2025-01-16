@@ -87,7 +87,7 @@ export default function useDynamicTranslation({
                                 if (id !== request?.metadata?.id || key !== request?.metadata?.hash) {
                                     console.warn(`Mismatching ids or hashes! Expected id: ${request?.metadata?.id}, hash: ${request?.metadata?.hash}, but got id: ${id}, hash: ${key}. We will still render your translation, but make sure to update to the newest version: www.generaltranslation.com/docs`);
                                 }
-                                merged[id] = { [key]: translation };
+                                merged[id] = { [request?.metadata?.hash || key]: translation };
                             } else if ('error' in result && result.error && (result as any).code) {
                                 merged[request?.data?.metadata?.id || request?.data?.metadata?.hash] = {
                                     error: result.error || "An error occurred.",
