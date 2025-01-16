@@ -22,7 +22,7 @@ export default function renderDefaultChildren({
         variableOptions: Intl.NumberFormatOptions | Intl.DateTimeFormatOptions
         locales: string[]
     }) => React.JSX.Element
-}) {
+}): React.ReactNode {
     const handleSingleChildElement = (child: ReactElement<any>) => {
         const generaltranslation = getGTProp(child)
         if (generaltranslation?.transformation === "variable") {

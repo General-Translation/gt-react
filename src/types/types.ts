@@ -35,14 +35,39 @@ export type TranslatedElement = {
         children?: TranslatedChildren
     }
 }
+
 export type TranslatedChild = TranslatedElement | string | Variable;
 export type TranslatedChildren = TranslatedChild | TranslatedChild[];
+export type TranslatedContent = string | (string | { key: string; variable?: string })[];
+export type TranslationError = {
+    error: string,
+    code?: number
+};
+
 
 export type Content = string | (Variable | string)[]
 export type TranslationsObject = {
-    [id: string]: {
-        [hash: string]: TranslatedChildren
-    }
-}
+    [id: string]:
+        { [hash: string]: TranslatedChildren | TranslatedContent }
+        | TranslationError
+};
 
 export type RenderMethod = 'skeleton' | 'replace' | 'hang' | 'subtle' | 'default';
+
+
+export type GTContextType = {
+    translate: (id: string, options?: Record<string, any>) => React.ReactNode,
+    translateContent: (params: { source: any, targetLocale: string, metadata: { hash: string } & Record<string, any> }) => void,
+    translateChildren: (params: { source: any, targetLocale: string, metadata: { hash: string } & Record<string, any> }) => void,
+    locale: string,
+    defaultLocale: string, 
+    translations: TranslationsObject | null,
+    translationRequired: boolean,
+    regionalTranslationRequired: boolean,
+    projectId?: string,
+    translationEnabled?: boolean,
+    renderSettings: {
+        method: RenderMethod,
+        timeout?: number | null
+    }
+}

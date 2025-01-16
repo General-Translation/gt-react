@@ -62,10 +62,9 @@ export default function useDynamicTranslation(_a) {
     var _this = this;
     var targetLocale = _a.targetLocale, projectId = _a.projectId, devApiKey = _a.devApiKey, runtimeUrl = _a.runtimeUrl, defaultLocale = _a.defaultLocale, setTranslations = _a.setTranslations, metadata = __rest(_a, ["targetLocale", "projectId", "devApiKey", "runtimeUrl", "defaultLocale", "setTranslations"]);
     metadata = __assign(__assign({}, metadata), { projectId: projectId, sourceLocale: defaultLocale });
-    var translationEnabled = (runtimeUrl &&
-        projectId);
+    var translationEnabled = !!(runtimeUrl && projectId);
     if (!translationEnabled)
-        return { translationEnabled: translationEnabled };
+        return { translationEnabled: translationEnabled, translateContent: function () { }, translateChildren: function () { } };
     // Queue to store requested keys between renders.
     var requestQueueRef = useRef(new Map());
     // Trigger a fetch when keys have been added.
@@ -123,19 +122,25 @@ export default function useDynamicTranslation(_a) {
                                 var merged = __assign({}, (prev || {}));
                                 results_1.forEach(function (result, index) {
                                     var _a;
-                                    var _b, _c, _d, _e, _f, _g, _h, _j, _k;
+                                    var _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p;
                                     var request = requests[index];
                                     if ('translation' in result && result.translation && result.reference) {
-                                        var translation = result.translation, _l = result.reference, id = _l.id, key = _l.key;
+                                        var translation = result.translation, _q = result.reference, id = _q.id, key = _q.key;
+                                        if (id !== ((_b = request === null || request === void 0 ? void 0 : request.metadata) === null || _b === void 0 ? void 0 : _b.id) || key !== ((_c = request === null || request === void 0 ? void 0 : request.metadata) === null || _c === void 0 ? void 0 : _c.hash)) {
+                                            console.warn("Mismatching ids or hashes! Expected id: ".concat((_d = request === null || request === void 0 ? void 0 : request.metadata) === null || _d === void 0 ? void 0 : _d.id, ", hash: ").concat((_e = request === null || request === void 0 ? void 0 : request.metadata) === null || _e === void 0 ? void 0 : _e.hash, ", but got id: ").concat(id, ", hash: ").concat(key, ". We will still render your translation, but make sure to update to the newest version: www.generaltranslation.com/docs"));
+                                        }
                                         merged[id] = (_a = {}, _a[key] = translation, _a);
                                     }
                                     else if ('error' in result && result.error && result.code) {
-                                        merged[((_c = (_b = request === null || request === void 0 ? void 0 : request.data) === null || _b === void 0 ? void 0 : _b.metadata) === null || _c === void 0 ? void 0 : _c.id) || ((_e = (_d = request === null || request === void 0 ? void 0 : request.data) === null || _d === void 0 ? void 0 : _d.metadata) === null || _e === void 0 ? void 0 : _e.hash)] = result;
-                                        console.error("Translation failed".concat(((_f = result === null || result === void 0 ? void 0 : result.reference) === null || _f === void 0 ? void 0 : _f.id) ? " for id: ".concat(result.reference.id) : ''), result);
+                                        merged[((_g = (_f = request === null || request === void 0 ? void 0 : request.data) === null || _f === void 0 ? void 0 : _f.metadata) === null || _g === void 0 ? void 0 : _g.id) || ((_j = (_h = request === null || request === void 0 ? void 0 : request.data) === null || _h === void 0 ? void 0 : _h.metadata) === null || _j === void 0 ? void 0 : _j.hash)] = {
+                                            error: result.error || "An error occurred.",
+                                            code: result.code || 500
+                                        };
+                                        console.error("Translation failed".concat(((_k = result === null || result === void 0 ? void 0 : result.reference) === null || _k === void 0 ? void 0 : _k.id) ? " for id: ".concat(result.reference.id) : ''), result);
                                     }
                                     else {
                                         // id defaults to hash if none provided
-                                        merged[((_h = (_g = request === null || request === void 0 ? void 0 : request.data) === null || _g === void 0 ? void 0 : _g.metadata) === null || _h === void 0 ? void 0 : _h.id) || ((_k = (_j = request === null || request === void 0 ? void 0 : request.data) === null || _j === void 0 ? void 0 : _j.metadata) === null || _k === void 0 ? void 0 : _k.hash)] = {
+                                        merged[((_m = (_l = request === null || request === void 0 ? void 0 : request.data) === null || _l === void 0 ? void 0 : _l.metadata) === null || _m === void 0 ? void 0 : _m.id) || ((_p = (_o = request === null || request === void 0 ? void 0 : request.data) === null || _o === void 0 ? void 0 : _o.metadata) === null || _p === void 0 ? void 0 : _p.hash)] = {
                                             error: "An error occurred.",
                                             code: 500
                                         };

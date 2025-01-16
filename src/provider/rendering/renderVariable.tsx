@@ -11,7 +11,7 @@ export default function renderVariable({
     variableValue: any,
     variableOptions: Intl.NumberFormatOptions | Intl.DateTimeFormatOptions,
     locales: string[]
-}) {
+}): React.JSX.Element {
     if (variableType === "number") {
         return (
             <Num 

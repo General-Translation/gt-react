@@ -11,5 +11,6 @@ import renderDefaultChildren from "./provider/rendering/renderDefaultChildren";
 import renderTranslatedChildren from "./provider/rendering/renderTranslatedChildren";
 import { defaultRenderSettings } from "./provider/rendering/defaultRenderSettings";
 import renderSkeleton from "./provider/rendering/renderSkeleton";
-export { addGTIdentifier, writeChildrenAsObjects, isVariableObject, flattenDictionary, getDictionaryEntry, getVariableProps, getPluralBranch, extractEntryMetadata, getVariableName, getFallbackVariableName, renderDefaultChildren, renderTranslatedChildren, renderSkeleton, defaultRenderSettings };
+import { isTranslationError } from "./utils/utils";
+export { addGTIdentifier, writeChildrenAsObjects, isVariableObject, flattenDictionary, getDictionaryEntry, getVariableProps, getPluralBranch, extractEntryMetadata, getVariableName, getFallbackVariableName, renderDefaultChildren, renderTranslatedChildren, renderSkeleton, defaultRenderSettings, isTranslationError };
 //# sourceMappingURL=internal.js.map
