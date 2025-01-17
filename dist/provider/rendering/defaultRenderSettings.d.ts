@@ -1,5 +1,6 @@
+import { RenderMethod } from "../../types/types";
 export declare const defaultRenderSettings: {
-    readonly method: "default";
-    readonly timeout: 8000 | null;
+    method: RenderMethod;
+    timeout?: number;
 };
 //# sourceMappingURL=defaultRenderSettings.d.ts.map

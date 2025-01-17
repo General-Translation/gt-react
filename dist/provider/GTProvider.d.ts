@@ -25,7 +25,7 @@ export default function GTProvider({ children, projectId, dictionary, locales, d
     devApiKey?: string;
     renderSettings?: {
         method: RenderMethod;
-        timeout?: number | null;
+        timeout?: number;
     };
     [key: string]: any;
 }): React.JSX.Element;
