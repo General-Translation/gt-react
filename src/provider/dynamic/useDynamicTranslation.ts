@@ -76,34 +76,46 @@ export default function useDynamicTranslation({
                 if (!response.ok) {
                     throw new Error(await response.text())
                 }
+
                 const results = await response.json() as any[];
                 if (!isCancelled) {
-                    setTranslations((prev: any) => {
-                        let merged: Record<string, any> = { ...(prev || {}) };
-                        results.forEach((result, index) => {
-                            const request = requests[index];
-                            if ('translation' in result && result.translation && result.reference) {
-                                const { translation, reference: { id, key } } = result;
-                                if (id !== request?.metadata?.id || key !== request?.metadata?.hash) {
-                                    console.warn(`Mismatching ids or hashes! Expected id: ${request?.metadata?.id}, hash: ${request?.metadata?.hash}, but got id: ${id}, hash: ${key}. We will still render your translation, but make sure to update to the newest version: www.generaltranslation.com/docs`);
-                                }
-                                merged[id] = { [request?.metadata?.hash || key]: translation };
-                            } else if ('error' in result && result.error && (result as any).code) {
-                                merged[request?.data?.metadata?.id || request?.data?.metadata?.hash] = {
-                                    error: result.error || "An error occurred.",
-                                    code: (result as any).code || 500
-                                };
-                                console.error(`Translation failed${result?.reference?.id ? ` for id: ${result.reference.id}` : '' }`, result);
-                            } else {
-                                // id defaults to hash if none provided
-                                merged[request?.data?.metadata?.id || request?.data?.metadata?.hash] = {
-                                    error: "An error occurred.",
-                                    code: 500
+                    const newTranslations: Record<string, any> = {};
+
+                    results.forEach((result, index) => {
+                        const request = requests[index];
+                        if ('translation' in result && result.translation && result.reference) { // translation success
+                            const { translation, reference: { id, key } } = result;
+                            // check for mismatching ids or hashes
+                            if (id !== request.metadata.id || key !== request.metadata.hash) {
+                                if (!request.metadata.id) {
+                                    console.warn(`Mismatching hashes! Expected hash: ${request.metadata.hash}, but got hash: ${key}. We will still render your translation, but make sure to update to the newest version: www.generaltranslation.com/docs`);
+                                } else {
+                                    console.warn(`Mismatching ids or hashes! Expected id: ${request.metadata.id}, hash: ${request.metadata.hash}, but got id: ${id}, hash: ${key}. We will still render your translation, but make sure to update to the newest version: www.generaltranslation.com/docs`);
                                 }
                             }
-                        });
-                        return merged;
+                            newTranslations[id || request.metadata.hash] = { [request.metadata.hash]: translation };
+                        } else if ('error' in result && result.error && (result as any).code) { // translation error
+                            newTranslations[request.metadata.id || request.metadata.hash] = {
+                                error: result.error || "An error occurred.",
+                                code: (result as any).code || 500
+                            };
+                            // error message
+                            if (!request.metadata.id) {
+                                console.error(`Translation failed for hash: ${request.metadata.hash} `, result);
+                            } else {
+                                console.error(`Translation failed for id: ${request.metadata.id}, hash: ${request.metadata.hash} `, result);
+                            }
+                        } else {    // unknown error
+                            // id defaults to hash if none provided
+                            newTranslations[request.metadata.id || request.metadata.hash] = {
+                                error: "An error occurred.",
+                                code: 500
+                            }
+                        }
                     });
+
+                    // update our translations
+                    setTranslations((prev: any) => {return { ...(prev || {}), ...newTranslations }});
                 }
             } catch (error) {
                 console.error(dynamicTranslationError, error);
@@ -111,14 +123,13 @@ export default function useDynamicTranslation({
                     let merged: Record<string, any> = { ...(prev || {}) };
                     requests.forEach((request) => {
                         // id defaults to hash if none provided
-                        merged[request?.metadata?.id || request?.metadata?.hash] = {
+                        merged[request.metadata.id || request.metadata.hash] = {
                             error: "An error occurred.",
                             code: 500
                         }
                     });
                     return merged;
                 });
-                
             } finally {
                 requestQueueRef.current.clear();
             }

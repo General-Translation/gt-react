@@ -47,7 +47,7 @@ export function useGT(
         const prefixedId = getId(id);
         if (translate) {
             const translation = translate(prefixedId, options);
-            if (!translation) console.warn(createNoEntryWarning(id, prefixedId));
+            if (!translation && translation !== '') console.warn(createNoEntryWarning(id, prefixedId))
             return translation;
         }
         return undefined;

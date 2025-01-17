@@ -77,7 +77,7 @@ function useGT(id) {
         var prefixedId = getId(id);
         if (translate) {
             var translation = translate(prefixedId, options);
-            if (!translation)
+            if (!translation && translation !== '')
                 console.warn((0, createErrors_1.createNoEntryWarning)(id, prefixedId));
             return translation;
         }
