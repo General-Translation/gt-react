@@ -77,7 +77,7 @@ export type GTContextType = {
     translationEnabled?: boolean;
     renderSettings: {
         method: RenderMethod;
-        timeout?: number | null;
+        timeout?: number;
     };
 };
 //# sourceMappingURL=types.d.ts.map

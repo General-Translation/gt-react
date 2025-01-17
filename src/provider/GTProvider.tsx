@@ -72,7 +72,7 @@ export default function GTProvider({
     devApiKey?: string;
     renderSettings?: {
         method: RenderMethod;
-        timeout?: number | null;
+        timeout?: number;
     };
     [key: string]: any
 }): React.JSX.Element {
