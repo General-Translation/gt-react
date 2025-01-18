@@ -49,7 +49,7 @@ export type TranslationsObject = {
         [hash: string]: TranslatedChildren | TranslatedContent;
     } | TranslationError;
 };
-export type RenderMethod = 'skeleton' | 'replace' | 'hang' | 'subtle' | 'default';
+export type RenderMethod = 'skeleton' | 'replace' | 'subtle' | 'default';
 export type GTContextType = {
     translate: (id: string, options?: Record<string, any>) => React.ReactNode;
     translateContent: (params: {

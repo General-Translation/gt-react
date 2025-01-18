@@ -134,15 +134,20 @@ export default function GTProvider({
 
       // ----- RENDER METHODS ----- //
 
+      // render default locale string
+      const renderDefaultContent = (): string => {
+        return renderContentToString(
+          taggedEntry,
+          defaultLocale, 
+          variables,
+          variablesOptions
+        );
+
+      }
+
       // render default locale
       const renderDefaultLocale = (): React.ReactNode => {
-        if (typeof taggedEntry === 'string')
-          return renderContentToString(
-            taggedEntry,
-            defaultLocale, 
-            variables,
-            variablesOptions
-          );
+        if (typeof taggedEntry === 'string') return renderDefaultContent();
         return renderDefaultChildren({
             children: taggedEntry,
             variables,
@@ -154,19 +159,13 @@ export default function GTProvider({
 
       // render skeleton
       const renderLoadingSkeleton = (): React.ReactNode => {
-        if (typeof taggedEntry === 'string') return '';
+        if (typeof taggedEntry === 'string') return renderDefaultContent();
         return renderSkeleton({ // render skeleton for jsx
             children: taggedEntry,
             variables,
             defaultLocale,
             renderVariable
         });
-      }
-
-      // hang behavior
-      const renderLoadingHang = (): React.ReactNode => {
-        if (typeof taggedEntry === 'string') return '';
-        return undefined;
       }
 
       // default behavior (skeleton except when language is same ie en-US -> en-GB)
@@ -218,15 +217,12 @@ export default function GTProvider({
           return renderLoadingSkeleton();
         }
         if (renderSettings.method === 'replace') {
-          return renderDefaultLocale(); // replace
-        }
-        if (renderSettings.method === 'hang') {
-          return renderLoadingHang();
+          return renderDefaultLocale();
         }
         if (renderSettings.method === 'subtle') {
-          return renderDefaultLocale(); // TODO: implement subtle behavior for client-side rendering
+          return renderDefaultLocale();
         }
-        return renderDefault(); // default rendering behavior (not to be confused with default locale)
+        return renderDefault(); // default
       }
 
       // render translated content
