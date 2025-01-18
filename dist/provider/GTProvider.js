@@ -101,6 +101,11 @@ function GTProvider(_a) {
         throw new Error(createErrors_1.projectIdMissingError);
     }
     ;
+    // disable subtle for development
+    if (devApiKey && renderSettings.method === 'subtle') {
+        console.warn('Subtle render method cannot be used in dev environments, falling back to default.');
+        renderSettings.method = 'default';
+    }
     // get tx required info
     var _j = (0, react_1.useMemo)(function () {
         var regionalTranslation = (0, generaltranslation_1.requiresRegionalTranslation)(defaultLocale, locale, locales);
@@ -248,7 +253,7 @@ function GTProvider(_a) {
             regionalTranslationRequired: regionalTranslationRequired,
             projectId: projectId,
             translationEnabled: translationEnabled,
-            renderSettings: renderSettings
+            renderSettings: renderSettings,
         }, children: children }));
 }
 //# sourceMappingURL=GTProvider.js.map

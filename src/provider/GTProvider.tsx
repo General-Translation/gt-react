@@ -81,6 +81,12 @@ export default function GTProvider({
       throw new Error(projectIdMissingError)
   };
 
+  // disable subtle for development
+  if (devApiKey && renderSettings.method === 'subtle') {
+    console.warn('Subtle render method cannot be used in dev environments, falling back to default.');
+    renderSettings.method = 'default';
+  }
+
   // get tx required info
   const [translationRequired, regionalTranslationRequired] = useMemo(() => {
     const regionalTranslation = requiresRegionalTranslation(defaultLocale, locale, locales)
@@ -248,7 +254,7 @@ export default function GTProvider({
       locale, defaultLocale, 
       translations, translationRequired, regionalTranslationRequired,
       projectId, translationEnabled,
-      renderSettings
+      renderSettings,
     }}>
       {children}
     </GTContext.Provider>
