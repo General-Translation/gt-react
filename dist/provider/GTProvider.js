@@ -101,6 +101,11 @@ function GTProvider(_a) {
         throw new Error(createErrors_1.projectIdMissingError);
     }
     ;
+    // disable subtle for development
+    if (devApiKey && renderSettings.method === 'subtle') {
+        console.warn('Subtle render method cannot be used in dev environments, falling back to default.');
+        renderSettings.method = 'default';
+    }
     // get tx required info
     var _j = (0, react_1.useMemo)(function () {
         var regionalTranslation = (0, generaltranslation_1.requiresRegionalTranslation)(defaultLocale, locale, locales);
@@ -158,10 +163,14 @@ function GTProvider(_a) {
         var variablesOptions = metadata === null || metadata === void 0 ? void 0 : metadata.variablesOptions;
         var taggedEntry = (0, internal_1.addGTIdentifier)(entry, id);
         // ----- RENDER METHODS ----- //
+        // render default locale string
+        var renderDefaultContent = function () {
+            return (0, generaltranslation_1.renderContentToString)(taggedEntry, defaultLocale, variables, variablesOptions);
+        };
         // render default locale
         var renderDefaultLocale = function () {
             if (typeof taggedEntry === 'string')
-                return (0, generaltranslation_1.renderContentToString)(taggedEntry, defaultLocale, variables, variablesOptions);
+                return renderDefaultContent();
             return (0, renderDefaultChildren_1.default)({
                 children: taggedEntry,
                 variables: variables,
@@ -173,19 +182,13 @@ function GTProvider(_a) {
         // render skeleton
         var renderLoadingSkeleton = function () {
             if (typeof taggedEntry === 'string')
-                return '';
+                return renderDefaultContent();
             return (0, renderSkeleton_1.default)({
                 children: taggedEntry,
                 variables: variables,
                 defaultLocale: defaultLocale,
                 renderVariable: renderVariable_1.default
             });
-        };
-        // hang behavior
-        var renderLoadingHang = function () {
-            if (typeof taggedEntry === 'string')
-                return '';
-            return undefined;
         };
         // default behavior (skeleton except when language is same ie en-US -> en-GB)
         var renderDefault = function () {
@@ -227,15 +230,12 @@ function GTProvider(_a) {
                 return renderLoadingSkeleton();
             }
             if (renderSettings.method === 'replace') {
-                return renderDefaultLocale(); // replace
-            }
-            if (renderSettings.method === 'hang') {
-                return renderLoadingHang();
+                return renderDefaultLocale();
             }
             if (renderSettings.method === 'subtle') {
-                return renderDefaultLocale(); // TODO: implement subtle behavior for client-side rendering
+                return renderDefaultLocale();
             }
-            return renderDefault(); // default rendering behavior (not to be confused with default locale)
+            return renderDefault(); // default
         }
         // render translated content
         var target = translations[id][hash];
@@ -253,7 +253,7 @@ function GTProvider(_a) {
             regionalTranslationRequired: regionalTranslationRequired,
             projectId: projectId,
             translationEnabled: translationEnabled,
-            renderSettings: renderSettings
+            renderSettings: renderSettings,
         }, children: children }));
 }
 //# sourceMappingURL=GTProvider.js.map

@@ -154,13 +154,10 @@ function T(_a) {
         else if (renderSettings.method === "replace") {
             loadingFallback = renderDefaultLocale();
         }
-        else if (renderSettings.method === 'hang') {
-            loadingFallback = undefined; // Blank screen
+        else if (renderSettings.method === "subtle") {
+            loadingFallback = renderDefaultLocale();
         }
-        else if (renderSettings.method === 'subtle') {
-            loadingFallback = renderDefaultLocale(); // TODO: implement subtle behavior for client-side rendering
-        }
-        else { // default behavior
+        else { // default
             loadingFallback = renderLoadingDefault();
         }
         // The suspense exists here for hydration reasons

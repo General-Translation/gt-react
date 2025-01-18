@@ -52,7 +52,7 @@ export type TranslationsObject = {
         | TranslationError
 };
 
-export type RenderMethod = 'skeleton' | 'replace' | 'hang' | 'subtle' | 'default';
+export type RenderMethod = 'skeleton' | 'replace' | 'subtle' | 'default';
 
 
 export type GTContextType = {
