@@ -77,7 +77,7 @@ var internal_2 = require("generaltranslation/internal");
 var renderVariable_1 = __importDefault(require("./rendering/renderVariable"));
 var createErrors_1 = require("../errors/createErrors");
 var supported_locales_1 = require("@generaltranslation/supported-locales");
-var useDynamicTranslation_1 = __importDefault(require("./dynamic/useDynamicTranslation"));
+var useRuntimeTranslation_1 = __importDefault(require("./dynamic/useRuntimeTranslation"));
 var defaultRenderSettings_1 = require("./rendering/defaultRenderSettings");
 var id_1 = require("generaltranslation/id");
 var renderSkeleton_1 = __importDefault(require("./rendering/renderSkeleton"));
@@ -241,7 +241,7 @@ function GTProvider(_a) {
         var target = translations[id][hash];
         return renderTranslation(target);
     }, [dictionary, translations, translationRequired, defaultLocale]);
-    var _l = (0, useDynamicTranslation_1.default)(__assign({ targetLocale: locale, projectId: projectId, defaultLocale: defaultLocale, devApiKey: devApiKey, runtimeUrl: runtimeUrl, setTranslations: setTranslations }, metadata)), translateChildren = _l.translateChildren, translateContent = _l.translateContent, translationEnabled = _l.translationEnabled;
+    var _l = (0, useRuntimeTranslation_1.default)(__assign({ targetLocale: locale, projectId: projectId, defaultLocale: defaultLocale, devApiKey: devApiKey, runtimeUrl: runtimeUrl, setTranslations: setTranslations }, metadata)), translateChildren = _l.translateChildren, translateContent = _l.translateContent, translationEnabled = _l.translationEnabled;
     return ((0, jsx_runtime_1.jsx)(GTContext_1.GTContext.Provider, { value: {
             translate: translate,
             translateContent: translateContent,

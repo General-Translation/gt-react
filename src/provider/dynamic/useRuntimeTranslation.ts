@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { dynamicTranslationError } from "../../errors/createErrors";
 
-export default function useDynamicTranslation({
+export default function useRuntimeTranslation({
     targetLocale, 
     projectId, devApiKey,
     runtimeUrl, defaultLocale,

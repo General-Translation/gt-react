@@ -89,7 +89,7 @@ function T(_a) {
         if (!translationRequired)
             return;
         // note have to recover from mis-matching hashing functions on client and server, if API returns wrong hash, then should fail gracefully
-        if (!translation && !translationEntry) {
+        if (!translationEntry) {
             translateChildren({
                 source: childrenAsObjects,
                 targetLocale: locale,
