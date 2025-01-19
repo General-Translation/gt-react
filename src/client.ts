@@ -1,6 +1,6 @@
 import { GTContext } from "./provider/GTContext"
 import useBrowserLocale from './hooks/useBrowserLocale'
-import useDynamicTranslation from "./provider/dynamic/useDynamicTranslation"
+import useRuntimeTranslation from "./provider/dynamic/useRuntimeTranslation"
 export {
-    GTContext, useBrowserLocale, useDynamicTranslation
+    GTContext, useBrowserLocale, useRuntimeTranslation as useDynamicTranslation
 }

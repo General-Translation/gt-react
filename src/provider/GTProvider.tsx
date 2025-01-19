@@ -28,7 +28,7 @@ import {
   projectIdMissingError,
 } from "../errors/createErrors";
 import { listSupportedLocales } from "@generaltranslation/supported-locales";
-import useDynamicTranslation from "./dynamic/useDynamicTranslation";
+import useRuntimeTranslation from "./dynamic/useRuntimeTranslation";
 import { defaultRenderSettings } from "./rendering/defaultRenderSettings";
 import { hashJsxChildren } from "generaltranslation/id";
 import React from "react";
@@ -238,7 +238,7 @@ export default function GTProvider({
     [dictionary, translations, translationRequired, defaultLocale]
   );
 
-  const { translateChildren, translateContent, translationEnabled } = useDynamicTranslation({
+  const { translateChildren, translateContent, translationEnabled } = useRuntimeTranslation({
     targetLocale: locale,
     projectId,
     defaultLocale,
