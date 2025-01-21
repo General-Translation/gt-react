@@ -6,13 +6,16 @@ import useBrowserLocale from "../hooks/useBrowserLocale";
 import { GTContext } from "./GTContext";
 import {
   Dictionary,
+  DictionaryEntry,
+  Entry,
+  Metadata,
   RenderMethod,
   TranslatedChildren,
   TranslatedContent,
   TranslationsObject,
 } from "../types/types";
 import getDictionaryEntry from "./helpers/getDictionaryEntry";
-import { addGTIdentifier, isTranslationError, writeChildrenAsObjects } from "../internal";
+import { addGTIdentifier, flattenDictionary, writeChildrenAsObjects } from "../internal";
 import extractEntryMetadata from "./helpers/extractEntryMetadata";
 import renderDefaultChildren from "./rendering/renderDefaultChildren";
 import renderTranslatedChildren from "./rendering/renderTranslatedChildren";
@@ -26,9 +29,9 @@ import renderVariable from "./rendering/renderVariable";
 import {
   createLibraryNoEntryWarning,
   projectIdMissingError,
-} from "../errors/createErrors";
+} from "../messages/createMessages";
 import { listSupportedLocales } from "@generaltranslation/supported-locales";
-import useRuntimeTranslation from "./dynamic/useRuntimeTranslation";
+import useRuntimeTranslation from "./runtime/useRuntimeTranslation";
 import { defaultRenderSettings } from "./rendering/defaultRenderSettings";
 import { hashJsxChildren } from "generaltranslation/id";
 import React from "react";
@@ -61,7 +64,7 @@ export default function GTProvider({
   devApiKey,
   ...metadata
 }: {
-    children?: any;
+    children?: React.ReactNode;
     projectId: string;
     dictionary?: Dictionary;
     locales?: string[];
@@ -94,49 +97,140 @@ export default function GTProvider({
   }, [defaultLocale, locale, locales]);
 
   // tracking translations
+  /** Key for translation tracking:
+   * Cache Loading            -> translations = null
+   * Cache Fail (for locale)  -> translations = {}
+   * Cache Fail (for id)      -> translations[id] = undefined
+   * Cache Fail (for hash)    -> translations[id][hash] = undefined
+   * 
+   * API Loading              -> translations[id][hash] = TranslationLoading
+   * API Fail (for batch)     -> translations[id][hash] = TranslationError
+   * API Fail (for hash)      -> translations[id][hash] = TranslationError
+   * 
+   * Success (Cache/API)      -> translations[id][hash] = TranslationSuccess
+   * 
+   * Possible scenarios:
+   * Cache Loading -> Success
+   * Cache Loading -> Cache Fail -> API Loading -> Success
+   * Cache Loading -> Cache Fail -> API Loading -> API Fail
+   */
   const [translations, setTranslations] = useState<TranslationsObject | null>(cacheUrl ? null : {});
 
-  // fetch from cache
+
+  // ----- CHECK CACHE FOR TX ----- //
+
   useEffect(() => {
-    if (!translations) {
-      if (!translationRequired) {
-        setTranslations({}); // no translation required
-      } else {
-        (async () => {
-        // check cache for translations
-        try {
-          const response = await fetch(`${cacheUrl}/${projectId}/${locale}`);
-          const result = await response.json();
-          setTranslations(result);
-        } catch (error) {
-          setTranslations({}); // not classified as a tx error, bc we can still fetch from API
-        }
-        })();
+
+    // check if cache fetch is necessary
+    if (!translationRequired) return setTranslations({});
+    if (translations) return
+
+    // fetch translations from cache
+    (async () => {
+      try {
+        const response = await fetch(`${cacheUrl}/${projectId}/${locale}`);
+        const result = await response.json();
+
+        // convert to translation success and record
+        const parsedResult = Object.entries(result).reduce((acc: Record<string, any>, [id, hashToTranslation]: [string, any]) => {
+          acc[id] = Object.entries(hashToTranslation).reduce((acc: Record<string, any>, [hash, content]) => {
+            acc[hash] = { state: 'success', entry: content };
+            return acc;
+          }, {});
+          return acc;
+        }, {})
+        setTranslations(parsedResult);
+      } catch (error) {
+        setTranslations({}); // not classified as a tx error, bc we can still fetch from API
       }
-    }
+    })();
   }, [translationRequired, cacheUrl, projectId, locale]);
 
-  // translate function for dictionaries
-  const translate = useCallback(
-    (id: string, options: Record<string, any> = {}): React.ReactNode => {
+  // ----- PERFORM DICTIONARY TRANSLATION ----- //
+
+  // Flatten dictionaries for processing while waiting for translations
+  const flattenedDictionary = flattenDictionary(dictionary);
+
+
+  // do translation
+  useEffect(() => {
+    // tx required, ditionary exists, and translations not in cache
+    if (!translationRequired || !dictionary || !translations) return;
+
+    // iterate through dictionary
+    Object.entries(flattenedDictionary).forEach(([id, entry]: [string, DictionaryEntry]) => {
+      // check that the dictionary entry is valid
+      if (entry === undefined
+        || (typeof entry === 'object' && !(React.isValidElement(entry) || Array.isArray(entry)))
+      ) {
+        console.warn(createLibraryNoEntryWarning(id));
+        return;
+      }
+
+      // Parse the dictionary entry
+      const { entry: dictionaryEntry, metadata } = extractEntryMetadata(entry);
+      const context = metadata?.context;
+      let taggedEntry = addGTIdentifier(dictionaryEntry as React.ReactElement | string, id);
+
+      // Get tx entry
+      let childrenAsObjects: TranslatedChildren | undefined, hash: string = '';
+      if (translationRequired) {
+        childrenAsObjects = writeChildrenAsObjects(taggedEntry);
+        hash = hashJsxChildren({ source: childrenAsObjects, context });
+      }
+      const translationEntry = translations?.[id]?.[hash];
+
+      // Initiate translation
+      if (translationRequired && translations && !translationEntry) { // tx required and cache miss
+        if (typeof taggedEntry === 'string') {
+          translateContent({
+            source: taggedEntry, 
+            targetLocale: locale,
+            metadata: { id, hash, context }
+          });
+        } else {
+          translateChildren({
+            source: childrenAsObjects,
+            targetLocale: locale,
+            metadata: { id, hash, context }
+          });
+        }
+      }
+    })
+  }, [dictionary, translations, translationRequired]);
+
+
+  // ----- TRANSLATE FUNCTION FOR DICTIONARIES ----- //
+
+  const renderDictionaryTranslation = useCallback(
+    (id: string, options: Record<string, any> = {}): React.ReactNode | string | undefined => {
+
+      // ----- SETUP ----- //
+
       // get the dictionary entry
       const dictionaryEntry = getDictionaryEntry(dictionary, id);
-      if (
-        dictionaryEntry === undefined ||
-        dictionaryEntry === null ||
-        (typeof dictionaryEntry === "object" && !Array.isArray(dictionaryEntry))
+      // check that the dictionary entry is valid
+      if (dictionaryEntry === undefined
+        || (typeof dictionaryEntry === 'object' && !(React.isValidElement(dictionaryEntry) || Array.isArray(dictionaryEntry)))
       ) {
         console.warn(createLibraryNoEntryWarning(id));
         return undefined;
       }
 
-      let { entry, metadata } = extractEntryMetadata(dictionaryEntry);
-
-      // Get variables and variable options
-      let variables = options;
-      let variablesOptions = metadata?.variablesOptions;
-
-      const taggedEntry = addGTIdentifier(entry, id);
+      // Parse the dictionary entry
+      const { entry, metadata } = extractEntryMetadata(dictionaryEntry as DictionaryEntry)
+      const variables = options;
+      const variablesOptions = metadata?.variablesOptions;
+      const context = metadata?.context;
+      let taggedEntry = addGTIdentifier(entry as React.ReactElement | string, id);
+      
+      // get tx entry
+      let childrenAsObjects: TranslatedChildren | undefined, hash: string = '';
+      if (translationRequired) {
+        childrenAsObjects = writeChildrenAsObjects(taggedEntry);
+        hash = hashJsxChildren({ source: childrenAsObjects, context });
+      }
+      const translationEntry = translations?.[id]?.[hash];
 
       // ----- RENDER METHODS ----- //
 
@@ -148,7 +242,6 @@ export default function GTProvider({
           variables,
           variablesOptions
         );
-
       }
 
       // render default locale
@@ -203,22 +296,8 @@ export default function GTProvider({
         renderDefaultLocale();
       }
 
-      // get hash
-      const context = metadata?.context;
-      const childrenAsObjects = writeChildrenAsObjects(taggedEntry);
-      const hash: string = hashJsxChildren(
-        context
-          ? { source: childrenAsObjects, context }
-          : { source: childrenAsObjects }
-      );
-
-      // error behavior -> fallback to default language
-      if (isTranslationError(translations?.[id])) {
-        return renderDefaultLocale();
-      }
-
       // loading
-      if (!translations || !translations[id]?.[hash]) {
+      if (!translationEntry || translationEntry?.state === 'loading') {
         if (renderSettings.method === 'skeleton') {
           return renderLoadingSkeleton();
         }
@@ -231,9 +310,13 @@ export default function GTProvider({
         return renderDefault(); // default
       }
 
+      // error behavior
+      if (translationEntry.state === 'error') {
+        return renderDefaultLocale();
+      }
+
       // render translated content
-      const target = translations[id][hash];
-      return renderTranslation(target);
+      return renderTranslation(translationEntry.entry);
     },
     [dictionary, translations, translationRequired, defaultLocale]
   );
@@ -250,7 +333,7 @@ export default function GTProvider({
 
   return (
     <GTContext.Provider value={{
-      translate, translateContent, translateChildren,
+      renderDictionaryTranslation: renderDictionaryTranslation, translateContent, translateChildren,
       locale, defaultLocale, 
       translations, translationRequired, regionalTranslationRequired,
       projectId, translationEnabled,

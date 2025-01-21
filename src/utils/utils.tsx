@@ -1,17 +1,4 @@
-import { TranslatedChildren, TranslatedContent, TranslationError } from "../types/types";
-
-
-export function isTranslationError(target: unknown): target is TranslationError {
-    if (typeof target !== 'object' || target === null) {
-      return false;
-    }
-
-    const hasError = 'error' in target && typeof target.error === 'string';
-    const hasCode = 'code' in target ? typeof target.code === 'number' : true;
-
-    return hasError && hasCode;
-}
-
+import { TranslatedContent } from "../types/types";
 
 export function isTranslatedContent(target: unknown): target is TranslatedContent {
   if (typeof target === 'string') {

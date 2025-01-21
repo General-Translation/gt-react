@@ -1,6 +1,6 @@
 import React, { ReactNode, ReactElement, isValidElement } from 'react'
 import { isAcceptedPluralForm } from 'generaltranslation/internal'
-import { createNestedDataGTError, createNestedTError } from '../errors/createErrors';
+import { createNestedDataGTError, createNestedTError } from '../messages/createMessages';
 
 type Child = ReactNode;
 type Children = Child[] | Child;

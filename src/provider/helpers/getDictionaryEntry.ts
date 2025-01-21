@@ -1,12 +1,12 @@
 import React from "react";
 import { Dictionary, DictionaryEntry } from "../../types/types";
-import { createLibraryNoEntryWarning } from "../../errors/createErrors";
+import { createLibraryNoEntryWarning } from "../../messages/createMessages";
 
 export default function getDictionaryEntry(
     dictionary: Dictionary,
     id: string
 ): Dictionary | DictionaryEntry | undefined {
-    if (!id || typeof id !== 'string') {
+    if (id === '') {
         console.error(createLibraryNoEntryWarning(id))
         return undefined;
     };
@@ -17,7 +17,7 @@ export default function getDictionaryEntry(
             console.error(createLibraryNoEntryWarning(id))
             return undefined;
         }
-        current = (current as Dictionary)[key]
+        current = (current as Dictionary)[key];
     }
-    return current;
+    return current; 
 }

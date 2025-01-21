@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { dynamicTranslationError } from "../../errors/createErrors";
+import { createMismatchingHashWarning, createMismatchingIdHashWarning, dynamicTranslationError, createGenericRuntimeTranslationError } from "../../messages/createMessages";
+import { TranslationLoading, TranslationsObject } from "../../types/types";
 
 export default function useRuntimeTranslation({
     targetLocale, 
@@ -61,6 +62,16 @@ export default function useRuntimeTranslation({
         (async () => {
             const requests = Array.from(requestQueueRef.current.values());
             try {
+                // ----- TRANSLATION LOADING ----- //
+                const loadingTranslations: TranslationsObject = requests.reduce((acc, request) => {
+                    const id = request.metadata.id || request.metadata.hash;
+                    acc[id] = { [request.metadata.hash]: { state: 'loading' } };
+                    return acc;
+                }, {});
+                setTranslations((prev: any) => {return { ...(prev || {}), ...loadingTranslations }});
+
+                // ----- RUNTIME TRANSLATION ----- // 
+                console.log('fetching translations', requests);
                 const response = await fetch(`${runtimeUrl}/v1/runtime/${projectId}/client`, {
                     method: 'POST',
                     headers: {
@@ -77,37 +88,53 @@ export default function useRuntimeTranslation({
                     throw new Error(await response.text())
                 }
 
+                // ----- PARSE RESPONSE ----- // 
                 const results = await response.json() as any[];
-                if (!isCancelled) {
-                    const newTranslations: Record<string, any> = {};
+                if (!isCancelled) { // don't send another req if one is already in flight
+                    const newTranslations: TranslationsObject = {};
 
+                    // process each result
                     results.forEach((result, index) => {
                         const request = requests[index];
-                        if ('translation' in result && result.translation && result.reference) { // translation success
-                            const { translation, reference: { id, key } } = result;
+
+                        // translation received
+                        if ('translation' in result && result.translation && result.reference) {
+                            const { translation, reference: { id, key: hash } } = result;
                             // check for mismatching ids or hashes
-                            if (id !== request.metadata.id || key !== request.metadata.hash) {
+                            if (id !== request.metadata.id || hash !== request.metadata.hash) {
                                 if (!request.metadata.id) {
-                                    console.warn(`Mismatching hashes! Expected hash: ${request.metadata.hash}, but got hash: ${key}. We will still render your translation, but make sure to update to the newest version: www.generaltranslation.com/docs`);
+                                    console.warn(createMismatchingHashWarning(request.metadata.hash, hash));
                                 } else {
-                                    console.warn(`Mismatching ids or hashes! Expected id: ${request.metadata.id}, hash: ${request.metadata.hash}, but got id: ${id}, hash: ${key}. We will still render your translation, but make sure to update to the newest version: www.generaltranslation.com/docs`);
+                                    console.warn(createMismatchingIdHashWarning(request.metadata.id, request.metadata.hash, id, hash));
                                 }
                             }
-                            newTranslations[id || request.metadata.hash] = { [request.metadata.hash]: translation };
-                        } else if ('error' in result && result.error && (result as any).code) { // translation error
-                            newTranslations[request.metadata.id || request.metadata.hash] = {
-                                error: result.error || "An error occurred.",
-                                code: (result as any).code || 500
+                            // set translation
+                            newTranslations[request.metadata.id || request.metadata.hash] = { // id defaults to hash if none provided
+                                [request.metadata.hash]: { state: 'success', entry: translation}
                             };
-                            // error message
-                            if (!request.metadata.id) {
-                                console.error(`Translation failed for hash: ${request.metadata.hash} `, result);
-                            } else {
-                                console.error(`Translation failed for id: ${request.metadata.id}, hash: ${request.metadata.hash} `, result);
-                            }
-                        } else {    // unknown error
-                            // id defaults to hash if none provided
+                            return;
+                        }
+
+                        // translation failure
+                        if (result.error !== undefined && result.error !== null && result.code !== undefined && result.code !== null) { // 0 and '' are falsey
+                            // log error message
+                            console.error(createGenericRuntimeTranslationError(request.metadata.id, request.metadata.hash), result.error);
+                            // set error in translation object
                             newTranslations[request.metadata.id || request.metadata.hash] = {
+                                [request.metadata.hash]: {
+                                    state: 'error',
+                                    error: result.error,
+                                    code: result.code
+                                }
+                            };
+                            return;
+                        }
+                        
+                        // unknown error
+                        console.error(createGenericRuntimeTranslationError(request.metadata.id, request.metadata.hash), result);
+                        newTranslations[request.metadata.id || request.metadata.hash] = {
+                            [request.metadata.hash]: {
+                                state: 'error',
                                 error: "An error occurred.",
                                 code: 500
                             }
@@ -118,19 +145,27 @@ export default function useRuntimeTranslation({
                     setTranslations((prev: any) => {return { ...(prev || {}), ...newTranslations }});
                 }
             } catch (error) {
+                // log error
                 console.error(dynamicTranslationError, error);
+
+                // add error message to all translations from this request
                 setTranslations((prev: any) => {
                     let merged: Record<string, any> = { ...(prev || {}) };
                     requests.forEach((request) => {
                         // id defaults to hash if none provided
                         merged[request.metadata.id || request.metadata.hash] = {
-                            error: "An error occurred.",
-                            code: 500
+                            [request.metadata.hash]: {
+                                state: 'error',
+                                error: "An error occurred.",
+                                code: 500
+                            }
                         }
                     });
                     return merged;
                 });
+
             } finally {
+                // clear the queue to avoid duplicate requests
                 requestQueueRef.current.clear();
             }
         })();

@@ -40,14 +40,22 @@ export type TranslatedContent = string | (string | {
     variable?: string;
 })[];
 export type TranslationError = {
+    state: 'error';
     error: string;
     code?: number;
+};
+export type TranslationSuccess = {
+    state: 'success';
+    entry: TranslatedChildren | TranslatedContent;
+};
+export type TranslationLoading = {
+    state: 'loading';
 };
 export type Content = string | (Variable | string)[];
 export type TranslationsObject = {
     [id: string]: {
-        [hash: string]: TranslatedChildren | TranslatedContent;
-    } | TranslationError;
+        [hash: string]: TranslationSuccess | TranslationLoading | TranslationError;
+    };
 };
 export type RenderMethod = 'skeleton' | 'replace' | 'subtle' | 'default';
 export type GTContextType = {
