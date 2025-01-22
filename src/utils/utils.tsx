@@ -1,5 +1,5 @@
 import React from "react";
-import { GTTranslationError, TaggedElement, TaggedElementProps, TranslatedContent, TranslationError } from "../types/types";
+import { TaggedElement, TaggedElementProps, TranslatedContent } from "../types/types";
 
 export function isTranslatedContent(target: unknown): target is TranslatedContent {
   if (typeof target === 'string') {
@@ -27,21 +27,4 @@ export function isTranslatedContent(target: unknown): target is TranslatedConten
 
 export function isValidTaggedElement(target: unknown): target is TaggedElement {
   return React.isValidElement<TaggedElementProps>(target)
-}
-
-
-
-export function errorToTranlsationError(error: Error): TranslationError {
-  if (error instanceof GTTranslationError) {
-    return {
-      state: 'error',
-      error: error.error,
-      code: error.code
-    }
-  }
-  return {
-    state: 'error',
-    error: `${error.name}: ${error.message}`,
-    code: 500
-  }
 }

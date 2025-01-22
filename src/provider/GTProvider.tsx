@@ -122,12 +122,12 @@ export default function GTProvider({
         const result = await response.json();
 
         // convert to translation success and record
-        const parsedResult = Object.entries(result).reduce((acc: Record<string, any>, [id, hashToTranslation]: [string, any]) => {
-          acc[id] = Object.entries(hashToTranslation).reduce((acc: Record<string, any>, [hash, content]) => {
-            acc[hash] = { state: 'success', entry: content };
-            return acc;
+        const parsedResult = Object.entries(result).reduce((translationsAcc: Record<string, any>, [id, hashToTranslation]: [string, any]) => {
+          translationsAcc[id] = Object.entries(hashToTranslation || {}).reduce((idAcc: Record<string, any>, [hash, content]) => {
+            idAcc[hash] = { state: 'success', entry: content };
+            return idAcc;
           }, {});
-          return acc;
+          return translationsAcc;
         }, {})
         setTranslations(parsedResult);
       } catch (error) {
@@ -150,7 +150,7 @@ export default function GTProvider({
       const { entry, metadata } = extractEntryMetadata(entryWithMetadata);
       const context = metadata?.context;
       const source = splitStringToContent(entry as string);
-      const hash = hashJsxChildren({ source, ...(context && {context}) });
+      const hash = hashJsxChildren({ source, context });
       acc[id] = { source, hash };
       return acc;
     }, {} as Record<string, { hash: string, source: Content }>);
@@ -202,9 +202,7 @@ export default function GTProvider({
 
       // get the dictionary entry
       const dictionaryEntry: DictionaryEntry | undefined = getDictionaryEntry(flattenedDictionary, id);
-      if (dictionaryEntry === undefined) {
-        return undefined; // dictionary entry not found
-      }
+      if (!dictionaryEntry) return undefined; // dictionary entry not found
 
       // Parse the dictionary entry
       const { entry, metadata } = extractEntryMetadata(dictionaryEntry)
@@ -215,10 +213,10 @@ export default function GTProvider({
 
       if (typeof entry === 'string') { // render strings
         // no translation required
-        const source = splitStringToContent(entry);
+        const content = splitStringToContent(entry);
         if (!translationRequired) {
           return renderContentToString(
-            source,
+            content,
             locales, 
             variables,
             variablesOptions
@@ -227,13 +225,13 @@ export default function GTProvider({
 
         // get translation entry
         const context = metadata?.context;
-        const hash = metadata?.hash || hashJsxChildren({ source, ...(context && {context}) });
+        const hash = metadata?.hash || hashJsxChildren({ source: content, context });
         const translationEntry = translations?.[id]?.[hash];
 
         // error behavior
         if (!translationEntry || translationEntry?.state !== 'success') {
           return renderContentToString(
-            source,
+            content,
             locales, 
             variables,
             variablesOptions
@@ -278,7 +276,7 @@ export default function GTProvider({
     <GTContext.Provider value={{
       translateDictionaryEntry, translateContent, translateChildren,
       locale, defaultLocale, 
-      dictionary, translations,
+      translations,
       translationRequired, dialectTranslationRequired,
       projectId, translationEnabled,
       renderSettings,

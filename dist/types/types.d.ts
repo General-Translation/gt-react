@@ -95,7 +95,6 @@ export type GTContextType = {
     translateChildren: TranslateChildrenCallback;
     locale: string;
     defaultLocale: string;
-    dictionary: Dictionary;
     translations: TranslationsObject | null;
     translationRequired: boolean;
     dialectTranslationRequired: boolean;
@@ -106,9 +105,4 @@ export type GTContextType = {
     projectId?: string;
     translationEnabled?: boolean;
 };
-export declare class GTTranslationError extends Error {
-    error: string;
-    code: number;
-    constructor(error: string, code: number);
-}
 //# sourceMappingURL=types.d.ts.map
