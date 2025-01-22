@@ -62,7 +62,7 @@ function T({
   const {
     translations,
     translationRequired,
-    regionalTranslationRequired,
+    dialectTranslationRequired: regionalTranslationRequired,
     translateChildren,
     renderSettings
   } = useGTContext(
@@ -95,18 +95,20 @@ function T({
   // Do translation if required
   const translationEntry = translations?.[id]?.[hash];
   useEffect(() => {
-    // no api fetch if no translation required
-    if (!translationRequired
-      || !(translations && !translationEntry)) {  // translation entry has not been found in cache or cache is loading
-      return;
-    }
+    // skip if: no translation required
+    if (!translationRequired) return;
+
+    // skip if: no fetch if cache hasn't been hit yet or we already have the translation
+    if (!translations || translationEntry) return;
+
+    // Translate content
     translateChildren({
       source: childrenAsObjects,
       targetLocale: locale,
       metadata: {
           id, hash, context
       }
-    });
+    })
   }, [translations, translationEntry, translationRequired, id, hash, context]);
 
   // ----- RENDER METHODS ----- // 

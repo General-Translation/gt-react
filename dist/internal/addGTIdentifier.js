@@ -24,7 +24,7 @@ import { jsx as _jsx } from "react/jsx-runtime";
 import React, { isValidElement } from 'react';
 import { isAcceptedPluralForm } from 'generaltranslation/internal';
 import { createNestedDataGTError, createNestedTError } from '../messages/createMessages';
-export default function addGTIdentifier(children, outerId, startingIndex) {
+export default function addGTIdentifier(children, startingIndex) {
     if (startingIndex === void 0) { startingIndex = 0; }
     // Object to keep track of the current index for GT IDs
     var index = startingIndex;
@@ -56,7 +56,7 @@ export default function addGTIdentifier(children, outerId, startingIndex) {
                 var pluralBranches = Object.entries(props).reduce(function (acc, _a) {
                     var branchName = _a[0], branch = _a[1];
                     if (isAcceptedPluralForm(branchName)) {
-                        acc[branchName] = addGTIdentifier(branch, branchName, index);
+                        acc[branchName] = addGTIdentifier(branch, index);
                     }
                     return acc;
                 }, {});
@@ -67,7 +67,7 @@ export default function addGTIdentifier(children, outerId, startingIndex) {
                 var children_1 = props.children, branch = props.branch, branches = __rest(props, ["children", "branch"]);
                 var resultBranches = Object.entries(branches).reduce(function (acc, _a) {
                     var branchName = _a[0], branch = _a[1];
-                    acc[branchName] = addGTIdentifier(branch, branchName, index);
+                    acc[branchName] = addGTIdentifier(branch, index);
                     return acc;
                 }, {});
                 if (Object.keys(resultBranches).length)
@@ -101,7 +101,6 @@ export default function addGTIdentifier(children, outerId, startingIndex) {
     }
     function handleChildren(children) {
         if (Array.isArray(children)) {
-            // outerId = undefined;
             return React.Children.map(children, handleSingleChild);
         }
         else {

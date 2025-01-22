@@ -1,11 +1,11 @@
 import React from "react";
-import { Dictionary, DictionaryEntry } from "../../types/types";
+import { Dictionary, DictionaryEntry, FlattenedDictionary } from "../../types/types";
 import { createLibraryNoEntryWarning } from "../../messages/createMessages";
 
-export default function getDictionaryEntry(
-    dictionary: Dictionary,
+export default function getDictionaryEntry<T extends Dictionary | FlattenedDictionary>(
+    dictionary: T,
     id: string
-): Dictionary | DictionaryEntry | undefined {
+): T extends FlattenedDictionary ? DictionaryEntry | undefined : Dictionary | DictionaryEntry | undefined {
     if (id === '') {
         console.error(createLibraryNoEntryWarning(id))
         return undefined;
@@ -19,5 +19,5 @@ export default function getDictionaryEntry(
         }
         current = (current as Dictionary)[key];
     }
-    return current; 
+    return current as (T extends FlattenedDictionary ? DictionaryEntry | undefined : Dictionary | DictionaryEntry | undefined); 
 }

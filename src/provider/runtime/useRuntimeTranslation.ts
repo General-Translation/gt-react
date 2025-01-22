@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { createMismatchingHashWarning, createMismatchingIdHashWarning, dynamicTranslationError, createGenericRuntimeTranslationError } from "../../messages/createMessages";
-import { TranslationLoading, TranslationsObject } from "../../types/types";
+import { TranslateChildrenCallback, TranslateContentCallback, TranslationsObject } from "../../types/types";
+import { Content } from "generaltranslation/internal";
 
 export default function useRuntimeTranslation({
     targetLocale, 
@@ -18,27 +19,41 @@ export default function useRuntimeTranslation({
     [key: string]: any
 }): {
     translationEnabled: boolean
-    translateContent: (params: { source: any, targetLocale: string, metadata: { hash: string, context?: string } & Record<string, any> }) => void,
-    translateChildren: (params: { source: any, targetLocale: string, metadata: { hash: string, context?: string } & Record<string, any> }) => void,
+    translateContent: TranslateContentCallback,
+    translateChildren: TranslateChildrenCallback,
 } {
 
     metadata = { ...metadata, projectId, sourceLocale: defaultLocale };
 
     const translationEnabled = !!(runtimeUrl && projectId);
-    if (!translationEnabled) return { translationEnabled, translateContent: () => {}, translateChildren: () => {} };
+    if (!translationEnabled) return { 
+        translationEnabled, 
+        translateContent: () => Promise.reject(new Error('translateContent() failed because translation is disabled')), 
+        translateChildren: () => Promise.reject(new Error('translateChildren() failed because translation is disabled')) 
+    };
 
     // Queue to store requested keys between renders.
-    const requestQueueRef = useRef<Map<string, any>>(new Map());
+    type TranslationRequestQueueItem = {
+        type: 'content' | 'jsx',
+        source: Content | any,
+        metadata: { hash: string, context?: string } & Record<string, any>,
+        resolve: any,
+        reject: any
+    }
+    const requestQueueRef = useRef<Map<string, TranslationRequestQueueItem>>(new Map());
     // Trigger a fetch when keys have been added.
     const [fetchTrigger, setFetchTrigger] = useState(0);
 
     const translateContent = useCallback((params: {
-        source: any, targetLocale: string, metadata: { hash: string, context?: string } & Record<string, any>
-    }) => {
+        source: Content, targetLocale: string, metadata: { hash: string, context?: string } & Record<string, any>
+    }): Promise<void>  => {
         const id = params.metadata.id ? `${params.metadata.id}-` : '';
-        const key = `${id}${params.metadata.hash}-${params.targetLocale}`;
-        requestQueueRef.current.set(key, { type: 'content', source: params.source, metadata: params.metadata });
+        const key = `${id}-${params.metadata.hash}-${params.targetLocale}`;
         setFetchTrigger((n) => n + 1);
+        // promise for hooking into the translation request request to know when complete
+        return new Promise<void>((resolve, reject) => {
+            requestQueueRef.current.set(key, { type: 'content', source: params.source, metadata: params.metadata, resolve, reject });
+        });
     }, []);
 
     /**
@@ -47,13 +62,16 @@ export default function useRuntimeTranslation({
      */
     const translateChildren = useCallback((params: {
         source: any, targetLocale: string, metadata: { hash: string, context?: string } & Record<string, any>
-    }) => {
+    }): Promise<void> => {
         const id = params.metadata.id ? `${params.metadata.id}-` : '';
-        const key = `${id}${params.metadata.hash}-${params.targetLocale}`;
-        requestQueueRef.current.set(key, { type: 'jsx', source: params.source, metadata: params.metadata });
+        const key = `${id}-${params.metadata.hash}-${params.targetLocale}`;
         setFetchTrigger((n) => n + 1);
+        // promise for hooking into the translation request to know when complete
+        return new Promise<void>((resolve, reject) => {
+            requestQueueRef.current.set(key, { type: 'jsx', source: params.source, metadata: params.metadata, resolve, reject });
+        });
     }, []);
-
+    
     useEffect(() => {
         if (requestQueueRef.current.size === 0) {
             return;
@@ -61,9 +79,11 @@ export default function useRuntimeTranslation({
         let isCancelled = false;
         (async () => {
             const requests = Array.from(requestQueueRef.current.values());
+            const newTranslations: TranslationsObject = {};
             try {
                 // ----- TRANSLATION LOADING ----- //
-                const loadingTranslations: TranslationsObject = requests.reduce((acc, request) => {
+                const loadingTranslations: TranslationsObject = requests.reduce((acc: TranslationsObject, request) => {
+                    // loading state for jsx, render loading behavior
                     const id = request.metadata.id || request.metadata.hash;
                     acc[id] = { [request.metadata.hash]: { state: 'loading' } };
                     return acc;
@@ -71,7 +91,6 @@ export default function useRuntimeTranslation({
                 setTranslations((prev: any) => {return { ...(prev || {}), ...loadingTranslations }});
 
                 // ----- RUNTIME TRANSLATION ----- // 
-                console.log('fetching translations', requests);
                 const response = await fetch(`${runtimeUrl}/v1/runtime/${projectId}/client`, {
                     method: 'POST',
                     headers: {
@@ -91,7 +110,6 @@ export default function useRuntimeTranslation({
                 // ----- PARSE RESPONSE ----- // 
                 const results = await response.json() as any[];
                 if (!isCancelled) { // don't send another req if one is already in flight
-                    const newTranslations: TranslationsObject = {};
 
                     // process each result
                     results.forEach((result, index) => {
@@ -110,7 +128,10 @@ export default function useRuntimeTranslation({
                             }
                             // set translation
                             newTranslations[request.metadata.id || request.metadata.hash] = { // id defaults to hash if none provided
-                                [request.metadata.hash]: { state: 'success', entry: translation}
+                                [request.metadata.hash]: {
+                                    state: 'success',
+                                    entry: translation
+                                }
                             };
                             return;
                         }
@@ -140,31 +161,30 @@ export default function useRuntimeTranslation({
                             }
                         }
                     });
-
-                    // update our translations
-                    setTranslations((prev: any) => {return { ...(prev || {}), ...newTranslations }});
                 }
             } catch (error) {
                 // log error
                 console.error(dynamicTranslationError, error);
 
                 // add error message to all translations from this request
-                setTranslations((prev: any) => {
-                    let merged: Record<string, any> = { ...(prev || {}) };
-                    requests.forEach((request) => {
-                        // id defaults to hash if none provided
-                        merged[request.metadata.id || request.metadata.hash] = {
-                            [request.metadata.hash]: {
-                                state: 'error',
-                                error: "An error occurred.",
-                                code: 500
-                            }
+                requests.forEach((request) => {
+                    // id defaults to hash if none provided
+                    newTranslations[request.metadata.id || request.metadata.hash] = {
+                        [request.metadata.hash]: {
+                            state: 'error',
+                            error: "An error occurred.",
+                            code: 500
                         }
-                    });
-                    return merged;
+                    }
                 });
 
             } finally {
+                // update our translations
+                setTranslations((prev: any) => {return { ...(prev || {}), ...newTranslations }});
+
+                // resolve all promises
+                requests.forEach((request) => request.resolve());
+
                 // clear the queue to avoid duplicate requests
                 requestQueueRef.current.clear();
             }

@@ -1,7 +1,6 @@
 import React, { isValidElement } from "react";
 import { createNoEntryWarning } from "../messages/createMessages";
 import useGTContext from "../provider/GTContext";
-
 /**
  * `useElement()` hook which gets the translation function `t()` provided by `<GTProvider>`.
  * 
@@ -30,7 +29,7 @@ export default function useElement(
   }
 
   // Get the translation context
-  const { renderDictionaryTranslation } = useGTContext(
+  const { translateDictionaryEntry } = useGTContext(
       `useElement('${id}'): No context provided. You're trying to get the t() function on the client, which can only be done inside a <GTProvider>.`
   );
  
@@ -47,15 +46,15 @@ export default function useElement(
       id: string = '', 
       options: Record<string, any> = {}
   ): React.JSX.Element {
-      const prefixedId = getId(id);
-      if (renderDictionaryTranslation) {
-          const translation = renderDictionaryTranslation(prefixedId, options);
-          if (!translation) console.warn(createNoEntryWarning(id, prefixedId));
-          if (!isValidElement(translation)) return <React.Fragment key={prefixedId}>{translation}</React.Fragment>
-          return translation;
-      }
-      // TODO: fall back on default locale
-      return <React.Fragment key={prefixedId}/>;
+
+    const prefixedId = getId(id);
+    if (translateDictionaryEntry) {
+        const translation = translateDictionaryEntry(prefixedId, options);
+        if (!translation) console.warn(createNoEntryWarning(id, prefixedId));
+        if (!isValidElement(translation)) return <React.Fragment key={prefixedId}>{translation}</React.Fragment>
+        return translation;
+    }
+    return <React.Fragment key={prefixedId}/>;
   };
 
   return t;

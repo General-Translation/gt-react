@@ -14,7 +14,10 @@ export default function flattenDictionary(dictionary, prefix) {
     for (var key in dictionary) {
         if (dictionary.hasOwnProperty(key)) {
             var newKey = prefix ? "".concat(prefix, ".").concat(key) : key;
-            if (typeof dictionary[key] === 'object' && dictionary[key] !== null && !Array.isArray(dictionary[key]) && !(React.isValidElement(dictionary[key]))) {
+            if (typeof dictionary[key] === 'object'
+                && dictionary[key] !== null
+                && !Array.isArray(dictionary[key])
+                && !(React.isValidElement(dictionary[key]))) {
                 var nestedFlattened = flattenDictionary(dictionary[key], newKey);
                 for (var flatKey in nestedFlattened) {
                     if (flattened.hasOwnProperty(flatKey)) {

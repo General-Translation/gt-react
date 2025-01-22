@@ -64,16 +64,22 @@ export default function useRuntimeTranslation(_a) {
     metadata = __assign(__assign({}, metadata), { projectId: projectId, sourceLocale: defaultLocale });
     var translationEnabled = !!(runtimeUrl && projectId);
     if (!translationEnabled)
-        return { translationEnabled: translationEnabled, translateContent: function () { }, translateChildren: function () { } };
-    // Queue to store requested keys between renders.
+        return {
+            translationEnabled: translationEnabled,
+            translateContent: function () { return Promise.reject(new Error('translateContent() failed because translation is disabled')); },
+            translateChildren: function () { return Promise.reject(new Error('translateChildren() failed because translation is disabled')); }
+        };
     var requestQueueRef = useRef(new Map());
     // Trigger a fetch when keys have been added.
     var _b = useState(0), fetchTrigger = _b[0], setFetchTrigger = _b[1];
     var translateContent = useCallback(function (params) {
         var id = params.metadata.id ? "".concat(params.metadata.id, "-") : '';
-        var key = "".concat(id).concat(params.metadata.hash, "-").concat(params.targetLocale);
-        requestQueueRef.current.set(key, { type: 'content', source: params.source, metadata: params.metadata });
+        var key = "".concat(id, "-").concat(params.metadata.hash, "-").concat(params.targetLocale);
         setFetchTrigger(function (n) { return n + 1; });
+        // promise for hooking into the translation request request to know when complete
+        return new Promise(function (resolve, reject) {
+            requestQueueRef.current.set(key, { type: 'content', source: params.source, metadata: params.metadata, resolve: resolve, reject: reject });
+        });
     }, []);
     /**
      * Call this from <T> components to request a translation key.
@@ -81,9 +87,12 @@ export default function useRuntimeTranslation(_a) {
      */
     var translateChildren = useCallback(function (params) {
         var id = params.metadata.id ? "".concat(params.metadata.id, "-") : '';
-        var key = "".concat(id).concat(params.metadata.hash, "-").concat(params.targetLocale);
-        requestQueueRef.current.set(key, { type: 'jsx', source: params.source, metadata: params.metadata });
+        var key = "".concat(id, "-").concat(params.metadata.hash, "-").concat(params.targetLocale);
         setFetchTrigger(function (n) { return n + 1; });
+        // promise for hooking into the translation request to know when complete
+        return new Promise(function (resolve, reject) {
+            requestQueueRef.current.set(key, { type: 'jsx', source: params.source, metadata: params.metadata, resolve: resolve, reject: reject });
+        });
     }, []);
     useEffect(function () {
         if (requestQueueRef.current.size === 0) {
@@ -91,23 +100,23 @@ export default function useRuntimeTranslation(_a) {
         }
         var isCancelled = false;
         (function () { return __awaiter(_this, void 0, void 0, function () {
-            var requests, loadingTranslations_1, response, _a, results, newTranslations_1, error_1;
+            var requests, newTranslations, loadingTranslations_1, response, _a, results, error_1;
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0:
                         requests = Array.from(requestQueueRef.current.values());
+                        newTranslations = {};
                         _b.label = 1;
                     case 1:
                         _b.trys.push([1, 6, 7, 8]);
                         loadingTranslations_1 = requests.reduce(function (acc, request) {
                             var _a;
+                            // loading state for jsx, render loading behavior
                             var id = request.metadata.id || request.metadata.hash;
                             acc[id] = (_a = {}, _a[request.metadata.hash] = { state: 'loading' }, _a);
                             return acc;
                         }, {});
                         setTranslations(function (prev) { return __assign(__assign({}, (prev || {})), loadingTranslations_1); });
-                        // ----- RUNTIME TRANSLATION ----- // 
-                        console.log('fetching translations', requests);
                         return [4 /*yield*/, fetch("".concat(runtimeUrl, "/v1/runtime/").concat(projectId, "/client"), {
                                 method: 'POST',
                                 headers: __assign({ 'Content-Type': 'application/json' }, (devApiKey && { 'x-gt-dev-api-key': devApiKey })),
@@ -127,7 +136,6 @@ export default function useRuntimeTranslation(_a) {
                     case 5:
                         results = _b.sent();
                         if (!isCancelled) { // don't send another req if one is already in flight
-                            newTranslations_1 = {};
                             // process each result
                             results.forEach(function (result, index) {
                                 var _a, _b, _c;
@@ -145,8 +153,11 @@ export default function useRuntimeTranslation(_a) {
                                         }
                                     }
                                     // set translation
-                                    newTranslations_1[request.metadata.id || request.metadata.hash] = (_a = {},
-                                        _a[request.metadata.hash] = { state: 'success', entry: translation },
+                                    newTranslations[request.metadata.id || request.metadata.hash] = (_a = {},
+                                        _a[request.metadata.hash] = {
+                                            state: 'success',
+                                            entry: translation
+                                        },
                                         _a);
                                     return;
                                 }
@@ -155,7 +166,7 @@ export default function useRuntimeTranslation(_a) {
                                     // log error message
                                     console.error(createGenericRuntimeTranslationError(request.metadata.id, request.metadata.hash), result.error);
                                     // set error in translation object
-                                    newTranslations_1[request.metadata.id || request.metadata.hash] = (_b = {},
+                                    newTranslations[request.metadata.id || request.metadata.hash] = (_b = {},
                                         _b[request.metadata.hash] = {
                                             state: 'error',
                                             error: result.error,
@@ -166,7 +177,7 @@ export default function useRuntimeTranslation(_a) {
                                 }
                                 // unknown error
                                 console.error(createGenericRuntimeTranslationError(request.metadata.id, request.metadata.hash), result);
-                                newTranslations_1[request.metadata.id || request.metadata.hash] = (_c = {},
+                                newTranslations[request.metadata.id || request.metadata.hash] = (_c = {},
                                     _c[request.metadata.hash] = {
                                         state: 'error',
                                         error: "An error occurred.",
@@ -174,8 +185,6 @@ export default function useRuntimeTranslation(_a) {
                                     },
                                     _c);
                             });
-                            // update our translations
-                            setTranslations(function (prev) { return __assign(__assign({}, (prev || {})), newTranslations_1); });
                         }
                         return [3 /*break*/, 8];
                     case 6:
@@ -183,23 +192,23 @@ export default function useRuntimeTranslation(_a) {
                         // log error
                         console.error(dynamicTranslationError, error_1);
                         // add error message to all translations from this request
-                        setTranslations(function (prev) {
-                            var merged = __assign({}, (prev || {}));
-                            requests.forEach(function (request) {
-                                var _a;
-                                // id defaults to hash if none provided
-                                merged[request.metadata.id || request.metadata.hash] = (_a = {},
-                                    _a[request.metadata.hash] = {
-                                        state: 'error',
-                                        error: "An error occurred.",
-                                        code: 500
-                                    },
-                                    _a);
-                            });
-                            return merged;
+                        requests.forEach(function (request) {
+                            var _a;
+                            // id defaults to hash if none provided
+                            newTranslations[request.metadata.id || request.metadata.hash] = (_a = {},
+                                _a[request.metadata.hash] = {
+                                    state: 'error',
+                                    error: "An error occurred.",
+                                    code: 500
+                                },
+                                _a);
                         });
                         return [3 /*break*/, 8];
                     case 7:
+                        // update our translations
+                        setTranslations(function (prev) { return __assign(__assign({}, (prev || {})), newTranslations); });
+                        // resolve all promises
+                        requests.forEach(function (request) { return request.resolve(); });
                         // clear the queue to avoid duplicate requests
                         requestQueueRef.current.clear();
                         return [7 /*endfinally*/];

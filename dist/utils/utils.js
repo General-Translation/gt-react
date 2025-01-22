@@ -1,3 +1,5 @@
+import React from "react";
+import { GTTranslationError } from "../types/types";
 export function isTranslatedContent(target) {
     if (typeof target === 'string') {
         return true;
@@ -16,5 +18,22 @@ export function isTranslatedContent(target) {
         }
         return false;
     });
+}
+export function isValidTaggedElement(target) {
+    return React.isValidElement(target);
+}
+export function errorToTranlsationError(error) {
+    if (error instanceof GTTranslationError) {
+        return {
+            state: 'error',
+            error: error.error,
+            code: error.code
+        };
+    }
+    return {
+        state: 'error',
+        error: "".concat(error.name, ": ").concat(error.message),
+        code: 500
+    };
 }
 //# sourceMappingURL=utils.js.map

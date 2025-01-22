@@ -1,13 +1,15 @@
 import React, { ReactElement } from 'react'
 import getVariableName from '../variables/getVariableName';
-import { TranslatedChildren } from '../types/types';
+import { GTProp, TaggedChild, TaggedChildren, TaggedElement, TranslatedChildren, TranslatedElement } from '../types/types';
+import { isValidTaggedElement } from '../utils/utils';
+import { JsxChild, JsxChildren, JsxElement } from 'generaltranslation/internal';
 
 /**
  * Gets the tag name of a React element.
  * @param {ReactElement} child - The React element.
  * @returns {string} - The tag name of the React element.
  */
-const getTagName = (child: ReactElement<any>): string => {
+const getTagName = (child: TaggedElement): string => {
     if (!child) return '';
     const { type, props } = child;
     if (type && typeof type === 'function') {
@@ -20,16 +22,16 @@ const getTagName = (child: ReactElement<any>): string => {
     return 'function';
 };
 
-const handleSingleChildElement = (child: ReactElement<any>): any => {
+const handleSingleChildElement = (child: TaggedElement): JsxChild => {
     const { type, props } = child;
-    let objectElement: Record<string, any> = {
+    let objectElement: JsxElement = {
         type: getTagName(child),
-        props: {}
+        props: { 'data-_gt': { id: -1 } }
     };
     if (props['data-_gt']) {
 
         const generaltranslation = props['data-_gt'];
-        let newGTProp: Record<string, any> = {
+        let newGTProp: GTProp = {
             ...generaltranslation
         };
 
@@ -68,11 +70,12 @@ const handleSingleChildElement = (child: ReactElement<any>): any => {
     return objectElement;
 }
 
-const handleSingleChild = (child: any): any => {
-    if (React.isValidElement(child)) {
+const handleSingleChild = (child: TaggedChild): JsxChild => {
+    if (isValidTaggedElement(child)) {
         return handleSingleChildElement(child);
     };
-    return child;
+    if (typeof child === 'number') return child.toString();
+    return child as JsxChild;
 }
 
 /**
@@ -80,6 +83,6 @@ const handleSingleChild = (child: any): any => {
  * @param {Children} children - The children to process.
  * @returns {object} The processed children as objects.
 */
-export default function writeChildrenAsObjects(children: any): TranslatedChildren {
+export default function writeChildrenAsObjects(children: TaggedChildren): JsxChildren {
     return Array.isArray(children) ? children.map(handleSingleChild): handleSingleChild(children);
 }

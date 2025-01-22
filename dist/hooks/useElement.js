@@ -24,7 +24,7 @@ export default function useElement(id) {
         return id ? "".concat(id, ".").concat(suffix) : suffix;
     };
     // Get the translation context
-    var translate = useGTContext("useElement('".concat(id, "'): No context provided. You're trying to get the t() function on the client, which can only be done inside a <GTProvider>.")).translate;
+    var translateDictionaryEntry = useGTContext("useElement('".concat(id, "'): No context provided. You're trying to get the t() function on the client, which can only be done inside a <GTProvider>.")).translateDictionaryEntry;
     /**
     * Translates a dictionary item based on its `id` and options.
     * Always returns a React.JSX.Element. Returns a fragment if there is no translation.
@@ -38,15 +38,14 @@ export default function useElement(id) {
         if (id === void 0) { id = ''; }
         if (options === void 0) { options = {}; }
         var prefixedId = getId(id);
-        if (translate) {
-            var translation = translate(prefixedId, options);
+        if (translateDictionaryEntry) {
+            var translation = translateDictionaryEntry(prefixedId, options);
             if (!translation)
                 console.warn(createNoEntryWarning(id, prefixedId));
             if (!isValidElement(translation))
                 return _jsx(React.Fragment, { children: translation }, prefixedId);
             return translation;
         }
-        // TODO: fall back on default locale
         return _jsx(React.Fragment, {}, prefixedId);
     }
     ;

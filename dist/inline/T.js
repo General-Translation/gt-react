@@ -61,7 +61,7 @@ function T(_a) {
     if (!id)
         throw new Error(createClientSideTWithoutIdError(children));
     var variables = props.variables, variablesOptions = props.variablesOptions;
-    var _c = useGTContext("<T id=\"".concat(id, "\"> used on the client-side outside of <GTProvider>")), translations = _c.translations, translationRequired = _c.translationRequired, regionalTranslationRequired = _c.regionalTranslationRequired, translateChildren = _c.translateChildren, renderSettings = _c.renderSettings;
+    var _c = useGTContext("<T id=\"".concat(id, "\"> used on the client-side outside of <GTProvider>")), translations = _c.translations, translationRequired = _c.translationRequired, regionalTranslationRequired = _c.dialectTranslationRequired, translateChildren = _c.translateChildren, renderSettings = _c.renderSettings;
     var locale = useLocale();
     var defaultLocale = useDefaultLocale();
     var taggedChildren = useMemo(function () { return addGTIdentifier(children); }, [children]);
@@ -83,11 +83,13 @@ function T(_a) {
     // Do translation if required
     var translationEntry = (_b = translations === null || translations === void 0 ? void 0 : translations[id]) === null || _b === void 0 ? void 0 : _b[hash];
     useEffect(function () {
-        // no api fetch if no translation required
-        if (!translationRequired
-            || !(translations && !translationEntry)) { // translation entry has not been found in cache or cache is loading
+        // skip if: no translation required
+        if (!translationRequired)
             return;
-        }
+        // skip if: no fetch if cache hasn't been hit yet or we already have the translation
+        if (!translations || translationEntry)
+            return;
+        // Translate content
         translateChildren({
             source: childrenAsObjects,
             targetLocale: locale,

@@ -1,16 +1,10 @@
-import React, { ReactNode, ReactElement, isValidElement } from 'react'
+import React, { ReactElement, isValidElement } from 'react'
 import { isAcceptedPluralForm } from 'generaltranslation/internal'
 import { createNestedDataGTError, createNestedTError } from '../messages/createMessages';
+import { Child, Children, GTProp, TaggedChild, TaggedChildren, TaggedElement, TaggedElementProps } from '../types/types';
 
-type Child = ReactNode;
-type Children = Child[] | Child;
-type GTProp = {
-    id: number,
-    transformation?: string,
-    [key: string]: any;
-}
 
-export default function addGTIdentifier(children: Children, outerId?: string | undefined, startingIndex: number = 0): any {
+export default function addGTIdentifier(children: Children, startingIndex: number = 0): TaggedChildren {
 
     // Object to keep track of the current index for GT IDs
     let index = startingIndex;
@@ -41,7 +35,7 @@ export default function addGTIdentifier(children: Children, outerId?: string | u
             if (transformationParts[0] === "plural") {
                 const pluralBranches = Object.entries(props).reduce((acc, [branchName, branch]) => {
                     if (isAcceptedPluralForm(branchName)) {
-                        (acc as Record<string, any>)[branchName] = addGTIdentifier(branch as any, branchName, index);
+                        (acc as Record<string, any>)[branchName] = addGTIdentifier(branch as Children, index);
                     }
                     return acc;
                 }, {});
@@ -50,7 +44,7 @@ export default function addGTIdentifier(children: Children, outerId?: string | u
             if (transformationParts[0] === "branch") {
                 const { children, branch, ...branches } = props;
                 const resultBranches = Object.entries(branches).reduce((acc, [branchName, branch]) => {
-                    (acc as Record<string, any>)[branchName] = addGTIdentifier(branch as any, branchName, index);
+                    (acc as Record<string, any>)[branchName] = addGTIdentifier(branch as Children, index);
                     return acc;
                 }, {})
                 if (Object.keys(resultBranches).length) result.branches = resultBranches;
@@ -60,36 +54,34 @@ export default function addGTIdentifier(children: Children, outerId?: string | u
         return result;
     }
 
-    function handleSingleChildElement(child: ReactElement<any>) {
+    function handleSingleChildElement(child: ReactElement<any>): TaggedElement {
         const { props } = child;
-        if (props['data-_gt']) 
-            throw new Error(createNestedDataGTError(child))
+        if (props['data-_gt']) throw new Error(createNestedDataGTError(child))
         // Create new props for the element, including the GT identifier and a key
-        let generaltranslation = createGTProp(child); 
-        let newProps = {
+        let generaltranslation: GTProp = createGTProp(child); 
+        let newProps: TaggedElementProps = {
             ...props,
             'data-_gt': generaltranslation
         };
         if (props.children && !generaltranslation.variableType) {
-            newProps.children = handleChildren(props.children);
+            newProps.children = handleChildren(props.children as Children);
         }
         if (child.type === React.Fragment) {
             const fragment = <span style={{ all: 'unset', display: 'contents' }} {...newProps} />;
-            return fragment;
+            return fragment as TaggedElement;
         }
-        return React.cloneElement(child, newProps);
+        return React.cloneElement(child, newProps) as TaggedElement;
     }
 
-    function handleSingleChild(child: any) {
+    function handleSingleChild(child: Child): TaggedChild {
         if (isValidElement(child)) {
             return handleSingleChildElement(child);
         }
         return child;
     }
     
-    function handleChildren(children: Children) {
+    function handleChildren(children: Children): TaggedChildren {
         if (Array.isArray(children)) {
-            // outerId = undefined;
             return React.Children.map(children, handleSingleChild)
         } else {
             return handleSingleChild(children);

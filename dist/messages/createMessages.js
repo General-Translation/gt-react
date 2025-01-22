@@ -21,6 +21,7 @@ export var createGenericRuntimeTranslationError = function (id, hash) {
 // ---- WARNINGS ---- //
 export var createLibraryNoEntryWarning = function (id) { return "gt-react: No dictionary entry found for id: \"".concat(id, "\""); };
 export var createNoEntryWarning = function (id, prefixedId) { return "t('".concat(id, "') finding no translation for dictionary item ").concat(prefixedId, " !"); };
+export var createInvalidElementEntryWarning = function (id, prefixedId) { return "t('".concat(id, "') invalid dictionary entry for ").concat(prefixedId, " ! useElement() can only be used to render JSX elements. Strings and other types are not allowed."); };
 export var createMismatchingHashWarning = function (expectedHash, receivedHash) { return "Mismatching hashes! Expected hash: ".concat(expectedHash, ", but got hash: ").concat(receivedHash, ". We will still render your translation, but make sure to update to the newest version: www.generaltranslation.com/docs"); };
 export var createMismatchingIdHashWarning = function (expectedId, expectedHash, receivedId, receivedHash) { return "Mismatching ids or hashes! Expected id: ".concat(expectedId, ", hash: ").concat(expectedHash, ", but got id: ").concat(receivedId, ", hash: ").concat(receivedHash, ". We will still render your translation, but make sure to update to the newest version: www.generaltranslation.com/docs"); };
 //# sourceMappingURL=createMessages.js.map

@@ -9,8 +9,8 @@ var __assign = (this && this.__assign) || function () {
     };
     return __assign.apply(this, arguments);
 };
-import React from 'react';
 import getVariableName from '../variables/getVariableName';
+import { isValidTaggedElement } from '../utils/utils';
 /**
  * Gets the tag name of a React element.
  * @param {ReactElement} child - The React element.
@@ -39,7 +39,7 @@ var handleSingleChildElement = function (child) {
     var type = child.type, props = child.props;
     var objectElement = {
         type: getTagName(child),
-        props: {}
+        props: { 'data-_gt': { id: -1 } }
     };
     if (props['data-_gt']) {
         var generaltranslation = props['data-_gt'];
@@ -80,10 +80,12 @@ var handleSingleChildElement = function (child) {
     return objectElement;
 };
 var handleSingleChild = function (child) {
-    if (React.isValidElement(child)) {
+    if (isValidTaggedElement(child)) {
         return handleSingleChildElement(child);
     }
     ;
+    if (typeof child === 'number')
+        return child.toString();
     return child;
 };
 /**

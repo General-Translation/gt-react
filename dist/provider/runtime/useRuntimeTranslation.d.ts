@@ -1,3 +1,4 @@
+import { TranslateChildrenCallback, TranslateContentCallback } from "../../types/types";
 export default function useRuntimeTranslation({ targetLocale, projectId, devApiKey, runtimeUrl, defaultLocale, setTranslations, ...metadata }: {
     targetLocale: string;
     projectId?: string;
@@ -8,21 +9,7 @@ export default function useRuntimeTranslation({ targetLocale, projectId, devApiK
     [key: string]: any;
 }): {
     translationEnabled: boolean;
-    translateContent: (params: {
-        source: any;
-        targetLocale: string;
-        metadata: {
-            hash: string;
-            context?: string;
-        } & Record<string, any>;
-    }) => void;
-    translateChildren: (params: {
-        source: any;
-        targetLocale: string;
-        metadata: {
-            hash: string;
-            context?: string;
-        } & Record<string, any>;
-    }) => void;
+    translateContent: TranslateContentCallback;
+    translateChildren: TranslateChildrenCallback;
 };
 //# sourceMappingURL=useRuntimeTranslation.d.ts.map

@@ -1,6 +1,7 @@
 import React from "react";
 import useGTContext from "../provider/GTContext";
 import { createNoEntryWarning } from "../messages/createMessages";
+import T from "../inline/T";
 
 /**
  * Gets the translation function `t` provided by `<GTProvider>`.
@@ -28,7 +29,7 @@ export default function useGT(
     }
 
     // Get the translation context
-    const { renderDictionaryTranslation } = useGTContext(
+    const { translateDictionaryEntry } = useGTContext(
         `useGT('${id}'): No context provided. You're trying to get the t() function on the client, which can only be done inside a <GTProvider>.`
     );
    
@@ -45,12 +46,11 @@ export default function useGT(
         options: Record<string, any> = {}
     ): React.ReactNode {
         const prefixedId = getId(id);
-        if (renderDictionaryTranslation) {
-            const translation = renderDictionaryTranslation(prefixedId, options);
-            if (!translation && translation !== '') console.warn(createNoEntryWarning(id, prefixedId))
+        if (translateDictionaryEntry) {
+            const translation = translateDictionaryEntry(prefixedId, options);
+            if (!translation) console.warn(createNoEntryWarning(id, prefixedId))
             return translation;
         }
-        return undefined;
     };
 
     return t;

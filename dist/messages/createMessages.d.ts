@@ -11,6 +11,7 @@ export declare const dynamicTranslationError = "Error fetching batched translati
 export declare const createGenericRuntimeTranslationError: (id: string | undefined, hash: string) => string;
 export declare const createLibraryNoEntryWarning: (id: string) => string;
 export declare const createNoEntryWarning: (id: string, prefixedId: string) => string;
+export declare const createInvalidElementEntryWarning: (id: string, prefixedId: string) => string;
 export declare const createMismatchingHashWarning: (expectedHash: string, receivedHash: string) => string;
 export declare const createMismatchingIdHashWarning: (expectedId: string, expectedHash: string, receivedId: string, receivedHash: string) => string;
 //# sourceMappingURL=createMessages.d.ts.map

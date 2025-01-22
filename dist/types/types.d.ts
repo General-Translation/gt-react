@@ -1,4 +1,17 @@
 import React, { ReactElement } from "react";
+export type Child = React.ReactNode;
+export type Children = Child[] | Child;
+export type GTProp = {
+    id: number;
+    transformation?: string;
+    children?: Children;
+} & Record<string, any>;
+export type TaggedChild = React.ReactNode | TaggedElement;
+export type TaggedChildren = TaggedChild[] | TaggedChild;
+export type TaggedElementProps = Record<string, any> & {
+    'data-_gt': GTProp;
+};
+export type TaggedElement = React.ReactElement<TaggedElementProps>;
 export type Entry = string | ReactElement;
 export type Metadata = {
     singular?: Entry;
@@ -17,6 +30,9 @@ export type Metadata = {
 export type DictionaryEntry = Entry | [Entry] | [Entry, Metadata];
 export type Dictionary = {
     [key: string]: Dictionary | DictionaryEntry;
+};
+export type FlattenedDictionary = {
+    [key: string]: DictionaryEntry;
 };
 export type Variable = {
     key: string;
@@ -51,41 +67,48 @@ export type TranslationSuccess = {
 export type TranslationLoading = {
     state: 'loading';
 };
-export type Content = string | (Variable | string)[];
 export type TranslationsObject = {
     [id: string]: {
         [hash: string]: TranslationSuccess | TranslationLoading | TranslationError;
     };
 };
 export type RenderMethod = 'skeleton' | 'replace' | 'subtle' | 'default';
+export type TranslateContentCallback = (params: {
+    source: any;
+    targetLocale: string;
+    metadata: {
+        hash: string;
+        context?: string;
+    } & Record<string, any>;
+}) => Promise<void>;
+export type TranslateChildrenCallback = (params: {
+    source: any;
+    targetLocale: string;
+    metadata: {
+        hash: string;
+        context?: string;
+    } & Record<string, any>;
+}) => Promise<void>;
 export type GTContextType = {
-    translate: (id: string, options?: Record<string, any>) => React.ReactNode;
-    translateContent: (params: {
-        source: any;
-        targetLocale: string;
-        metadata: {
-            hash: string;
-            context?: string;
-        } & Record<string, any>;
-    }) => void;
-    translateChildren: (params: {
-        source: any;
-        targetLocale: string;
-        metadata: {
-            hash: string;
-            context?: string;
-        } & Record<string, any>;
-    }) => void;
+    translateDictionaryEntry: (id: string, options?: Record<string, any>) => React.ReactNode;
+    translateContent: TranslateContentCallback;
+    translateChildren: TranslateChildrenCallback;
     locale: string;
     defaultLocale: string;
+    dictionary: Dictionary;
     translations: TranslationsObject | null;
     translationRequired: boolean;
-    regionalTranslationRequired: boolean;
-    projectId?: string;
-    translationEnabled?: boolean;
+    dialectTranslationRequired: boolean;
     renderSettings: {
         method: RenderMethod;
         timeout?: number;
     };
+    projectId?: string;
+    translationEnabled?: boolean;
 };
+export declare class GTTranslationError extends Error {
+    error: string;
+    code: number;
+    constructor(error: string, code: number);
+}
 //# sourceMappingURL=types.d.ts.map

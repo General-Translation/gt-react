@@ -20,7 +20,7 @@ export default function useGT(id) {
         return id ? "".concat(id, ".").concat(suffix) : suffix;
     };
     // Get the translation context
-    var translate = useGTContext("useGT('".concat(id, "'): No context provided. You're trying to get the t() function on the client, which can only be done inside a <GTProvider>.")).translate;
+    var translateDictionaryEntry = useGTContext("useGT('".concat(id, "'): No context provided. You're trying to get the t() function on the client, which can only be done inside a <GTProvider>.")).translateDictionaryEntry;
     /**
     * Translates a dictionary item based on its `id` and options.
     *
@@ -32,14 +32,14 @@ export default function useGT(id) {
     function t(id, options) {
         if (id === void 0) { id = ''; }
         if (options === void 0) { options = {}; }
+        console.log('brian');
         var prefixedId = getId(id);
-        if (translate) {
-            var translation = translate(prefixedId, options);
-            if (!translation && translation !== '')
+        if (translateDictionaryEntry) {
+            var translation = translateDictionaryEntry(prefixedId, options);
+            if (!translation)
                 console.warn(createNoEntryWarning(id, prefixedId));
             return translation;
         }
-        return undefined;
     }
     ;
     return t;
