@@ -1,5 +1,6 @@
 import T from "./inline/T";
-import { useGT, useElement } from "./hooks/useGT";
+import useGT from "./hooks/useGT";
+import useElement from "./hooks/useElement";
 import useDefaultLocale from "./hooks/useDefaultLocale";
 import useLocale from "./hooks/useLocale";
 import GTProvider from "./provider/GTProvider";

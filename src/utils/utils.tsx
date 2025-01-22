@@ -1,17 +1,5 @@
-import { TranslatedChildren, TranslatedContent, TranslationError } from "../types/types";
-
-
-export function isTranslationError(target: unknown): target is TranslationError {
-    if (typeof target !== 'object' || target === null) {
-      return false;
-    }
-
-    const hasError = 'error' in target && typeof target.error === 'string';
-    const hasCode = 'code' in target ? typeof target.code === 'number' : true;
-
-    return hasError && hasCode;
-}
-
+import React from "react";
+import { GTTranslationError, TaggedElement, TaggedElementProps, TranslatedContent, TranslationError } from "../types/types";
 
 export function isTranslatedContent(target: unknown): target is TranslatedContent {
   if (typeof target === 'string') {
@@ -35,4 +23,25 @@ export function isTranslatedContent(target: unknown): target is TranslatedConten
 
     return false;
   });
+}
+
+export function isValidTaggedElement(target: unknown): target is TaggedElement {
+  return React.isValidElement<TaggedElementProps>(target)
+}
+
+
+
+export function errorToTranlsationError(error: Error): TranslationError {
+  if (error instanceof GTTranslationError) {
+    return {
+      state: 'error',
+      error: error.error,
+      code: error.code
+    }
+  }
+  return {
+    state: 'error',
+    error: `${error.name}: ${error.message}`,
+    code: 500
+  }
 }

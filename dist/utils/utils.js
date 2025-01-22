@@ -1,16 +1,6 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.isTranslationError = isTranslationError;
-exports.isTranslatedContent = isTranslatedContent;
-function isTranslationError(target) {
-    if (typeof target !== 'object' || target === null) {
-        return false;
-    }
-    var hasError = 'error' in target && typeof target.error === 'string';
-    var hasCode = 'code' in target ? typeof target.code === 'number' : true;
-    return hasError && hasCode;
-}
-function isTranslatedContent(target) {
+import React from "react";
+import { GTTranslationError } from "../types/types";
+export function isTranslatedContent(target) {
     if (typeof target === 'string') {
         return true;
     }
@@ -28,5 +18,22 @@ function isTranslatedContent(target) {
         }
         return false;
     });
+}
+export function isValidTaggedElement(target) {
+    return React.isValidElement(target);
+}
+export function errorToTranlsationError(error) {
+    if (error instanceof GTTranslationError) {
+        return {
+            state: 'error',
+            error: error.error,
+            code: error.code
+        };
+    }
+    return {
+        state: 'error',
+        error: "".concat(error.name, ": ").concat(error.message),
+        code: 500
+    };
 }
 //# sourceMappingURL=utils.js.map

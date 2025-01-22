@@ -1,5 +1,20 @@
 import React, { ReactElement } from "react"
 
+
+
+export type Child = React.ReactNode;
+export type Children = Child[] | Child;
+export type GTProp = {
+    id: number,
+    transformation?: string,
+    children?: Children,
+} & Record<string, any>;
+
+export type TaggedChild = React.ReactNode | TaggedElement;
+export type TaggedChildren = TaggedChild[] | TaggedChild;
+export type TaggedElementProps = Record<string, any> & { 'data-_gt': GTProp };
+export type TaggedElement = React.ReactElement<TaggedElementProps>
+
 export type Entry = string | ReactElement;
 export type Metadata = {
     singular?: Entry,
@@ -19,19 +34,23 @@ export type DictionaryEntry = Entry | [ Entry ] | [ Entry, Metadata ];
 export type Dictionary = {
     [key: string]: Dictionary | DictionaryEntry;
 }
+export type FlattenedDictionary = {
+    [key: string]: DictionaryEntry
+}
 
 export type Variable = {
     key: string,
     id?: number,
     variable?: "variable" | "number" | "datetime" | "currency"
 }
+
 export type TranslatedElement = {
     type: string,
     props: {
         'data-_gt': {
             id: number,
             [key: string]: any
-        }
+        },
         children?: TranslatedChildren
     }
 }
@@ -39,35 +58,52 @@ export type TranslatedElement = {
 export type TranslatedChild = TranslatedElement | string | Variable;
 export type TranslatedChildren = TranslatedChild | TranslatedChild[];
 export type TranslatedContent = string | (string | { key: string; variable?: string })[];
+
 export type TranslationError = {
+    state: 'error',
     error: string,
     code?: number
 };
+export type TranslationSuccess = {
+    state: 'success',
+    entry: TranslatedChildren | TranslatedContent
+};
+export type TranslationLoading = {
+    state: 'loading'
+}
 
-
-export type Content = string | (Variable | string)[]
 export type TranslationsObject = {
-    [id: string]:
-        { [hash: string]: TranslatedChildren | TranslatedContent }
-        | TranslationError
+    [id: string]: {
+        [hash: string]: TranslationSuccess | TranslationLoading | TranslationError
+    }
 };
 
 export type RenderMethod = 'skeleton' | 'replace' | 'subtle' | 'default';
 
 
+export type TranslateContentCallback = (params: { source: any, targetLocale: string, metadata: { hash: string, context?: string } & Record<string, any> }) => Promise<void>;
+export type TranslateChildrenCallback = (params: { source: any, targetLocale: string, metadata: { hash: string, context?: string } & Record<string, any> }) => Promise<void>;
+
 export type GTContextType = {
-    translate: (id: string, options?: Record<string, any>) => React.ReactNode,
-    translateContent: (params: { source: any, targetLocale: string, metadata: { hash: string, context?: string } & Record<string, any> }) => void,
-    translateChildren: (params: { source: any, targetLocale: string, metadata: { hash: string, context?: string } & Record<string, any> }) => void,
+    translateDictionaryEntry: (id: string, options?: Record<string, any>) => React.ReactNode,
+    translateContent: TranslateContentCallback,
+    translateChildren: TranslateChildrenCallback,
     locale: string,
-    defaultLocale: string, 
+    defaultLocale: string,
+    dictionary: Dictionary,
     translations: TranslationsObject | null,
     translationRequired: boolean,
-    regionalTranslationRequired: boolean,
+    dialectTranslationRequired: boolean,
+    renderSettings: { method: RenderMethod, timeout?: number },
     projectId?: string,
     translationEnabled?: boolean,
-    renderSettings: {
-        method: RenderMethod,
-        timeout?: number
+}
+
+
+export class GTTranslationError extends Error {
+    constructor(public error: string, public code: number) {
+      super(error);
+      this.name = "GTTranslationError";
+      this.code = code;
     }
 }

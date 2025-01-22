@@ -1,6 +1,3 @@
-import { ReactNode } from 'react';
-type Child = ReactNode;
-type Children = Child[] | Child;
-export default function addGTIdentifier(children: Children, outerId?: string | undefined, startingIndex?: number): any;
-export {};
+import { Children, TaggedChildren } from '../types/types';
+export default function addGTIdentifier(children: Children, startingIndex?: number): TaggedChildren;
 //# sourceMappingURL=addGTIdentifier.d.ts.map

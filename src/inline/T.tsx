@@ -2,15 +2,15 @@ import React, { Suspense, useEffect } from "react";
 import useDefaultLocale from "../hooks/useDefaultLocale";
 import useLocale from "../hooks/useLocale";
 import renderDefaultChildren from "../provider/rendering/renderDefaultChildren";
-import { addGTIdentifier, isTranslationError, writeChildrenAsObjects } from "../internal";
+import { addGTIdentifier, writeChildrenAsObjects } from "../internal";
 import useGTContext from "../provider/GTContext";
 import renderTranslatedChildren from "../provider/rendering/renderTranslatedChildren";
 import { useMemo } from "react";
 import renderVariable from "../provider/rendering/renderVariable";
-import { createClientSideTWithoutIdError } from "../errors/createErrors";
+import { createClientSideTWithoutIdError } from "../messages/createMessages";
 import { hashJsxChildren } from "generaltranslation/id";
 import renderSkeleton from "../provider/rendering/renderSkeleton";
-import { TranslatedChildren, TranslatedContent } from "../types/types";
+import { TranslatedChildren } from "../types/types";
 
 /**
  * Translation component that handles rendering translated content, including plural forms.
@@ -62,7 +62,7 @@ function T({
   const {
     translations,
     translationRequired,
-    regionalTranslationRequired,
+    dialectTranslationRequired: regionalTranslationRequired,
     translateChildren,
     renderSettings
   } = useGTContext(
@@ -71,10 +71,11 @@ function T({
 
   const locale = useLocale();
   const defaultLocale = useDefaultLocale();
-  const taggedChildren = useMemo(() => addGTIdentifier(children), [children])
+  const taggedChildren = useMemo(() => addGTIdentifier(children), [children]);
 
   // ----- FETCH TRANSLATION ----- //
 
+  // Calculate necessary info for fetching tx/generating tx
   const context = props.context;
   const [childrenAsObjects, hash] = useMemo(() => {
     if (translationRequired) {
@@ -91,21 +92,24 @@ function T({
   }, [context, taggedChildren, translationRequired]);
 
 
-  const translation = translations?.[id];
-  const translationEntry = !isTranslationError(translation) && translation?.[hash];
+  // Do translation if required
+  const translationEntry = translations?.[id]?.[hash];
   useEffect(() => {
+    // skip if: no translation required
     if (!translationRequired) return;
-    // note have to recover from mis-matching hashing functions on client and server, if API returns wrong hash, then should fail gracefully
-    if (!translationEntry) {
-      translateChildren({
-        source: childrenAsObjects,
-        targetLocale: locale,
-        metadata: {
-            id, hash, context
-        }
-      });
-    }
-  }, [translation, translationEntry, translationRequired, id, hash, context]);
+
+    // skip if: no fetch if cache hasn't been hit yet or we already have the translation
+    if (!translations || translationEntry) return;
+
+    // Translate content
+    translateChildren({
+      source: childrenAsObjects,
+      targetLocale: locale,
+      metadata: {
+          id, hash, context
+      }
+    })
+  }, [translations, translationEntry, translationRequired, id, hash, context]);
 
   // ----- RENDER METHODS ----- // 
 
@@ -154,12 +158,8 @@ function T({
       return renderDefaultLocale();
   }
 
-  // handle translation error
-  if (isTranslationError(translation)) {
-    return renderDefaultLocale();
-  }
   // loading behavior
-  if (!translationEntry) {
+  if (!translationEntry || translationEntry?.state === "loading") {
     let loadingFallback;
     if (renderSettings.method === "skeleton") {
         loadingFallback = renderLoadingSkeleton();
@@ -174,8 +174,13 @@ function T({
     return <Suspense fallback={loadingFallback}>{loadingFallback}</Suspense>;
   }
 
+  // error behavior
+  if (translationEntry.state === "error") {
+    return renderDefaultLocale();
+  }
+
   // render translated content
-  return renderTranslation(translationEntry as TranslatedChildren);
+  return renderTranslation(translationEntry.entry as TranslatedChildren);
 
 }
 

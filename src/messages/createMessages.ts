@@ -21,8 +21,22 @@ export const renderingError = 'General Translation: Rendering error.'
 
 export const dynamicTranslationError = "Error fetching batched translations:"
 
+export const createGenericRuntimeTranslationError = (id: string | undefined, hash: string) => {
+    if (!id) {
+        return `Translation failed for hash: ${hash}`;
+    } else {
+        return `Translation failed for id: ${id}, hash: ${hash} `;
+    }
+}
+
 // ---- WARNINGS ---- //
 
 export const createLibraryNoEntryWarning = (id: string) => `gt-react: No dictionary entry found for id: "${id}"`
 
 export const createNoEntryWarning = (id: string, prefixedId: string) => `t('${id}') finding no translation for dictionary item ${prefixedId} !`
+
+export const createInvalidElementEntryWarning = (id: string, prefixedId: string) => `t('${id}') invalid dictionary entry for ${prefixedId} ! useElement() can only be used to render JSX elements. Strings and other types are not allowed.`
+
+export const createMismatchingHashWarning = (expectedHash: string, receivedHash: string) => `Mismatching hashes! Expected hash: ${expectedHash}, but got hash: ${receivedHash}. We will still render your translation, but make sure to update to the newest version: www.generaltranslation.com/docs`
+
+export const createMismatchingIdHashWarning = (expectedId: string, expectedHash: string, receivedId: string, receivedHash: string) => `Mismatching ids or hashes! Expected id: ${expectedId}, hash: ${expectedHash}, but got id: ${receivedId}, hash: ${receivedHash}. We will still render your translation, but make sure to update to the newest version: www.generaltranslation.com/docs`
