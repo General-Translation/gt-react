@@ -80,11 +80,7 @@ function T({
   const [childrenAsObjects, hash] = useMemo(() => {
     if (translationRequired) {
       const childrenAsObjects = writeChildrenAsObjects(taggedChildren);
-      const hash: string = hashJsxChildren(
-        context
-          ? { source: childrenAsObjects, context }
-          : { source: childrenAsObjects }
-      );
+      const hash: string = hashJsxChildren({ source: childrenAsObjects, ...(context && {context}) });
       return [childrenAsObjects, hash];
     } else {
       return [undefined, ''];

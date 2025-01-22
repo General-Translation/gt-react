@@ -1,5 +1,11 @@
-import useGTContext from "../provider/GTContext";
-import { createNoEntryWarning } from "../messages/createMessages";
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = useGT;
+var GTContext_1 = __importDefault(require("../provider/GTContext"));
+var createMessages_1 = require("../messages/createMessages");
 /**
  * Gets the translation function `t` provided by `<GTProvider>`.
  *
@@ -13,14 +19,14 @@ import { createNoEntryWarning } from "../messages/createMessages";
  * const t = useGT();
  * console.log(t('hello')); // Translates item 'hello'
  */
-export default function useGT(id) {
+function useGT(id) {
     if (id === void 0) { id = ''; }
     // Create a prefix for translation keys if an id is provided
     var getId = function (suffix) {
         return id ? "".concat(id, ".").concat(suffix) : suffix;
     };
     // Get the translation context
-    var translateDictionaryEntry = useGTContext("useGT('".concat(id, "'): No context provided. You're trying to get the t() function on the client, which can only be done inside a <GTProvider>.")).translateDictionaryEntry;
+    var translateDictionaryEntry = (0, GTContext_1.default)("useGT('".concat(id, "'): No context provided. You're trying to get the t() function on the client, which can only be done inside a <GTProvider>.")).translateDictionaryEntry;
     /**
     * Translates a dictionary item based on its `id` and options.
     *
@@ -36,7 +42,7 @@ export default function useGT(id) {
         if (translateDictionaryEntry) {
             var translation = translateDictionaryEntry(prefixedId, options);
             if (!translation)
-                console.warn(createNoEntryWarning(id, prefixedId));
+                console.warn((0, createMessages_1.createNoEntryWarning)(id, prefixedId));
             return translation;
         }
     }

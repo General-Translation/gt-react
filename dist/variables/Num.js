@@ -1,7 +1,12 @@
-import { jsx as _jsx } from "react/jsx-runtime";
-import { formatNum } from 'generaltranslation';
-import useLocale from '../hooks/useLocale';
-import useDefaultLocale from '../hooks/useDefaultLocale';
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+var jsx_runtime_1 = require("react/jsx-runtime");
+var generaltranslation_1 = require("generaltranslation");
+var useLocale_1 = __importDefault(require("../hooks/useLocale"));
+var useDefaultLocale_1 = __importDefault(require("../hooks/useDefaultLocale"));
 /**
  * The `<Num>` component renders a formatted number string, allowing customization of the name, default value, and formatting options.
  * It formats the number according to the current locale and optionally passed formatting options.
@@ -25,18 +30,18 @@ import useDefaultLocale from '../hooks/useDefaultLocale';
  */
 function Num(_a) {
     var children = _a.children, value = _a.value, name = _a.name, locales = _a.locales, _b = _a.options, options = _b === void 0 ? {} : _b;
-    var providerLocales = [useLocale(), useDefaultLocale()];
+    var providerLocales = [(0, useLocale_1.default)(), (0, useDefaultLocale_1.default)()];
     locales || (locales = providerLocales);
     var renderedValue = (typeof children !== 'undefined') ? children : value;
     renderedValue = (typeof renderedValue === 'string') ? parseFloat(renderedValue) : renderedValue;
     var formattedValue = renderedValue;
     if (typeof renderedValue === 'number') {
         // Using Intl.NumberFormat for consistent number formatting
-        formattedValue = formatNum({ value: renderedValue, locales: locales, options: options });
+        formattedValue = (0, generaltranslation_1.formatNum)({ value: renderedValue, locales: locales, options: options });
     }
-    return (_jsx("span", { "data-_gt-variable-name": name, "data-_gt-variable-type": "number", "data-_gt-variable-options": JSON.stringify(options), style: { display: 'contents' }, suppressHydrationWarning: true, children: formattedValue }));
+    return ((0, jsx_runtime_1.jsx)("span", { "data-_gt-variable-name": name, "data-_gt-variable-type": "number", "data-_gt-variable-options": JSON.stringify(options), style: { display: 'contents' }, suppressHydrationWarning: true, children: formattedValue }));
 }
 ;
 Num.gtTransformation = "variable-number";
-export default Num;
+exports.default = Num;
 //# sourceMappingURL=Num.js.map

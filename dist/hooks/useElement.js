@@ -1,7 +1,46 @@
-import { jsx as _jsx } from "react/jsx-runtime";
-import React, { isValidElement } from "react";
-import { createNoEntryWarning } from "../messages/createMessages";
-import useGTContext from "../provider/GTContext";
+"use strict";
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || (function () {
+    var ownKeys = function(o) {
+        ownKeys = Object.getOwnPropertyNames || function (o) {
+            var ar = [];
+            for (var k in o) if (Object.prototype.hasOwnProperty.call(o, k)) ar[ar.length] = k;
+            return ar;
+        };
+        return ownKeys(o);
+    };
+    return function (mod) {
+        if (mod && mod.__esModule) return mod;
+        var result = {};
+        if (mod != null) for (var k = ownKeys(mod), i = 0; i < k.length; i++) if (k[i] !== "default") __createBinding(result, mod, k[i]);
+        __setModuleDefault(result, mod);
+        return result;
+    };
+})();
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = useElement;
+var jsx_runtime_1 = require("react/jsx-runtime");
+var react_1 = __importStar(require("react"));
+var createMessages_1 = require("../messages/createMessages");
+var GTContext_1 = __importDefault(require("../provider/GTContext"));
 /**
  * `useElement()` hook which gets the translation function `t()` provided by `<GTProvider>`.
  *
@@ -17,14 +56,14 @@ import useGTContext from "../provider/GTContext";
  * const t = useElement();
  * console.log(t('hello')); // Translates item 'hello', returns it as a JSX element
  */
-export default function useElement(id) {
+function useElement(id) {
     if (id === void 0) { id = ''; }
     // Create a prefix for translation keys if an id is provided
     var getId = function (suffix) {
         return id ? "".concat(id, ".").concat(suffix) : suffix;
     };
     // Get the translation context
-    var translateDictionaryEntry = useGTContext("useElement('".concat(id, "'): No context provided. You're trying to get the t() function on the client, which can only be done inside a <GTProvider>.")).translateDictionaryEntry;
+    var translateDictionaryEntry = (0, GTContext_1.default)("useElement('".concat(id, "'): No context provided. You're trying to get the t() function on the client, which can only be done inside a <GTProvider>.")).translateDictionaryEntry;
     /**
     * Translates a dictionary item based on its `id` and options.
     * Always returns a React.JSX.Element. Returns a fragment if there is no translation.
@@ -41,12 +80,12 @@ export default function useElement(id) {
         if (translateDictionaryEntry) {
             var translation = translateDictionaryEntry(prefixedId, options);
             if (!translation)
-                console.warn(createNoEntryWarning(id, prefixedId));
-            if (!isValidElement(translation))
-                return _jsx(React.Fragment, { children: translation }, prefixedId);
+                console.warn((0, createMessages_1.createNoEntryWarning)(id, prefixedId));
+            if (!(0, react_1.isValidElement)(translation))
+                return (0, jsx_runtime_1.jsx)(react_1.default.Fragment, { children: translation }, prefixedId);
             return translation;
         }
-        return _jsx(React.Fragment, {}, prefixedId);
+        return (0, jsx_runtime_1.jsx)(react_1.default.Fragment, {}, prefixedId);
     }
     ;
     return t;

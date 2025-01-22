@@ -90,20 +90,10 @@ export type GTContextType = {
     translateChildren: TranslateChildrenCallback,
     locale: string,
     defaultLocale: string,
-    dictionary: Dictionary,
     translations: TranslationsObject | null,
     translationRequired: boolean,
     dialectTranslationRequired: boolean,
     renderSettings: { method: RenderMethod, timeout?: number },
     projectId?: string,
     translationEnabled?: boolean,
-}
-
-
-export class GTTranslationError extends Error {
-    constructor(public error: string, public code: number) {
-      super(error);
-      this.name = "GTTranslationError";
-      this.code = code;
-    }
 }

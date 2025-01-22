@@ -1,3 +1,4 @@
+"use strict";
 var __assign = (this && this.__assign) || function () {
     __assign = Object.assign || function(t) {
         for (var s, i = 1, n = arguments.length; i < n; i++) {
@@ -9,6 +10,39 @@ var __assign = (this && this.__assign) || function () {
     };
     return __assign.apply(this, arguments);
 };
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || (function () {
+    var ownKeys = function(o) {
+        ownKeys = Object.getOwnPropertyNames || function (o) {
+            var ar = [];
+            for (var k in o) if (Object.prototype.hasOwnProperty.call(o, k)) ar[ar.length] = k;
+            return ar;
+        };
+        return ownKeys(o);
+    };
+    return function (mod) {
+        if (mod && mod.__esModule) return mod;
+        var result = {};
+        if (mod != null) for (var k = ownKeys(mod), i = 0; i < k.length; i++) if (k[i] !== "default") __createBinding(result, mod, k[i]);
+        __setModuleDefault(result, mod);
+        return result;
+    };
+})();
 var __rest = (this && this.__rest) || function (s, e) {
     var t = {};
     for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
@@ -20,11 +54,13 @@ var __rest = (this && this.__rest) || function (s, e) {
         }
     return t;
 };
-import { jsx as _jsx } from "react/jsx-runtime";
-import React, { isValidElement } from 'react';
-import { isAcceptedPluralForm } from 'generaltranslation/internal';
-import { createNestedDataGTError, createNestedTError } from '../messages/createMessages';
-export default function addGTIdentifier(children, startingIndex) {
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = addGTIdentifier;
+var jsx_runtime_1 = require("react/jsx-runtime");
+var react_1 = __importStar(require("react"));
+var internal_1 = require("generaltranslation/internal");
+var createMessages_1 = require("../messages/createMessages");
+function addGTIdentifier(children, startingIndex) {
     if (startingIndex === void 0) { startingIndex = 0; }
     // Object to keep track of the current index for GT IDs
     var index = startingIndex;
@@ -47,7 +83,7 @@ export default function addGTIdentifier(children, startingIndex) {
         if (transformation) {
             var transformationParts = transformation.split('-');
             if (transformationParts[0] === "translate") {
-                throw new Error(createNestedTError(child));
+                throw new Error((0, createMessages_1.createNestedTError)(child));
             }
             if (transformationParts[0] === "variable") {
                 result.variableType = (transformationParts === null || transformationParts === void 0 ? void 0 : transformationParts[1]) || "variable";
@@ -55,7 +91,7 @@ export default function addGTIdentifier(children, startingIndex) {
             if (transformationParts[0] === "plural") {
                 var pluralBranches = Object.entries(props).reduce(function (acc, _a) {
                     var branchName = _a[0], branch = _a[1];
-                    if (isAcceptedPluralForm(branchName)) {
+                    if ((0, internal_1.isAcceptedPluralForm)(branchName)) {
                         acc[branchName] = addGTIdentifier(branch, index);
                     }
                     return acc;
@@ -80,28 +116,28 @@ export default function addGTIdentifier(children, startingIndex) {
     function handleSingleChildElement(child) {
         var props = child.props;
         if (props['data-_gt'])
-            throw new Error(createNestedDataGTError(child));
+            throw new Error((0, createMessages_1.createNestedDataGTError)(child));
         // Create new props for the element, including the GT identifier and a key
         var generaltranslation = createGTProp(child);
         var newProps = __assign(__assign({}, props), { 'data-_gt': generaltranslation });
         if (props.children && !generaltranslation.variableType) {
             newProps.children = handleChildren(props.children);
         }
-        if (child.type === React.Fragment) {
-            var fragment = _jsx("span", __assign({ style: { all: 'unset', display: 'contents' } }, newProps));
+        if (child.type === react_1.default.Fragment) {
+            var fragment = (0, jsx_runtime_1.jsx)("span", __assign({ style: { all: 'unset', display: 'contents' } }, newProps));
             return fragment;
         }
-        return React.cloneElement(child, newProps);
+        return react_1.default.cloneElement(child, newProps);
     }
     function handleSingleChild(child) {
-        if (isValidElement(child)) {
+        if ((0, react_1.isValidElement)(child)) {
             return handleSingleChildElement(child);
         }
         return child;
     }
     function handleChildren(children) {
         if (Array.isArray(children)) {
-            return React.Children.map(children, handleSingleChild);
+            return react_1.default.Children.map(children, handleSingleChild);
         }
         else {
             return handleSingleChild(children);

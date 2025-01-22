@@ -1,6 +1,12 @@
-import React from "react";
-import { GTTranslationError } from "../types/types";
-export function isTranslatedContent(target) {
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.isTranslatedContent = isTranslatedContent;
+exports.isValidTaggedElement = isValidTaggedElement;
+var react_1 = __importDefault(require("react"));
+function isTranslatedContent(target) {
     if (typeof target === 'string') {
         return true;
     }
@@ -19,21 +25,7 @@ export function isTranslatedContent(target) {
         return false;
     });
 }
-export function isValidTaggedElement(target) {
-    return React.isValidElement(target);
-}
-export function errorToTranlsationError(error) {
-    if (error instanceof GTTranslationError) {
-        return {
-            state: 'error',
-            error: error.error,
-            code: error.code
-        };
-    }
-    return {
-        state: 'error',
-        error: "".concat(error.name, ": ").concat(error.message),
-        code: 500
-    };
+function isValidTaggedElement(target) {
+    return react_1.default.isValidElement(target);
 }
 //# sourceMappingURL=utils.js.map

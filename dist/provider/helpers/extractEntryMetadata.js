@@ -1,4 +1,7 @@
-export default function extractEntryMetadata(value) {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = extractEntryMetadata;
+function extractEntryMetadata(value) {
     if (Array.isArray(value)) {
         if (value.length === 1) {
             return { entry: value[0] };
