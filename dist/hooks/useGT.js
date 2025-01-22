@@ -32,7 +32,6 @@ export default function useGT(id) {
     function t(id, options) {
         if (id === void 0) { id = ''; }
         if (options === void 0) { options = {}; }
-        console.log('brian');
         var prefixedId = getId(id);
         if (translateDictionaryEntry) {
             var translation = translateDictionaryEntry(prefixedId, options);
