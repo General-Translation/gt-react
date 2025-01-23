@@ -45,7 +45,7 @@ function renderTranslatedElement({
             variables.n = n;
         return renderTranslatedChildren({ 
             source: sourceBranch, 
-            target: targetBranch as TranslatedChildren,
+            target: targetBranch,
             variables, variablesOptions, locales, renderVariable
         });
     }

@@ -27,6 +27,7 @@ export default function GTProvider({ children, projectId, dictionary, locales, d
         method: RenderMethod;
         timeout?: number;
     };
+    runtimeTranslations: boolean;
     [key: string]: any;
 }): React.JSX.Element;
 //# sourceMappingURL=GTProvider.d.ts.map

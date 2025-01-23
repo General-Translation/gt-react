@@ -91,6 +91,4 @@ export default function renderDefaultChildren({
     };
 
     return handleChildren(children);
-
-
 }

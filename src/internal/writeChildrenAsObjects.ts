@@ -26,7 +26,7 @@ const handleSingleChildElement = (child: TaggedElement): JsxChild => {
     const { type, props } = child;
     let objectElement: JsxElement = {
         type: getTagName(child),
-        props: { 'data-_gt': { id: -1 } }
+        props: {}
     };
     if (props['data-_gt']) {
 

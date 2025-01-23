@@ -68,18 +68,13 @@ export default function GTProvider({
         method: RenderMethod;
         timeout?: number;
     };
+    runtimeTranslations: boolean;
     [key: string]: any
 }): React.JSX.Element {
 
   if (!projectId && (cacheUrl === defaultCacheUrl || runtimeUrl === defaultRuntimeApiUrl)) {
       throw new Error(projectIdMissingError)
   };
-
-  // disable subtle for development
-  if (devApiKey && renderSettings.method === 'subtle') {
-    console.warn('Subtle render method cannot be used in dev environments, falling back to default.');
-    renderSettings.method = 'default';
-  }
 
   // get tx required info
   const [translationRequired, dialectTranslationRequired] = useMemo(() => {
@@ -240,7 +235,7 @@ export default function GTProvider({
 
         // render translated content
         return renderContentToString(
-          translationEntry.entry as TranslatedContent,
+          translationEntry.target as TranslatedContent,
           [locale, defaultLocale],
           variables,
           variablesOptions

@@ -45,7 +45,7 @@ var handleSingleChildElement = function (child) {
     var type = child.type, props = child.props;
     var objectElement = {
         type: getTagName(child),
-        props: { 'data-_gt': { id: -1 } }
+        props: {}
     };
     if (props['data-_gt']) {
         var generaltranslation = props['data-_gt'];

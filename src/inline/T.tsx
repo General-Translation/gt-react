@@ -62,7 +62,7 @@ function T({
   const {
     translations,
     translationRequired,
-    dialectTranslationRequired: regionalTranslationRequired,
+    dialectTranslationRequired,
     translateChildren,
     renderSettings
   } = useGTContext(
@@ -117,7 +117,7 @@ function T({
         variablesOptions,
         defaultLocale,
         renderVariable
-    }) as React.JSX.Element;
+    });
   }
 
   const renderLoadingSkeleton = () => {
@@ -130,7 +130,7 @@ function T({
   }
 
   const renderLoadingDefault = () => {
-    if (regionalTranslationRequired) {
+    if (dialectTranslationRequired) {
         return renderDefaultLocale();
     }
     return renderLoadingSkeleton();
@@ -144,14 +144,14 @@ function T({
       variablesOptions,
       locales: [locale, defaultLocale],
       renderVariable
-    }) as React.JSX.Element
+    }) as React.JSX.Element;
   }
 
   // ----- RENDER BEHAVIOR ----- //
 
   // fallback to default locale if no tx required
   if (!translationRequired) {
-      return renderDefaultLocale();
+      return <React.Fragment>{renderDefaultLocale()}</React.Fragment>;
   }
 
   // loading behavior
@@ -161,22 +161,20 @@ function T({
         loadingFallback = renderLoadingSkeleton();
     } else if (renderSettings.method === "replace") {
         loadingFallback = renderDefaultLocale();
-    } else if (renderSettings.method === "subtle") {
-        loadingFallback = renderDefaultLocale();
     } else { // default
       loadingFallback = renderLoadingDefault();
     }
     // The suspense exists here for hydration reasons
-    return <Suspense fallback={loadingFallback}>{loadingFallback}</Suspense>;
+    return <React.Fragment>{loadingFallback}</React.Fragment>;
   }
 
   // error behavior
   if (translationEntry.state === "error") {
-    return renderDefaultLocale();
+    return <React.Fragment>{renderDefaultLocale()}</React.Fragment>;
   }
 
   // render translated content
-  return renderTranslation(translationEntry.entry as TranslatedChildren);
+  return <React.Fragment>{renderTranslation(translationEntry.target)}</React.Fragment>;
 
 }
 

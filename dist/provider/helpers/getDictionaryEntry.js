@@ -7,11 +7,6 @@ exports.default = getDictionaryEntry;
 var react_1 = __importDefault(require("react"));
 var createMessages_1 = require("../../messages/createMessages");
 function getDictionaryEntry(dictionary, id) {
-    if (id === '') {
-        console.error((0, createMessages_1.createLibraryNoEntryWarning)(id));
-        return undefined;
-    }
-    ;
     var current = dictionary;
     var dictionaryPath = id.split(".");
     for (var _i = 0, dictionaryPath_1 = dictionaryPath; _i < dictionaryPath_1.length; _i++) {

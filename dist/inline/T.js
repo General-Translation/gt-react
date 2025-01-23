@@ -10,6 +10,39 @@ var __assign = (this && this.__assign) || function () {
     };
     return __assign.apply(this, arguments);
 };
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || (function () {
+    var ownKeys = function(o) {
+        ownKeys = Object.getOwnPropertyNames || function (o) {
+            var ar = [];
+            for (var k in o) if (Object.prototype.hasOwnProperty.call(o, k)) ar[ar.length] = k;
+            return ar;
+        };
+        return ownKeys(o);
+    };
+    return function (mod) {
+        if (mod && mod.__esModule) return mod;
+        var result = {};
+        if (mod != null) for (var k = ownKeys(mod), i = 0; i < k.length; i++) if (k[i] !== "default") __createBinding(result, mod, k[i]);
+        __setModuleDefault(result, mod);
+        return result;
+    };
+})();
 var __rest = (this && this.__rest) || function (s, e) {
     var t = {};
     for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
@@ -26,7 +59,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var jsx_runtime_1 = require("react/jsx-runtime");
-var react_1 = require("react");
+var react_1 = __importStar(require("react"));
 var useDefaultLocale_1 = __importDefault(require("../hooks/useDefaultLocale"));
 var useLocale_1 = __importDefault(require("../hooks/useLocale"));
 var renderDefaultChildren_1 = __importDefault(require("../provider/rendering/renderDefaultChildren"));
@@ -77,7 +110,7 @@ function T(_a) {
     if (!id)
         throw new Error((0, createMessages_1.createClientSideTWithoutIdError)(children));
     var variables = props.variables, variablesOptions = props.variablesOptions;
-    var _c = (0, GTContext_1.default)("<T id=\"".concat(id, "\"> used on the client-side outside of <GTProvider>")), translations = _c.translations, translationRequired = _c.translationRequired, regionalTranslationRequired = _c.dialectTranslationRequired, translateChildren = _c.translateChildren, renderSettings = _c.renderSettings;
+    var _c = (0, GTContext_1.default)("<T id=\"".concat(id, "\"> used on the client-side outside of <GTProvider>")), translations = _c.translations, translationRequired = _c.translationRequired, dialectTranslationRequired = _c.dialectTranslationRequired, translateChildren = _c.translateChildren, renderSettings = _c.renderSettings;
     var locale = (0, useLocale_1.default)();
     var defaultLocale = (0, useDefaultLocale_1.default)();
     var taggedChildren = (0, react_2.useMemo)(function () { return (0, internal_1.addGTIdentifier)(children); }, [children]);
@@ -134,7 +167,7 @@ function T(_a) {
         });
     };
     var renderLoadingDefault = function () {
-        if (regionalTranslationRequired) {
+        if (dialectTranslationRequired) {
             return renderDefaultLocale();
         }
         return renderLoadingSkeleton();
@@ -152,7 +185,7 @@ function T(_a) {
     // ----- RENDER BEHAVIOR ----- //
     // fallback to default locale if no tx required
     if (!translationRequired) {
-        return renderDefaultLocale();
+        return (0, jsx_runtime_1.jsx)(react_1.default.Fragment, { children: renderDefaultLocale() });
     }
     // loading behavior
     if (!translationEntry || (translationEntry === null || translationEntry === void 0 ? void 0 : translationEntry.state) === "loading") {
@@ -163,21 +196,18 @@ function T(_a) {
         else if (renderSettings.method === "replace") {
             loadingFallback = renderDefaultLocale();
         }
-        else if (renderSettings.method === "subtle") {
-            loadingFallback = renderDefaultLocale();
-        }
         else { // default
             loadingFallback = renderLoadingDefault();
         }
         // The suspense exists here for hydration reasons
-        return (0, jsx_runtime_1.jsx)(react_1.Suspense, { fallback: loadingFallback, children: loadingFallback });
+        return (0, jsx_runtime_1.jsx)(react_1.default.Fragment, { children: loadingFallback });
     }
     // error behavior
     if (translationEntry.state === "error") {
-        return renderDefaultLocale();
+        return (0, jsx_runtime_1.jsx)(react_1.default.Fragment, { children: renderDefaultLocale() });
     }
     // render translated content
-    return renderTranslation(translationEntry.entry);
+    return (0, jsx_runtime_1.jsx)(react_1.default.Fragment, { children: renderTranslation(translationEntry.target) });
 }
 T.gtTransformation = "translate-client";
 exports.default = T;

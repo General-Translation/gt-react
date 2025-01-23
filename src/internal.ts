@@ -11,16 +11,19 @@ import renderDefaultChildren from "./provider/rendering/renderDefaultChildren";
 import renderTranslatedChildren from "./provider/rendering/renderTranslatedChildren";
 import { defaultRenderSettings } from "./provider/rendering/defaultRenderSettings";
 import renderSkeleton from "./provider/rendering/renderSkeleton";
-import { Dictionary, RenderMethod, TranslatedChildren, TranslatedContent, TranslationError, TranslationsObject, DictionaryEntry, TranslationSuccess, GTContextType } from "./types/types";
+import { Dictionary, RenderMethod, TranslatedChildren, TranslatedContent, TranslationError, TranslationsObject, DictionaryEntry, TranslationSuccess, GTContextType, TranslationLoading, TaggedChildren, Children, FlattenedDictionary, Metadata, Child, GTProp, Entry } from "./types/types";
+import renderVariable from "./provider/rendering/renderVariable";
 export {
     addGTIdentifier, writeChildrenAsObjects, isVariableObject,
-    Dictionary, flattenDictionary, getDictionaryEntry, getVariableProps, DictionaryEntry,
+    Dictionary, flattenDictionary, getDictionaryEntry, getVariableProps, DictionaryEntry, FlattenedDictionary, Metadata,
     getPluralBranch, extractEntryMetadata,
-    getVariableName, getFallbackVariableName,
+    getVariableName, getFallbackVariableName, renderVariable,
     renderDefaultChildren, renderTranslatedChildren,
     renderSkeleton,
     RenderMethod, defaultRenderSettings,
-    TranslatedChildren as TranslatedChildren, TranslationsObject, TranslatedContent as TranslatedContent, TranslationError, TranslationSuccess,
+    TaggedChildren, Children, Child, GTProp, Entry,
+    TranslatedChildren, TranslatedContent,
+    TranslationsObject, TranslationLoading, TranslationError, TranslationSuccess,
     GTContextType
 } 
 
