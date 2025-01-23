@@ -5,14 +5,41 @@ var jsx_runtime_1 = require("react/jsx-runtime");
  * The `<Var>` component renders a variable value, which can either be passed as `children` or a `value`.
  * If `children` is provided, it will be used; otherwise, the `value` is rendered.
  *
- * @example
+ * @example Inline usage:
  * ```jsx
- * <Var
- *    name="username"
- * >
- *    John
- * </Var>
+ *  function MyComponent() {
+ *     return (
+ *          <T id="user">
+ *              <p>
+ *                  Hello, <Var> John </Var>!
+ *              </p>
+ *          </T>
+ *      );
+ *  }
  * ```
+ *
+ * @example Dictionary Usage:
+ * ```jsx
+ *  // dictionary.jsx
+ *  const dictionary = {
+ *      user: (
+ *          <>
+ *              Hello, <Var name="user-name" />! Your dog's name is <Var name="dog-name"/>.
+ *          </>
+ *      ),
+ *  }
+ *
+ *  // component.jsx
+ *  function MyComponent() {
+ *      const t = useGT();
+ *      return (
+ *          <p>
+ *              { t('user', { 'user-name': 'John', 'dog-name': 'Rex' }) }
+ *          </p>
+ *      );
+ *  }
+ * ```
+ *
  *
  * @param {any} [children] - The content to render inside the component. If provided, it will take precedence over `value`.
  * @param {string} [name] - Optional name for the variable, used for metadata purposes.
