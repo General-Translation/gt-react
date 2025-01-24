@@ -6,15 +6,11 @@ export default function getDictionaryEntry<T extends Dictionary | FlattenedDicti
     dictionary: T,
     id: string
 ): T extends FlattenedDictionary ? DictionaryEntry | undefined : Dictionary | DictionaryEntry | undefined {
-    if (id === '') {
-        console.error(createLibraryNoEntryWarning(id))
-        return undefined;
-    };
     let current: Dictionary | DictionaryEntry = dictionary;
     let dictionaryPath = id.split(".");
     for (const key of dictionaryPath) {
         if (typeof current !== 'object' || Array.isArray(current) || React.isValidElement(current)) {
-            console.error(createLibraryNoEntryWarning(id))
+            console.error(createLibraryNoEntryWarning(id));
             return undefined;
         }
         current = (current as Dictionary)[key];

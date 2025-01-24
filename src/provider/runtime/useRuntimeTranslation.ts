@@ -130,7 +130,7 @@ export default function useRuntimeTranslation({
                             newTranslations[request.metadata.id || request.metadata.hash] = { // id defaults to hash if none provided
                                 [request.metadata.hash]: {
                                     state: 'success',
-                                    entry: translation
+                                    target: translation
                                 }
                             };
                             return;

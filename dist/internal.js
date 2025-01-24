@@ -36,7 +36,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.defaultRenderSettings = exports.renderSkeleton = exports.renderTranslatedChildren = exports.renderDefaultChildren = exports.getFallbackVariableName = exports.getVariableName = exports.extractEntryMetadata = exports.getPluralBranch = exports.getVariableProps = exports.getDictionaryEntry = exports.flattenDictionary = exports.isVariableObject = exports.writeChildrenAsObjects = exports.addGTIdentifier = void 0;
+exports.defaultRenderSettings = exports.renderSkeleton = exports.renderTranslatedChildren = exports.renderDefaultChildren = exports.renderVariable = exports.getFallbackVariableName = exports.getVariableName = exports.extractEntryMetadata = exports.getPluralBranch = exports.getVariableProps = exports.getDictionaryEntry = exports.flattenDictionary = exports.isEmptyReactFragment = exports.isVariableObject = exports.writeChildrenAsObjects = exports.addGTIdentifier = void 0;
 var flattenDictionary_1 = __importDefault(require("./internal/flattenDictionary"));
 exports.flattenDictionary = flattenDictionary_1.default;
 var addGTIdentifier_1 = __importDefault(require("./internal/addGTIdentifier"));
@@ -64,4 +64,8 @@ var defaultRenderSettings_1 = require("./provider/rendering/defaultRenderSetting
 Object.defineProperty(exports, "defaultRenderSettings", { enumerable: true, get: function () { return defaultRenderSettings_1.defaultRenderSettings; } });
 var renderSkeleton_1 = __importDefault(require("./provider/rendering/renderSkeleton"));
 exports.renderSkeleton = renderSkeleton_1.default;
+var renderVariable_1 = __importDefault(require("./provider/rendering/renderVariable"));
+exports.renderVariable = renderVariable_1.default;
+var utils_1 = require("./utils/utils");
+Object.defineProperty(exports, "isEmptyReactFragment", { enumerable: true, get: function () { return utils_1.isEmptyReactFragment; } });
 //# sourceMappingURL=internal.js.map

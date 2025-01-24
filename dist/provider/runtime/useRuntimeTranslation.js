@@ -159,7 +159,7 @@ function useRuntimeTranslation(_a) {
                                     newTranslations[request.metadata.id || request.metadata.hash] = (_a = {},
                                         _a[request.metadata.hash] = {
                                             state: 'success',
-                                            entry: translation
+                                            target: translation
                                         },
                                         _a);
                                     return;

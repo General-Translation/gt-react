@@ -31,7 +31,7 @@ import React from "react";
  *
  */
 declare function T({ children, id, ...props }: {
-    children?: any;
+    children: any;
     id: string;
     context?: string;
     [key: string]: any;

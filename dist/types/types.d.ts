@@ -51,10 +51,7 @@ export type TranslatedElement = {
 };
 export type TranslatedChild = TranslatedElement | string | Variable;
 export type TranslatedChildren = TranslatedChild | TranslatedChild[];
-export type TranslatedContent = string | (string | {
-    key: string;
-    variable?: string;
-})[];
+export type TranslatedContent = string | (string | Variable)[];
 export type TranslationError = {
     state: 'error';
     error: string;
@@ -62,7 +59,7 @@ export type TranslationError = {
 };
 export type TranslationSuccess = {
     state: 'success';
-    entry: TranslatedChildren | TranslatedContent;
+    target: TranslatedChildren | TranslatedContent;
 };
 export type TranslationLoading = {
     state: 'loading';
@@ -72,7 +69,7 @@ export type TranslationsObject = {
         [hash: string]: TranslationSuccess | TranslationLoading | TranslationError;
     };
 };
-export type RenderMethod = 'skeleton' | 'replace' | 'subtle' | 'default';
+export type RenderMethod = 'skeleton' | 'replace' | 'default';
 export type TranslateContentCallback = (params: {
     source: any;
     targetLocale: string;

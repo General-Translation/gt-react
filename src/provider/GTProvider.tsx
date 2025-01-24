@@ -11,7 +11,7 @@ import {
   TranslationsObject,
 } from "../types/types";
 import getDictionaryEntry from "./helpers/getDictionaryEntry";
-import { flattenDictionary } from "../internal";
+import { flattenDictionary, isEmptyReactFragment, renderDefaultChildren } from "../internal";
 import extractEntryMetadata from "./helpers/extractEntryMetadata";
 
 import {
@@ -75,12 +75,6 @@ export default function GTProvider({
       throw new Error(projectIdMissingError)
   };
 
-  // disable subtle for development
-  if (devApiKey && renderSettings.method === 'subtle') {
-    console.warn('Subtle render method cannot be used in dev environments, falling back to default.');
-    renderSettings.method = 'default';
-  }
-
   // get tx required info
   const [translationRequired, dialectTranslationRequired] = useMemo(() => {
     const translationRequired = requiresTranslation(defaultLocale, locale, locales);
@@ -141,11 +135,19 @@ export default function GTProvider({
   // Flatten dictionaries for processing while waiting for translations
   const flattenedDictionary = useMemo(() => flattenDictionary(dictionary), [dictionary]);
 
+  // Get strings that have changed
   const stringData = useMemo(() => {
     if (!translationRequired) return {};
-    return Object.entries(flattenedDictionary).filter(([_, entryWithMetadata]) => {
+    return Object.entries(flattenedDictionary).filter(([id, entryWithMetadata]) => {
       const { entry } = extractEntryMetadata(entryWithMetadata)
-      if (typeof entry === 'string') return true;
+      if (typeof entry === 'string') {
+        if (!entry.length) {
+          console.warn(`gt-react warn: Empty string found in dictionary with id: ${id}`);
+          return
+        }
+        return true;
+      }
+      return false;
     }).reduce((acc: Record<string, { hash: string, source: Content }>, [id, entryWithMetadata]) => {
       const { entry, metadata } = extractEntryMetadata(entryWithMetadata);
       const context = metadata?.context;
@@ -202,7 +204,7 @@ export default function GTProvider({
 
       // get the dictionary entry
       const dictionaryEntry: DictionaryEntry | undefined = getDictionaryEntry(flattenedDictionary, id);
-      if (!dictionaryEntry) return undefined; // dictionary entry not found
+      if (!dictionaryEntry && dictionaryEntry !== "") return undefined; // dictionary entry not found
 
       // Parse the dictionary entry
       const { entry, metadata } = extractEntryMetadata(dictionaryEntry)
@@ -212,6 +214,13 @@ export default function GTProvider({
       // ----- RENDER STRINGS ----- //
 
       if (typeof entry === 'string') { // render strings
+
+        // Reject empty strings
+        if (!entry.length) {
+          console.warn(`gt-react warn: Empty string found in dictionary with id: ${id}`);
+          return entry;
+        }
+
         // no translation required
         const content = splitStringToContent(entry);
         if (!translationRequired) {
@@ -240,7 +249,7 @@ export default function GTProvider({
 
         // render translated content
         return renderContentToString(
-          translationEntry.entry as TranslatedContent,
+          translationEntry.target as TranslatedContent,
           [locale, defaultLocale],
           variables,
           variablesOptions
@@ -248,6 +257,13 @@ export default function GTProvider({
       }
       
       // ----- RENDER JSX ----- //
+
+
+      // Reject empty fragments
+      if (isEmptyReactFragment(entry)) {
+        console.warn(`gt-react warn: Empty fragment found in dictionary with id: ${id}`);
+        return entry;
+      }
 
       return <T
         id={id}

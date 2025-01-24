@@ -41,7 +41,7 @@ function useGT(id) {
         var prefixedId = getId(id);
         if (translateDictionaryEntry) {
             var translation = translateDictionaryEntry(prefixedId, options);
-            if (!translation)
+            if (translation === undefined || translation === null)
                 console.warn((0, createMessages_1.createNoEntryWarning)(id, prefixedId));
             return translation;
         }
