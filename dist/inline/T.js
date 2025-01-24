@@ -107,6 +107,8 @@ function T(_a) {
     var children = _a.children, id = _a.id, props = __rest(_a, ["children", "id"]);
     if (!children)
         return undefined;
+    if ((0, internal_1.isEmptyReactFragment)(children))
+        return (0, jsx_runtime_1.jsx)(react_1.default.Fragment, {});
     if (!id)
         throw new Error((0, createMessages_1.createClientSideTWithoutIdError)(children));
     var variables = props.variables, variablesOptions = props.variablesOptions;

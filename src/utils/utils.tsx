@@ -28,3 +28,12 @@ export function isTranslatedContent(target: unknown): target is TranslatedConten
 export function isValidTaggedElement(target: unknown): target is TaggedElement {
   return React.isValidElement<TaggedElementProps>(target)
 }
+
+
+export function isEmptyReactFragment(target: unknown): target is React.ReactElement {
+  if (React.isValidElement(target) && target.type === React.Fragment) {
+    const props = target.props as { children?: React.ReactNode };
+    return !props.children || React.Children.count(props.children) === 0
+  }
+  return false
+}

@@ -164,14 +164,21 @@ function GTProvider(_a) {
     // ----- PERFORM DICTIONARY TRANSLATION ----- //
     // Flatten dictionaries for processing while waiting for translations
     var flattenedDictionary = (0, react_1.useMemo)(function () { return (0, internal_1.flattenDictionary)(dictionary); }, [dictionary]);
+    // Get strings that have changed
     var stringData = (0, react_1.useMemo)(function () {
         if (!translationRequired)
             return {};
         return Object.entries(flattenedDictionary).filter(function (_a) {
-            var _ = _a[0], entryWithMetadata = _a[1];
+            var id = _a[0], entryWithMetadata = _a[1];
             var entry = (0, extractEntryMetadata_1.default)(entryWithMetadata).entry;
-            if (typeof entry === 'string')
+            if (typeof entry === 'string') {
+                if (!entry.length) {
+                    console.warn("gt-react warn: Empty string found in dictionary with id: ".concat(id));
+                    return;
+                }
                 return true;
+            }
+            return false;
         }).reduce(function (acc, _a) {
             var id = _a[0], entryWithMetadata = _a[1];
             var _b = (0, extractEntryMetadata_1.default)(entryWithMetadata), entry = _b.entry, metadata = _b.metadata;
@@ -221,7 +228,7 @@ function GTProvider(_a) {
         if (options === void 0) { options = {}; }
         // get the dictionary entry
         var dictionaryEntry = (0, getDictionaryEntry_1.default)(flattenedDictionary, id);
-        if (!dictionaryEntry)
+        if (!dictionaryEntry && dictionaryEntry !== "")
             return undefined; // dictionary entry not found
         // Parse the dictionary entry
         var _b = (0, extractEntryMetadata_1.default)(dictionaryEntry), entry = _b.entry, metadata = _b.metadata;
@@ -229,6 +236,11 @@ function GTProvider(_a) {
         var variablesOptions = metadata === null || metadata === void 0 ? void 0 : metadata.variablesOptions;
         // ----- RENDER STRINGS ----- //
         if (typeof entry === 'string') { // render strings
+            // Reject empty strings
+            if (!entry.length) {
+                console.warn("gt-react warn: Empty string found in dictionary with id: ".concat(id));
+                return entry;
+            }
             // no translation required
             var content = (0, generaltranslation_1.splitStringToContent)(entry);
             if (!translationRequired) {
@@ -246,6 +258,11 @@ function GTProvider(_a) {
             return (0, generaltranslation_1.renderContentToString)(translationEntry.target, [locale, defaultLocale], variables, variablesOptions);
         }
         // ----- RENDER JSX ----- //
+        // Reject empty fragments
+        if ((0, internal_1.isEmptyReactFragment)(entry)) {
+            console.warn("gt-react warn: Empty fragment found in dictionary with id: ".concat(id));
+            return entry;
+        }
         return (0, jsx_runtime_1.jsx)(T_1.default, __assign({ id: id, variables: variables, variablesOptions: variablesOptions }, metadata, { children: entry }));
     }, [dictionary, translations, translationRequired, defaultLocale, flattenedDictionary, dictionaryStringsResolved]);
     var _m = (0, useRuntimeTranslation_1.default)(__assign({ targetLocale: locale, projectId: projectId, defaultLocale: defaultLocale, devApiKey: devApiKey, runtimeUrl: runtimeUrl, setTranslations: setTranslations }, metadata)), translateChildren = _m.translateChildren, translateContent = _m.translateContent, translationEnabled = _m.translationEnabled;

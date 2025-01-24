@@ -2,7 +2,7 @@ import React, { Suspense, useEffect } from "react";
 import useDefaultLocale from "../hooks/useDefaultLocale";
 import useLocale from "../hooks/useLocale";
 import renderDefaultChildren from "../provider/rendering/renderDefaultChildren";
-import { addGTIdentifier, writeChildrenAsObjects } from "../internal";
+import { addGTIdentifier, isEmptyReactFragment, writeChildrenAsObjects } from "../internal";
 import useGTContext from "../provider/GTContext";
 import renderTranslatedChildren from "../provider/rendering/renderTranslatedChildren";
 import { useMemo } from "react";
@@ -48,12 +48,14 @@ function T({
     id,
     ...props
 }: {
-    children?: any;
+    children: any;
     id: string;
     context?: string;
     [key: string]: any;
 }): React.JSX.Element | undefined {
   if (!children) return undefined;
+
+  if (isEmptyReactFragment(children)) return <React.Fragment />;
 
   if (!id) throw new Error(createClientSideTWithoutIdError(children));
 

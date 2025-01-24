@@ -13,8 +13,9 @@ import { defaultRenderSettings } from "./provider/rendering/defaultRenderSetting
 import renderSkeleton from "./provider/rendering/renderSkeleton";
 import { Dictionary, RenderMethod, TranslatedChildren, TranslatedContent, TranslationError, TranslationsObject, DictionaryEntry, TranslationSuccess, GTContextType, TranslationLoading, TaggedChildren, Children, FlattenedDictionary, Metadata, Child, GTProp, Entry } from "./types/types";
 import renderVariable from "./provider/rendering/renderVariable";
+import { isEmptyReactFragment } from "./utils/utils";
 export {
-    addGTIdentifier, writeChildrenAsObjects, isVariableObject,
+    addGTIdentifier, writeChildrenAsObjects, isVariableObject, isEmptyReactFragment,
     Dictionary, flattenDictionary, getDictionaryEntry, getVariableProps, DictionaryEntry, FlattenedDictionary, Metadata,
     getPluralBranch, extractEntryMetadata,
     getVariableName, getFallbackVariableName, renderVariable,

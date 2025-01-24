@@ -48,7 +48,7 @@ export default function useGT(
         const prefixedId = getId(id);
         if (translateDictionaryEntry) {
             const translation = translateDictionaryEntry(prefixedId, options);
-            if (!translation) console.warn(createNoEntryWarning(id, prefixedId))
+            if (translation === undefined || translation === null) console.warn(createNoEntryWarning(id, prefixedId))
             return translation;
         }
     };

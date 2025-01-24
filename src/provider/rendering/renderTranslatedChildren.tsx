@@ -163,7 +163,6 @@ export default function renderTranslatedChildren({
                     }
                     return undefined
                 })();
-
                 return <React.Fragment key={`var_${index}`}>{renderVariable({
                     variableType,
                     variableName,
