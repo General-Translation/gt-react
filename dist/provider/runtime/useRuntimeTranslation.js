@@ -63,7 +63,7 @@ var react_1 = require("react");
 var createMessages_1 = require("../../messages/createMessages");
 function useRuntimeTranslation(_a) {
     var _this = this;
-    var targetLocale = _a.targetLocale, projectId = _a.projectId, devApiKey = _a.devApiKey, runtimeUrl = _a.runtimeUrl, defaultLocale = _a.defaultLocale, setTranslations = _a.setTranslations, metadata = __rest(_a, ["targetLocale", "projectId", "devApiKey", "runtimeUrl", "defaultLocale", "setTranslations"]);
+    var targetLocale = _a.targetLocale, projectId = _a.projectId, devApiKey = _a.devApiKey, runtimeUrl = _a.runtimeUrl, defaultLocale = _a.defaultLocale, renderSettings = _a.renderSettings, setTranslations = _a.setTranslations, metadata = __rest(_a, ["targetLocale", "projectId", "devApiKey", "runtimeUrl", "defaultLocale", "renderSettings", "setTranslations"]);
     metadata = __assign(__assign({}, metadata), { projectId: projectId, sourceLocale: defaultLocale });
     var translationEnabled = !!(runtimeUrl && projectId);
     if (!translationEnabled)
@@ -103,7 +103,8 @@ function useRuntimeTranslation(_a) {
         }
         var isCancelled = false;
         (function () { return __awaiter(_this, void 0, void 0, function () {
-            var requests, newTranslations, loadingTranslations_1, response, _a, results, error_1;
+            var requests, newTranslations, loadingTranslations_1, fetchWithAbort, response, _a, results, error_1;
+            var _this = this;
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0:
@@ -120,7 +121,33 @@ function useRuntimeTranslation(_a) {
                             return acc;
                         }, {});
                         setTranslations(function (prev) { return __assign(__assign({}, (prev || {})), loadingTranslations_1); });
-                        return [4 /*yield*/, fetch("".concat(runtimeUrl, "/v1/runtime/").concat(projectId, "/client"), {
+                        fetchWithAbort = function (url, options, timeout) { return __awaiter(_this, void 0, void 0, function () {
+                            var controller, timeoutId, error_2;
+                            return __generator(this, function (_a) {
+                                switch (_a.label) {
+                                    case 0:
+                                        controller = new AbortController();
+                                        timeoutId = (timeout === undefined) ? undefined : setTimeout(function () { return controller.abort(); }, timeout);
+                                        _a.label = 1;
+                                    case 1:
+                                        _a.trys.push([1, 3, 4, 5]);
+                                        return [4 /*yield*/, fetch(url, __assign(__assign({}, options), { signal: controller.signal }))];
+                                    case 2: return [2 /*return*/, _a.sent()];
+                                    case 3:
+                                        error_2 = _a.sent();
+                                        console.error('timeout!');
+                                        if (error_2 instanceof Error && error_2.name === 'AbortError')
+                                            throw new Error('Request timed out'); // Handle the timeout case
+                                        throw error_2; // Re-throw other errors
+                                    case 4:
+                                        if (timeoutId !== undefined)
+                                            clearTimeout(timeoutId); // Ensure timeout is cleared
+                                        return [7 /*endfinally*/];
+                                    case 5: return [2 /*return*/];
+                                }
+                            });
+                        }); };
+                        return [4 /*yield*/, fetchWithAbort("".concat(runtimeUrl, "/v1/runtime/").concat(projectId, "/client"), {
                                 method: 'POST',
                                 headers: __assign({ 'Content-Type': 'application/json' }, (devApiKey && { 'x-gt-dev-api-key': devApiKey })),
                                 body: JSON.stringify({
@@ -128,7 +155,7 @@ function useRuntimeTranslation(_a) {
                                     targetLocale: targetLocale,
                                     metadata: metadata
                                 }),
-                            })];
+                            }, renderSettings.timeout)];
                     case 2:
                         response = _b.sent();
                         if (!!response.ok) return [3 /*break*/, 4];

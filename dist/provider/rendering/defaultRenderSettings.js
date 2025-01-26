@@ -17,5 +17,5 @@ function shouldApplyTimeout() {
     var NODE_ENV = typeof process !== 'undefined' ? process.env.NODE_ENV : '';
     return !(NODE_ENV === "development" || NODE_ENV === "test");
 }
-exports.defaultRenderSettings = __assign({ method: "default" }, ((shouldApplyTimeout()) ? { timeout: 8000 } : {}));
+exports.defaultRenderSettings = __assign({ method: "default" }, ((shouldApplyTimeout()) ? { timeout: 1000 } : {}));
 //# sourceMappingURL=defaultRenderSettings.js.map

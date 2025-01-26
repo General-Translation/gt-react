@@ -75,6 +75,10 @@ export default function GTProvider({
       throw new Error(projectIdMissingError)
   };
 
+  if (renderSettings.timeout === undefined && defaultRenderSettings.timeout !== undefined) {
+    renderSettings.timeout = defaultRenderSettings.timeout
+  }
+
   // get tx required info
   const [translationRequired, dialectTranslationRequired] = useMemo(() => {
     const translationRequired = requiresTranslation(defaultLocale, locale, locales);
@@ -283,6 +287,7 @@ export default function GTProvider({
     defaultLocale,
     devApiKey,
     runtimeUrl,
+    renderSettings,
     setTranslations,
     ...metadata,
   });

@@ -11,5 +11,5 @@ export const defaultRenderSettings: {
   timeout?: number;
 } = {
     method: "default",
-    ...((shouldApplyTimeout()) ? { timeout: 8000 } : {}),
+    ...((shouldApplyTimeout()) ? { timeout: 1000 } : {}),
 } as const;

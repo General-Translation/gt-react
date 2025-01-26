@@ -1,12 +1,13 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { createMismatchingHashWarning, createMismatchingIdHashWarning, dynamicTranslationError, createGenericRuntimeTranslationError } from "../../messages/createMessages";
-import { TranslateChildrenCallback, TranslateContentCallback, TranslationsObject } from "../../types/types";
+import { RenderMethod, TranslateChildrenCallback, TranslateContentCallback, TranslationsObject } from "../../types/types";
 import { Content } from "generaltranslation/internal";
 
 export default function useRuntimeTranslation({
     targetLocale, 
     projectId, devApiKey,
     runtimeUrl, defaultLocale,
+    renderSettings,
     setTranslations,
     ...metadata
 }: {
@@ -15,6 +16,10 @@ export default function useRuntimeTranslation({
     defaultLocale?: string,
     devApiKey?: string,
     runtimeUrl?: string,
+    renderSettings: {
+        method: RenderMethod,
+        timeout?: number,
+    },
     setTranslations: React.Dispatch<React.SetStateAction<any>>
     [key: string]: any
 }): {
@@ -91,18 +96,36 @@ export default function useRuntimeTranslation({
                 setTranslations((prev: any) => {return { ...(prev || {}), ...loadingTranslations }});
 
                 // ----- RUNTIME TRANSLATION ----- // 
-                const response = await fetch(`${runtimeUrl}/v1/runtime/${projectId}/client`, {
-                    method: 'POST',
-                    headers: {
-                      'Content-Type': 'application/json',
-                      ...(devApiKey && { 'x-gt-dev-api-key': devApiKey })
+                const fetchWithAbort = async (url: string, options: RequestInit | undefined, timeout: number | undefined) => {
+                    const controller = new AbortController();
+                    const timeoutId = (timeout === undefined) ? undefined : setTimeout(() => controller.abort(), timeout);
+                    try {
+                        return await fetch(url, { ...options, signal: controller.signal, });
+                    } catch (error) {
+                        console.error('timeout!')
+                        if (error instanceof Error && error.name === 'AbortError') throw new Error('Request timed out'); // Handle the timeout case
+                        throw error; // Re-throw other errors
+                    } finally {
+                        if (timeoutId !== undefined) clearTimeout(timeoutId); // Ensure timeout is cleared
+                    }
+                };
+
+                const response = await fetchWithAbort(
+                    `${runtimeUrl}/v1/runtime/${projectId}/client`,
+                    {
+                        method: 'POST',
+                        headers: {
+                        'Content-Type': 'application/json',
+                        ...(devApiKey && { 'x-gt-dev-api-key': devApiKey })
+                        },
+                        body: JSON.stringify({
+                        requests,
+                        targetLocale,
+                        metadata
+                        }),
                     },
-                    body: JSON.stringify({
-                      requests,
-                      targetLocale,
-                      metadata
-                    }),
-                });
+                    renderSettings.timeout,
+                );
                 if (!response.ok) {
                     throw new Error(await response.text())
                 }
