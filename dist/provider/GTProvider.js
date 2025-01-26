@@ -98,6 +98,9 @@ function GTProvider(_a) {
         throw new Error(createMessages_1.projectIdMissingError);
     }
     ;
+    if (renderSettings.timeout === undefined && defaultRenderSettings_1.defaultRenderSettings.timeout !== undefined) {
+        renderSettings.timeout = defaultRenderSettings_1.defaultRenderSettings.timeout;
+    }
     // get tx required info
     var _j = (0, react_1.useMemo)(function () {
         var translationRequired = (0, generaltranslation_1.requiresTranslation)(defaultLocale, locale, locales);
@@ -265,7 +268,7 @@ function GTProvider(_a) {
         }
         return (0, jsx_runtime_1.jsx)(T_1.default, __assign({ id: id, variables: variables, variablesOptions: variablesOptions }, metadata, { children: entry }));
     }, [dictionary, translations, translationRequired, defaultLocale, flattenedDictionary, dictionaryStringsResolved]);
-    var _m = (0, useRuntimeTranslation_1.default)(__assign({ targetLocale: locale, projectId: projectId, defaultLocale: defaultLocale, devApiKey: devApiKey, runtimeUrl: runtimeUrl, setTranslations: setTranslations }, metadata)), translateChildren = _m.translateChildren, translateContent = _m.translateContent, translationEnabled = _m.translationEnabled;
+    var _m = (0, useRuntimeTranslation_1.default)(__assign({ targetLocale: locale, projectId: projectId, defaultLocale: defaultLocale, devApiKey: devApiKey, runtimeUrl: runtimeUrl, renderSettings: renderSettings, setTranslations: setTranslations }, metadata)), translateChildren = _m.translateChildren, translateContent = _m.translateContent, translationEnabled = _m.translationEnabled;
     // hang until cache response, then render translations or loading state (when waiting on API response)
     return ((0, jsx_runtime_1.jsx)(GTContext_1.GTContext.Provider, { value: {
             translateDictionaryEntry: translateDictionaryEntry,
