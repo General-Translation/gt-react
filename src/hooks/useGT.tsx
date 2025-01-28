@@ -1,7 +1,6 @@
 import React from "react";
 import useGTContext from "../provider/GTContext";
 import { createNoEntryWarning } from "../messages/createMessages";
-import T from "../inline/T";
 
 /**
  * Gets the translation function `t` provided by `<GTProvider>`.

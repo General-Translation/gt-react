@@ -12,7 +12,16 @@ import Plural from "./branches/plurals/Plural";
 import Branch from "./branches/Branch";
 
 export {
-    Var, Num, Currency, DateTime,
-    T, GTProvider, Plural, Branch,
-    useGT, useElement, useDefaultLocale, useLocale
-}
+  Var,
+  Num,
+  Currency,
+  DateTime,
+  T,
+  GTProvider,
+  Plural,
+  Branch,
+  useGT,
+  useElement,
+  useDefaultLocale,
+  useLocale,
+};

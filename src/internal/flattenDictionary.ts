@@ -1,7 +1,8 @@
 import React from "react";
-import { Dictionary, DictionaryEntry, FlattenedDictionary } from "../types/types";
+import { Dictionary, FlattenedDictionary } from "../types/types";
 
-const createDuplicateKeyError = (key: string) => `Duplicate key found in dictionary: "${key}"`
+const createDuplicateKeyError = (key: string) =>
+  `Duplicate key found in dictionary: "${key}"`;
 
 /**
  * Flattens a nested dictionary by concatenating nested keys.
@@ -11,30 +12,34 @@ const createDuplicateKeyError = (key: string) => `Duplicate key found in diction
  * @returns {Record<string, React.ReactNode>} The flattened dictionary object.
  * @throws {Error} If two keys result in the same flattened key.
  */
-export default function flattenDictionary(dictionary: Dictionary, prefix: string = ''): FlattenedDictionary {
-    const flattened: FlattenedDictionary = {};
-    for (const key in dictionary) {
-        if (dictionary.hasOwnProperty(key)) {
-            const newKey = prefix ? `${prefix}.${key}` : key;
-            if (typeof dictionary[key] === 'object'
-                && dictionary[key] !== null
-                && !Array.isArray(dictionary[key])
-                && !(React.isValidElement(dictionary[key]))
-            ) {
-                const nestedFlattened = flattenDictionary(dictionary[key], newKey);
-                for (const flatKey in nestedFlattened) {
-                    if (flattened.hasOwnProperty(flatKey)) {
-                        throw new Error(createDuplicateKeyError(flatKey));
-                    }
-                    flattened[flatKey] = nestedFlattened[flatKey];
-                }
-            } else {
-                if (flattened.hasOwnProperty(newKey)) {
-                    throw new Error(createDuplicateKeyError(newKey));
-                }
-                flattened[newKey] = dictionary[key];
-            }
+export default function flattenDictionary(
+  dictionary: Dictionary,
+  prefix: string = ""
+): FlattenedDictionary {
+  const flattened: FlattenedDictionary = {};
+  for (const key in dictionary) {
+    if (dictionary.hasOwnProperty(key)) {
+      const newKey = prefix ? `${prefix}.${key}` : key;
+      if (
+        typeof dictionary[key] === "object" &&
+        dictionary[key] !== null &&
+        !Array.isArray(dictionary[key]) &&
+        !React.isValidElement(dictionary[key])
+      ) {
+        const nestedFlattened = flattenDictionary(dictionary[key], newKey);
+        for (const flatKey in nestedFlattened) {
+          if (flattened.hasOwnProperty(flatKey)) {
+            throw new Error(createDuplicateKeyError(flatKey));
+          }
+          flattened[flatKey] = nestedFlattened[flatKey];
         }
+      } else {
+        if (flattened.hasOwnProperty(newKey)) {
+          throw new Error(createDuplicateKeyError(newKey));
+        }
+        flattened[newKey] = dictionary[key];
+      }
     }
-    return flattened;
+  }
+  return flattened;
 }

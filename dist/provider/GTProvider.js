@@ -94,11 +94,12 @@ var T_1 = __importDefault(require("../inline/T"));
 function GTProvider(_a) {
     var _this = this;
     var children = _a.children, projectId = _a.projectId, _b = _a.dictionary, dictionary = _b === void 0 ? {} : _b, _c = _a.locales, locales = _c === void 0 ? (0, supported_locales_1.listSupportedLocales)() : _c, _d = _a.defaultLocale, defaultLocale = _d === void 0 ? internal_2.libraryDefaultLocale : _d, _e = _a.locale, locale = _e === void 0 ? (0, useBrowserLocale_1.default)(defaultLocale, locales) || defaultLocale : _e, _f = _a.cacheUrl, cacheUrl = _f === void 0 ? internal_2.defaultCacheUrl : _f, _g = _a.runtimeUrl, runtimeUrl = _g === void 0 ? internal_2.defaultRuntimeApiUrl : _g, _h = _a.renderSettings, renderSettings = _h === void 0 ? defaultRenderSettings_1.defaultRenderSettings : _h, devApiKey = _a.devApiKey, metadata = __rest(_a, ["children", "projectId", "dictionary", "locales", "defaultLocale", "locale", "cacheUrl", "runtimeUrl", "renderSettings", "devApiKey"]);
-    if (!projectId && (cacheUrl === internal_2.defaultCacheUrl || runtimeUrl === internal_2.defaultRuntimeApiUrl)) {
+    if (!projectId &&
+        (cacheUrl === internal_2.defaultCacheUrl || runtimeUrl === internal_2.defaultRuntimeApiUrl)) {
         throw new Error(createMessages_1.projectIdMissingError);
     }
-    ;
-    if (renderSettings.timeout === undefined && defaultRenderSettings_1.defaultRenderSettings.timeout !== undefined) {
+    if (renderSettings.timeout === undefined &&
+        defaultRenderSettings_1.defaultRenderSettings.timeout !== undefined) {
         renderSettings.timeout = defaultRenderSettings_1.defaultRenderSettings.timeout;
     }
     // get tx required info
@@ -125,7 +126,7 @@ function GTProvider(_a) {
      * Cache Loading -> Cache Fail -> API Loading -> Success
      * Cache Loading -> Cache Fail -> API Loading -> API Fail
      */
-    var _k = (0, react_2.useState)((cacheUrl && translationRequired) ? null : {}), translations = _k[0], setTranslations = _k[1];
+    var _k = (0, react_2.useState)(cacheUrl && translationRequired ? null : {}), translations = _k[0], setTranslations = _k[1];
     // ----- CHECK CACHE FOR TX ----- //
     (0, react_2.useEffect)(function () {
         // check if cache fetch is necessary
@@ -148,7 +149,7 @@ function GTProvider(_a) {
                             var id = _a[0], hashToTranslation = _a[1];
                             translationsAcc[id] = Object.entries(hashToTranslation || {}).reduce(function (idAcc, _a) {
                                 var hash = _a[0], content = _a[1];
-                                idAcc[hash] = { state: 'success', entry: content };
+                                idAcc[hash] = { state: "success", entry: content };
                                 return idAcc;
                             }, {});
                             return translationsAcc;
@@ -171,10 +172,11 @@ function GTProvider(_a) {
     var stringData = (0, react_1.useMemo)(function () {
         if (!translationRequired)
             return {};
-        return Object.entries(flattenedDictionary).filter(function (_a) {
+        return Object.entries(flattenedDictionary)
+            .filter(function (_a) {
             var id = _a[0], entryWithMetadata = _a[1];
             var entry = (0, extractEntryMetadata_1.default)(entryWithMetadata).entry;
-            if (typeof entry === 'string') {
+            if (typeof entry === "string") {
                 if (!entry.length) {
                     console.warn("gt-react warn: Empty string found in dictionary with id: ".concat(id));
                     return;
@@ -182,7 +184,8 @@ function GTProvider(_a) {
                 return true;
             }
             return false;
-        }).reduce(function (acc, _a) {
+        })
+            .reduce(function (acc, _a) {
             var id = _a[0], entryWithMetadata = _a[1];
             var _b = (0, extractEntryMetadata_1.default)(entryWithMetadata), entry = _b.entry, metadata = _b.metadata;
             var context = metadata === null || metadata === void 0 ? void 0 : metadata.context;
@@ -197,7 +200,7 @@ function GTProvider(_a) {
         var unresolvedDictionaryStringsAndHashes = Object.entries(stringData).filter(function (_a) {
             var _b, _c, _d;
             var id = _a[0], hash = _a[1].hash;
-            if (((_c = (_b = translations === null || translations === void 0 ? void 0 : translations[id]) === null || _b === void 0 ? void 0 : _b[hash]) === null || _c === void 0 ? void 0 : _c.state) === 'loading')
+            if (((_c = (_b = translations === null || translations === void 0 ? void 0 : translations[id]) === null || _b === void 0 ? void 0 : _b[hash]) === null || _c === void 0 ? void 0 : _c.state) === "loading")
                 stringIsLoading = true;
             return !((_d = translations === null || translations === void 0 ? void 0 : translations[id]) === null || _d === void 0 ? void 0 : _d[hash]);
         });
@@ -219,11 +222,15 @@ function GTProvider(_a) {
             translateContent({
                 source: source,
                 targetLocale: locale,
-                metadata: __assign(__assign({}, metadata), { id: id, hash: hash })
+                metadata: __assign(__assign({}, metadata), { id: id, hash: hash }),
             });
         });
         // is this already translated? if so, skip
-    }, [translationRequired, unresolvedDictionaryStringsAndHashes, flattenedDictionary]);
+    }, [
+        translationRequired,
+        unresolvedDictionaryStringsAndHashes,
+        flattenedDictionary,
+    ]);
     // ----- TRANSLATE FUNCTION FOR DICTIONARIES ----- //
     var translateDictionaryEntry = (0, react_2.useCallback)(function (id, options) {
         // ----- SETUP ----- //
@@ -238,7 +245,8 @@ function GTProvider(_a) {
         var variables = options;
         var variablesOptions = metadata === null || metadata === void 0 ? void 0 : metadata.variablesOptions;
         // ----- RENDER STRINGS ----- //
-        if (typeof entry === 'string') { // render strings
+        if (typeof entry === "string") {
+            // render strings
             // Reject empty strings
             if (!entry.length) {
                 console.warn("gt-react warn: Empty string found in dictionary with id: ".concat(id));
@@ -254,7 +262,7 @@ function GTProvider(_a) {
             var hash = (metadata === null || metadata === void 0 ? void 0 : metadata.hash) || (0, id_1.hashJsxChildren)({ source: content, context: context });
             var translationEntry = (_a = translations === null || translations === void 0 ? void 0 : translations[id]) === null || _a === void 0 ? void 0 : _a[hash];
             // error behavior
-            if (!translationEntry || (translationEntry === null || translationEntry === void 0 ? void 0 : translationEntry.state) !== 'success') {
+            if (!translationEntry || (translationEntry === null || translationEntry === void 0 ? void 0 : translationEntry.state) !== "success") {
                 return (0, generaltranslation_1.renderContentToString)(content, locales, variables, variablesOptions);
             }
             // render translated content
@@ -266,8 +274,15 @@ function GTProvider(_a) {
             console.warn("gt-react warn: Empty fragment found in dictionary with id: ".concat(id));
             return entry;
         }
-        return (0, jsx_runtime_1.jsx)(T_1.default, __assign({ id: id, variables: variables, variablesOptions: variablesOptions }, metadata, { children: entry }));
-    }, [dictionary, translations, translationRequired, defaultLocale, flattenedDictionary, dictionaryStringsResolved]);
+        return ((0, jsx_runtime_1.jsx)(T_1.default, __assign({ id: id, variables: variables, variablesOptions: variablesOptions }, metadata, { children: entry })));
+    }, [
+        dictionary,
+        translations,
+        translationRequired,
+        defaultLocale,
+        flattenedDictionary,
+        dictionaryStringsResolved,
+    ]);
     var _m = (0, useRuntimeTranslation_1.default)(__assign({ targetLocale: locale, projectId: projectId, defaultLocale: defaultLocale, devApiKey: devApiKey, runtimeUrl: runtimeUrl, renderSettings: renderSettings, setTranslations: setTranslations }, metadata)), translateChildren = _m.translateChildren, translateContent = _m.translateContent, translationEnabled = _m.translationEnabled;
     // hang until cache response, then render translations or loading state (when waiting on API response)
     return ((0, jsx_runtime_1.jsx)(GTContext_1.GTContext.Provider, { value: {

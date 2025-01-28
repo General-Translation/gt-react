@@ -1,4 +1,4 @@
-export default function renderVariable({ variableType, variableName, variableValue, variableOptions, locales }: {
+export default function renderVariable({ variableType, variableName, variableValue, variableOptions, locales, }: {
     variableType: "variable" | "number" | "datetime" | "currency";
     variableName: string;
     variableValue: any;

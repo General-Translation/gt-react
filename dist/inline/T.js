@@ -160,19 +160,11 @@ function T(_a) {
             renderVariable: renderVariable_1.default
         });
     };
-    var renderLoadingSkeleton = function () {
-        return (0, renderSkeleton_1.default)({
-            children: taggedChildren,
-            variables: variables,
-            defaultLocale: defaultLocale,
-            renderVariable: renderVariable_1.default
-        });
-    };
     var renderLoadingDefault = function () {
         if (dialectTranslationRequired) {
             return renderDefaultLocale();
         }
-        return renderLoadingSkeleton();
+        return (0, renderSkeleton_1.default)();
     };
     var renderTranslation = function (target) {
         return (0, renderTranslatedChildren_1.default)({
@@ -193,7 +185,7 @@ function T(_a) {
     if (!translationEntry || (translationEntry === null || translationEntry === void 0 ? void 0 : translationEntry.state) === "loading") {
         var loadingFallback = void 0;
         if (renderSettings.method === "skeleton") {
-            loadingFallback = renderLoadingSkeleton();
+            loadingFallback = (0, renderSkeleton_1.default)();
         }
         else if (renderSettings.method === "replace") {
             loadingFallback = renderDefaultLocale();

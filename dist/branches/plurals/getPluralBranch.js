@@ -10,9 +10,9 @@ var internal_1 = require("generaltranslation/internal");
  * @returns {any} The determined branch.
  */
 function getPluralBranch(n, locales, branches) {
-    var branchName = '';
+    var branchName = "";
     var branch = null;
-    if (typeof n === 'number' && !branch && branches)
+    if (typeof n === "number" && !branch && branches)
         branchName = (0, internal_1.getPluralForm)(n, Object.keys(branches), locales);
     if (branchName && !branch)
         branch = branches[branchName];

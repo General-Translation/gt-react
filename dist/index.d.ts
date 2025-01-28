@@ -10,5 +10,5 @@ import Currency from "./variables/Currency";
 import DateTime from "./variables/DateTime";
 import Plural from "./branches/plurals/Plural";
 import Branch from "./branches/Branch";
-export { Var, Num, Currency, DateTime, T, GTProvider, Plural, Branch, useGT, useElement, useDefaultLocale, useLocale };
+export { Var, Num, Currency, DateTime, T, GTProvider, Plural, Branch, useGT, useElement, useDefaultLocale, useLocale, };
 //# sourceMappingURL=index.d.ts.map

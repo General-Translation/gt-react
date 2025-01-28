@@ -20,6 +20,6 @@ function renderVariable(_a) {
     else if (variableType === "currency") {
         return ((0, jsx_runtime_1.jsx)(Currency_1.default, { name: variableName, value: variableValue, options: variableOptions }));
     }
-    return ((0, jsx_runtime_1.jsx)(Var_1.default, { name: variableName, value: variableValue }));
+    return (0, jsx_runtime_1.jsx)(Var_1.default, { name: variableName, value: variableValue });
 }
 //# sourceMappingURL=renderVariable.js.map
