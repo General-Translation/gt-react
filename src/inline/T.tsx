@@ -122,20 +122,11 @@ function T({
     });
   }
 
-  const renderLoadingSkeleton = () => {
-      return renderSkeleton({
-          children: taggedChildren,
-          variables,
-          defaultLocale,
-          renderVariable
-      });
-  }
-
   const renderLoadingDefault = () => {
     if (dialectTranslationRequired) {
         return renderDefaultLocale();
     }
-    return renderLoadingSkeleton();
+    return renderSkeleton();
   }
 
   const renderTranslation = (target: TranslatedChildren) => {
@@ -160,7 +151,7 @@ function T({
   if (!translationEntry || translationEntry?.state === "loading") {
     let loadingFallback;
     if (renderSettings.method === "skeleton") {
-        loadingFallback = renderLoadingSkeleton();
+        loadingFallback = renderSkeleton();
     } else if (renderSettings.method === "replace") {
         loadingFallback = renderDefaultLocale();
     } else { // default
