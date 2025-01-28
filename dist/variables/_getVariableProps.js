@@ -18,16 +18,16 @@ exports.default = getVariableProps;
 var getVariableName_1 = __importDefault(require("./getVariableName"));
 function getVariableProps(props) {
     var _a;
-    var variableType = ((_a = props['data-_gt']) === null || _a === void 0 ? void 0 : _a.variableType) || "variable";
+    var variableType = ((_a = props["data-_gt"]) === null || _a === void 0 ? void 0 : _a.variableType) || "variable";
     var result = {
         variableType: variableType,
         variableName: (0, getVariableName_1.default)(props, variableType),
         variableValue: (function () {
-            if (typeof props.value !== 'undefined')
+            if (typeof props.value !== "undefined")
                 return props.value;
-            if (typeof props['data-_gt-unformatted-value'] !== 'undefined')
-                return props['data-_gt-unformatted-value'];
-            if (typeof props.children !== 'undefined')
+            if (typeof props["data-_gt-unformatted-value"] !== "undefined")
+                return props["data-_gt-unformatted-value"];
+            if (typeof props.children !== "undefined")
                 return props.children;
             return undefined;
         })(),
@@ -35,10 +35,10 @@ function getVariableProps(props) {
             var variableOptions = __assign(__assign({}, (props.currency && { currency: props.currency })), (props.options && __assign({}, props.options)));
             if (Object.keys(variableOptions).length)
                 return variableOptions;
-            if (typeof props['data-_gt-variable-options'] === 'string')
-                return JSON.parse(props['data-_gt-variable-options']);
-            return props['data-_gt-variable-options'] || undefined;
-        })()
+            if (typeof props["data-_gt-variable-options"] === "string")
+                return JSON.parse(props["data-_gt-variable-options"]);
+            return props["data-_gt-variable-options"] || undefined;
+        })(),
     };
     return result;
 }

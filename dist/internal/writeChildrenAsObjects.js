@@ -25,30 +25,32 @@ var utils_1 = require("../utils/utils");
 var getTagName = function (child) {
     var _a;
     if (!child)
-        return '';
+        return "";
     var type = child.type, props = child.props;
-    if (type && typeof type === 'function') {
-        if ('displayName' in type && typeof type.displayName === 'string' && type.displayName)
+    if (type && typeof type === "function") {
+        if ("displayName" in type &&
+            typeof type.displayName === "string" &&
+            type.displayName)
             return type.displayName;
-        if ('name' in type && typeof type.name === 'string' && type.name)
+        if ("name" in type && typeof type.name === "string" && type.name)
             return type.name;
     }
-    if (type && typeof type === 'string')
+    if (type && typeof type === "string")
         return type;
     if (props.href)
-        return 'a';
-    if ((_a = props['data-_gt']) === null || _a === void 0 ? void 0 : _a.id)
-        return "C".concat(props['data-_gt'].id);
-    return 'function';
+        return "a";
+    if ((_a = props["data-_gt"]) === null || _a === void 0 ? void 0 : _a.id)
+        return "C".concat(props["data-_gt"].id);
+    return "function";
 };
 var handleSingleChildElement = function (child) {
     var type = child.type, props = child.props;
     var objectElement = {
         type: getTagName(child),
-        props: {}
+        props: {},
     };
-    if (props['data-_gt']) {
-        var generaltranslation = props['data-_gt'];
+    if (props["data-_gt"]) {
+        var generaltranslation = props["data-_gt"];
         var newGTProp = __assign({}, generaltranslation);
         var transformation = generaltranslation.transformation;
         if (transformation === "variable") {
@@ -57,11 +59,11 @@ var handleSingleChildElement = function (child) {
             return {
                 variable: variableType,
                 key: variableName,
-                id: generaltranslation.id
+                id: generaltranslation.id,
             };
         }
         if (transformation === "plural" && generaltranslation.branches) {
-            objectElement.type = 'Plural';
+            objectElement.type = "Plural";
             var newBranches_1 = {};
             Object.entries(generaltranslation.branches).forEach(function (_a) {
                 var key = _a[0], value = _a[1];
@@ -70,7 +72,7 @@ var handleSingleChildElement = function (child) {
             newGTProp = __assign(__assign({}, newGTProp), { branches: newBranches_1 });
         }
         if (transformation === "branch" && generaltranslation.branches) {
-            objectElement.type = 'Branch';
+            objectElement.type = "Branch";
             var newBranches_2 = {};
             Object.entries(generaltranslation.branches).forEach(function (_a) {
                 var key = _a[0], value = _a[1];
@@ -78,7 +80,7 @@ var handleSingleChildElement = function (child) {
             });
             newGTProp = __assign(__assign({}, newGTProp), { branches: newBranches_2 });
         }
-        objectElement.props['data-_gt'] = newGTProp;
+        objectElement.props["data-_gt"] = newGTProp;
     }
     if (props.children) {
         objectElement.props.children = writeChildrenAsObjects(props.children);
@@ -89,8 +91,7 @@ var handleSingleChild = function (child) {
     if ((0, utils_1.isValidTaggedElement)(child)) {
         return handleSingleChildElement(child);
     }
-    ;
-    if (typeof child === 'number')
+    if (typeof child === "number")
         return child.toString();
     return child;
 };
@@ -98,8 +99,10 @@ var handleSingleChild = function (child) {
  * Transforms children elements into objects, processing each child recursively if needed.
  * @param {Children} children - The children to process.
  * @returns {object} The processed children as objects.
-*/
+ */
 function writeChildrenAsObjects(children) {
-    return Array.isArray(children) ? children.map(handleSingleChild) : handleSingleChild(children);
+    return Array.isArray(children)
+        ? children.map(handleSingleChild)
+        : handleSingleChild(children);
 }
 //# sourceMappingURL=writeChildrenAsObjects.js.map

@@ -75,13 +75,14 @@ function addGTIdentifier(children, startingIndex) {
         var result = { id: index };
         var transformation;
         try {
-            transformation = typeof type === 'function' ? (type.gtTransformation || '') : '';
+            transformation =
+                typeof type === "function" ? type.gtTransformation || "" : "";
         }
         catch (error) {
-            transformation = '';
+            transformation = "";
         }
         if (transformation) {
-            var transformationParts = transformation.split('-');
+            var transformationParts = transformation.split("-");
             if (transformationParts[0] === "translate") {
                 throw new Error((0, createMessages_1.createNestedTError)(child));
             }
@@ -115,16 +116,16 @@ function addGTIdentifier(children, startingIndex) {
     };
     function handleSingleChildElement(child) {
         var props = child.props;
-        if (props['data-_gt'])
+        if (props["data-_gt"])
             throw new Error((0, createMessages_1.createNestedDataGTError)(child));
         // Create new props for the element, including the GT identifier and a key
         var generaltranslation = createGTProp(child);
-        var newProps = __assign(__assign({}, props), { 'data-_gt': generaltranslation });
+        var newProps = __assign(__assign({}, props), { "data-_gt": generaltranslation });
         if (props.children && !generaltranslation.variableType) {
             newProps.children = handleChildren(props.children);
         }
         if (child.type === react_1.default.Fragment) {
-            var fragment = (0, jsx_runtime_1.jsx)("span", __assign({ style: { all: 'unset', display: 'contents' } }, newProps));
+            var fragment = ((0, jsx_runtime_1.jsx)("span", __assign({ style: { all: "unset", display: "contents" } }, newProps)));
             return fragment;
         }
         return react_1.default.cloneElement(child, newProps);
@@ -145,5 +146,4 @@ function addGTIdentifier(children, startingIndex) {
     }
     return handleChildren(children);
 }
-;
 //# sourceMappingURL=addGTIdentifier.js.map

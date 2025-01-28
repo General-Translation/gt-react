@@ -11,7 +11,9 @@ function getDictionaryEntry(dictionary, id) {
     var dictionaryPath = id.split(".");
     for (var _i = 0, dictionaryPath_1 = dictionaryPath; _i < dictionaryPath_1.length; _i++) {
         var key = dictionaryPath_1[_i];
-        if (typeof current !== 'object' || Array.isArray(current) || react_1.default.isValidElement(current)) {
+        if (typeof current !== "object" ||
+            Array.isArray(current) ||
+            react_1.default.isValidElement(current)) {
             console.error((0, createMessages_1.createLibraryNoEntryWarning)(id));
             return undefined;
         }

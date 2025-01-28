@@ -1,9 +1,9 @@
-'use client'
+"use client";
 
-import { useState, useEffect } from 'react';
-import { determineLocale } from 'generaltranslation';
-import { libraryDefaultLocale } from 'generaltranslation/internal';
-import { listSupportedLocales } from '@generaltranslation/supported-locales';
+import { useState, useEffect } from "react";
+import { determineLocale } from "generaltranslation";
+import { libraryDefaultLocale } from "generaltranslation/internal";
+import { listSupportedLocales } from "@generaltranslation/supported-locales";
 
 /**
  * Hook to retrieve the browser's default locale, with support for a fallback and locale stored in a cookie.
@@ -26,18 +26,19 @@ import { listSupportedLocales } from '@generaltranslation/supported-locales';
  * the provided `defaultLocale` is used.
  */
 export default function useBrowserLocale(
-    defaultLocale: string = libraryDefaultLocale, 
-    locales: string[] = listSupportedLocales()
+  defaultLocale: string = libraryDefaultLocale,
+  locales: string[] = listSupportedLocales()
 ): string {
-    const [locale, setLocale] = useState<string>('');
-    useEffect(() => {
-        const browserLocales = (() => {
-            if (navigator?.languages) return navigator.languages;
-            if (navigator?.language) return [navigator.language];
-            if ((navigator as any)?.userLanguage) return [(navigator as any)?.userLanguage];
-            return [defaultLocale];
-        })() as string[];
-        setLocale(determineLocale(browserLocales, locales) || defaultLocale);
-    }, [defaultLocale, locales]);
-    return locale;
+  const [locale, setLocale] = useState<string>("");
+  useEffect(() => {
+    const browserLocales = (() => {
+      if (navigator?.languages) return navigator.languages;
+      if (navigator?.language) return [navigator.language];
+      if ((navigator as any)?.userLanguage)
+        return [(navigator as any)?.userLanguage];
+      return [defaultLocale];
+    })() as string[];
+    setLocale(determineLocale(browserLocales, locales) || defaultLocale);
+  }, [defaultLocale, locales]);
+  return locale;
 }

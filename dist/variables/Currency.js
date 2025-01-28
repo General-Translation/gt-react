@@ -43,15 +43,24 @@ function Currency(_a) {
     var children = _a.children, value = _a.value, name = _a.name, _b = _a.currency, currency = _b === void 0 ? "USD" : _b, locales = _a.locales, _c = _a.options, options = _c === void 0 ? {} : _c;
     var providerLocales = [(0, useLocale_1.default)(), (0, useDefaultLocale_1.default)()];
     locales || (locales = providerLocales);
-    var renderedValue = (typeof children !== 'undefined' && typeof value === 'undefined') ? children : value;
-    renderedValue = (typeof renderedValue === 'string') ? parseFloat(renderedValue) : renderedValue;
+    var renderedValue = typeof children !== "undefined" && typeof value === "undefined"
+        ? children
+        : value;
+    renderedValue =
+        typeof renderedValue === "string"
+            ? parseFloat(renderedValue)
+            : renderedValue;
     // Format the value using Intl.NumberFormat
-    if (typeof renderedValue === 'number') {
-        renderedValue = (0, generaltranslation_1.formatCurrency)({ value: renderedValue, locales: locales, currency: currency, options: options });
+    if (typeof renderedValue === "number") {
+        renderedValue = (0, generaltranslation_1.formatCurrency)({
+            value: renderedValue,
+            locales: locales,
+            currency: currency,
+            options: options,
+        });
     }
-    return ((0, jsx_runtime_1.jsx)("span", { "data-_gt-variable-name": name, "data-_gt-variable-type": "currency", "data-_gt-variable-options": JSON.stringify(__assign({ style: 'currency', currency: currency }, options)), style: { display: 'contents' }, suppressHydrationWarning: true, children: renderedValue }));
+    return ((0, jsx_runtime_1.jsx)("span", { "data-_gt-variable-name": name, "data-_gt-variable-type": "currency", "data-_gt-variable-options": JSON.stringify(__assign({ style: "currency", currency: currency }, options)), style: { display: "contents" }, suppressHydrationWarning: true, children: renderedValue }));
 }
-;
 // Static property to indicate the transformation type
 Currency.gtTransformation = "variable-currency";
 exports.default = Currency;

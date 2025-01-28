@@ -69,19 +69,29 @@ function useRuntimeTranslation(_a) {
     if (!translationEnabled)
         return {
             translationEnabled: translationEnabled,
-            translateContent: function () { return Promise.reject(new Error('translateContent() failed because translation is disabled')); },
-            translateChildren: function () { return Promise.reject(new Error('translateChildren() failed because translation is disabled')); }
+            translateContent: function () {
+                return Promise.reject(new Error("translateContent() failed because translation is disabled"));
+            },
+            translateChildren: function () {
+                return Promise.reject(new Error("translateChildren() failed because translation is disabled"));
+            },
         };
     var requestQueueRef = (0, react_1.useRef)(new Map());
     // Trigger a fetch when keys have been added.
     var _b = (0, react_1.useState)(0), fetchTrigger = _b[0], setFetchTrigger = _b[1];
     var translateContent = (0, react_1.useCallback)(function (params) {
-        var id = params.metadata.id ? "".concat(params.metadata.id, "-") : '';
+        var id = params.metadata.id ? "".concat(params.metadata.id, "-") : "";
         var key = "".concat(id, "-").concat(params.metadata.hash, "-").concat(params.targetLocale);
         setFetchTrigger(function (n) { return n + 1; });
         // promise for hooking into the translation request request to know when complete
         return new Promise(function (resolve, reject) {
-            requestQueueRef.current.set(key, { type: 'content', source: params.source, metadata: params.metadata, resolve: resolve, reject: reject });
+            requestQueueRef.current.set(key, {
+                type: "content",
+                source: params.source,
+                metadata: params.metadata,
+                resolve: resolve,
+                reject: reject,
+            });
         });
     }, []);
     /**
@@ -89,12 +99,18 @@ function useRuntimeTranslation(_a) {
      * Keys are batched and fetched in the next effect cycle.
      */
     var translateChildren = (0, react_1.useCallback)(function (params) {
-        var id = params.metadata.id ? "".concat(params.metadata.id, "-") : '';
+        var id = params.metadata.id ? "".concat(params.metadata.id, "-") : "";
         var key = "".concat(id, "-").concat(params.metadata.hash, "-").concat(params.targetLocale);
         setFetchTrigger(function (n) { return n + 1; });
         // promise for hooking into the translation request to know when complete
         return new Promise(function (resolve, reject) {
-            requestQueueRef.current.set(key, { type: 'jsx', source: params.source, metadata: params.metadata, resolve: resolve, reject: reject });
+            requestQueueRef.current.set(key, {
+                type: "jsx",
+                source: params.source,
+                metadata: params.metadata,
+                resolve: resolve,
+                reject: reject,
+            });
         });
     }, []);
     (0, react_1.useEffect)(function () {
@@ -117,17 +133,21 @@ function useRuntimeTranslation(_a) {
                             var _a;
                             // loading state for jsx, render loading behavior
                             var id = request.metadata.id || request.metadata.hash;
-                            acc[id] = (_a = {}, _a[request.metadata.hash] = { state: 'loading' }, _a);
+                            acc[id] = (_a = {}, _a[request.metadata.hash] = { state: "loading" }, _a);
                             return acc;
                         }, {});
-                        setTranslations(function (prev) { return __assign(__assign({}, (prev || {})), loadingTranslations_1); });
+                        setTranslations(function (prev) {
+                            return __assign(__assign({}, (prev || {})), loadingTranslations_1);
+                        });
                         fetchWithAbort = function (url, options, timeout) { return __awaiter(_this, void 0, void 0, function () {
                             var controller, timeoutId, error_2;
                             return __generator(this, function (_a) {
                                 switch (_a.label) {
                                     case 0:
                                         controller = new AbortController();
-                                        timeoutId = (timeout === undefined) ? undefined : setTimeout(function () { return controller.abort(); }, timeout);
+                                        timeoutId = timeout === undefined
+                                            ? undefined
+                                            : setTimeout(function () { return controller.abort(); }, timeout);
                                         _a.label = 1;
                                     case 1:
                                         _a.trys.push([1, 3, 4, 5]);
@@ -135,9 +155,9 @@ function useRuntimeTranslation(_a) {
                                     case 2: return [2 /*return*/, _a.sent()];
                                     case 3:
                                         error_2 = _a.sent();
-                                        console.error('timeout!');
-                                        if (error_2 instanceof Error && error_2.name === 'AbortError')
-                                            throw new Error('Request timed out'); // Handle the timeout case
+                                        console.error("timeout!");
+                                        if (error_2 instanceof Error && error_2.name === "AbortError")
+                                            throw new Error("Request timed out"); // Handle the timeout case
                                         throw error_2; // Re-throw other errors
                                     case 4:
                                         if (timeoutId !== undefined)
@@ -148,12 +168,12 @@ function useRuntimeTranslation(_a) {
                             });
                         }); };
                         return [4 /*yield*/, fetchWithAbort("".concat(runtimeUrl, "/v1/runtime/").concat(projectId, "/client"), {
-                                method: 'POST',
-                                headers: __assign({ 'Content-Type': 'application/json' }, (devApiKey && { 'x-gt-dev-api-key': devApiKey })),
+                                method: "POST",
+                                headers: __assign({ "Content-Type": "application/json" }, (devApiKey && { "x-gt-dev-api-key": devApiKey })),
                                 body: JSON.stringify({
                                     requests: requests,
                                     targetLocale: targetLocale,
-                                    metadata: metadata
+                                    metadata: metadata,
                                 }),
                             }, renderSettings.timeout)];
                     case 2:
@@ -164,17 +184,21 @@ function useRuntimeTranslation(_a) {
                     case 3: throw new (_a.apply(Error, [void 0, _b.sent()]))();
                     case 4: return [4 /*yield*/, response.json()];
                     case 5:
-                        results = _b.sent();
-                        if (!isCancelled) { // don't send another req if one is already in flight
+                        results = (_b.sent());
+                        if (!isCancelled) {
+                            // don't send another req if one is already in flight
                             // process each result
                             results.forEach(function (result, index) {
                                 var _a, _b, _c;
                                 var request = requests[index];
                                 // translation received
-                                if ('translation' in result && result.translation && result.reference) {
+                                if ("translation" in result &&
+                                    result.translation &&
+                                    result.reference) {
                                     var translation = result.translation, _d = result.reference, id = _d.id, hash = _d.key;
                                     // check for mismatching ids or hashes
-                                    if (id !== request.metadata.id || hash !== request.metadata.hash) {
+                                    if (id !== request.metadata.id ||
+                                        hash !== request.metadata.hash) {
                                         if (!request.metadata.id) {
                                             console.warn((0, createMessages_1.createMismatchingHashWarning)(request.metadata.hash, hash));
                                         }
@@ -184,23 +208,28 @@ function useRuntimeTranslation(_a) {
                                     }
                                     // set translation
                                     newTranslations[request.metadata.id || request.metadata.hash] = (_a = {},
+                                        // id defaults to hash if none provided
                                         _a[request.metadata.hash] = {
-                                            state: 'success',
-                                            target: translation
+                                            state: "success",
+                                            target: translation,
                                         },
                                         _a);
                                     return;
                                 }
                                 // translation failure
-                                if (result.error !== undefined && result.error !== null && result.code !== undefined && result.code !== null) { // 0 and '' are falsey
+                                if (result.error !== undefined &&
+                                    result.error !== null &&
+                                    result.code !== undefined &&
+                                    result.code !== null) {
+                                    // 0 and '' are falsey
                                     // log error message
                                     console.error((0, createMessages_1.createGenericRuntimeTranslationError)(request.metadata.id, request.metadata.hash), result.error);
                                     // set error in translation object
                                     newTranslations[request.metadata.id || request.metadata.hash] = (_b = {},
                                         _b[request.metadata.hash] = {
-                                            state: 'error',
+                                            state: "error",
                                             error: result.error,
-                                            code: result.code
+                                            code: result.code,
                                         },
                                         _b);
                                     return;
@@ -209,9 +238,9 @@ function useRuntimeTranslation(_a) {
                                 console.error((0, createMessages_1.createGenericRuntimeTranslationError)(request.metadata.id, request.metadata.hash), result);
                                 newTranslations[request.metadata.id || request.metadata.hash] = (_c = {},
                                     _c[request.metadata.hash] = {
-                                        state: 'error',
+                                        state: "error",
                                         error: "An error occurred.",
-                                        code: 500
+                                        code: 500,
                                     },
                                     _c);
                             });
@@ -227,16 +256,18 @@ function useRuntimeTranslation(_a) {
                             // id defaults to hash if none provided
                             newTranslations[request.metadata.id || request.metadata.hash] = (_a = {},
                                 _a[request.metadata.hash] = {
-                                    state: 'error',
+                                    state: "error",
                                     error: "An error occurred.",
-                                    code: 500
+                                    code: 500,
                                 },
                                 _a);
                         });
                         return [3 /*break*/, 8];
                     case 7:
                         // update our translations
-                        setTranslations(function (prev) { return __assign(__assign({}, (prev || {})), newTranslations); });
+                        setTranslations(function (prev) {
+                            return __assign(__assign({}, (prev || {})), newTranslations);
+                        });
                         // resolve all promises
                         requests.forEach(function (request) { return request.resolve(); });
                         // clear the queue to avoid duplicate requests

@@ -44,7 +44,7 @@ import React from "react";
  * @param {any} [value] - The default value to be displayed if `children` is not provided.
  * @returns {JSX.Element} The rendered variable component with either `children` or `value`.
  */
-declare function Var({ children, name, value }: {
+declare function Var({ children, name, value, }: {
     children?: any;
     name?: string;
     value?: any;

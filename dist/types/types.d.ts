@@ -9,7 +9,7 @@ export type GTProp = {
 export type TaggedChild = React.ReactNode | TaggedElement;
 export type TaggedChildren = TaggedChild[] | TaggedChild;
 export type TaggedElementProps = Record<string, any> & {
-    'data-_gt': GTProp;
+    "data-_gt": GTProp;
 };
 export type TaggedElement = React.ReactElement<TaggedElementProps>;
 export type Entry = string | ReactElement;
@@ -42,7 +42,7 @@ export type Variable = {
 export type TranslatedElement = {
     type: string;
     props: {
-        'data-_gt': {
+        "data-_gt": {
             id: number;
             [key: string]: any;
         };
@@ -53,23 +53,23 @@ export type TranslatedChild = TranslatedElement | string | Variable;
 export type TranslatedChildren = TranslatedChild | TranslatedChild[];
 export type TranslatedContent = string | (string | Variable)[];
 export type TranslationError = {
-    state: 'error';
+    state: "error";
     error: string;
     code?: number;
 };
 export type TranslationSuccess = {
-    state: 'success';
+    state: "success";
     target: TranslatedChildren | TranslatedContent;
 };
 export type TranslationLoading = {
-    state: 'loading';
+    state: "loading";
 };
 export type TranslationsObject = {
     [id: string]: {
         [hash: string]: TranslationSuccess | TranslationLoading | TranslationError;
     };
 };
-export type RenderMethod = 'skeleton' | 'replace' | 'default';
+export type RenderMethod = "skeleton" | "replace" | "default";
 export type TranslateContentCallback = (params: {
     source: any;
     targetLocale: string;

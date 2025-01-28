@@ -14,8 +14,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.defaultRenderSettings = void 0;
 // Apply an 8 second timeout for non dev/testign environments
 function shouldApplyTimeout() {
-    var NODE_ENV = typeof process !== 'undefined' ? process.env.NODE_ENV : '';
+    var NODE_ENV = typeof process !== "undefined" ? process.env.NODE_ENV : "";
     return !(NODE_ENV === "development" || NODE_ENV === "test");
 }
-exports.defaultRenderSettings = __assign({ method: "default" }, ((shouldApplyTimeout()) ? { timeout: 8000 } : {}));
+exports.defaultRenderSettings = __assign({ method: "default" }, (shouldApplyTimeout() ? { timeout: 8000 } : {}));
 //# sourceMappingURL=defaultRenderSettings.js.map

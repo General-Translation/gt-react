@@ -33,23 +33,24 @@ function DateTime(_a) {
     locales || (locales = providerLocales);
     var final;
     var dateValue;
-    var defaultValue = (typeof children !== 'undefined' && typeof value === 'undefined') ? children : value;
-    if (typeof defaultValue === 'number') {
+    var defaultValue = typeof children !== "undefined" && typeof value === "undefined"
+        ? children
+        : value;
+    if (typeof defaultValue === "number") {
         dateValue = new Date(defaultValue);
     }
-    else if (typeof defaultValue === 'string') {
+    else if (typeof defaultValue === "string") {
         dateValue = new Date(defaultValue);
     }
     else if (defaultValue instanceof Date) {
         dateValue = defaultValue;
     }
-    if (typeof dateValue !== 'undefined') {
-        final = ((0, generaltranslation_1.formatDateTime)({ value: dateValue, locales: locales, options: options })).replace(/[\u200F\u202B\u202E]/g, '');
+    if (typeof dateValue !== "undefined") {
+        final = (0, generaltranslation_1.formatDateTime)({ value: dateValue, locales: locales, options: options }).replace(/[\u200F\u202B\u202E]/g, "");
     }
     // Render the formatted date within a span element
-    return ((0, jsx_runtime_1.jsx)("span", { "data-_gt-variable-name": name, "data-_gt-variable-type": "date", "data-_gt-variable-options": JSON.stringify(options), style: { display: 'contents' }, suppressHydrationWarning: true, children: final }));
+    return ((0, jsx_runtime_1.jsx)("span", { "data-_gt-variable-name": name, "data-_gt-variable-type": "date", "data-_gt-variable-options": JSON.stringify(options), style: { display: "contents" }, suppressHydrationWarning: true, children: final }));
 }
-;
 // Static property for transformation type
 DateTime.gtTransformation = "variable-datetime";
 exports.default = DateTime;

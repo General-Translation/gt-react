@@ -32,16 +32,18 @@ function Num(_a) {
     var children = _a.children, value = _a.value, name = _a.name, locales = _a.locales, _b = _a.options, options = _b === void 0 ? {} : _b;
     var providerLocales = [(0, useLocale_1.default)(), (0, useDefaultLocale_1.default)()];
     locales || (locales = providerLocales);
-    var renderedValue = (typeof children !== 'undefined') ? children : value;
-    renderedValue = (typeof renderedValue === 'string') ? parseFloat(renderedValue) : renderedValue;
+    var renderedValue = typeof children !== "undefined" ? children : value;
+    renderedValue =
+        typeof renderedValue === "string"
+            ? parseFloat(renderedValue)
+            : renderedValue;
     var formattedValue = renderedValue;
-    if (typeof renderedValue === 'number') {
+    if (typeof renderedValue === "number") {
         // Using Intl.NumberFormat for consistent number formatting
         formattedValue = (0, generaltranslation_1.formatNum)({ value: renderedValue, locales: locales, options: options });
     }
-    return ((0, jsx_runtime_1.jsx)("span", { "data-_gt-variable-name": name, "data-_gt-variable-type": "number", "data-_gt-variable-options": JSON.stringify(options), style: { display: 'contents' }, suppressHydrationWarning: true, children: formattedValue }));
+    return ((0, jsx_runtime_1.jsx)("span", { "data-_gt-variable-name": name, "data-_gt-variable-type": "number", "data-_gt-variable-options": JSON.stringify(options), style: { display: "contents" }, suppressHydrationWarning: true, children: formattedValue }));
 }
-;
 Num.gtTransformation = "variable-number";
 exports.default = Num;
 //# sourceMappingURL=Num.js.map

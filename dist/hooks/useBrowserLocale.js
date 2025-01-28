@@ -1,5 +1,5 @@
 "use strict";
-'use client';
+"use client";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = useBrowserLocale;
 var react_1 = require("react");
@@ -29,7 +29,7 @@ var supported_locales_1 = require("@generaltranslation/supported-locales");
 function useBrowserLocale(defaultLocale, locales) {
     if (defaultLocale === void 0) { defaultLocale = internal_1.libraryDefaultLocale; }
     if (locales === void 0) { locales = (0, supported_locales_1.listSupportedLocales)(); }
-    var _a = (0, react_1.useState)(''), locale = _a[0], setLocale = _a[1];
+    var _a = (0, react_1.useState)(""), locale = _a[0], setLocale = _a[1];
     (0, react_1.useEffect)(function () {
         var browserLocales = (function () {
             if (navigator === null || navigator === void 0 ? void 0 : navigator.languages)

@@ -5,5 +5,5 @@ import React from "react";
  * @returns an empty string
  */
 export default function renderSkeleton(): React.ReactNode {
-    return ''
+  return '';
 }
