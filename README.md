@@ -1,5 +1,7 @@
 # gt-react
 
+This repo has been archived and migrated to the [GT monorepo](https://github.com/General-Translation/gt-libraries)
+
 A React library for automatic internationalization. 
 
 See [gt-next](https://github.com/General-Translation/gt-next) for the Next.js version of this library.
